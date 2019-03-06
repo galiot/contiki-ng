@@ -155,14 +155,6 @@ rpl_neighbor_print_list(const char *str)
     int curr_rank = curr_instance.dag.rank;
     rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
 
-/*---------------------------------------------------------------------------*/
-/* GALIOT -------------------------------------------------------------------*/ 
-/*---------------------------------------------------------------------------*/
-printf("TEST\n");
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-
     LOG_INFO("nbr: own state, addr ");
     LOG_INFO_6ADDR(rpl_get_global_address());
     LOG_INFO_(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
@@ -170,6 +162,23 @@ printf("TEST\n");
         curr_instance.mop, curr_instance.of->ocp, curr_rank,
         max_acceptable_rank(),
         curr_dio_interval, rpl_neighbor_count(), str);
+
+/*---------------------------------------------------------------------------*/
+/* GALIOT -------------------------------------------------------------------*/ 
+/*---------------------------------------------------------------------------*/
+    printf("\n");
+    printf("nbr: own state, addr ");
+    uiplib_ipaddr_print(rpl_get_global_address());
+    printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
+        rpl_dag_state_to_str(curr_instance.dag.state),
+        curr_instance.mop, curr_instance.of->ocp, curr_rank,
+        max_acceptable_rank(),
+        curr_dio_interval, rpl_neighbor_count(), str);
+    printf("\n");
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
     while(nbr != NULL) {
       char buf[120];
       rpl_neighbor_snprint(buf, sizeof(buf), nbr);
