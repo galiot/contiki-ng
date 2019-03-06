@@ -82,6 +82,7 @@ static rpl_nbr_t * best_parent(int fresh_only);
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 char *test_string = "TEST";
 int galiot_populated_flag = 0; // are the variables populated?
+char galiot_addr[UIPLIB_IPV6_MAX_STR_LEN] = "EMPTY";
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -190,7 +191,8 @@ rpl_neighbor_print_list(const char *str)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     // printf("\n");
     // printf("nbr: own state, addr ");
-    test_string = "CHANGE";
+    uiplib_ipaddr_snprint(galiot_addr, sizeof(galiot_addr), rpl_get_global_address());
+    test_string = "CHANGED";
     // uiplib_ipaddr_print(rpl_get_global_address());
     // printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
     //     rpl_dag_state_to_str(curr_instance.dag.state),
