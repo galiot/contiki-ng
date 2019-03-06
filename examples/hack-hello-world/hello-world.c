@@ -142,7 +142,13 @@ PROCESS_THREAD(hello_world_process, ev, data)
       count++;
     }
     printf("NBRS: %d\n", count);
+    count = 0; // reset the NBR count
 
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    // this is where we CHECK whether the galiot variables are populated
+    // and print accordingly to the console
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -151,12 +157,28 @@ PROCESS_THREAD(hello_world_process, ev, data)
     printf("***WILL IT BE?***\n");
     printf("test_string: %s\n", test_string);
 
-    if (strcmp(test_string, "TEST") == 0) {
+    // checking the test_string (will be depracated soon)
+    // if (strcmp(test_string, "TEST") == 0) {
+    //   printf(">>> STRINGS NOT YET POPULATED\n");
+    // }
+    // else {
+    //   printf(">>> STRINGS POPULATED\n");
+    // }
+    // if (strcmp(test_string, "TEST") == 0) {
+    //   printf(">>> STRINGS NOT YET POPULATED\n");
+    // }
+    // else {
+    //   printf(">>> STRINGS POPULATED\n");
+    // }
+
+    // checking the galiot_populated_flag
+    if (galiot_populated_flag == 0) {
       printf(">>> STRINGS NOT YET POPULATED\n");
     }
     else {
-      printf(">>> STRINGS POPULATED\n");
+      printf(">>> STRINGS NOW POPULATED\n");
     }
+
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
