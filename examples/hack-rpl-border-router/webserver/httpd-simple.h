@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Swedish Institute of Computer Science.
+ * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,50 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
  */
 
-#ifndef PROJECT_CONF_H_
-#define PROJECT_CONF_H_
+/**
+ * \file
+ *         A simple webserver
+ * \author
+ *         Adam Dunkels <adam@sics.se>
+ *         Niclas Finne <nfi@sics.se>
+ *         Joakim Eriksson <joakime@sics.se>
+ */
 
-/* Set maximum debug level on all modules. See os/sys/log-conf.h for
- * a list of supported modules. The different log levels are defined in
- * os/sys/log.h:
- *     LOG_LEVEL_NONE         No log
- *     LOG_LEVEL_ERR          Errors
- *     LOG_LEVEL_WARN         Warnings
- *     LOG_LEVEL_INFO         Basic info
- *     LOG_LEVEL_DBG          Detailled debug
-  */
-#define LOG_CONF_LEVEL_IPV6                        LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_RPL                         LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_6LOWPAN                     LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_TCPIP                       LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_MAC                         LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_FRAMER                      LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_COAP                        LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_LWM2M                       LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_6TOP                        LOG_LEVEL_INFO
+#ifndef HTTPD_SIMPLE_H_
+#define HTTPD_SIMPLE_H_
 
-#define LINK_STATS_CONF_PACKET_COUNTERS
+#include "contiki-net.h"
 
-/* Enable cooja annotations */
-#define LOG_CONF_WITH_ANNOTATE                0
+/* The current internal border router webserver ignores the requested file name */
+/* and needs no per-connection output buffer, so save some RAM */
+#ifndef WEBSERVER_CONF_CFS_PATHLEN
+#define HTTPD_PATHLEN 2
+#else /* WEBSERVER_CONF_CFS_CONNS */
+#define HTTPD_PATHLEN WEBSERVER_CONF_CFS_PATHLEN
+#endif /* WEBSERVER_CONF_CFS_CONNS */
 
-#endif
+struct httpd_state;
+typedef char (*httpd_simple_script_t)(struct httpd_state *s);
+
+struct httpd_state {
+  struct timer timer;
+  struct psock sin, sout;
+  struct pt outputpt;
+  char inputbuf[HTTPD_PATHLEN + 24];
+/*char outputbuf[UIP_TCP_MSS]; */
+  char filename[HTTPD_PATHLEN];
+  httpd_simple_script_t script;
+  char state;
+};
+
+void httpd_init(void);
+void httpd_appcall(void *state);
+
+httpd_simple_script_t httpd_simple_get_script(const char *name);
+
+#define SEND_STRING(s, str) PSOCK_SEND(s, (uint8_t *)str, strlen(str))
+
+#endif /* HTTPD_SIMPLE_H_ */

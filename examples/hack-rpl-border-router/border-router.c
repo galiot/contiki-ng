@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Swedish Institute of Computer Science.
+ * Copyright (c) 201, RISE SICS
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,33 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ * This file is part of the Contiki operating system.
+ *
  */
 
-#ifndef PROJECT_CONF_H_
-#define PROJECT_CONF_H_
+#include "contiki.h"
 
-/* Set maximum debug level on all modules. See os/sys/log-conf.h for
- * a list of supported modules. The different log levels are defined in
- * os/sys/log.h:
- *     LOG_LEVEL_NONE         No log
- *     LOG_LEVEL_ERR          Errors
- *     LOG_LEVEL_WARN         Warnings
- *     LOG_LEVEL_INFO         Basic info
- *     LOG_LEVEL_DBG          Detailled debug
-  */
-#define LOG_CONF_LEVEL_IPV6                        LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_RPL                         LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_6LOWPAN                     LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_TCPIP                       LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_MAC                         LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_FRAMER                      LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_COAP                        LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_LWM2M                       LOG_LEVEL_INFO
-#define LOG_CONF_LEVEL_6TOP                        LOG_LEVEL_INFO
+/* Log configuration */
+#include "sys/log.h"
+#define LOG_MODULE "RPL BR"
+#define LOG_LEVEL LOG_LEVEL_INFO
 
-#define LINK_STATS_CONF_PACKET_COUNTERS
+/* Declare and auto-start this file's process */
+PROCESS(contiki_ng_br, "Contiki-NG Border Router");
+AUTOSTART_PROCESSES(&contiki_ng_br);
 
-/* Enable cooja annotations */
-#define LOG_CONF_WITH_ANNOTATE                0
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(contiki_ng_br, ev, data)
+{
+  PROCESS_BEGIN();
 
-#endif
+#if BORDER_ROUTER_CONF_WEBSERVER
+  PROCESS_NAME(webserver_nogui_process);
+  process_start(&webserver_nogui_process, NULL);
+#endif /* BORDER_ROUTER_CONF_WEBSERVER */
+
+  LOG_INFO("Contiki-NG Border Router started\n");
+
+  PROCESS_END();
+}
