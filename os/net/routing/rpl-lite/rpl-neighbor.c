@@ -175,7 +175,6 @@ rpl_neighbor_print_list(const char *str)
     // printf("\n");
     // printf("nbr: own state, addr ");
     test_string = "CHANGE";
-    printf("changed: %s\n", test_string);
     // uiplib_ipaddr_print(rpl_get_global_address());
     // printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
     //     rpl_dag_state_to_str(curr_instance.dag.state),
@@ -194,6 +193,15 @@ rpl_neighbor_print_list(const char *str)
       nbr = nbr_table_next(rpl_neighbors, nbr);
     }
     LOG_INFO("nbr: end of list\n");
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    printf("STRINGS ARE NOW BEING POPULATED\n");
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
   }
 }
 /*---------------------------------------------------------------------------*/
