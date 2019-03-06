@@ -52,6 +52,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #include <stdio.h> /* For printf() */
+#include <string.h>
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -67,6 +68,7 @@ void RPL_CALLBACK_PARENT_SWITCH(rpl_nbr_t *old, rpl_nbr_t *new);
 #endif /* RPL_CALLBACK_PARENT_SWITCH */
 
 static rpl_nbr_t * best_parent(int fresh_only);
+char *test_string = "TEST";
 
 /*---------------------------------------------------------------------------*/
 /* Per-neighbor RPL information */
@@ -172,6 +174,8 @@ rpl_neighbor_print_list(const char *str)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     // printf("\n");
     // printf("nbr: own state, addr ");
+    test_string = "CHANGE";
+    printf("changed: %s\n", test_string);
     // uiplib_ipaddr_print(rpl_get_global_address());
     // printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
     //     rpl_dag_state_to_str(curr_instance.dag.state),

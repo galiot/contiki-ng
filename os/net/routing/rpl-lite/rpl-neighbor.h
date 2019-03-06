@@ -217,4 +217,6 @@ typedef rpl_nbr_t rpl_parent_t;
 #define rpl_parent_get_ipaddr(nbr) rpl_neighbor_get_ipaddr(nbr)
  /** @} */
 
+ char *test_string;
+
 #endif /* RPL_NEIGHBOR_H */
