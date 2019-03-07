@@ -49,4 +49,6 @@
 #define LOG_CONF_LEVEL_LWM2M                       LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_6TOP                        LOG_LEVEL_NONE
 
+#define MOTE_COLOR RED
+
 #endif /* PROJECT_CONF_H_ */

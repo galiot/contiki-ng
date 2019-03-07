@@ -99,6 +99,14 @@ int galiot_RPL_nbr_array_index = 0;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 char galiot_RPL_nbr_array_ipaddr[4][UIPLIB_IPV6_MAX_STR_LEN] = {"::", "::", "::", "::"};
+uint16_t galiot_RPL_nbr_array_rank[4] = {65535, 65535, 65535, 65535};
+uint16_t galiot_RPL_nbr_array_linkMetric[4] = {65535, 65535, 65535, 65535};
+uint16_t galiot_RPL_nbr_array_rankIfParent[4] = {65535, 65535, 65535, 65535};
+uint8_t galiot_RPL_nbr_array_statsFreshness[4] = {0, 0, 0, 0};
+char galiot_RPL_nbr_array_rankRoot[4] = {' ', ' ', ' ', ' '};
+char galiot_RPL_nbr_array_bestParent[4] = {' ', ' ', ' ', ' '};
+char galiot_RPL_nbr_array_acceptableRankAndParent[4] = {' ', ' ', ' ', ' '};
+char galiot_RPL_nbr_array_statsIsFresh[4] = {' ', ' ', ' ', ' '};
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -251,20 +259,15 @@ rpl_neighbor_print_list(const char *str)
       // const struct link_stats *galiot_stats = rpl_neighbor_get_link_stats(nbr);
       // clock_time_t galiot_clock_now = clock_time();
 
-      
-      //
-      // rpl_neighbor_get_ipaddr(nbr)
-      //
-      // char galiot_IPV6_uiplib_ip6addr[UIPLIB_IPV6_MAX_STR_LEN];
-      // uiplib_ipaddr_snprint(galiot_IPV6_uiplib_ip6addr, sizeof(galiot_IPV6_uiplib_ip6addr), rpl_get_global_address());
-      // index += uiplib_ipaddr_snprint(buf+index, buflen-index, rpl_neighbor_get_ipaddr(nbr));
-
 
 
       char buf[120];
       rpl_neighbor_snprint(buf, sizeof(buf), nbr);
       LOG_INFO("nbr: %s\n", buf);
 
+      rpl_nbr_t *galiot_best = best_parent(0);
+      const struct link_stats *galiot_stats = rpl_neighbor_get_link_stats(nbr);
+      // clock_time_t galiot_clock_now = clock_time();
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -273,9 +276,16 @@ rpl_neighbor_print_list(const char *str)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       uiplib_ipaddr_snprint(galiot_RPL_nbr_array_ipaddr[galiot_RPL_nbr_array_index], sizeof(galiot_RPL_nbr_array_ipaddr[galiot_RPL_nbr_array_index]), rpl_neighbor_get_ipaddr(nbr));
-      printf("INDEX INDEX INDEX %d\n", galiot_RPL_nbr_array_index);
-      printf("TEST TEST TEST %s\n", galiot_RPL_nbr_array_ipaddr[galiot_RPL_nbr_array_index]);
-      
+      galiot_RPL_nbr_array_rank[galiot_RPL_nbr_array_index] = nbr->rank;
+      galiot_RPL_nbr_array_linkMetric[galiot_RPL_nbr_array_index] = rpl_neighbor_get_link_metric(nbr);
+      galiot_RPL_nbr_array_rankIfParent[galiot_RPL_nbr_array_index] = rpl_neighbor_rank_via_nbr(nbr);
+      galiot_RPL_nbr_array_statsFreshness[galiot_RPL_nbr_array_index] = galiot_stats != NULL ? galiot_stats->freshness : 0;
+      galiot_RPL_nbr_array_rankRoot[galiot_RPL_nbr_array_index] = (nbr->rank == ROOT_RANK) ? 'r' : ' ';
+      galiot_RPL_nbr_array_bestParent[galiot_RPL_nbr_array_index] = (nbr == galiot_best) ? 'b' : ' ';
+      galiot_RPL_nbr_array_acceptableRankAndParent[galiot_RPL_nbr_array_index] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
+      galiot_RPL_nbr_array_statsIsFresh[galiot_RPL_nbr_array_index] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
+
+
 
 
       nbr = nbr_table_next(rpl_neighbors, nbr);
@@ -287,6 +297,8 @@ rpl_neighbor_print_list(const char *str)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // printf("INDEX INDEX INDEX %d\n", galiot_RPL_nbr_array_index);
+      // printf("TEST TEST TEST %s\n", galiot_RPL_nbr_array_ipaddr[galiot_RPL_nbr_array_index]);
       galiot_RPL_nbr_array_index++;
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
