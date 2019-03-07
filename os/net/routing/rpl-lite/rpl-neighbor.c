@@ -82,6 +82,7 @@ static rpl_nbr_t * best_parent(int fresh_only);
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 int galiot_RPL_populatedFlag = 0; // are the variables populated?
 char galiot_RPL_nbr_ownState_addr[UIPLIB_IPV6_MAX_STR_LEN] = "UNASSIGHNED";
+char galiot_nbr_ownState_dagState[16] = "UNKNOWN";
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -188,10 +189,12 @@ rpl_neighbor_print_list(const char *str)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    // printf("\n");
-    // printf("nbr: own state, addr ");
+    // nbr: own state, addr
     uiplib_ipaddr_snprint(galiot_RPL_nbr_ownState_addr, sizeof(galiot_RPL_nbr_ownState_addr), rpl_get_global_address());
     // uiplib_ipaddr_print(rpl_get_global_address());
+    //
+    // nbr: own state, DAG state
+    strcpy(galiot_nbr_ownState_dagState, rpl_dag_state_to_str(curr_instance.dag.state));
     // printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
     //     rpl_dag_state_to_str(curr_instance.dag.state),
     //     curr_instance.mop, curr_instance.of->ocp, curr_rank,
