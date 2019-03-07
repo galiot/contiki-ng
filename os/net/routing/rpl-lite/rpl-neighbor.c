@@ -81,6 +81,10 @@ static rpl_nbr_t * best_parent(int fresh_only);
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 int galiot_RPL_populatedFlag = 0; // are the variables populated?
+int galiot_RPL_nbr_array_populatedFlag = 0; // is the neighbors variables populated?
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 char galiot_RPL_nbr_ownState_addr[UIPLIB_IPV6_MAX_STR_LEN] = "(UNASSIGHNED)";
 char galiot_RPL_nbr_ownState_DAGState[32] = "(NONE)";
 uint8_t galiot_RPL_nbr_ownState_mop = 255;
@@ -107,6 +111,7 @@ char galiot_RPL_nbr_array_rankRoot[4] = {' ', ' ', ' ', ' '};
 char galiot_RPL_nbr_array_bestParent[4] = {' ', ' ', ' ', ' '};
 char galiot_RPL_nbr_array_acceptableRankAndParent[4] = {' ', ' ', ' ', ' '};
 char galiot_RPL_nbr_array_statsIsFresh[4] = {' ', ' ', ' ', ' '};
+uint16_t galiot_RPL_nbr_array_lastTx[4] = {65535, 65535, 65535, 65535};
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -267,7 +272,11 @@ rpl_neighbor_print_list(const char *str)
 
       rpl_nbr_t *galiot_best = best_parent(0);
       const struct link_stats *galiot_stats = rpl_neighbor_get_link_stats(nbr);
-      // clock_time_t galiot_clock_now = clock_time();
+      clock_time_t galiot_clock_now = clock_time();
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      galiot_RPL_nbr_array_populatedFlag = 1;
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -284,7 +293,15 @@ rpl_neighbor_print_list(const char *str)
       galiot_RPL_nbr_array_bestParent[galiot_RPL_nbr_array_index] = (nbr == galiot_best) ? 'b' : ' ';
       galiot_RPL_nbr_array_acceptableRankAndParent[galiot_RPL_nbr_array_index] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
       galiot_RPL_nbr_array_statsIsFresh[galiot_RPL_nbr_array_index] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
-
+     
+      if(galiot_stats->last_tx_time > 0) 
+      {
+        galiot_RPL_nbr_array_lastTx[galiot_RPL_nbr_array_index] = (unsigned)((galiot_clock_now - galiot_stats->last_tx_time) / (60 * CLOCK_SECOND));
+      }
+      else
+      {
+        galiot_RPL_nbr_array_lastTx[galiot_RPL_nbr_array_index] = 65535;
+      }
 
 
 

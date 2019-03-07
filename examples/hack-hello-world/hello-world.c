@@ -239,7 +239,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    if (galiot_RPL_nbr_array_index == 0) 
+    if (galiot_RPL_nbr_array_populatedFlag == 0) 
     {
       printf("(galiot) >>> RPL_nbr: (NO NEIGHBORS FOUND, SEARCHING...)\n");
       printf("================================================================\n");
@@ -267,7 +267,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
         printf("(galiot) >>> RPL_nbr: NEIGHBOR %d / %d, acceptable rank if given parent selected as prefered AND parent capable: %c\n", i+1, galiot_RPL_nbr_array_index+1, galiot_RPL_nbr_array_acceptableRankAndParent[i]);
         // link stats are fresh
         printf("(galiot) >>> RPL_nbr: NEIGHBOR %d / %d, statistics is fresh: %c\n", i+1, galiot_RPL_nbr_array_index+1, galiot_RPL_nbr_array_statsIsFresh[i]);
-
+        // Last Tx timestamp
+        printf("(galiot) >>> RPL_nbr: NEIGHBOR %d / %d, last Tx timestamp (minutes): %u\n", i+1, galiot_RPL_nbr_array_index+1, galiot_RPL_nbr_array_lastTx[i]);
 
 
 
