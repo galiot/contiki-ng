@@ -51,7 +51,9 @@
  *     LOG_LEVEL_WARN         Warnings
  *     LOG_LEVEL_INFO         Basic info
  *     LOG_LEVEL_DBG          Detailled debug
-  */
+ */
+
+/*
 #define LOG_CONF_LEVEL_IPV6                        LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_RPL                         LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_6LOWPAN                     LOG_LEVEL_NONE
@@ -61,5 +63,6 @@
 #define LOG_CONF_LEVEL_COAP                        LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_LWM2M                       LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_6TOP                        LOG_LEVEL_NONE
+*/
 
 #endif /* PROJECT_CONF_H_ */
