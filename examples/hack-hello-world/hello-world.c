@@ -113,7 +113,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
     printf("Hello, world\n");
 
     
-    
+    printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -139,12 +139,14 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    printf("----------------------------------------------------------------\n");
     if (galiot_RPL_populatedFlag == 0) {    // checking the galiot_populated_flag
       printf("(galiot) >>> RPL_nbr: UNPOPULATED\n");
     }
     else {
       printf("(galiot) >>> RPL_nbr: POPULATED\n");
     }
+    printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -156,24 +158,63 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     printf("(galiot) >>> RPL_nbr: own state, address: %s\n", galiot_RPL_nbr_ownState_addr);
-    printf("(galiot) >>> RPL_nbr: own state, DAG state: %s\n", galiot_nbr_ownState_DAGState);
+    printf("(galiot) >>> RPL_nbr: own state, DAG state: %s\n", galiot_RPL_nbr_ownState_DAGState);
     /* DAG Mode of Operation (rpl-const.h) */
     // RPL_MOP_NO_DOWNWARD_ROUTES      0
     // RPL_MOP_NON_STORING             1
     // RPL_MOP_STORING_NO_MULTICAST    2
     // RPL_MOP_STORING_MULTICAST       3
-    switch (galiot_nbr_ownState_mop) {
-      case 0: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (no downward routes)\n", galiot_nbr_ownState_mop);
+    switch (galiot_RPL_nbr_ownState_mop) {
+      case 0: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (no downward routes)\n", galiot_RPL_nbr_ownState_mop);
               break;
-      case 1: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (non-storing)\n", galiot_nbr_ownState_mop);
+      case 1: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (non-storing)\n", galiot_RPL_nbr_ownState_mop);
               break;
-      case 2: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (no multicast)]\n", galiot_nbr_ownState_mop);
+      case 2: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (no multicast)]\n", galiot_RPL_nbr_ownState_mop);
               break;
-      case 3: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (multicast)]\n", galiot_nbr_ownState_mop);
+      case 3: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (multicast)]\n", galiot_RPL_nbr_ownState_mop);
               break;
-      default: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (UNKNOWN)\n", galiot_nbr_ownState_mop);
+      default: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_mop);
     }
-    // printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u\n", galiot_nbr_ownState_mop);
+    // Objective Code Point (OCP) (https://www.iana.org/assignments/rpl/rpl.xhtml#ocp)
+    // 0	A basic Objective Function that relies only on the objects that are defined in [RFC6550].	[RFC6552]
+    // 1	Minimum Rank with Hysteresis Objective Function (MRHOF) [RFC6719]
+    switch (galiot_RPL_nbr_ownState_ocp) {
+      case 0: printf("(galiot) >>> RPL_nbr: own state, objective code point: %u (basic)\n", galiot_RPL_nbr_ownState_ocp);
+              break;
+      case 1: printf("(galiot) >>> RPL_nbr: own state, objective code point: %u (MRHOF)\n", galiot_RPL_nbr_ownState_ocp);
+              break;
+      default: printf("(galiot) >>> RPL_nbr: own state, objective code point: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_ocp);
+    }
+    // The current rank
+    switch (galiot_RPL_nbr_ownState_rank) {
+      case 65535: printf("(galiot) >>> RPL_nbr: own state, rank: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_rank);
+                  break;
+      default: printf("(galiot) >>> RPL_nbr: own state, rank: %u\n", galiot_RPL_nbr_ownState_rank);
+    }
+    // The maximum rank (rpl-neigbor.c)
+    switch (galiot_RPL_nbr_ownState_rank) {
+      case 2147483647: printf("(galiot) >>> RPL_nbr: own state, max rank: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_maxRank);
+           break;
+      case 65535: printf("(galiot) >>> RPL_nbr: own state, max rank: %u (infinite)\n", galiot_RPL_nbr_ownState_maxRank);
+           break;
+      default: printf("(galiot) >>> RPL_nbr: own state, max rank: %u\n", galiot_RPL_nbr_ownState_maxRank);
+    }
+    // current DIO interval (rpl-types.h)
+    switch (galiot_RPL_nbr_ownState_DIOInt) {
+      case 65535: printf("(galiot) >>> RPL_nbr: own state, current DIO interval: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_DIOInt);
+                  break;
+      default: printf("(galiot) >>> RPL_nbr: own state, current DIO interval: %u\n", galiot_RPL_nbr_ownState_DIOInt);
+    }
+    // returns the number of nodes in the RPL neighbor table
+    switch (galiot_RPL_nbr_ownState_nbrCount) {
+      case 65535: printf("(galiot) >>> RPL_nbr: own state, number of nodes in the RPL neighbor table: %u (UNKNOWN)\n", galiot_RPL_nbr_ownState_nbrCount);
+                  break;
+      default: printf("(galiot) >>> RPL_nbr: own state, number of nodes in the RPL neighbor table: %u\n", galiot_RPL_nbr_ownState_nbrCount);
+    }
+    // polulation trigger
+    printf("(galiot) >>> RPL_nbr: own state, RTL neighbor table population trigger: %s\n", galiot_RPL_nbr_ownState_lastTrigger);
+
+    printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -209,6 +250,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
     else {
       printf("(galiot) >>> RPL: DAG-leaf mote\n");
     }
+    printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/

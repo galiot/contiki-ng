@@ -81,9 +81,15 @@ static rpl_nbr_t * best_parent(int fresh_only);
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 int galiot_RPL_populatedFlag = 0; // are the variables populated?
-char galiot_RPL_nbr_ownState_addr[UIPLIB_IPV6_MAX_STR_LEN] = "UNASSIGHNED";
-char galiot_nbr_ownState_DAGState[16] = "UNKNOWN";
-uint8_t galiot_nbr_ownState_mop = 255;
+char galiot_RPL_nbr_ownState_addr[UIPLIB_IPV6_MAX_STR_LEN] = "(UNASSIGHNED)";
+char galiot_RPL_nbr_ownState_DAGState[32] = "(NONE)";
+uint8_t galiot_RPL_nbr_ownState_mop = 255;
+uint16_t galiot_RPL_nbr_ownState_ocp = 65535;
+int galiot_RPL_nbr_ownState_rank = 65535;
+int galiot_RPL_nbr_ownState_maxRank = 2147483647;
+int galiot_RPL_nbr_ownState_DIOInt = 65535;
+int galiot_RPL_nbr_ownState_nbrCount = 65535;
+char galiot_RPL_nbr_ownState_lastTrigger[32] = "(NONE)";
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -195,8 +201,22 @@ rpl_neighbor_print_list(const char *str)
     // uiplib_ipaddr_print(rpl_get_global_address());
     //
     // nbr: own state, DAG state
-    strcpy(galiot_nbr_ownState_DAGState, rpl_dag_state_to_str(curr_instance.dag.state));
-    galiot_nbr_ownState_mop = curr_instance.mop;
+    strcpy(galiot_RPL_nbr_ownState_DAGState, rpl_dag_state_to_str(curr_instance.dag.state));
+    // nbr: own state, mop
+    galiot_RPL_nbr_ownState_mop = curr_instance.mop;
+    // nbr: own state, ocp
+    galiot_RPL_nbr_ownState_ocp = curr_instance.of->ocp;
+    // nbr: own state, rank
+    galiot_RPL_nbr_ownState_rank = curr_rank;
+    // nbr: own state, max-rank
+    galiot_RPL_nbr_ownState_maxRank = max_acceptable_rank();
+    // nbr: own state, dioint
+    galiot_RPL_nbr_ownState_DIOInt = curr_dio_interval;
+    // nbr: own state, nbr count
+    galiot_RPL_nbr_ownState_nbrCount = rpl_neighbor_count();
+
+    strcpy(galiot_RPL_nbr_ownState_lastTrigger, str);
+
     // printf(", DAG state: %s, MOP %u OCP %u rank %u max-rank %u, dioint %u, nbr count %u (%s)\n",
     //     rpl_dag_state_to_str(curr_instance.dag.state),
     //     curr_instance.mop, curr_instance.of->ocp, curr_rank,

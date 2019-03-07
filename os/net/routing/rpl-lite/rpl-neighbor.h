@@ -226,8 +226,14 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 int galiot_RPL_populatedFlag;
 char galiot_RPL_nbr_ownState_addr[UIPLIB_IPV6_MAX_STR_LEN];
-char galiot_nbr_ownState_DAGState[16];
-uint8_t galiot_nbr_ownState_mop;
+char galiot_RPL_nbr_ownState_DAGState[32];
+uint8_t galiot_RPL_nbr_ownState_mop;
+uint16_t galiot_RPL_nbr_ownState_ocp;
+int galiot_RPL_nbr_ownState_rank;
+int galiot_RPL_nbr_ownState_maxRank;
+int galiot_RPL_nbr_ownState_DIOInt;
+int galiot_RPL_nbr_ownState_nbrCount;
+char galiot_RPL_nbr_ownState_lastTrigger[32];
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
