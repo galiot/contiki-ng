@@ -156,7 +156,24 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     printf("(galiot) >>> RPL_nbr: own state, address: %s\n", galiot_RPL_nbr_ownState_addr);
-    printf("(galiot) >>> RPL_nbr: own state, DAG state: %s\n", galiot_nbr_ownState_dagState);
+    printf("(galiot) >>> RPL_nbr: own state, DAG state: %s\n", galiot_nbr_ownState_DAGState);
+    /* DAG Mode of Operation (rpl-const.h) */
+    // RPL_MOP_NO_DOWNWARD_ROUTES      0
+    // RPL_MOP_NON_STORING             1
+    // RPL_MOP_STORING_NO_MULTICAST    2
+    // RPL_MOP_STORING_MULTICAST       3
+    switch (galiot_nbr_ownState_mop) {
+      case 0: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (no downward routes)\n", galiot_nbr_ownState_mop);
+              break;
+      case 1: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (non-storing)\n", galiot_nbr_ownState_mop);
+              break;
+      case 2: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (no multicast)]\n", galiot_nbr_ownState_mop);
+              break;
+      case 3: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u [storing (multicast)]\n", galiot_nbr_ownState_mop);
+              break;
+      default: printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u (UNKNOWN)\n", galiot_nbr_ownState_mop);
+    }
+    // printf("(galiot) >>> RPL_nbr: own state, mode of operation: %u\n", galiot_nbr_ownState_mop);
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
