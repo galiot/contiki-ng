@@ -157,7 +157,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    printf("(galiot) >>> RPL_nbr: own state, address: %s\n", galiot_RPL_nbr_ownState_addr);
+    printf("(galiot) >>> RPL_nbr: own state, IPv6 unique local address (ULA): %s\n", galiot_RPL_nbr_ownState_addr);
     printf("(galiot) >>> RPL_nbr: own state, DAG state: %s\n", galiot_RPL_nbr_ownState_DAGState);
     /* DAG Mode of Operation (rpl-const.h) */
     // RPL_MOP_NO_DOWNWARD_ROUTES      0
@@ -213,6 +213,31 @@ PROCESS_THREAD(hello_world_process, ev, data)
     }
     // polulation trigger
     printf("(galiot) >>> RPL_nbr: own state, RTL neighbor table population trigger: %s\n", galiot_RPL_nbr_ownState_lastTrigger);
+
+    printf("----------------------------------------------------------------\n");
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    if (galiot_RPL_nbr_array_index == 0) 
+    {
+      printf("(galiot) >>> RPL_nbr: (NO NEIGHBORS FOUND, SEARCHING...)\n");
+    }
+    else 
+    {
+      for (int i = 0; i <= galiot_RPL_nbr_array_index; i++)
+      {
+        printf("(galiot) >>> RPL_nbr: NEIGHBOR %d / %d, IPv6 link-local address: %s\n", i+1, galiot_RPL_nbr_array_index+1, galiot_RPL_nbr_array_ipaddr[i]);
+      }
+      
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      
+
+    } 
+
+
 
     printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
