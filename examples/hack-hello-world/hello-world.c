@@ -159,7 +159,9 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    printf("----------------------------------------------------------------\n");
+    printf("\n");
+    printf("================================================================\n");
+    printf("\n");
     printf("(galiot) >>> IPv6: own address: %s\n", galiot_IPV6_uiplib_ip6addr);   // "nbr: own state, addr "
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -186,16 +188,18 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    printf("\n");
     printf("================================================================\n");
+    printf("\n");
     if (galiot_RPL_populatedFlag == 0)   // checking the galiot_populated_flag
     {    
-      printf("(galiot) >>> RPL_nbr: UNPOPULATED\n");
+      printf("(galiot) >>> RPL_nbr: [-] UNPOPULATED\n");
     }
     else 
     {
-      printf("(galiot) >>> RPL_nbr: POPULATED\n");
+      printf("(galiot) >>> RPL_nbr: [%lu] POPULATED\n", galiot_RPL_populatedSystemTime);
     }
-    printf("================================================================\n");
+    printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -274,7 +278,9 @@ PROCESS_THREAD(hello_world_process, ev, data)
     }
     // polulation trigger
     printf("(galiot) >>> RPL_nbr: HOME, RTL neighbor table population trigger: %s\n", galiot_RPL_nbr_ownState_lastTrigger);
+    printf("\n");
     printf("================================================================\n");
+    printf("\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -288,11 +294,15 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     if (galiot_RPL_nbr_array_populatedFlag == 0) 
     {
-      printf("(galiot) >>> RPL_nbr: (NO NEIGHBORS FOUND, SEARCHING...)\n");
+      printf("(galiot) >>> RPL_nbr: [-] NEIGHBORS FOUND, (NONE)\n");
+      printf("\n");
       printf("================================================================\n");
+      printf("\n");
     }
     else 
     {
+      printf("(galiot) >>> RPL_nbr: [%lu] NEIGHBORS COUNT, %d\n", galiot_RPL_nbr_array_populatedSystemTime, galiot_RPL_nbr_array_index+1);
+      printf("----------------------------------------------------------------\n");
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       for (int i = 0; i <= galiot_RPL_nbr_array_index; i++)
       {
@@ -319,7 +329,12 @@ PROCESS_THREAD(hello_world_process, ev, data)
         printf("(galiot) >>> RPL_nbr: NEIGHBOR %d / %d, last Tx timestamp (minutes): %u\n", i+1, galiot_RPL_nbr_array_index+1, galiot_RPL_nbr_array_lastTx[i]);
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
         if (i < galiot_RPL_nbr_array_index) printf("----------------------------------------------------------------\n");
-        else printf("================================================================\n");
+        else 
+        {
+          printf("\n");
+          printf("================================================================\n");
+          printf("\n");  
+        }
       }      
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     }
@@ -336,11 +351,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/ 
     if (galiot_RPL_nbr_lastParentSwitch_occuredFlag == 0)
     {
-      printf("(galiot) >>> RPL_nbr: PARENT SWITCH, (NONE)\n");
+      printf("(galiot) >>> RPL_nbr: [-] PARENT SWITCH, (NONE)\n");
     }
     else
     {
-      printf("(galiot) >>> RPL_nbr: PARENT_SWITCH, (RECORDED) %s -> %s\n", galiot_RPL_nbr_lastParentSwitch_from, galiot_RPL_nbr_lastParentSwitch_to);
+      printf("(galiot) >>> RPL_nbr: [%lu] PARENT_SWITCH, (RECORDED) %s -> %s\n", galiot_RPL_nbr_lastParentSwitch_occuredSystemTime, galiot_RPL_nbr_lastParentSwitch_from, galiot_RPL_nbr_lastParentSwitch_to);
     }
     printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -348,11 +363,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     if (galiot_RPL_nbr_removingAllNeighbors_occuredFlag == 0)
     {
-      printf("(galiot) >>> RPL_nbr: REMOVAL OF ALL NEIGHBORS, (NONE)\n");
+      printf("(galiot) >>> RPL_nbr: [-] REMOVAL OF ALL NEIGHBORS, (NONE)\n");
     }
     else
     {
-      printf("(galiot) >>> RPL_nbr: REMOVING ALL NEIGHBORS, (RECORDED)\n");
+      printf("(galiot) >>> RPL_nbr: [%lu] REMOVING ALL NEIGHBORS, (RECORDED)\n", galiot_RPL_nbr_removingAllNeighbors_occuredSystemTime);
     }
     printf("----------------------------------------------------------------\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -360,13 +375,15 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     if (galiot_RPL_nbr_urgentProbingScheduled_occurredFlag == 0)
     {
-      printf("(galiot) >>> RPL_nbr: URGENT PROBING SCHEDULED, (NONE)\n");
+      printf("(galiot) >>> RPL_nbr: [-] URGENT PROBING SCHEDULED, (NONE)\n");
     }
     else
     {
-      printf("(galiot) >>> RPL_nbr: URGENT PROBING SCHEDULED, (RECORDED) -> %s\n", galiot_RPL_nbr_urgentProbingScheduled_to);
+      printf("(galiot) >>> RPL_nbr: [%lu] URGENT PROBING SCHEDULED, (RECORDED) -> %s\n", galiot_RPL_nbr_urgentProbingScheduled_occurredSystemTime, galiot_RPL_nbr_urgentProbingScheduled_to);
     } 
+     printf("\n");
      printf("================================================================\n");
+     printf("\n");  
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -411,7 +428,9 @@ PROCESS_THREAD(hello_world_process, ev, data)
     {
       printf("(galiot) >>> RPL: DAG-leaf mote\n");
     }
-    printf("----------------------------------------------------------------\n");
+    printf("\n");
+    printf("================================================================\n");
+    printf("\n");  
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
