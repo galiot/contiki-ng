@@ -49,6 +49,37 @@
 #define LOG_MODULE "RPL"
 #define LOG_LEVEL LOG_LEVEL_RPL
 
+
+
+
+
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+#if GALIOT_FUNCTIONALITY
+
+  int galiot_snap_flag_rpl_link_callback = 0;
+  int galiot_snap_count_rpl_link_callback = 0;
+
+  // struct galiot_struct_snap_rpl_link_callback galiot_snap_rpl_link_callback;
+  /*int i;
+  for(i = 0; i < galiot_snap_count_rpl_link_callback; i++)
+  {
+    strcpy(galiot_snap_rpl_link_callback.packet_sent_to[i % GALIOT_SNAPSHOT_COUNT], "-");
+    galiot_snap_rpl_link_callback.status[i % GALIOT_SNAPSHOT_COUNT] = 604;
+    galiot_snap_rpl_link_callback.tx[i % GALIOT_SNAPSHOT_COUNT] = 604;
+    galiot_snap_rpl_link_callback.new_link_metric[i % GALIOT_SNAPSHOT_COUNT] = 65535;
+  }*/
+
+#endif /* GALIOT_FUNCTIONALITY */
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
 uip_ipaddr_t rpl_multicast_addr;
 static uint8_t rpl_leaf_only = RPL_DEFAULT_LEAF_ONLY;
 
@@ -109,6 +140,59 @@ rpl_link_callback(const linkaddr_t *addr, int status, int numtx)
       LOG_INFO("packet sent to ");
       LOG_INFO_LLADDR(addr);
       LOG_INFO_(", status %u, tx %u, new link metric %u\n", status, numtx, rpl_neighbor_get_link_metric(nbr));
+
+
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      #if GALIOT_FUNCTIONALITY
+      
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      char addr_str[40];
+      char galiot_addr_buf[2];
+
+      for(unsigned int i = 0; i < LINKADDR_SIZE; i++) 
+      {
+        if(i > 0 && i % 2 == 0) 
+        {
+          strcat(addr_str, ".");
+        }
+        sprintf(galiot_addr_buf, "%02x", addr->u8[i]);
+        strcat(addr_str, galiot_addr_buf);
+      }
+      printf("*** DEBUG: lladdr_str: %s\n", addr_str);
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      galiot_snap_flag_rpl_link_callback = 1;
+      galiot_snap_count_rpl_link_callback++;
+
+      strcpy(galiot_snap_rpl_link_callback.packet_sent_to[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT], addr_str);
+      galiot_snap_rpl_link_callback.status[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = status;
+      galiot_snap_rpl_link_callback.tx[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = numtx;
+      galiot_snap_rpl_link_callback.new_link_metric[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = rpl_neighbor_get_link_metric(nbr);
+
+      printf("*** DEBUG: galiot_snap_count_rpl_link_callback: %d\n", galiot_snap_count_rpl_link_callback);
+      printf("*** DEBUG: galiot_snap_count_rpl_link_callback mod GALIOT_SNAPSHOT_COUNT: %u\n", galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT);
+
+      printf("*** DEBUG: packet sent to: %s\n", galiot_snap_rpl_link_callback.packet_sent_to[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
+      printf("*** DEBUG: status: %u\n", galiot_snap_rpl_link_callback.status[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
+      printf("*** DEBUG: tx: %u\n", galiot_snap_rpl_link_callback.tx[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
+      printf("*** DEBUG: new_link_metric: %u\n", galiot_snap_rpl_link_callback.new_link_metric[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
+      
+      
+
+      #endif /* GALIOT_FUNCTIONALITY */
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
       rpl_timers_schedule_state_update();
     }
   }

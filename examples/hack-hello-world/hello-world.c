@@ -147,6 +147,14 @@ PROCESS_THREAD(hello_world_process, ev, data)
     printf("Hello, world\n");
     printf("SYSTEM TIME: %lu\n", clock_seconds());
 
+    
+    #ifdef GALIOT_FUNCTIONALITY
+      printf("GALIOT FUNCTIONALITY IS ENABLED\n");
+      printf("GALIOT_SNAPSHOT_COUNT IS %d\n", GALIOT_SNAPSHOT_COUNT);
+    #else
+      printf("GALIOT_SNAPSHOT_COUNT IS %d\n", GALIOT_SNAPSHOT_COUNT);
+    #endif
+
 
 
     
