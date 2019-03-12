@@ -205,22 +205,22 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      // rpl_link_callback
+      // rpl_link_callback_INFO
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      if (galiot_snap_flag_rpl_link_callback == 0)
+      if (galiot_snap_flag_rpl_link_callback_INFO == 0)
       {
-        printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: OFF\n", clock_seconds());
+        printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback (INFO): OFF\n", clock_seconds());
         printf("----------------------------------------------------------------\n");
       }
       else
       {
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: ON\n", clock_seconds());
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_link_callback);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_link_callback_INFO);
         
-        if (galiot_snap_flag_countOverflow_rpl_link_callback == 1)
+        if (galiot_snap_flag_countOverflow_rpl_link_callback_INFO == 1)
         {
-          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: OVERFLOW\n", clock_seconds());
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): OVERFLOW\n", clock_seconds());
         }
         
         printf("----------------------------------------------------------------\n");
@@ -228,33 +228,33 @@ PROCESS_THREAD(hello_world_process, ev, data)
         
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
       {
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_link_callback.system_time[i], i);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: PACKET SENT TO: %s\n", clock_seconds(), galiot_snap_rpl_link_callback.packet_sent_to[i]);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: STATUS: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.status[i]);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: TX: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.tx[i]);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: NEW LINK METRIC: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.new_link_metric[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_link_callback_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): PACKET SENT TO: %s\n", clock_seconds(), galiot_snap_rpl_link_callback_INFO.packet_sent_to[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): STATUS: %u\n", clock_seconds(), galiot_snap_rpl_link_callback_INFO.status[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): TX: %u\n", clock_seconds(), galiot_snap_rpl_link_callback_INFO.tx[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): NEW LINK METRIC: %u\n", clock_seconds(), galiot_snap_rpl_link_callback_INFO.new_link_metric[i]);
         printf("----------------------------------------------------------------\n");
       }
       
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      // rpl_reset_prefix
+      // rpl_reset_prefix_INFO
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      if (galiot_snap_flag_rpl_reset_prefix == 0)
+      if (galiot_snap_flag_rpl_reset_prefix_INFO == 0)
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: OFF\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): OFF\n", clock_seconds());
         printf("----------------------------------------------------------------\n");
       }
       else
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: ON\n", clock_seconds());
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_reset_prefix);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_reset_prefix_INFO);
         
-        if (galiot_snap_flag_countOverflow_rpl_reset_prefix == 1)
+        if (galiot_snap_flag_countOverflow_rpl_reset_prefix_INFO == 1)
         {
-          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: OVERFLOW\n", clock_seconds());
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): OVERFLOW\n", clock_seconds());
         }
         
         printf("----------------------------------------------------------------\n");
@@ -262,30 +262,30 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
       {
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_reset_prefix.system_time[i], i);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: REMOVING GLOBAL IP ADDRESS %s\n", clock_seconds(), galiot_snap_rpl_reset_prefix.removing_global_IP_address[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_reset_prefix_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): REMOVING GLOBAL IP ADDRESS: %s\n", clock_seconds(), galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[i]);
         printf("----------------------------------------------------------------\n");
       }
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      // rpl_set_prefix_from_addr
+      // rpl_set_prefix_from_addr_WARNING
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      if (galiot_snap_flag_rpl_set_prefix_from_addr == 0)
+      if (galiot_snap_flag_rpl_set_prefix_from_addr_WARNING == 0)
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr: OFF\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): OFF\n", clock_seconds());
         printf("----------------------------------------------------------------\n");
       }
       else
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr: ON\n", clock_seconds());
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_set_prefix_from_addr);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_set_prefix_from_addr_WARNING);
         
-        if (galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr == 1)
+        if (galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_WARNING == 1)
         {
-          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr: OVERFLOW\n", clock_seconds());
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): OVERFLOW\n", clock_seconds());
         }
         
         printf("----------------------------------------------------------------\n");
@@ -293,8 +293,39 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
       {
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_set_prefix_from_addr.system_time[i], i);
-        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr: ADDING GLOBAL IP ADDRESS %s\n", clock_seconds(), galiot_snap_rpl_set_prefix_from_addr.adding_global_IP_address[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_set_prefix_from_addr_WARNING.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): PREFIX NOT INCLUDED, NOT SUPPORTED OR INVALID\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_set_prefix_from_addr_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      if (galiot_snap_flag_rpl_set_prefix_from_addr_INFO == 0)
+      {
+        printf("\n");
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): OFF\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      else
+      {
+        printf("\n");
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_set_prefix_from_addr_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): ADDING GLOBAL IP ADDRESS: %s\n", clock_seconds(), galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[i]);
         printf("----------------------------------------------------------------\n");
       }
 
@@ -302,21 +333,21 @@ PROCESS_THREAD(hello_world_process, ev, data)
       // init
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      if (galiot_snap_flag_init == 0)
+      if (galiot_snap_flag_init_INFO == 0)
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> init: OFF\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): OFF\n", clock_seconds());
         printf("----------------------------------------------------------------\n");
       }
       else
       {
         printf("\n");
-        printf("(galiot) >>> [%10lu] >>> rpl >>> init: ON\n", clock_seconds());
-        printf("(galiot) >>> [%10lu] >>> rpl >>> init: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_set_prefix_from_addr);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_init_INFO);
         
-        if (galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr == 1)
+        if (galiot_snap_flag_countOverflow_init_INFO == 1)
         {
-          printf("(galiot) >>> [%10lu] >>> rpl >>> init: OVERFLOW\n", clock_seconds());
+          printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): OVERFLOW\n", clock_seconds());
         }
         
         printf("----------------------------------------------------------------\n");
@@ -324,7 +355,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
       {
-        printf("(galiot) >>> [%10lu] >>> rpl >>> init >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_init.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_init_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): INITIALIZING\n", clock_seconds());
         printf("----------------------------------------------------------------\n");
       }
 

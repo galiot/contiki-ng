@@ -62,37 +62,45 @@
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-  // rpl_link_callback
+  // rpl_link_callback_INFO
   
-  int galiot_snap_flag_rpl_link_callback = 0;                 // whether rpl_link_callback snap data have been populated
-  int galiot_snap_count_rpl_link_callback = 0;                // how many times rpl_link_callback snap data have been offered
-  int galiot_snap_flag_countOverflow_rpl_link_callback = 0;  // whether rpl_link_callback snap data have been offered 604 times at least once
+  int galiot_snap_flag_rpl_link_callback_INFO = 0;                 // whether rpl_link_callback snap data have been populated
+  int galiot_snap_count_rpl_link_callback_INFO = 0;                // how many times rpl_link_callback snap data have been offered
+  int galiot_snap_flag_countOverflow_rpl_link_callback_INFO = 0;  // whether rpl_link_callback snap data have been offered 604 times at least once
 
-  struct galiot_snap_struct_rpl_link_callback galiot_snap_rpl_link_callback = { {0}, {" "}, {0}, {0}, {0} };
+  struct galiot_snap_struct_rpl_link_callback_INFO galiot_snap_rpl_link_callback_INFO = { {0}, {" "}, {0}, {0}, {0} };
   
-  // rpl_reset_prefix
+  // rpl_reset_prefix_INFO
 
-  int galiot_snap_flag_rpl_reset_prefix = 0;
-  int galiot_snap_count_rpl_reset_prefix = 0;
-  int galiot_snap_flag_countOverflow_rpl_reset_prefix = 0;
+  int galiot_snap_flag_rpl_reset_prefix_INFO = 0;
+  int galiot_snap_count_rpl_reset_prefix_INFO = 0;
+  int galiot_snap_flag_countOverflow_rpl_reset_prefix_INFO = 0;
 
-  struct galiot_snap_struct_rpl_reset_prefix galiot_snap_rpl_reset_prefix = { {0}, {" "} };
+  struct galiot_snap_struct_rpl_reset_prefix_INFO galiot_snap_rpl_reset_prefix_INFO = { {0}, {" "} };
 
-  // rpl_set_prefix_from_addr
+  // rpl_set_prefix_from_addr_WARNING
 
-  int galiot_snap_flag_rpl_set_prefix_from_addr = 0;
-  int galiot_snap_count_rpl_set_prefix_from_addr = 0;
-  int galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr = 0;
+  int galiot_snap_flag_rpl_set_prefix_from_addr_WARNING = 0;
+  int galiot_snap_count_rpl_set_prefix_from_addr_WARNING = 0;
+  int galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_WARNING = 0;
 
-  struct galiot_snap_struct_rpl_set_prefix_from_addr galiot_snap_rpl_set_prefix_from_addr = { {0}, {" "} };
+  struct galiot_snap_struct_rpl_set_prefix_from_addr_WARNING galiot_snap_rpl_set_prefix_from_addr_WARNING = { {0} };
+  
+  // rpl_set_prefix_from_addr_INFO
 
-  // init
+  int galiot_snap_flag_rpl_set_prefix_from_addr_INFO = 0;
+  int galiot_snap_count_rpl_set_prefix_from_addr_INFO = 0;
+  int galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_INFO = 0;
 
-  int galiot_snap_flag_init = 0;
-  int galiot_snap_count_init = 0;
-  int galiot_snap_flag_countOverflow_init = 0;
+  struct galiot_snap_struct_rpl_set_prefix_from_addr_INFO galiot_snap_rpl_set_prefix_from_addr_INFO = { {0}, {" "} };
 
-  struct galiot_snap_struct_init galiot_snap_init = { {0} };
+  // init_INFO
+
+  int galiot_snap_flag_init_INFO = 0;
+  int galiot_snap_count_init_INFO = 0;
+  int galiot_snap_flag_countOverflow_init_INFO = 0;
+
+  struct galiot_snap_struct_init_INFO galiot_snap_init_INFO = { {0} };
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -201,31 +209,22 @@ rpl_link_callback(const linkaddr_t *addr, int status, int numtx)
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        galiot_snap_flag_rpl_link_callback = 1;
-        galiot_snap_count_rpl_link_callback++;
+        galiot_snap_flag_rpl_link_callback_INFO = 1;
+        galiot_snap_count_rpl_link_callback_INFO++;
 
-        if (galiot_snap_count_rpl_link_callback == 604)
+        if (galiot_snap_count_rpl_link_callback_INFO == 604)
         {
-         galiot_snap_flag_countOverflow_rpl_link_callback = 1;
-         galiot_snap_count_rpl_link_callback = 1;
+         galiot_snap_flag_countOverflow_rpl_link_callback_INFO = 1;
+         galiot_snap_count_rpl_link_callback_INFO = 1;
         }
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        galiot_snap_rpl_link_callback.system_time[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-        strcpy(galiot_snap_rpl_link_callback.packet_sent_to[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT], addr_str);
-        galiot_snap_rpl_link_callback.status[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = status;
-        galiot_snap_rpl_link_callback.tx[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = numtx;
-        galiot_snap_rpl_link_callback.new_link_metric[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT] = rpl_neighbor_get_link_metric(nbr);
-
-        printf("*** DEBUG: galiot_snap_count_rpl_link_callback: %d\n", galiot_snap_count_rpl_link_callback);
-        printf("*** DEBUG: galiot_snap_count_rpl_link_callback mod GALIOT_SNAPSHOT_COUNT: %u\n", galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT);
-        printf("*** DEBUG: system time: %lu\n", galiot_snap_rpl_link_callback.system_time[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
-
-        printf("*** DEBUG: packet sent to: %s\n", galiot_snap_rpl_link_callback.packet_sent_to[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
-        printf("*** DEBUG: status: %u\n", galiot_snap_rpl_link_callback.status[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
-        printf("*** DEBUG: tx: %u\n", galiot_snap_rpl_link_callback.tx[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
-        printf("*** DEBUG: new_link_metric: %u\n", galiot_snap_rpl_link_callback.new_link_metric[galiot_snap_count_rpl_link_callback % GALIOT_SNAPSHOT_COUNT]);
+        galiot_snap_rpl_link_callback_INFO.system_time[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+        strcpy(galiot_snap_rpl_link_callback_INFO.packet_sent_to[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT], addr_str);
+        galiot_snap_rpl_link_callback_INFO.status[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = status;
+        galiot_snap_rpl_link_callback_INFO.tx[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = numtx;
+        galiot_snap_rpl_link_callback_INFO.new_link_metric[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = rpl_neighbor_get_link_metric(nbr);
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       
       
@@ -284,29 +283,27 @@ rpl_reset_prefix(rpl_prefix_t *last_prefix)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    // SNAP rpl_reset_prefix
+    // SNAP rpl_reset_prefix_INFO
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     #if GALIOT_FUNCTIONALITY
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_flag_rpl_reset_prefix = 1;
-      galiot_snap_count_rpl_reset_prefix++;
+      galiot_snap_flag_rpl_reset_prefix_INFO = 1;
+      galiot_snap_count_rpl_reset_prefix_INFO++;
 
-      if (galiot_snap_count_rpl_reset_prefix == 604)  
+      if (galiot_snap_count_rpl_reset_prefix_INFO == 604)  
       {
-        galiot_snap_flag_countOverflow_rpl_reset_prefix = 1;
-        galiot_snap_count_rpl_reset_prefix = 1;
+        galiot_snap_flag_countOverflow_rpl_reset_prefix_INFO = 1;
+        galiot_snap_count_rpl_reset_prefix_INFO = 1;
       }
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_rpl_reset_prefix.system_time[galiot_snap_count_rpl_reset_prefix % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-      uiplib_ipaddr_snprint(galiot_snap_rpl_reset_prefix.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_reset_prefix.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
+      galiot_snap_rpl_reset_prefix_INFO.system_time[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+      uiplib_ipaddr_snprint(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      printf("********** DEBUG: rpl_reset_prefix SYSTEM TIME: %lu\n", galiot_snap_rpl_reset_prefix.system_time[galiot_snap_count_rpl_reset_prefix % GALIOT_SNAPSHOT_COUNT]);
-      printf("********** DEBUG, rpl_reset_prefix removing %s\n", galiot_snap_rpl_reset_prefix.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix % GALIOT_SNAPSHOT_COUNT]);
 
     #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -328,6 +325,44 @@ rpl_set_prefix_from_addr(uip_ipaddr_t *addr, unsigned len, uint8_t flags)
 
   if(addr == NULL || len == 0 || len > 128 || !(flags & UIP_ND6_RA_FLAG_AUTONOMOUS)) {
     LOG_WARN("prefix not included, not-supported or invalid\n");
+
+
+
+
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  // SNAP rpl_set_prefix_from_addr_WARNING
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  #if GALIOT_FUNCTIONALITY
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    galiot_snap_flag_rpl_set_prefix_from_addr_WARNING = 1;
+    galiot_snap_count_rpl_set_prefix_from_addr_WARNING++;
+
+    if (galiot_snap_count_rpl_set_prefix_from_addr_WARNING == 604)  
+    {
+      galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_WARNING = 1;
+      galiot_snap_count_rpl_set_prefix_from_addr_WARNING = 1;
+    }
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    galiot_snap_rpl_set_prefix_from_addr_WARNING.system_time[galiot_snap_count_rpl_set_prefix_from_addr_WARNING % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  #endif /* GALIOT_FUNCTIONALITY */
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
     return 0;
   }
 
@@ -348,32 +383,33 @@ rpl_set_prefix_from_addr(uip_ipaddr_t *addr, unsigned len, uint8_t flags)
 
 
 
+
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    // SNAP rpl_set_prefix_from_addr
+    // SNAP rpl_set_prefix_from_addr_INFO
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     #if GALIOT_FUNCTIONALITY
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_flag_rpl_set_prefix_from_addr = 1;
-      galiot_snap_count_rpl_set_prefix_from_addr++;
+      galiot_snap_flag_rpl_set_prefix_from_addr_INFO = 1;
+      galiot_snap_count_rpl_set_prefix_from_addr_INFO++;
 
-      if (galiot_snap_count_rpl_set_prefix_from_addr == 604)  
+      if (galiot_snap_count_rpl_set_prefix_from_addr_INFO == 604)  
       {
-        galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr = 1;
-        galiot_snap_count_rpl_set_prefix_from_addr = 1;
+        galiot_snap_flag_countOverflow_rpl_set_prefix_from_addr_INFO = 1;
+        galiot_snap_count_rpl_set_prefix_from_addr_INFO = 1;
       }
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_rpl_set_prefix_from_addr.system_time[galiot_snap_count_rpl_set_prefix_from_addr % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-      uiplib_ipaddr_snprint(galiot_snap_rpl_set_prefix_from_addr.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_set_prefix_from_addr.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
+      galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+      uiplib_ipaddr_snprint(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      printf("********** DEBUG: rpl_set_prefix_from_addr SYSTEM TIME: %lu\n", galiot_snap_rpl_set_prefix_from_addr.system_time[galiot_snap_count_rpl_set_prefix_from_addr % GALIOT_SNAPSHOT_COUNT]);
-      printf("********** DEBUG, rpl_set_prefix_from_addr adding %s\n", galiot_snap_rpl_set_prefix_from_addr.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr % GALIOT_SNAPSHOT_COUNT]);
+      printf("********** DEBUG: rpl_set_prefix_from_addr SYSTEM TIME: %lu\n", galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]);
+      printf("********** DEBUG, rpl_set_prefix_from_addr adding %s\n", galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]);
 
     #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -412,25 +448,25 @@ init(void)
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-  // SNAP init
+  // SNAP init_INFO
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   #if GALIOT_FUNCTIONALITY
 
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    galiot_snap_flag_init = 1;
-    galiot_snap_count_init++;
+    galiot_snap_flag_init_INFO = 1;
+    galiot_snap_count_init_INFO++;
 
-    if (galiot_snap_count_init == 604)  
+    if (galiot_snap_count_init_INFO == 604)  
     {
-      galiot_snap_flag_countOverflow_init = 1;
-      galiot_snap_count_init = 1;
+      galiot_snap_flag_countOverflow_init_INFO = 1;
+      galiot_snap_count_init_INFO = 1;
     }
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    galiot_snap_init.system_time[galiot_snap_count_init % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+    galiot_snap_init_INFO.system_time[galiot_snap_count_init_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #endif /* GALIOT_FUNCTIONALITY */
