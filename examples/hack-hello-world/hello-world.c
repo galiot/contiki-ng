@@ -155,11 +155,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     printf("\n");
-    printf("================================================================\n");
+    printf("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n");
     printf("\n");
-    printf("SYSTEM TIME: %lu\n", clock_seconds());
+    printf("(galiot) >>> SYSTEM TIME: %lu\n", clock_seconds());
     printf("\n");
-    printf("================================================================\n");
+    printf("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n");
     printf("\n");
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -173,15 +173,18 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     #ifdef GALIOT_FUNCTIONALITY
-      printf(">>> GALIOT FUNCTIONALITY: ENABLED\n");
-      printf(">>> GALIOT SNAPSHOT COUNT: %d\n", GALIOT_SNAPSHOT_COUNT);
+      printf("(galiot) >>> GALIOT FUNCTIONALITY: ENABLED\n");
+      printf("(galiot) >>> GALIOT SNAPSHOT COUNT: %d\n", GALIOT_SNAPSHOT_COUNT);
+      printf("----------------------------------------------------------------\n");
+      printf("(galiot) >>> GALIOT RPL NEIGHBOR_ARRY MAXIMUM SIZE: %d\n", GALIOT_RPL_NEIGHBOR_ARRY);
+
       printf("\n");
-      printf("================================================================\n");
+      printf("================================================================================================================================\n");
       printf("\n");
     #else
       printf(">>> GALIOT FUNCTIONALITY: DISABLED\n");
       printf("\n");
-      printf("================================================================\n");
+      printf("================================================================================================================================\n");
       printf("\n");
     #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -214,14 +217,23 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
+      printf("\n");
+      printf("(galiot) >>> rpl-neighbor\n");
+      printf("\n");
+
+
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       // rpl_neighbor_print_list_INFO_ownState
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       if (galiot_snap_flag_rpl_neighbor_print_list_INFO_ownState == 0)
       {
+        printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) own state: OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -276,8 +288,12 @@ PROCESS_THREAD(hello_world_process, ev, data)
         
         if (galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[j] == 0)
         {
+          printf("\n");
+          printf("\n");
+          printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
           printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: OFF\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
-          printf("----------------------------------------------------------------\n");
+          printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+          printf("\n");
         }
         else
         {
@@ -289,7 +305,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
             printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: OVERFLOW\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
           }
         
-          printf("----------------------------------------------------------------\n");
+          printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+          printf("\n");
         }
 
         for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -324,8 +341,12 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
       if (galiot_snap_flag_rpl_neighbor_set_preferred_parent_INFO == 0)
       {
+        printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_set_preferred_parent (INFO): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -337,7 +358,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_set_preferred_parent (INFO): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -347,6 +369,76 @@ PROCESS_THREAD(hello_world_process, ev, data)
         printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_set_preferred_parent (INFO): PARENT SWITCH   TO <--- %s\n", clock_seconds(), galiot_snap_rpl_neighbor_set_preferred_parent_INFO.lastParentSwitch_to[i]);
         printf("----------------------------------------------------------------\n");
       }
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_neighbor_remove_all
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      if (galiot_snap_flag_rpl_neighbor_remove_all_INFO == 0)
+      {
+        printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO): OFF\n", clock_seconds());
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_neighbor_remove_all_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_neighbor_remove_all_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
+      }
+
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_neighbor_remove_all_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_remove_all (INFO): REMOVING ALL NEIGHBORS\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_neighbor_select_best
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      if (galiot_snap_flag_rpl_neighbor_select_best_INFO == 0)
+      {
+        printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO): OFF\n", clock_seconds());
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_neighbor_select_best_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_neighbor_select_best_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
+      }
+
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_neighbor_select_best_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_select_best (INFO): BEST PARENT NOT FRESH, SCHEDULE URGENT PROBING TO <--- %s\n", clock_seconds(), galiot_snap_rpl_neighbor_select_best_INFO.scheduleUrgentProbing_to[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+
+      // best parent is not fresh, schedule urgent probing to ADDR
 
 
 
@@ -406,14 +498,21 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
+      printf("\n");
+      printf("(galiot) >>> rpl.c\n");
+
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       // rpl_link_callback_INFO
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       if (galiot_snap_flag_rpl_link_callback_INFO == 0)
       {
+        printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback (INFO): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -425,7 +524,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback (INFO): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
         
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -445,8 +545,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
       if (galiot_snap_flag_rpl_reset_prefix_INFO == 0)
       {
         printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -459,7 +562,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix (INFO): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -476,8 +580,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
       if (galiot_snap_flag_rpl_set_prefix_from_addr_WARNING == 0)
       {
         printf("\n");
+        printf("\n");
+       printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -490,7 +597,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (WARNING): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -507,8 +615,11 @@ PROCESS_THREAD(hello_world_process, ev, data)
       if (galiot_snap_flag_rpl_set_prefix_from_addr_INFO == 0)
       {
         printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
@@ -521,7 +632,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_set_prefix_from_addr (INFO): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
@@ -538,12 +650,17 @@ PROCESS_THREAD(hello_world_process, ev, data)
       if (galiot_snap_flag_init_INFO == 0)
       {
         printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): OFF\n", clock_seconds());
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
       else
       {
         printf("\n");
+        printf("\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
         printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): ON\n", clock_seconds());
         printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_init_INFO);
         
@@ -552,7 +669,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
           printf("(galiot) >>> [%10lu] >>> rpl >>> init (INFO): OVERFLOW\n", clock_seconds());
         }
         
-        printf("----------------------------------------------------------------\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("\n");
       }
 
       for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
