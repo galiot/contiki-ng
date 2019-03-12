@@ -183,7 +183,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
       printf("\n");
       printf("================================================================\n");
       printf("\n");
-    #endif
+    #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -203,36 +203,79 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_link_callback
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
       if (galiot_snap_flag_rpl_link_callback == 0)
       {
         printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: OFF\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
       }
       else
       {
-        printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: ON\n", clock_seconds());
-        printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_link_callback);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_link_callback);
         
-        if (galiot_snap_flag_count_overflow_rpl_link_callback == 1)
+        if (galiot_snap_flag_countOverflow_rpl_link_callback == 1)
         {
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: OVERFLOW\n", clock_seconds());
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: OVERFLOW\n", clock_seconds());
         }
         
         printf("----------------------------------------------------------------\n");
+      }
         
-        for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_link_callback.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: PACKET SENT TO: %s\n", clock_seconds(), galiot_snap_rpl_link_callback.packet_sent_to[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: STATUS: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.status[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: TX: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.tx[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_link_callback: NEW LINK METRIC: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.new_link_metric[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_reset_prefix
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      if (galiot_snap_flag_rpl_reset_prefix == 0)
+      {
+        printf("----------------------------------------------------------------\n");
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: OFF\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_reset_prefix);
+        
+        if (galiot_snap_flag_countOverflow_rpl_reset_prefix == 1)
         {
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_link_callback.system_time[i], i);
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: PACKET SENT TO: %s\n", clock_seconds(), galiot_snap_rpl_link_callback.packet_sent_to[i]);
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: STATUS: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.status[i]);
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: TX: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.tx[i]);
-          printf("(galiot) [%10lu] >>> rpl >>> rpl_link_callback: NEW LINK METRIC: %u\n", clock_seconds(), galiot_snap_rpl_link_callback.new_link_metric[i]);
-          printf("----------------------------------------------------------------\n");
+          printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: OVERFLOW\n", clock_seconds());
         }
-     }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_reset_prefix.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl >>> rpl_reset_prefix: REMOVING GLOBAL IP ADDRESS %s\n", clock_seconds(), galiot_snap_rpl_reset_prefix.removing_global_IP_address[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+
+
+
+
+
+
+
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    #endif
+    #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
