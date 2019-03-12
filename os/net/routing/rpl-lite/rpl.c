@@ -69,15 +69,7 @@
   int galiot_snap_flag_count_overflow_rpl_link_callback = 0;  // whether rpl_link_callback snap data have been offered 604 times at least once
 
   struct galiot_snap_struct_rpl_link_callback galiot_snap_rpl_link_callback = { {4294967295}, {"."}, {2147483647}, {2147483647}, {65535} };
-
   
-  // memset(galiot_snap_rpl_link_callback.system_time, 4294967295, sizeof(galiot_snap_rpl_link_callback.system_time);
-  //memset(galiot_snap_rpl_link_callback.packet_sent_to, ".", sizeof(galiot_snap_rpl_link_callback.packet_sent_to));
-    //galiot_snap_rpl_link_callback.status = {2147483647};
-    //galiot_snap_rpl_link_callback.tx = {2147483647};
-    //galiot_snap_rpl_link_callback.new_link_metric = {65535};
-  
-
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
