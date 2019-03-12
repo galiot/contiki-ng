@@ -220,11 +220,13 @@ rpl_link_callback(const linkaddr_t *addr, int status, int numtx)
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        galiot_snap_rpl_link_callback_INFO.system_time[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-        strcpy(galiot_snap_rpl_link_callback_INFO.packet_sent_to[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT], addr_str);
-        galiot_snap_rpl_link_callback_INFO.status[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = status;
-        galiot_snap_rpl_link_callback_INFO.tx[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = numtx;
-        galiot_snap_rpl_link_callback_INFO.new_link_metric[galiot_snap_count_rpl_link_callback_INFO % GALIOT_SNAPSHOT_COUNT] = rpl_neighbor_get_link_metric(nbr);
+        int galiot_snap_index = (galiot_snap_count_rpl_link_callback_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+        
+        galiot_snap_rpl_link_callback_INFO.system_time[galiot_snap_index] = clock_seconds();
+        strcpy(galiot_snap_rpl_link_callback_INFO.packet_sent_to[galiot_snap_index], addr_str);
+        galiot_snap_rpl_link_callback_INFO.status[galiot_snap_index] = status;
+        galiot_snap_rpl_link_callback_INFO.tx[galiot_snap_index] = numtx;
+        galiot_snap_rpl_link_callback_INFO.new_link_metric[galiot_snap_index] = rpl_neighbor_get_link_metric(nbr);
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       
       
@@ -301,8 +303,10 @@ rpl_reset_prefix(rpl_prefix_t *last_prefix)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_rpl_reset_prefix_INFO.system_time[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-      uiplib_ipaddr_snprint(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_count_rpl_reset_prefix_INFO % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
+      int galiot_snap_index = (galiot_snap_count_rpl_reset_prefix_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+      
+      galiot_snap_rpl_reset_prefix_INFO.system_time[galiot_snap_index] = clock_seconds();
+      uiplib_ipaddr_snprint(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_index], sizeof(galiot_snap_rpl_reset_prefix_INFO.removing_global_IP_address[galiot_snap_index]), &ipaddr); 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
     #endif /* GALIOT_FUNCTIONALITY */
@@ -330,7 +334,7 @@ rpl_set_prefix_from_addr(uip_ipaddr_t *addr, unsigned len, uint8_t flags)
 
 
 
-    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   // SNAP rpl_set_prefix_from_addr_WARNING
@@ -351,7 +355,9 @@ rpl_set_prefix_from_addr(uip_ipaddr_t *addr, unsigned len, uint8_t flags)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    galiot_snap_rpl_set_prefix_from_addr_WARNING.system_time[galiot_snap_count_rpl_set_prefix_from_addr_WARNING % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+    int galiot_snap_index = (galiot_snap_count_rpl_set_prefix_from_addr_WARNING - 1) % GALIOT_SNAPSHOT_COUNT;
+
+    galiot_snap_rpl_set_prefix_from_addr_WARNING.system_time[galiot_snap_index] = clock_seconds();
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #endif /* GALIOT_FUNCTIONALITY */
@@ -405,8 +411,10 @@ rpl_set_prefix_from_addr(uip_ipaddr_t *addr, unsigned len, uint8_t flags)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
-      uiplib_ipaddr_snprint(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT], sizeof(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]), &ipaddr); 
+      int galiot_snap_index = (galiot_snap_count_rpl_set_prefix_from_addr_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+      
+      galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[galiot_snap_index] = clock_seconds();
+      uiplib_ipaddr_snprint(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_index], sizeof(galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_index]), &ipaddr); 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       printf("********** DEBUG: rpl_set_prefix_from_addr SYSTEM TIME: %lu\n", galiot_snap_rpl_set_prefix_from_addr_INFO.system_time[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]);
       printf("********** DEBUG, rpl_set_prefix_from_addr adding %s\n", galiot_snap_rpl_set_prefix_from_addr_INFO.adding_global_IP_address[galiot_snap_count_rpl_set_prefix_from_addr_INFO % GALIOT_SNAPSHOT_COUNT]);
@@ -466,7 +474,9 @@ init(void)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-    galiot_snap_init_INFO.system_time[galiot_snap_count_init_INFO % GALIOT_SNAPSHOT_COUNT] = clock_seconds();
+    int galiot_snap_index = (galiot_snap_count_init_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+
+    galiot_snap_init_INFO.system_time[galiot_snap_index] = clock_seconds();
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #endif /* GALIOT_FUNCTIONALITY */
