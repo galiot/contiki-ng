@@ -619,6 +619,96 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_timers_handle_probing_timer_INFO_if
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_timers_handle_probing_timer_INFO_if == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_timers_handle_probing_timer_INFO_if);
+        
+        if (galiot_snap_flag_countOverflow_rpl_timers_handle_probing_timer_INFO_if == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_timers_handle_probing_timer_INFO_if.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): PROBING: %s\n", clock_seconds(), galiot_snap_rpl_timers_handle_probing_timer_INFO_if.probing_ipaddr[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): URGENT: %s\n", clock_seconds(), galiot_snap_rpl_timers_handle_probing_timer_INFO_if.urgent[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): TIME (MINUTES AGO): %u\n", clock_seconds(), galiot_snap_rpl_timers_handle_probing_timer_INFO_if.last_tx[i]);
+
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_timers_handle_probing_timer_INFO_else
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_timers_handle_probing_timer_INFO_else == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_timers_handle_probing_timer_INFO_else);
+        
+        if (galiot_snap_flag_countOverflow_rpl_timers_handle_probing_timer_INFO_else == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_timers_handle_probing_timer_INFO_else.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_timers >>> handle_probing_timer (INFO) >>> NO NEIGHBOR NEEDS PROBING\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+
+
+
 
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/

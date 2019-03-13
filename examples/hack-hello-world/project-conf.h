@@ -139,6 +139,7 @@
 
   #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF                       1
   #define GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER_CONF                1
+  #define GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER_CONF            1
 
   #define GALIOT_SNAP_RPL_LINK_CALLBACK_CONF                          0
   #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           0
@@ -192,7 +193,11 @@
     #define GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER                   0
   #endif
 
-
+  #if GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER_CONF
+    #define GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER               GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER_CONF
+  #else
+    #define GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER               0
+  #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
