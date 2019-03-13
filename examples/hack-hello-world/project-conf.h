@@ -66,7 +66,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define MOTE_COLOR RED
+#define MOTE_COLOR                                                          RED
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -81,12 +81,12 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 // GALIOT_OUTPUT_CONF specifies if galiot functionality is enabled or not.
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_CONF_FUNCTIONALITY 1
+#define GALIOT_CONF_FUNCTIONALITY                                    1
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_CONF_FUNCTIONALITY
-#define GALIOT_FUNCTIONALITY GALIOT_CONF_FUNCTIONALITY
+  #define GALIOT_FUNCTIONALITY                        GALIOT_CONF_FUNCTIONALITY
 #endif /* GALIOT_OUTPUT_CONF */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -94,14 +94,14 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 //GALIOT_OUTPUT_COUNT_CONF specifies how many snapshots will be stored.
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_CONF_SNAPSHOT_COUNT 2
+#define GALIOT_CONF_SNAPSHOT_COUNT                                    2
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
-#define GALIOT_SNAPSHOT_COUNT GALIOT_CONF_SNAPSHOT_COUNT
+  #define GALIOT_SNAPSHOT_COUNT                       GALIOT_CONF_SNAPSHOT_COUNT
 #else /* GALIOT_FUNCTIONALITY */
-#define GALIOT_SNAPSHOT_COUNT 0
+  #define GALIOT_SNAPSHOT_COUNT                                         0
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -109,14 +109,14 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 //GALIOT_RPL_NEIGHBOR_ARRY_CONF specifies the maximum number of neighbers
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_RPL_NEIGHBOR_ARRY_CONF 4
+#define GALIOT_RPL_NEIGHBOR_ARRY_CONF                                 4
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
-#define GALIOT_RPL_NEIGHBOR_ARRY GALIOT_RPL_NEIGHBOR_ARRY_CONF
+  #define GALIOT_RPL_NEIGHBOR_ARRY                 GALIOT_RPL_NEIGHBOR_ARRY_CONF
 #else /* GALIOT_FUNCTIONALITY */
-#define GALIOT_RPL_NEIGHBOR_ARRY 0
+  #define GALIOT_RPL_NEIGHBOR_ARRY                                      0
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -137,39 +137,39 @@
   #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF                    0
   #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF                   0
 
-  #define GALIOT_SNAP_RPL_LINK_CALLBACK_CONF                          1
-  #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           1
-  #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF                   1
-  #define GALIOT_SNAP_RPL_INIT_CONF                                   1
+  #define GALIOT_SNAP_RPL_LINK_CALLBACK_CONF                          0
+  #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           0
+  #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF                   0
+  #define GALIOT_SNAP_RPL_INIT_CONF                                   0
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE_CONF
-    #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE_CONF
+    #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE              GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE_CONF
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE              0
   #endif
 
   #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR_CONF
-    #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR_CONF
+    #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR                   GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR_CONF
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR                   0
   #endif
 
   #if GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT_CONF
-    #define GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT_CONF
+    #define GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT             GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT_CONF
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT             0
   #endif
 
   #if GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF
-    #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF
+    #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL                       GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL                       0
   #endif
 
   #if GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF
-    #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF
+    #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST                      GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST                      0
   #endif
@@ -177,25 +177,25 @@
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #if GALIOT_SNAP_RPL_LINK_CALLBACK_CONF
-    #define GALIOT_SNAP_RPL_LINK_CALLBACK GALIOT_SNAP_RPL_LINK_CALLBACK_CONF
+    #define GALIOT_SNAP_RPL_LINK_CALLBACK                             GALIOT_SNAP_RPL_LINK_CALLBACK_CONF
   #else
     #define GALIOT_SNAP_RPL_LINK_CALLBACK                             0
   #endif
 
   #if GALIOT_SNAP_RPL_RESET_PREFIX_CONF   
-    #define GALIOT_SNAP_RPL_RESET_PREFIX GALIOT_SNAP_RPL_RESET_PREFIX_CONF   
+    #define GALIOT_SNAP_RPL_RESET_PREFIX                              GALIOT_SNAP_RPL_RESET_PREFIX_CONF   
   #else
     #define GALIOT_SNAP_RPL_RESET_PREFIX                              0
   #endif
 
   #if GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF
-    #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF
+    #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR                      GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF
   #else
     #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR                      0
   #endif
 
   #if GALIOT_SNAP_RPL_INIT_CONF 
-    #define GALIOT_SNAP_RPL_INIT GALIOT_SNAP_RPL_INIT_CONF 
+    #define GALIOT_SNAP_RPL_INIT                                      GALIOT_SNAP_RPL_INIT_CONF 
   #else
     #define GALIOT_SNAP_RPL_INIT                                      0
   #endif
