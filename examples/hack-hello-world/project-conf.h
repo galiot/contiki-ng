@@ -131,21 +131,32 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+  #define GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO_CONF          1
+  
   #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE_CONF           0
   #define GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR_CONF                0
   #define GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT_CONF          0
   #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF                    0
   #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF                   0
 
-  #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF                       1
-  #define GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER_CONF                1
-  #define GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER_CONF            1
+  // #define GALIOT_SNAP_RPL_OF0_CONF                                 0
+
+  #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF                       0
+  #define GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER_CONF                0
+  #define GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER_CONF            0
 
   #define GALIOT_SNAP_RPL_LINK_CALLBACK_CONF                          0
   #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           0
   #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF                   0
   #define GALIOT_SNAP_RPL_INIT_CONF                                   0
 
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  #if GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO_CONF
+    #define GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO             GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO_CONF
+  #else
+    #define GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO             0
+  #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
@@ -178,6 +189,14 @@
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST                      0
   #endif
+
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  // #if GALIOT_SNAP_RPL_OF0_CONF
+  //   #define GALIOT_SNAP_RPL_OF0                                    GALIOT_SNAP_RPL_OF0_CONF
+  // #else
+  //  #define GALIOT_SNAP_RPL_OF0                                    0
+  // #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 

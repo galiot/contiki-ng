@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "contiki.h": "c",
-        "routing.h": "c"
+        "routing.h": "c",
+        "rpl.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }
