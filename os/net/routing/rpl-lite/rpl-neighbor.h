@@ -248,6 +248,10 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
     int galiot_snap_flag_rpl_neighbor_print_list_INFO_ownState;
     int galiot_snap_count_rpl_neighbor_print_list_INFO_ownState;
     int galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_ownState;
@@ -268,6 +272,10 @@ typedef rpl_nbr_t rpl_parent_t;
 
     struct galiot_snap_struct_rpl_neighbor_print_list_INFO_ownState galiot_snap_rpl_neighbor_print_list_INFO_ownState;
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -285,6 +293,10 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
     int galiot_arrayIndex_rpl_neighbor;
     
@@ -309,6 +321,10 @@ typedef rpl_nbr_t rpl_parent_t;
 
     struct galiot_snap_struct_rpl_neighbor_print_list_INFO_nbr galiot_snap_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -327,6 +343,10 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
     int galiot_snap_flag_rpl_neighbor_set_preferred_parent_INFO;
     int galiot_snap_count_rpl_neighbor_set_preferred_parent_INFO;
     int galiot_snap_flag_countOverflow_rpl_neighbor_set_preferred_parent_INFO;
@@ -339,6 +359,10 @@ typedef rpl_nbr_t rpl_parent_t;
     };
 
     struct galiot_snap_struct_rpl_neighbor_set_preferred_parent_INFO galiot_snap_rpl_neighbor_set_preferred_parent_INFO;
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -358,6 +382,10 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
     int galiot_snap_flag_rpl_neighbor_remove_all_INFO;
     int galiot_snap_count_rpl_neighbor_remove_all_INFO;
     int galiot_snap_flag_countOverflow_rpl_neighbor_remove_all_INFO;
@@ -368,6 +396,10 @@ typedef rpl_nbr_t rpl_parent_t;
     };
 
     struct galiot_snap_struct_rpl_neighbor_remove_all_INFO galiot_snap_rpl_neighbor_remove_all_INFO;
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -387,6 +419,10 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
     int galiot_snap_flag_rpl_neighbor_select_best_INFO;
     int galiot_snap_count_rpl_neighbor_select_best_INFO;
     int galiot_snap_flag_countOverflow_rpl_neighbor_select_best_INFO;
@@ -399,6 +435,10 @@ typedef rpl_nbr_t rpl_parent_t;
     };
 
     struct galiot_snap_struct_rpl_neighbor_select_best_INFO galiot_snap_rpl_neighbor_select_best_INFO;
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
 #endif /* GALIOT_FUNCTIONALITY */
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/

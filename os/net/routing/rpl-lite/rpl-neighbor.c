@@ -97,7 +97,14 @@ static rpl_nbr_t * best_parent(int fresh_only);
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
+  
+  
+  
   // rpl_neighbor_print_list_INFO_ownState
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
   
   int galiot_snap_flag_rpl_neighbor_print_list_INFO_ownState = 0;
   int galiot_snap_count_rpl_neighbor_print_list_INFO_ownState = 0;
@@ -105,7 +112,17 @@ static rpl_nbr_t * best_parent(int fresh_only);
     
   struct galiot_snap_struct_rpl_neighbor_print_list_INFO_ownState galiot_snap_rpl_neighbor_print_list_INFO_ownState = { {0}, {" "}, {" "}, {0}, {0}, {0}, {0}, {0}, {0}, {" "} };
 
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE */
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  
+  
+  
   // rpl_neighbor_print_list_INFO_neighbors
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
   int galiot_arrayIndex_rpl_neighbor = 0;
   
@@ -115,7 +132,17 @@ static rpl_nbr_t * best_parent(int fresh_only);
 
   struct galiot_snap_struct_rpl_neighbor_print_list_INFO_nbr galiot_snap_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF]; /* = {{0}, {" "}, {0}, {0}, {0}, {0}, {' '}, {' '}, {' '}, {0}}; */
 
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  
+  
+  
   // rpl_neighbor_set_preferred_parent
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #if GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
   int galiot_snap_flag_rpl_neighbor_set_preferred_parent_INFO = 0;
   int galiot_snap_count_rpl_neighbor_set_preferred_parent_INFO = 0;
@@ -131,7 +158,17 @@ static rpl_nbr_t * best_parent(int fresh_only);
 
   struct galiot_snap_struct_rpl_neighbor_remove_all_INFO galiot_snap_rpl_neighbor_remove_all_INFO = { {0} };
 
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #endif /* GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT */
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+  
+  
   // rpl_neighbor_select_best
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #if GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
   int galiot_snap_flag_rpl_neighbor_select_best_INFO = 0;
   int galiot_snap_count_rpl_neighbor_select_best_INFO = 0;
@@ -139,7 +176,9 @@ static rpl_nbr_t * best_parent(int fresh_only);
 
   struct galiot_snap_struct_rpl_neighbor_select_best_INFO galiot_snap_rpl_neighbor_select_best_INFO = { {0}, {" "} };
 
-
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #endif /* GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST */
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
   
 
@@ -267,6 +306,10 @@ rpl_neighbor_print_list(const char *str)
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
         #if GALIOT_FUNCTIONALITY
 
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+          #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
           galiot_snap_flag_rpl_neighbor_print_list_INFO_ownState = 1;
           galiot_snap_count_rpl_neighbor_print_list_INFO_ownState++;
@@ -294,6 +337,10 @@ rpl_neighbor_print_list(const char *str)
 
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+          #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_OWNSTATE */
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
         #endif /* GALIOT_FUNCTIONALITY */
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -314,8 +361,16 @@ rpl_neighbor_print_list(const char *str)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     #if GALIOT_FUNCTIONALITY
+
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
     
       galiot_arrayIndex_rpl_neighbor = 0;
+
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
     #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -342,15 +397,19 @@ rpl_neighbor_print_list(const char *str)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       #if GALIOT_FUNCTIONALITY
-      
-      // int rpl_neigbor_sprint(char *buf, int buflen, rpl_nbr_t *nbr) <--- rpl.c
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      rpl_nbr_t *galiot_best = best_parent(0);
-      const struct link_stats *galiot_stats = rpl_neighbor_get_link_stats(nbr);
-      clock_time_t galiot_clock_now = clock_time();
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+        #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      
+        // int rpl_neigbor_sprint(char *buf, int buflen, rpl_nbr_t *nbr) <--- rpl.c
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+        rpl_nbr_t *galiot_best = best_parent(0);
+        const struct link_stats *galiot_stats = rpl_neighbor_get_link_stats(nbr);
+        clock_time_t galiot_clock_now = clock_time();
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
         galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
         galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor]++;
 
@@ -359,32 +418,36 @@ rpl_neighbor_print_list(const char *str)
           galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
           galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
         }
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      int galiot_snap_index_nbr = (galiot_snap_count_rpl_neighbor_print_list_INFO_ownState - 1) % GALIOT_SNAPSHOT_COUNT;
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+        int galiot_snap_index_nbr = (galiot_snap_count_rpl_neighbor_print_list_INFO_ownState - 1) % GALIOT_SNAPSHOT_COUNT;
 
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].system_time[galiot_snap_index_nbr] = clock_seconds();
-      uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr], sizeof(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr]), rpl_neighbor_get_ipaddr(nbr));
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rank[galiot_snap_index_nbr] = nbr->rank;
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].linkMetric[galiot_snap_index_nbr] = rpl_neighbor_get_link_metric(nbr);
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankIfParent[galiot_snap_index_nbr] = rpl_neighbor_rank_via_nbr(nbr);
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsFreshness[galiot_snap_index_nbr] = galiot_stats != NULL ? galiot_stats->freshness : 0;
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankRoot[galiot_snap_index_nbr] = (nbr->rank == ROOT_RANK) ? 'r' : ' ';
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].bestParent[galiot_snap_index_nbr] = (nbr == galiot_best) ? 'b' : ' ';
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].acceptableRankAndParent[galiot_snap_index_nbr] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
-      galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsIsFresh[galiot_snap_index_nbr] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].system_time[galiot_snap_index_nbr] = clock_seconds();
+        uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr], sizeof(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr]), rpl_neighbor_get_ipaddr(nbr));
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rank[galiot_snap_index_nbr] = nbr->rank;
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].linkMetric[galiot_snap_index_nbr] = rpl_neighbor_get_link_metric(nbr);
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankIfParent[galiot_snap_index_nbr] = rpl_neighbor_rank_via_nbr(nbr);
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsFreshness[galiot_snap_index_nbr] = galiot_stats != NULL ? galiot_stats->freshness : 0;
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankRoot[galiot_snap_index_nbr] = (nbr->rank == ROOT_RANK) ? 'r' : ' ';
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].bestParent[galiot_snap_index_nbr] = (nbr == galiot_best) ? 'b' : ' ';
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].acceptableRankAndParent[galiot_snap_index_nbr] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
+        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsIsFresh[galiot_snap_index_nbr] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
       
-      if(galiot_stats->last_tx_time > 0) 
-      {
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = (unsigned)((galiot_clock_now - galiot_stats->last_tx_time) / (60 * CLOCK_SECOND));
-      }
-      else
-      {
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = 65535;
-      }
-      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+        if(galiot_stats->last_tx_time > 0) 
+        {
+          galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = (unsigned)((galiot_clock_now - galiot_stats->last_tx_time) / (60 * CLOCK_SECOND));
+        }
+        else
+        {
+          galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = 65535;
+        }
+        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+        #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
 
       
       #endif /* GALIOT_FUNCTIONALITY */
@@ -425,7 +488,15 @@ rpl_neighbor_print_list(const char *str)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       #if GALIOT_FUNCTIONALITY
 
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+        #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
         galiot_arrayIndex_rpl_neighbor++;
+
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+        #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+        /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       
       #endif /* GALIOT_FUNCTIONALITY */
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -453,8 +524,16 @@ rpl_neighbor_print_list(const char *str)
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   #if GALIOT_FUNCTIONALITY
+    
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
     galiot_arrayIndex_rpl_neighbor--;
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       
   #endif /* GALIOT_FUNCTIONALITY */
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -613,6 +692,10 @@ rpl_neighbor_set_preferred_parent(rpl_nbr_t *nbr)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     #if GALIOT_FUNCTIONALITY
 
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       galiot_snap_flag_rpl_neighbor_set_preferred_parent_INFO = 1;
       galiot_snap_count_rpl_neighbor_set_preferred_parent_INFO++;
@@ -631,6 +714,10 @@ rpl_neighbor_set_preferred_parent(rpl_nbr_t *nbr)
       uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_set_preferred_parent_INFO.lastParentSwitch_from[galiot_snap_index], sizeof(galiot_snap_rpl_neighbor_set_preferred_parent_INFO.lastParentSwitch_from[galiot_snap_index]), rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
       uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_set_preferred_parent_INFO.lastParentSwitch_to[galiot_snap_index], sizeof(galiot_snap_rpl_neighbor_set_preferred_parent_INFO.lastParentSwitch_to[galiot_snap_index]), rpl_neighbor_get_ipaddr(nbr));
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_NEIGHBOR_SET_PREFERRED_PARENT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
     #endif /* GALIOT_FUNCTIONALITY */
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -685,6 +772,10 @@ rpl_neighbor_remove_all(void)
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
   #if GALIOT_FUNCTIONALITY
 
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     galiot_snap_flag_rpl_neighbor_remove_all_INFO = 1;
     galiot_snap_count_rpl_neighbor_remove_all_INFO++;
@@ -701,6 +792,10 @@ rpl_neighbor_remove_all(void)
 
     galiot_snap_rpl_neighbor_remove_all_INFO.system_time[galiot_snap_index] = clock_seconds();
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
   #endif /* GALIOT_FUNCTIONALITY */
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -818,23 +913,31 @@ rpl_neighbor_select_best(void)
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
         #if GALIOT_FUNCTIONALITY
 
-        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        galiot_snap_flag_rpl_neighbor_select_best_INFO = 1;
-        galiot_snap_count_rpl_neighbor_select_best_INFO++;
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+          #if GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
-        if (galiot_snap_count_rpl_neighbor_select_best_INFO == 604)  
-        {
-          galiot_snap_flag_countOverflow_rpl_neighbor_select_best_INFO = 1;
-          galiot_snap_count_rpl_neighbor_select_best_INFO = 1;
-        }
-        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+          /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+          galiot_snap_flag_rpl_neighbor_select_best_INFO = 1;
+          galiot_snap_count_rpl_neighbor_select_best_INFO++;
 
-        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        int galiot_snap_index = (galiot_snap_count_rpl_neighbor_select_best_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+          if (galiot_snap_count_rpl_neighbor_select_best_INFO == 604)  
+          {
+            galiot_snap_flag_countOverflow_rpl_neighbor_select_best_INFO = 1;
+            galiot_snap_count_rpl_neighbor_select_best_INFO = 1;
+          }
+          /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-        galiot_snap_rpl_neighbor_select_best_INFO.system_time[galiot_snap_index] = clock_seconds();
-        uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_select_best_INFO.scheduleUrgentProbing_to[galiot_snap_index], sizeof(galiot_snap_rpl_neighbor_select_best_INFO.scheduleUrgentProbing_to[galiot_snap_index]), rpl_neighbor_get_ipaddr(best));
-        /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+          /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+          int galiot_snap_index = (galiot_snap_count_rpl_neighbor_select_best_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+
+          galiot_snap_rpl_neighbor_select_best_INFO.system_time[galiot_snap_index] = clock_seconds();
+          uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_select_best_INFO.scheduleUrgentProbing_to[galiot_snap_index], sizeof(galiot_snap_rpl_neighbor_select_best_INFO.scheduleUrgentProbing_to[galiot_snap_index]), rpl_neighbor_get_ipaddr(best));
+          /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+          #endif /* GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL */
+          /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
       #endif /* GALIOT_FUNCTIONALITY */
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
