@@ -137,10 +137,13 @@
   #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF                    0
   #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF                   0
 
+  #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF                       1
+
   #define GALIOT_SNAP_RPL_LINK_CALLBACK_CONF                          0
   #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           0
   #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF                   0
   #define GALIOT_SNAP_RPL_INIT_CONF                                   0
+
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
@@ -173,6 +176,16 @@
   #else
     #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST                      0
   #endif
+
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  #if GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF
+    #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET                          GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF
+  #else
+    #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET                          0
+  #endif
+
+
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
