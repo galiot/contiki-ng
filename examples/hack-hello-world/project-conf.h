@@ -139,7 +139,7 @@
   #define GALIOT_SNAP_RPL_NEIGHBOR_REMOVE_ALL_CONF                    0
   #define GALIOT_SNAP_RPL_NEIGHBOR_SELECT_BEST_CONF                   0
 
-  // #define GALIOT_SNAP_RPL_OF0_CONF                                 0
+  #define GALIOT_SNAP_RPL_OF0_CONF                                    1
 
   #define GALIOT_SNAP_RPL_TIMERS_DIO_RESET_CONF                       0
   #define GALIOT_SNAP_RPL_TIMERS_HANDLE_DIO_TIMER_CONF                0
@@ -192,11 +192,11 @@
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-  // #if GALIOT_SNAP_RPL_OF0_CONF
-  //   #define GALIOT_SNAP_RPL_OF0                                    GALIOT_SNAP_RPL_OF0_CONF
-  // #else
-  //  #define GALIOT_SNAP_RPL_OF0                                    0
-  // #endif
+  #if GALIOT_SNAP_RPL_OF0_CONF
+    #define GALIOT_SNAP_RPL_OF0                                        GALIOT_SNAP_RPL_OF0_CONF
+  #else
+   #define GALIOT_SNAP_RPL_OF0                                         0
+  #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 

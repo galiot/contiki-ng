@@ -1,5 +1,5 @@
-#ifndef GALIOT_RPL_NBR_POLICY_H
-#define GALIOT_RPL_NBR_POLICY_H
+#ifndef GALIOT_RPL_OF0_H
+#define GALIOT_RPL_OF0_H
 
 #include "net/routing/rpl-lite/rpl.h"
 
@@ -17,23 +17,22 @@
 #if GALIOT_FUNCTIONALITY
 
     /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
-    #if GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO
+    #if GALIOT_SNAP_RPL_OF0
     /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
-    int galiot_snap_flag_rpl_nbr_policy_find_removable_dio_WARN;
-    int galiot_snap_count_rpl_nbr_policy_find_removable_dio_WARN;
-    int galiot_snap_flag_countOverflow_rpl_nbr_policy_find_removable_dio_WARN;
+    int galiot_snap_flag_rpl_of0_reset_INFO;
+    int galiot_snap_count_rpl_of0_reset_INFO;
+    int galiot_snap_flag_countOverflow_rpl_of0_reset_INFO;
     
-    struct galiot_snap_struct_rpl_nbr_policy_find_removable_dio_WARN
+    struct galiot_snap_struct_rpl_of0_reset_INFO
     {
          unsigned long system_time[GALIOT_SNAPSHOT_COUNT];
-         int instance_ID[GALIOT_SNAPSHOT_COUNT];
     };
 
-    struct galiot_snap_struct_rpl_nbr_policy_find_removable_dio_WARN galiot_snap_rpl_nbr_policy_find_removable_dio_WARN;
+    struct galiot_snap_struct_rpl_of0_reset_INFO galiot_snap_rpl_of0_reset_INFO;
 
     /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
-    #endif /* GALIOT_SNAP_RPL_NBR_POLICY_FIND_REMOVABLE_DIO */
+    #endif /* GALIOT_SNAP_RPL_OF0 */
     /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
 #endif /* GALIOT_FUNCTIONALITY */
@@ -45,7 +44,4 @@
 
 
 
-#endif /* GALIOT_RPL_NBR_POLICY_H */
-
-
-
+#endif /* GALIOT_RPL_OF0_H */
