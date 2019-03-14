@@ -697,8 +697,6 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
-
-
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       // rpl_icmp6_dio_input_WARN_default
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -738,6 +736,56 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_INPUT */
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_icmp6_dio_input_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_ICMP6_DIO_INPUT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_icmp6_dio_input_INFO == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (WARN): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (WARN): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dio_input_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_icmp6_dio_input_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): RECEIVED A %s-DIO\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.DIO_type[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): FROM (6ADDR): %s\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.DIO_from_6ADDR[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): INSTANCE_ID: %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.instance_id[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): DAG-ID %s (6ADDR): \n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.DAG_id_6ADDR[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): VERSION: %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.version[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): DTSN: %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.dtsn[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): RANK: %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_input_INFO.rank[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_INPUT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
 
 
 

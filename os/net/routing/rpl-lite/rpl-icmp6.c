@@ -324,6 +324,24 @@ UIP_ICMP6_HANDLER(dao_ack_handler, ICMP6_RPL, RPL_CODE_DAO_ACK, dao_ack_input);
 
 
 
+  // rpl_icmp6_dio_input_INFO
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #if GALIOT_SNAP_RPL_ICMP6_DIO_INPUT
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  
+  int galiot_snap_flag_rpl_icmp6_dio_input_INFO = 0;
+  int galiot_snap_count_rpl_icmp6_dio_input_INFO = 0;
+  int galiot_snap_flag_countOverflow_rpl_icmp6_dio_input_INFO = 0;
+    
+  struct galiot_snap_struct_rpl_icmp6_dio_input_INFO galiot_snap_rpl_icmp6_dio_input_INFO = { {0}, {" "}, {" "}, {0}, {" "}, {0}, {0}, {0} };
+
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+  #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_INPUT */
+  /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
 
   
 
@@ -732,6 +750,7 @@ dio_input(void)
 
 
 
+
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -788,9 +807,6 @@ dio_input(void)
 
 
 
-
-
-
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -831,15 +847,6 @@ dio_input(void)
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
           /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-        
-
-
-
-
-
-
-
-
 
 
 
@@ -863,11 +870,6 @@ dio_input(void)
           dio.mc.obj.energy.energy_est = buffer[i + 7];
         } else {
           LOG_WARN("dio_input: unsupported DAG MC type %u, discard\n", (unsigned)dio.mc.type);
-
-
-
-
-
 
 
 
@@ -917,24 +919,12 @@ dio_input(void)
 
 
 
-
-
-
-
-
-
           goto discard;
         }
         break;
       case RPL_OPTION_ROUTE_INFO:
         if(len < 9) {
           LOG_WARN("dio_input: invalid destination prefix option, len %u, discard\n", len);
-
-
-
-
-
-
 
 
 
@@ -984,13 +974,6 @@ dio_input(void)
 
 
 
-
-
-
-
-
-
-
           goto discard;
         }
 
@@ -1005,11 +988,6 @@ dio_input(void)
                  (dio.destination_prefix.length + 7) / 8);
         } else {
           LOG_WARN("dio_input: invalid route info option, len %u, discard\n", len);
-
-
-
-
-
 
 
 
@@ -1059,16 +1037,6 @@ dio_input(void)
 
 
 
-
-
-
-
-
-
-
-
-
-
           goto discard;
         }
 
@@ -1076,13 +1044,6 @@ dio_input(void)
       case RPL_OPTION_DAG_CONF:
         if(len != 16) {
           LOG_WARN("dio_input: invalid DAG configuration option, len %u, discard\n", len);
-
-
-
-
-
-
-
 
 
 
@@ -1132,14 +1093,6 @@ dio_input(void)
 
 
 
-
-
-
-
-
-
-
-
           goto discard;
         }
 
@@ -1157,12 +1110,6 @@ dio_input(void)
       case RPL_OPTION_PREFIX_INFO:
         if(len != 32) {
           LOG_WARN("dio_input: invalid DAG prefix info, len %u, discard\n", len);
-
-
-
-
-
-
 
 
 
@@ -1212,13 +1159,6 @@ dio_input(void)
 
 
 
-
-
-
-
-
-
-
           goto discard;
         }
         dio.prefix_info.length = buffer[i + 2];
@@ -1231,10 +1171,6 @@ dio_input(void)
         break;
       default:
         LOG_WARN("dio_input: unsupported suboption type in DIO: %u, discard\n", (unsigned)subopt_type);
-
-
-
-
 
 
 
@@ -1284,10 +1220,6 @@ dio_input(void)
 
 
 
-
-
-
-
         goto discard;
     }
   }
@@ -1301,6 +1233,70 @@ dio_input(void)
          (unsigned)dio.version,
          (unsigned)dio.dtsn,
          (unsigned)dio.rank);
+
+
+
+
+
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  // SNAP: rpl_icmp6_dio_input_INFO
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  #if GALIOT_FUNCTIONALITY
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #if GALIOT_SNAP_RPL_ICMP6_DIO_INPUT
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    galiot_snap_flag_rpl_icmp6_dio_input_INFO = 1;
+    galiot_snap_count_rpl_icmp6_dio_input_INFO++;
+    
+    if (galiot_snap_count_rpl_icmp6_dio_input_INFO == 604)  
+    {
+      galiot_snap_flag_countOverflow_rpl_icmp6_dio_input_INFO = 1;
+      galiot_snap_count_rpl_icmp6_dio_input_INFO = 1;
+    }
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    int galiot_snap_index = (galiot_snap_count_rpl_icmp6_dio_input_INFO - 1) % GALIOT_SNAPSHOT_COUNT;
+    
+    galiot_snap_rpl_icmp6_dio_input_INFO.system_time[galiot_snap_index] = clock_seconds();
+    strcpy(galiot_snap_rpl_icmp6_dio_input_INFO.DIO_type[galiot_snap_index], uip_is_addr_mcast(&UIP_IP_BUF->destipaddr) ? "multicast" : "unicast");
+    uiplib_ipaddr_snprint(galiot_snap_rpl_icmp6_dio_input_INFO.DIO_from_6ADDR[galiot_snap_index], sizeof(galiot_snap_rpl_icmp6_dio_input_INFO.DIO_from_6ADDR[galiot_snap_index]), &from);
+    galiot_snap_rpl_icmp6_dio_input_INFO.instance_id[galiot_snap_index] = (unsigned)dio.instance_id;
+    uiplib_ipaddr_snprint(galiot_snap_rpl_icmp6_dio_input_INFO.DAG_id_6ADDR[galiot_snap_index], sizeof(galiot_snap_rpl_icmp6_dio_input_INFO.DAG_id_6ADDR[galiot_snap_index]), &dio.dag_id);
+    galiot_snap_rpl_icmp6_dio_input_INFO.version[galiot_snap_index] = (unsigned)dio.version;
+    galiot_snap_rpl_icmp6_dio_input_INFO.dtsn[galiot_snap_index] = (unsigned)dio.dtsn;
+    galiot_snap_rpl_icmp6_dio_input_INFO.rank[galiot_snap_index] = (unsigned)dio.rank;
+    
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+    #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_INPUT */
+    /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+  #endif /* GALIOT_FUNCTIONALITY */
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   rpl_process_dio(&from, &dio);
 
