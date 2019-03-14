@@ -288,7 +288,7 @@ typedef rpl_nbr_t rpl_parent_t;
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-// rpl_neighbor_print_list_INFO_neighbors
+// rpl_neighbor_print_list_DBG_neighbors
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -300,11 +300,11 @@ typedef rpl_nbr_t rpl_parent_t;
 
     int galiot_arrayIndex_rpl_neighbor;
     
-    int galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
-    int galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
-    int galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
+    int galiot_snap_flag_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
+    int galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
+    int galiot_snap_flag_countOverflow_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
     
-    struct galiot_snap_struct_rpl_neighbor_print_list_INFO_nbr
+    struct galiot_snap_struct_rpl_neighbor_print_list_DBG_nbr
     {
          unsigned long system_time[GALIOT_SNAPSHOT_COUNT];
          char lladdr[GALIOT_SNAPSHOT_COUNT][UIPLIB_IPV6_MAX_STR_LEN];
@@ -319,7 +319,7 @@ typedef rpl_nbr_t rpl_parent_t;
          uint16_t lastTx[GALIOT_SNAPSHOT_COUNT];
     };
 
-    struct galiot_snap_struct_rpl_neighbor_print_list_INFO_nbr galiot_snap_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
+    struct galiot_snap_struct_rpl_neighbor_print_list_DBG_nbr galiot_snap_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF];
 
     /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
     #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */

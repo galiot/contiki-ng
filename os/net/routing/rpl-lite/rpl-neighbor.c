@@ -118,7 +118,7 @@ static rpl_nbr_t * best_parent(int fresh_only);
   
   
   
-  // rpl_neighbor_print_list_INFO_neighbors
+  // rpl_neighbor_print_list_DBG_nbr
 
   /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
   #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
@@ -126,11 +126,11 @@ static rpl_nbr_t * best_parent(int fresh_only);
 
   int galiot_arrayIndex_rpl_neighbor = 0;
   
-  int galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
-  int galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
-  int galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
+  int galiot_snap_flag_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
+  int galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
+  int galiot_snap_flag_countOverflow_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF] = {0};
 
-  struct galiot_snap_struct_rpl_neighbor_print_list_INFO_nbr galiot_snap_rpl_neighbor_print_list_INFO_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF]; /* = {{0}, {" "}, {0}, {0}, {0}, {0}, {' '}, {' '}, {' '}, {0}}; */
+  struct galiot_snap_struct_rpl_neighbor_print_list_DBG_nbr galiot_snap_rpl_neighbor_print_list_DBG_nbr[GALIOT_RPL_NEIGHBOR_ARRY_CONF]; /* = {{0}, {" "}, {0}, {0}, {0}, {0}, {' '}, {' '}, {' '}, {0}}; */
 
   /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
   #endif /* GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR */
@@ -392,7 +392,7 @@ rpl_neighbor_print_list(const char *str)
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      // SNAP rpl_neighbor_print_list_INFO_neighbors
+      // SNAP rpl_neighbor_print_list_INFO_nbr
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -410,37 +410,37 @@ rpl_neighbor_print_list(const char *str)
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
-        galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor]++;
+        galiot_snap_flag_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
+        galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor]++;
 
-        if (galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] == 604)  
+        if (galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor] == 604)  
         {
-          galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
-          galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
+          galiot_snap_flag_countOverflow_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
+          galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor] = 1;
         }
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-        int galiot_snap_index_nbr = (galiot_snap_count_rpl_neighbor_print_list_INFO_ownState - 1) % GALIOT_SNAPSHOT_COUNT;
+        int galiot_snap_index_nbr = (galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor] - 1) % GALIOT_SNAPSHOT_COUNT;
 
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].system_time[galiot_snap_index_nbr] = clock_seconds();
-        uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr], sizeof(galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr]), rpl_neighbor_get_ipaddr(nbr));
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rank[galiot_snap_index_nbr] = nbr->rank;
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].linkMetric[galiot_snap_index_nbr] = rpl_neighbor_get_link_metric(nbr);
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankIfParent[galiot_snap_index_nbr] = rpl_neighbor_rank_via_nbr(nbr);
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsFreshness[galiot_snap_index_nbr] = galiot_stats != NULL ? galiot_stats->freshness : 0;
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].rankRoot[galiot_snap_index_nbr] = (nbr->rank == ROOT_RANK) ? 'r' : ' ';
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].bestParent[galiot_snap_index_nbr] = (nbr == galiot_best) ? 'b' : ' ';
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].acceptableRankAndParent[galiot_snap_index_nbr] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
-        galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].statsIsFresh[galiot_snap_index_nbr] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].system_time[galiot_snap_index_nbr] = clock_seconds();
+        uiplib_ipaddr_snprint(galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr], sizeof(galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].lladdr[galiot_snap_index_nbr]), rpl_neighbor_get_ipaddr(nbr));
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].rank[galiot_snap_index_nbr] = nbr->rank;
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].linkMetric[galiot_snap_index_nbr] = rpl_neighbor_get_link_metric(nbr);
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].rankIfParent[galiot_snap_index_nbr] = rpl_neighbor_rank_via_nbr(nbr);
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].statsFreshness[galiot_snap_index_nbr] = galiot_stats != NULL ? galiot_stats->freshness : 0;
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].rankRoot[galiot_snap_index_nbr] = (nbr->rank == ROOT_RANK) ? 'r' : ' ';
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].bestParent[galiot_snap_index_nbr] = (nbr == galiot_best) ? 'b' : ' ';
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].acceptableRankAndParent[galiot_snap_index_nbr] = (acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr)) ? 'a' : ' ';
+        galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].statsIsFresh[galiot_snap_index_nbr] = link_stats_is_fresh(galiot_stats) ? 'f' : ' ';
       
         if(galiot_stats->last_tx_time > 0) 
         {
-          galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = (unsigned)((galiot_clock_now - galiot_stats->last_tx_time) / (60 * CLOCK_SECOND));
+          galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = (unsigned)((galiot_clock_now - galiot_stats->last_tx_time) / (60 * CLOCK_SECOND));
         }
         else
         {
-          galiot_snap_rpl_neighbor_print_list_INFO_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = 65535;
+          galiot_snap_rpl_neighbor_print_list_DBG_nbr[galiot_arrayIndex_rpl_neighbor].lastTx[galiot_snap_index_nbr] = 65535;
         }
         /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       

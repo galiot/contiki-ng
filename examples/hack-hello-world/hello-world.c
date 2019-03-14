@@ -668,7 +668,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-      // rpl_neighbor_print_list_INFO_nbr
+      // rpl_neighbor_print_list_DBG_nbr
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       #if GALIOT_SNAP_RPL_NEIGHBOR_PRINT_LIST_NBR
@@ -677,23 +677,23 @@ PROCESS_THREAD(hello_world_process, ev, data)
       for (int j = 0; j <= galiot_arrayIndex_rpl_neighbor; j++)
       {
         
-        if (galiot_snap_flag_rpl_neighbor_print_list_INFO_nbr[j] == 0)
+        if (galiot_snap_flag_rpl_neighbor_print_list_DBG_nbr[j] == 0)
         {
           //printf("\n");
           //printf("\n");
           //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: OFF\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: OFF\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
           //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
           //printf("\n");
         }
         else
         {
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: ON\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: SNAPS: %d\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_count_rpl_neighbor_print_list_INFO_nbr[j]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: ON\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: SNAPS: %d\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_count_rpl_neighbor_print_list_DBG_nbr[j]);
         
-          if (galiot_snap_flag_countOverflow_rpl_neighbor_print_list_INFO_nbr[j] == 1)
+          if (galiot_snap_flag_countOverflow_rpl_neighbor_print_list_DBG_nbr[j] == 1)
           {
-            printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: OVERFLOW\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
+            printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: OVERFLOW\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1);
           }
         
           //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
@@ -702,17 +702,17 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
         for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
         {
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].system_time[i], i);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: IPv6 LINK LOCAL ADDRESS: %s\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1,galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].lladdr[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: RANK: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].rank[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: LINK METRIC: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].statsFreshness[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: RANK IF GIVEN PARENT SELECTED AS PREFERED: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].rankIfParent[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: FRESHNESS OF THE STATISTICS: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].statsFreshness[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: RANK IF CONFIGURED ROOT RANK: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].rankRoot[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: BEST PARENT: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].bestParent[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: ACCEPTABLE RANK IF GIVEN PARENT SELECTED AS PREFERED && PARENT CAPABLE: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].acceptableRankAndParent[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: STATISTICS IS FRESH: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].statsIsFresh[i]);
-          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (INFO) nbr %d/%d: LAST TX TIMESTAMP (MINUTES): %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_INFO_nbr[j].lastTx[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].system_time[i], i);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: IPv6 LINK LOCAL ADDRESS: %s\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1,galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].lladdr[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: RANK: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].rank[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: LINK METRIC: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].statsFreshness[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: RANK IF GIVEN PARENT SELECTED AS PREFERED: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].rankIfParent[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: FRESHNESS OF THE STATISTICS: %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].statsFreshness[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: RANK IF CONFIGURED ROOT RANK: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].rankRoot[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: BEST PARENT: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].bestParent[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: ACCEPTABLE RANK IF GIVEN PARENT SELECTED AS PREFERED && PARENT CAPABLE: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].acceptableRankAndParent[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: STATISTICS IS FRESH: %c\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].statsIsFresh[i]);
+          printf("(galiot) >>> [%10lu] >>> rpl-neighbor >>> rpl_neighbor_print_list (DBG) nbr %d/%d: LAST TX TIMESTAMP (MINUTES): %u\n", clock_seconds(), j+1, galiot_arrayIndex_rpl_neighbor+1, galiot_snap_rpl_neighbor_print_list_DBG_nbr[j].lastTx[i]);
           printf("----------------------------------------------------------------\n");
         }
 
