@@ -133,6 +133,7 @@
 
   #define GALIOT_SNAP_RPL_ICMP6_UPDATE_NBR_TABLE_CONF                 1
   #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF                        1
+  #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF                       1
 
   #define GALIOT_SNAP_RPL_MRHOF_RESET_CONF                            0
   #define GALIOT_SNAP_RPL_MRHOF_UPDATE_METRIC_CONTAINER_CONF          0
@@ -168,6 +169,12 @@
     #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT                           GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF
   #else
     #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF  
+    #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT                          GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF
+  #else
+    #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT                          0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/

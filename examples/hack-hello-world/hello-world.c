@@ -361,6 +361,49 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_icmp6_dis_output_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_icmp6_dis_output_INFO == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dis_output_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_icmp6_dis_output_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_icmp6_dis_output_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dis_output (INFO): SENDING A DIS TO (6ADDR): %s\n", clock_seconds(), galiot_snap_rpl_icmp6_dis_output_INFO.DIS_to_6addr[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+
 
 
 
