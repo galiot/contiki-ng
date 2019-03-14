@@ -757,8 +757,8 @@ PROCESS_THREAD(hello_world_process, ev, data)
       }
       else
       {
-        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (WARN): ON\n", clock_seconds());
-        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (WARN): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dio_input_INFO);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> dio_input (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dio_input_INFO);
         
         if (galiot_snap_flag_countOverflow_rpl_icmp6_dio_input_INFO == 1)
         {
@@ -784,6 +784,93 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_INPUT */
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_icmp6_dio_output_ERR
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_icmp6_dio_output_ERR == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dio_output_ERR);
+        
+        if (galiot_snap_flag_countOverflow_rpl_icmp6_dio_output_ERR == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_ERR.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (ERR): UNABLE TO SEND DIO BECAUSE OF UNSUPPORTED DAG MC, TYPE %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_ERR.mc_type[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_icmp6_dio_output_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_icmp6_dio_output_INFO == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dio_output_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_icmp6_dio_output_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): SENDING A %s-DIO\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_INFO.DIO_type[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): RANK: %u\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_INFO.DIO_rank[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dio_output (INFO): TO (6ADDR): %s\n", clock_seconds(), galiot_snap_rpl_icmp6_dio_output_INFO.to_6ADDR[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
 
 
 
