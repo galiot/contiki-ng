@@ -1269,6 +1269,52 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_icmp6_dao_ack_output_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_ICMP6_DAO_ACK_OUTPUT
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_icmp6_dao_ack_output_INFO == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_icmp6_dao_ack_output_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_icmp6_dao_ack_output_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_icmp6_dao_ack_output_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): SENDING A DAO-%s\n", clock_seconds(), galiot_snap_rpl_icmp6_dao_ack_output_INFO.DAO_response[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): SEQNO: %d\n", clock_seconds(), galiot_snap_rpl_icmp6_dao_ack_output_INFO.seqno[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): TO (6ADDR): %s\n", clock_seconds(), galiot_snap_rpl_icmp6_dao_ack_output_INFO.to_6ADDR[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_icmp6 >>> rpl_icmp6_dao_ack_output (INFO): STATUS: %d\n", clock_seconds(), galiot_snap_rpl_icmp6_dao_ack_output_INFO.status[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_ICMP6_DAO_ACK_OUTPUT */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+
 
 
 
