@@ -664,12 +664,6 @@ handle_probing_timer(void *ptr)
       galiot_snap_rpl_timers_handle_probing_timer_INFO_if.last_tx[galiot_snap_index] = stats != NULL ? (unsigned)((clock_time() - stats->last_tx_time) / (60 * CLOCK_SECOND)) : 0;
       /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
-
-
-
-
-
-
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
       #endif /* GALIOT_SNAP_RPL_TIMERS_HANDLE_PROBING_TIMER */
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
