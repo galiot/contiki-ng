@@ -124,6 +124,36 @@
 
 
 
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+//  contiki-default-conf.h
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+//   /* NBR_TABLE_CONF_MAX_NEIGHBORS specifies the maximum number of neighbors
+//      that each node will be able to handle. */
+//  #ifndef NBR_TABLE_CONF_MAX_NEIGHBORS
+//  #define NBR_TABLE_CONF_MAX_NEIGHBORS 16
+//  #endif /* NBR_TABLE_CONF_MAX_NEIGHBORS */
+
+//  /* NETSTACK_MAX_ROUTE_ENTRIES specifies the maximum number of entries
+//     the routing module will handle. Applies to uIP routing tables if they are
+//     used, or to RPL non-storing mode links instead */
+//  #ifndef NETSTACK_MAX_ROUTE_ENTRIES
+//  #define NETSTACK_MAX_ROUTE_ENTRIES 16
+//  #endif /* NETSTACK_MAX_ROUTE_ENTRIES */
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+/*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
+
+
+
 
 
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -131,15 +161,19 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
+  #define GALIOT_SNAP_RPL_DAG_ROOT_PRINT_LINKS_CONF                   0
+  #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF            0 
+  #define GALIOT_SNAP_RPL_DAG_ROOT_START_CONF                         0
+
   #define GALIOT_SNAP_RPL_ICMP6_UPDATE_NBR_TABLE_CONF                 0
   #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF                        0
   #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF                       0
   #define GALIOT_SNAP_RPL_ICMP6_DIO_INPUT_CONF                        0
   #define GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF                       0
   #define GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF                        0
-  #define GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT_CONF                       1
-  #define GALIOT_SNAP_RPL_ICMP6_DAO_ACK_INPUT_CONF                    1
-  #define GALIOT_SNAP_RPL_ICMP6_DAO_ACK_OUTPUT_CONF                   1
+  #define GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT_CONF                       0
+  #define GALIOT_SNAP_RPL_ICMP6_DAO_ACK_INPUT_CONF                    0
+  #define GALIOT_SNAP_RPL_ICMP6_DAO_ACK_OUTPUT_CONF                   0
 
   #define GALIOT_SNAP_RPL_MRHOF_RESET_CONF                            0
   #define GALIOT_SNAP_RPL_MRHOF_UPDATE_METRIC_CONTAINER_CONF          0
@@ -162,6 +196,26 @@
   #define GALIOT_SNAP_RPL_RESET_PREFIX_CONF                           0
   #define GALIOT_SNAP_RPL_SET_PREFIX_FROM_ADDR_CONF                   0
   #define GALIOT_SNAP_RPL_INIT_CONF                                   0
+
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  #if GALIOT_SNAP_RPL_DAG_ROOT_PRINT_LINKS_CONF 
+    #define GALIOT_SNAP_RPL_DAG_ROOT_PRINT_LINKS                      GALIOT_SNAP_RPL_DAG_ROOT_PRINT_LINKS_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_ROOT_PRINT_LINKS                      0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF 
+    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS                GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS                0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_ROOT_START_CONF 
+    #define GALIOT_SNAP_RPL_DAG_ROOT_START                             GALIOT_SNAP_RPL_DAG_ROOT_START_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_ROOT_START                             0
+  #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
