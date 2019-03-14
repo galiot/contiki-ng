@@ -131,12 +131,13 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 #if GALIOT_FUNCTIONALITY
 
-  #define GALIOT_SNAP_RPL_ICMP6_UPDATE_NBR_TABLE_CONF                 1
-  #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF                        1
-  #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF                       1
-  #define GALIOT_SNAP_RPL_ICMP6_DIO_INPUT_CONF                        1
-  #define GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF                       1
-  #define GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF                        1
+  #define GALIOT_SNAP_RPL_ICMP6_UPDATE_NBR_TABLE_CONF                 0
+  #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF                        0
+  #define GALIOT_SNAP_RPL_ICMP6_DIS_OUTPUT_CONF                       0
+  #define GALIOT_SNAP_RPL_ICMP6_DIO_INPUT_CONF                        0
+  #define GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF                       0
+  #define GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF                        0
+  #define GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT_CONF                       1
 
   #define GALIOT_SNAP_RPL_MRHOF_RESET_CONF                            0
   #define GALIOT_SNAP_RPL_MRHOF_UPDATE_METRIC_CONTAINER_CONF          0
@@ -186,16 +187,22 @@
     #define GALIOT_SNAP_RPL_ICMP6_DIO_INPUT                           0
   #endif
 
-   #if GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF  
+  #if GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF  
     #define GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT                          GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT_CONF
   #else
     #define GALIOT_SNAP_RPL_ICMP6_DIO_OUTPUT                          0
   #endif
 
-   #if GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF  
+  #if GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF  
     #define GALIOT_SNAP_RPL_ICMP6_DAO_INPUT                           GALIOT_SNAP_RPL_ICMP6_DAO_INPUT_CONF
   #else
     #define GALIOT_SNAP_RPL_ICMP6_DAO_INPUT                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT_CONF  
+    #define GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT                          GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT_CONF
+  #else
+    #define GALIOT_SNAP_RPL_ICMP6_DAO_OUTPUT                          0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
