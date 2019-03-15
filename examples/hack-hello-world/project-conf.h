@@ -175,6 +175,13 @@
   #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF                0
   #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG_CONF       1
   #define GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF                           1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG_CONF               1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_CONF                        1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DIS_CONF                        1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO_CONF                        1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO_ACK_CONF                    1
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_HBH_CONF                        1
+  #define GALIOT_SNAP_RPL_DAG_INIT_ROOT_CONF                          1
 
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF                  0
@@ -295,6 +302,48 @@
     #define GALIOT_SNAP_RPL_DAG_INIT_DAG                              GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF
   #else
     #define GALIOT_SNAP_RPL_DAG_INIT_DAG                              0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG                  GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG                  0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO                           GALIOT_SNAP_RPL_DAG_PROCESS_DIO_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DIS_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIS                           GALIOT_SNAP_RPL_DAG_PROCESS_DIS_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIS                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DAO_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO                           GALIOT_SNAP_RPL_DAG_PROCESS_DAO_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DAO_ACK_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO_ACK                       GALIOT_SNAP_RPL_DAG_PROCESS_DAO_ACK_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DAO_ACK                       0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_HBH_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_HBH                           GALIOT_SNAP_RPL_DAG_PROCESS_HBH_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_HBH                           0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_INIT_ROOT_CONF
+    #define GALIOT_SNAP_RPL_DAG_INIT_ROOT                             GALIOT_SNAP_RPL_DAG_INIT_ROOT_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_INIT_ROOT                             0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
