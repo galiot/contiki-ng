@@ -94,7 +94,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 //GALIOT_OUTPUT_COUNT_CONF specifies how many snapshots will be stored.
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_CONF_SNAPSHOT_COUNT                                    1
+#define GALIOT_CONF_SNAPSHOT_COUNT                                    2
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -166,6 +166,8 @@
   #define GALIOT_SNAP_RPL_DAG_ROOT_START_CONF                         0
 
   #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              1
+  #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           1
+  #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     1
 
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF                  0
@@ -220,10 +222,10 @@
     #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS                0
   #endif
 
-  #if GALIOT_SNAP_RPL_DAG_ROOT_START_CONF 
-    #define GALIOT_SNAP_RPL_DAG_ROOT_START                             GALIOT_SNAP_RPL_DAG_ROOT_START_CONF
+  #if GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF 
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_ROOT_START                             0
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -232,6 +234,18 @@
     #define GALIOT_SNAP_RPL_DAG_LEAVE                                  GALIOT_SNAP_RPL_DAG_LEAVE_CONF
   #else
     #define GALIOT_SNAP_RPL_DAG_LEAVE                                  0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
