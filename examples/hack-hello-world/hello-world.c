@@ -1006,6 +1006,397 @@ PROCESS_THREAD(hello_world_process, ev, data)
       /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
 
 
+      
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_update_nbr_from_dio_ERR
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_update_nbr_from_dio_ERR == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_update_nbr_from_dio_ERR);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_update_nbr_from_dio_ERR == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_update_nbr_from_dio_ERR.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> update_nbr_from_dio (ERR): FAILED TO ADD NEIGHBOR\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): INCONSISTENT DIO VERSION\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): (CURRENT: %u)\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio.dag_version[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): (RECEIVED: %u)\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_ERR_inconsistent_dio.version[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): INITIATE GLOBAL REPAIR\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_WARN_new_dio_version
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): NEW DIO VERSION\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): (CURRENT: %u)\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version.dag_version[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): (RECEIVED: %u)\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_new_dio_version.version[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): APPLY GLOBAL REPAIR\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_ERR_cache_full
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_ERR_cache_full == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_ERR_cache_full);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_ERR_cache_full == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_ERR_cache_full.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): IPv6 CACHE FULL, DROPPING DIO\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_ERR_nbr_table_full
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_ERR_nbr_table_full == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_ERR_nbr_table_full);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_ERR_nbr_table_full == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_ERR_nbr_table_full.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (ERR): NEIGHBOR TABLE FULL, DROPPING DIO\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_INFO
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_INFO == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_INFO);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_INFO == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_INFO.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (INFO): REFRESHING LIFETIME\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): DTSN INCREMENT, %u ---> \n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment.last_dtsn[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): DTSN INCREMENT, ---> %u \n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment.dtsn[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> process_dio_from_current_dag (WARN): SCHEDULE NEW DAO WITH DTSN: %u\n", clock_seconds(), galiot_snap_rpl_dag_process_dio_from_current_dag_WARN_dtsn_increment.dtsn_out[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_init_dag_ERR_usupported_of
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_INIT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_init_dag_ERR_usupported_of == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_init_dag_ERR_usupported_of);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_init_dag_ERR_usupported_of == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_init_dag_ERR_usupported_of.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): IGNORING DIO WITH AN UNSUPPORTED OF, %u\n", clock_seconds(), galiot_snap_rpl_dag_init_dag_ERR_usupported_of.ocp[i]);
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_INIT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_dag_init_dag_ERR_failed_to_set_prefix
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_DAG_INIT_DAG
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_dag_init_dag_ERR_failed_to_set_prefix == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_dag_init_dag_ERR_failed_to_set_prefix);
+        
+        if (galiot_snap_flag_countOverflow_rpl_dag_init_dag_ERR_failed_to_set_prefix == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_dag_init_dag_ERR_failed_to_set_prefix.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_dag >>> init_dag (ERR): FAILED TO SET PREFIX\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_DAG_INIT_DAG */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+
+
+
+
 
 
       

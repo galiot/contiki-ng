@@ -165,13 +165,16 @@
   #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF            0 
   #define GALIOT_SNAP_RPL_DAG_ROOT_START_CONF                         0
 
-  #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              1
-  #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           1
-  #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     1
-  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF                      1
-  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF             1
-  #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF                       1
-  #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF                       1
+  #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              0
+  #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           0
+  #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     0
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF                      0
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF             0
+  #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF                       0
+  #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF                       0
+  #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF                0
+  #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG_CONF       1
+  #define GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF                           1
 
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF                  0
@@ -221,97 +224,115 @@
   #endif
 
   #if GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF 
-    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS                GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF
+    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS               GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS                0
+    #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS               0
   #endif
 
-  #if GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF 
-    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF
+  #if GALIOT_SNAP_RPL_DAG_ROOT_START_CONF 
+    #define GALIOT_SNAP_RPL_DAG_ROOT_START                            GALIOT_SNAP_RPL_DAG_ROOT_START_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         0
-  #endif
-
-  #if GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF 
-    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF
-  #else
-    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         0
+    #define GALIOT_SNAP_RPL_DAG_ROOT_START                            0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #if GALIOT_SNAP_RPL_DAG_LEAVE_CONF 
-    #define GALIOT_SNAP_RPL_DAG_LEAVE                                  GALIOT_SNAP_RPL_DAG_LEAVE_CONF
+    #define GALIOT_SNAP_RPL_DAG_LEAVE                                 GALIOT_SNAP_RPL_DAG_LEAVE_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_LEAVE                                  0
+    #define GALIOT_SNAP_RPL_DAG_LEAVE                                 0
   #endif
 
   #if GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
-    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                              GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               0
+    #define GALIOT_SNAP_RPL_DAG_PERIODIC                              0
   #endif
 
-  #if GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
-    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
+  #if GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF 
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                        GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_PERIODIC                               0
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                        0
   #endif
 
   #if GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF
-    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                          GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                         GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                          0
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                         0
   #endif
 
   #if GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF
-    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                 GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                 0
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF
+    #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR                          GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR                          0
   #endif
 
   #if GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF
-    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                            GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                          GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF
   #else
-    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                            0
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                          0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO                   GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO                   0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG_CONF
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG          GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG          0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF
+    #define GALIOT_SNAP_RPL_DAG_INIT_DAG                              GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_INIT_DAG                              0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF 
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP                GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP               GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP                0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP               0
   #endif
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF 
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE                      GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE                     GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE                      0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE                     0
   #endif
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER_CONF
-    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER               GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER              GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER               0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER              0
   #endif
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE_CONF
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE                      GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE                     GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE                      0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE                     0
   #endif
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER_CONF
-    #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER               GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER              GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER               0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER              0
   #endif
 
   #if GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER_CONF
-    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER               GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER_CONF
+    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER              GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER_CONF
   #else
-    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER               0
+    #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER              0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
