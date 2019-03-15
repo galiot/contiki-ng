@@ -2,7 +2,8 @@
     "files.associations": {
         "contiki.h": "c",
         "routing.h": "c",
-        "rpl.h": "c"
+        "rpl.h": "c",
+        "rpl-dag-root.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }

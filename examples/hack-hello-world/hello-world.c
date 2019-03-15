@@ -59,6 +59,9 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+// #include "os/net/routing/rpl-lite/rpl-dag-root.h"
+// #include "os/net/routing/rpl-lite/rpl-ext-header.h"
+// #include "os/net/routing/rpl-lite/rpl-icmp6.h"
 #include "os/net/routing/rpl-lite/galiot_rpl-mrhof.h"
 #include "os/net/routing/rpl-lite/galiot_rpl-nbr-policy.h"
 #include "os/net/routing/rpl-lite/rpl-neighbor.h"
@@ -467,6 +470,280 @@ PROCESS_THREAD(hello_world_process, ev, data)
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
     /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    #ifdef GALIOT_FUNCTIONALITY
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // /os/net/routing/rpl-lite/rpl-ext_header.c
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+      
+      //printf("\n");
+      printf("(galiot) >>> rpl-ext-header\n");
+      //printf("\n");
+
+      
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_ext_header_srh_get_next_hop_DBG
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_ext_header_srh_get_next_hop_DBG == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_ext_header_srh_get_next_hop_DBG);
+        
+        if (galiot_snap_flag_countOverflow_rpl_ext_header_srh_get_next_hop_DBG == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_get_next_hop_DBG.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_get_next_hop (DBG): NO SRH FOUND\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+        
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_ext_header_srh_update_INFO_srh_not_found
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_ext_header_srh_update_INFO_srh_not_found == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_ext_header_srh_update_INFO_srh_not_found);
+        
+        if (galiot_snap_flag_countOverflow_rpl_ext_header_srh_update_INFO_srh_not_found == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_not_found.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): SRH NOT FOUND\n", clock_seconds());
+        printf("----------------------------------------------------------------\n");
+        
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_ext_header_srh_update_INFO_srh_read
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_ext_header_srh_update_INFO_srh_read == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_ext_header_srh_update_INFO_srh_read);
+        
+        if (galiot_snap_flag_countOverflow_rpl_ext_header_srh_update_INFO_srh_read == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, PATH LEN: %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.path_len[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, SEGMENTS LEFT: %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.segments_left[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, COMPRI: %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.cmpri[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, COMPRE: %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.cmpre[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, EXT LEN: %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.ext_len[i]);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): READ SRH, (PADDING): %u\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_srh_read.padding[i]);
+        printf("----------------------------------------------------------------\n");
+        
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      // rpl_ext_header_srh_update_INFO_update
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #if GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+      if (galiot_snap_flag_rpl_ext_header_srh_update_INFO_update == 0)
+      {
+        //printf("\n");
+        //printf("\n");
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OFF\n", clock_seconds());
+        //printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        //printf("\n");
+      }
+      else
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): ON\n", clock_seconds());
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): SNAPS: %d\n", clock_seconds(), galiot_snap_count_rpl_ext_header_srh_update_INFO_update);
+        
+        if (galiot_snap_flag_countOverflow_rpl_ext_header_srh_update_INFO_update == 1)
+        {
+          printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): OVERFLOW\n", clock_seconds());
+        }
+        
+        printf("----------------------------------------------------------------\n");
+      }
+        
+      for (int i = 0; i < GALIOT_SNAPSHOT_COUNT; i++)
+      {
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO) >>> [%10lu] LAST_SNAP[%d]\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_update.system_time[i], i);
+        printf("(galiot) >>> [%10lu] >>> rpl_ext_header >>> rpl_ext_header_srh_update (INFO): SRH NEXT HOP, (6ADDR): %s\n", clock_seconds(), galiot_snap_rpl_ext_header_srh_update_INFO_update.destipaddr_6ADDR[i]);
+        printf("----------------------------------------------------------------\n");
+        
+      }
+      
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+      #endif /* GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE */
+      /*|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>|<>*/
+
+
+
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+      /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    #endif /* GALIOT_FUNCTIONALITY */
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+    /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*//*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
