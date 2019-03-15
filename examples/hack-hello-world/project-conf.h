@@ -168,6 +168,10 @@
   #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              1
   #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           1
   #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     1
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF                      1
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF             1
+  #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF                       1
+  #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF                       1
 
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF                  0
@@ -228,6 +232,12 @@
     #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         0
   #endif
 
+  #if GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF 
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES                         0
+  #endif
+
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 
   #if GALIOT_SNAP_RPL_DAG_LEAVE_CONF 
@@ -246,6 +256,24 @@
     #define GALIOT_SNAP_RPL_DAG_PERIODIC                               GALIOT_SNAP_RPL_DAG_PERIODIC_CONF
   #else
     #define GALIOT_SNAP_RPL_DAG_PERIODIC                               0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                          GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR                          0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                 GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT                 0
+  #endif
+
+  #if GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                            GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE                            0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
