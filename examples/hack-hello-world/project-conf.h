@@ -81,7 +81,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 // GALIOT_OUTPUT_CONF specifies if galiot functionality is enabled or not.
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_CONF_FUNCTIONALITY                                    1
+#define GALIOT_CONF_FUNCTIONALITY                                    2
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -94,7 +94,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 //GALIOT_OUTPUT_COUNT_CONF specifies how many snapshots will be stored.
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
-#define GALIOT_CONF_SNAPSHOT_COUNT                                    2
+#define GALIOT_CONF_SNAPSHOT_COUNT                                    1
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
@@ -165,12 +165,14 @@
   #define GALIOT_SNAP_RPL_DAG_ROOT_SET_GLOBAL_ADDRESS_CONF            0 
   #define GALIOT_SNAP_RPL_DAG_ROOT_START_CONF                         0
 
+  #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              1
+
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
   #define GALIOT_SNAP_RPL_EXT_HEADER_SRH_UPDATE_CONF                  0
-  #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER_CONF           1
-  #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE_CONF                  1
-  #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER_CONF           1
-  #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER_CONF           1
+  #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_SRH_HEADER_CONF           0
+  #define GALIOT_SNAP_RPL_EXT_HEADER_SBH_UPDATE_CONF                  0
+  #define GALIOT_SNAP_RPL_EXT_HEADER_UPDATE_HBH_HEADER_CONF           0
+  #define GALIOT_SNAP_RPL_EXT_HEADER_INSERT_HBH_HEADER_CONF           0
 
   #define GALIOT_SNAP_RPL_ICMP6_UPDATE_NBR_TABLE_CONF                 0
   #define GALIOT_SNAP_RPL_ICMP6_DIS_INPUT_CONF                        0
@@ -222,6 +224,14 @@
     #define GALIOT_SNAP_RPL_DAG_ROOT_START                             GALIOT_SNAP_RPL_DAG_ROOT_START_CONF
   #else
     #define GALIOT_SNAP_RPL_DAG_ROOT_START                             0
+  #endif
+
+  /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
+
+  #if GALIOT_SNAP_RPL_DAG_LEAVE_CONF 
+    #define GALIOT_SNAP_RPL_DAG_LEAVE                                  GALIOT_SNAP_RPL_DAG_LEAVE_CONF
+  #else
+    #define GALIOT_SNAP_RPL_DAG_LEAVE                                  0
   #endif
 
   /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?--?-|-?-|-?-|-?-*/
