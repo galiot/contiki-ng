@@ -138,8 +138,34 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  
+  // static uip_ds6_nbr_t *nbr;
 
-  static uip_ds6_nbr_t *nbr;
+  #if (UIP_MAX_ROUTES != 0)
+  {
+
+    //static uip_ds6_route_t *r;
+
+  }
+  #endif /* UIP_MAX_ROUTES != 0 */
+
+  #if (UIP_SR_LINK_NUM != 0)
+  {
+
+    //if(uip_sr_num_nodes() > 0) 
+    //{
+      //static uip_sr_node_t *link;
+    //}
+
+  }
+  #endif /* UIP_SR_LINK_NUM != 0 */
+
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
   
   
 
@@ -306,7 +332,7 @@ PROCESS_THREAD(hello_world_process, ev, data)
       
       printf("\n");
 
-      printf("(galiot)                            > ENERGEST (RADIO)\n");
+      printf("(galiot) > ENERGEST (RADIO)\n");
       printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
       printf("(galiot) > [%9lu]s >     LISTEN\n", to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
       printf("(galiot) > [%9lu]s >   TRANSMIT\n", to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
@@ -318,6 +344,107 @@ PROCESS_THREAD(hello_world_process, ev, data)
 
 
 
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+
+
+      printf("(galiot) > NEIGBORS\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      
+      static uip_ds6_nbr_t *nbr;
+      for(nbr = uip_ds6_nbr_head(); nbr != NULL; nbr = uip_ds6_nbr_next(nbr)) 
+      {
+        char galiot_nbr_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+        uiplib_ipaddr_snprint(galiot_nbr_ipaddr, sizeof(galiot_nbr_ipaddr), &nbr->ipaddr);
+
+        printf("(galiot) > %s\n", galiot_nbr_ipaddr);
+      }
+
+      printf("\n");
+
+
+      /*-----------------------------------------------------------------------------------------*/
+      
+      
+      #if (UIP_MAX_ROUTES != 0)
+      {
+
+        printf("(galiot) > ROUTES\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+
+        static uip_ds6_route_t *r;
+        for(r = uip_ds6_route_head(); r != NULL; r = uip_ds6_route_next(r))
+        {
+          char galiot_r_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+          uiplib_ipaddr_snprint(galiot_r_ipaddr, sizeof(galiot_r_ipaddr), &r->ipaddr);
+
+          printf("(galiot) > %s/%u\n", galiot_r_ipaddr, r->length);
+
+          char galiot_r_nexthop_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+          uiplib_ipaddr_snprint(galiot_r_nexthop_ipaddr, sizeof(galiot_r_nexthop_ipaddr), uip_ds6_route_nexthop(r));
+          
+          printf("(galiot) > (via %s)\n", galiot_r_ipaddr, galiot_r_nexthop_ipaddr);
+          printf("(galiot) > %lu\n", (unsigned long)r->state.lifetime);
+        }
+
+        printf("\n");
+      
+      }
+      #endif /* UIP_MAX_ROUTES != 0 */
+
+
+    /*-----------------------------------------------------------------------------------------*/
+
+
+    #if (UIP_SR_LINK_NUM != 0)
+    {
+
+      printf("(galiot) > ROUTING LINKS\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+
+
+      if(uip_sr_num_nodes() > 0) 
+      {
+        static uip_sr_node_t *link;
+        for(link = uip_sr_node_head(); link != NULL; link = uip_sr_node_next(link)) 
+        {
+          if(link->parent != NULL) 
+          {
+            uip_ipaddr_t child_ipaddr;
+            uip_ipaddr_t parent_ipaddr;
+
+            NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
+            NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, link->parent);
+
+            char galiot_link_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+            uiplib_ipaddr_snprint(galiot_link_ipaddr, sizeof(galiot_link_ipaddr), &child_ipaddr);
+            char galiot_link_parent_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+            uiplib_ipaddr_snprint(galiot_link_parent_ipaddr, sizeof(galiot_link_parent_ipaddr), &parent_ipaddr);
+
+
+            printf("(galiot) > %s\n", galiot_link_ipaddr);
+            printf("(galiot) > (parent: %s)\n", galiot_link_parent_ipaddr);
+            
+            printf("(galiot) > [%u]s\n", (unsigned int)link->lifetime);
+          }
+        }
+      }
+
+      printf("\n");
+
+    }
+    #endif /* UIP_SR_LINK_NUM != 0 */
+
+
+
+
+
+
+      
+      
+      
+      
       /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
       /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
       /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
