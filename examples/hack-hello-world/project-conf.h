@@ -167,14 +167,14 @@
   #define GALIOT_SNAP_RPL_DAG_ROOT_START_CONF                         0
 
   // rpl-dag
-  #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              0
-  #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           0
-  #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     0
-  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF                      0
-  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF             0
-  #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF                       0
-  #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF                       0
-  #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF                0
+  #define GALIOT_SNAP_RPL_DAG_LEAVE_CONF                              1
+  #define GALIOT_SNAP_RPL_DAG_PERIODIC_CONF                           1
+  #define GALIOT_SNAP_RPL_DAG_REFRESH_ROUTES_CONF                     1
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_CONF                      1
+  #define GALIOT_SNAP_RPL_DAG_GLOBAL_REPAIR_NON_ROOT_CONF             1
+  #define GALIOT_SNAP_RPL_DAG_LOCAL_REPAIR_CONF                       1
+  #define GALIOT_SNAP_RPL_DAG_UPDATE_STATE_CONF                       1
+  #define GALIOT_SNAP_RPL_DAG_UPDATE_NBR_FROM_DIO_CONF                1
   #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_FROM_CURRENT_DAG_CONF       1
   #define GALIOT_SNAP_RPL_DAG_INIT_DAG_CONF                           1
   #define GALIOT_SNAP_RPL_DAG_PROCESS_DIO_INIT_DAG_CONF               1
@@ -263,7 +263,7 @@
   #define GALIOT_PRINT_RPL_DAG_PROCESS_DAO_CONF                        0
   #define GALIOT_PRINT_RPL_DAG_PROCESS_DAO_ACK_CONF                    0
   #define GALIOT_PRINT_RPL_DAG_PROCESS_HBH_CONF                        0
-  #define GALIOT_PRINT_RPL_DAG_INIT_ROOT_CONF                          0
+  #define GALIOT_PRINT_RPL_DAG_INIT_ROOT_CONF                          1
 
   // rpl-ext-header
   #define GALIOT_PRINT_RPL_EXT_HEADER_SRH_GET_NEXT_HOP_CONF            0
