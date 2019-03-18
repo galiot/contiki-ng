@@ -86,6 +86,31 @@
 
 
 
+
+
+
+
+
+#ifdef GALIOT_FUNCTIONALITY
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+
+    #include "os/sys/energest.h"
+
+    static unsigned long to_seconds(uint64_t time)
+    {
+      return (unsigned long)(time / ENERGEST_SECOND);
+    }
+
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+  /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+#endif /* GALIOT_FUNCTIONALITY */
+
+
+
+
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
 AUTOSTART_PROCESSES(&hello_world_process);
@@ -153,6 +178,180 @@ PROCESS_THREAD(hello_world_process, ev, data)
   while(1) {
     printf("Hello, world\n");
     
+
+
+
+
+
+
+
+    #ifdef GALIOT_FUNCTIONALITY
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      printf("\n");
+
+
+
+      // IP
+      /*-----------------------------------------------------------------------------------------*/
+      printf("(galiot)                            > IP STATISTICS\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      printf("(galiot) > [%10lu] >      (ip.recv) > Number of received packets at the IP layer\n", uip_stat.ip.recv);
+      printf("(galiot) > [%10lu] >      (ip.sent) > Number of sent packets at the IP layer\n", uip_stat.ip.sent);
+      printf("(galiot) > [%10lu] > (ip.forwarded) > Number of forwarded packets at the IP layer\n", uip_stat.ip.forwarded);
+      printf("(galiot) > [%10lu] >      (ip.drop) > Number of dropped packets at the IP layer\n", uip_stat.ip.drop);
+      printf("(galiot) > [%10lu] >    (ip.vhlerr) > Number of packets dropped due to wrong IP version or header length\n", uip_stat.ip.vhlerr);
+      printf("(galiot) > [%10lu] >  (ip.hblenerr) > Number of packets dropped due to wrong IP length, high byte\n", uip_stat.ip.hblenerr);
+      printf("(galiot) > [%10lu] >  (ip.lblenerr) > Number of packets dropped due to wrong IP length, low byte\n", uip_stat.ip.lblenerr);
+      printf("(galiot) > [%10lu] >   (ip.fragerr) > Number of packets dropped because they were IP fragments\n", uip_stat.ip.fragerr);
+      printf("(galiot) > [%10lu] >    (ip.chkerr) > Number of packets dropped due to IP checksum errors\n", uip_stat.ip.chkerr);
+      printf("(galiot) > [%10lu] >  (ip.protoerr) > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", uip_stat.ip.protoerr);
+
+      printf("\n");
+      /*-----------------------------------------------------------------------------------------*/
+
+
+
+      // ICMP
+      /*-----------------------------------------------------------------------------------------*/
+      printf("(galiot)                            > ICMP STATISTICS\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      printf("(galiot) > [%10lu] >     (icmp.recv) > Number of received ICMP packets\n", uip_stat.icmp.recv);
+      printf("(galiot) > [%10lu] >     (icmp.sent) > Number of sent ICMP packets\n", uip_stat.icmp.sent);
+      printf("(galiot) > [%10lu] >     (icmp.drop) > Number of dropped ICMP packets\n", uip_stat.icmp.drop);
+      printf("(galiot) > [%10lu] >  (icmp.typeerr) > Number of ICMP packets with a wrong type\n", uip_stat.icmp.typeerr);
+      printf("(galiot) > [%10lu] >   (icmp.chkerr) > Number of ICMP packets with a bad checksum\n", uip_stat.icmp.chkerr);
+
+      printf("\n");
+      /*-----------------------------------------------------------------------------------------*/
+
+
+
+      // TCP
+      /*-----------------------------------------------------------------------------------------*/
+      #if UIP_TCP
+
+        printf("(galiot)                            > TCP STATISTICS\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) > [%10lu] >      (tcp.recv) > Number of received TCP segments\n", uip_stat.tcp.recv);
+        printf("(galiot) > [%10lu] >      (tcp.sent) > Number of sent TCP segments\n", uip_stat.tcp.sent);
+        printf("(galiot) > [%10lu] >      (tcp.drop) > Number of dropped TCP segments\n", uip_stat.tcp.drop);
+        printf("(galiot) > [%10lu] >    (tcp.chkerr) > Number of TCP segments with a bad checksum\n", uip_stat.tcp.chkerr);
+        printf("(galiot) > [%10lu] >    (tcp.ackerr) > Number of TCP segments with a bad ACK number\n", uip_stat.tcp.ackerr);
+        printf("(galiot) > [%10lu] >       (tcp.rst) > Number of received TCP RST (reset) segments\n", uip_stat.tcp.rst);
+        printf("(galiot) > [%10lu] >    (tcp.rexmit) > Number of retransmitted TCP segments\n", uip_stat.tcp.rexmit);
+        printf("(galiot) > [%10lu] >   (tcp.syndrop) > Number of dropped SYNs because too few connections were available\n", uip_stat.tcp.syndrop);
+        printf("(galiot) > [%10lu] >    (tcp.synrst) > Number of SYNs for closed ports, triggering a RST\n", uip_stat.tcp.synrst);
+
+        printf("\n");
+
+      #endif /* UIP_TCP */
+      /*-----------------------------------------------------------------------------------------*/
+
+
+
+      // UDP
+      /*-----------------------------------------------------------------------------------------*/
+      #if UIP_UDP
+
+        printf("(galiot)                            > UDP STATISTICS\n");
+        printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+        printf("(galiot) > [%10lu] >      (udp.drop) > Number of dropped UDP segments\n", uip_stat.udp.drop);
+        printf("(galiot) > [%10lu] >      (udp.recv) > Number of received UDP segments\n", uip_stat.udp.recv);
+        printf("(galiot) > [%10lu] >      (udp.sent) > Number of sent UDP segments\n", uip_stat.udp.sent);
+        printf("(galiot) > [%10lu] >    (udp.chkerr) > Number of UDP segments with a bad checksum\n", uip_stat.udp.chkerr);
+
+        printf("\n");
+
+      #endif /* UIP_UDP */
+      /*-----------------------------------------------------------------------------------------*/
+
+
+
+      // ND6
+      /*-----------------------------------------------------------------------------------------*/
+      printf("(galiot)                            > ND6 STATISTICS\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      printf("(galiot) > [%10lu] >      (nd6.drop) > Number of dropped ND6 packets\n", uip_stat.nd6.drop);
+      printf("(galiot) > [%10lu] >      (nd6.recv) > Number of dropped ND6 packets\n", uip_stat.nd6.recv);
+      printf("(galiot) > [%10lu] >      (nd6.sent) > Number of dropped ND6 packets\n", uip_stat.nd6.sent);
+
+      printf("\n");
+      /*-----------------------------------------------------------------------------------------*/
+
+
+
+
+
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+
+
+
+
+
+      // Update all energest times
+      energest_flush();
+
+
+
+      printf("(galiot) > ENERGEST (CPU)\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      printf("(galiot) > [%9lu]s >        CPU\n", to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
+      printf("(galiot) > [%9lu]s >        LPM\n", to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
+      printf("(galiot) > [%9lu]s >   DEEP LPM\n", to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
+      printf("(galiot) > [%9lu]s > TOTAL TIME\n", to_seconds(ENERGEST_GET_TOTAL_TIME()));
+      
+      printf("\n");
+
+      printf("(galiot)                            > ENERGEST (RADIO)\n");
+      printf("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
+      printf("(galiot) > [%9lu]s >     LISTEN\n", to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
+      printf("(galiot) > [%9lu]s >   TRANSMIT\n", to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
+      printf("(galiot) > [%9lu]s >        OFF\n", to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
+
+      printf("\n");
+
+
+
+
+
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+      /*/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/*/
+    #endif /* GALIOT_FUNCTIONALITY */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
