@@ -54,7 +54,7 @@
  */
 
 #define LOG_CONF_LEVEL_IPV6                                     LOG_LEVEL_NONE
-#define LOG_CONF_LEVEL_RPL                                      LOG_LEVEL_INFO
+#define LOG_CONF_LEVEL_RPL                                      LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_6LOWPAN                                  LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_TCPIP                                    LOG_LEVEL_NONE
 #define LOG_CONF_LEVEL_MAC                                      LOG_LEVEL_NONE
@@ -74,9 +74,28 @@
 
 
 
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
+
+
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+
+#define ENERGEST_CONF_ON 1
+
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+
+
+
+
+
+
+
+
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
 
 // enable/disable oar functionality, across the board
 #define OAR_CONF_FUNCTIONALITY                                              1
@@ -107,9 +126,9 @@
     #define OAR_JSON                                                        0 
 #endif  /*  OAR_CONF_DEBUG  */
 
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
-/*[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][*/
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
 
 
 
@@ -121,22 +140,47 @@
 
 
 
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
 
-// set the frequency in seconds for printing to console 
-#define OAR_CONF_DEBUG_INTERVAL                                             10
+#if (OAR_DEBUG)
 
-#if OAR_CONF_DEBUG_INTERVAL
-    #define OAR_DEBUG_INTERVAL                          OAR_CONF_DEBUG_INTERVAL
-#else   /*  OAR_CONF_DEBUG_INTERVAL  */
-    #define OAR_JSON                                                        10 
-#endif  /*  OAR_CONF_DEBUG_INTERVAL  */
+    /*---------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------*/
+    
+    // set the frequency in seconds for printing to console 
+    #define OAR_CONF_DEBUG_INTERVAL                                              3      // (SECONDS)
 
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-/*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
+    // enable/disable the energest debugging (printing energest values)
+    #define OAR_CONF_DEBUG_ENERGEST                                              1 
+
+
+
+    /*---------------------------------------------------------------------------*/
+
+    #if OAR_CONF_DEBUG_INTERVAL
+        #define OAR_DEBUG_INTERVAL                          OAR_CONF_DEBUG_INTERVAL
+    #else   /*  OAR_CONF_DEBUG_ENERGEST  */
+        #define OAR_DEBUG_INTERVAL                                              10 
+    #endif  /*  OAR_CONF_DEBUG_ENERGEST  */
+
+    #if OAR_CONF_DEBUG_ENERGEST
+        #define OAR_DEBUG_ENERGEST                          OAR_CONF_DEBUG_ENERGEST
+    #else   /*  OAR_CONF_DEBUG_ENERGEST  */
+        #define OAR_ENERGEST                                                     0 
+    #endif  /*  OAR_CONF_DEBUG_ENERGEST  */
+
+    /*---------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------*/
+
+#endif  /*  OAR_DEBUG   */
+
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
 
 
 

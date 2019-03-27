@@ -42,10 +42,28 @@
 
 /*---------------------------------------------------------------------------*/
 
-#include "project-conf.h"       // for vscode intellisense
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+
+#include "project-conf.h"       // for vscode intellisense (make recipe includes it either way)
+
+// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+
+
+
+
+
 
 #include "contiki.h"            /* Main include file for OS-specific modules. */
 #include <stdio.h>              /* For printf() */
+
+
+
+// DECLARATIONS
+
+
+
+
+
 
 
 
@@ -57,31 +75,90 @@ AUTOSTART_PROCESSES(&oar_debug_process);
 /*---------------------------------------------------------------------------*/
 
 PROCESS_THREAD(oar_debug_process, ev, data)
-{
+{   
+
+
+
+
+
+
+
+
+
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+
+    // if debug functionality is disabled, do not print any values on serial, 
+    // exiting explicitly the oar_debug_process
+    
+    #if !(OAR_DEBUG) 
+        PROCESS_EXIT();
+    #endif      /* OAR_DEBUG */
+
+    
+
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+
+
+
+
+
+
+
+
+
+
     /*  An event-timer variable. Note that this variable must be static
         in order to preserve the value across yielding. */
     static struct etimer debug_timer;
+    
+    
+
+
+
+
+
+
+    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    // DEBUG DECLARATIONS
+    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    #if (OAR_DEBUG_ENERGEST)
+        unsigned long int system_time = clock_seconds();
+     #endif      /* OAR_DEBUG_ENERGEST */
+
+    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+
+
+
+
+
+
+
+
 
     PROCESS_BEGIN();
 
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
+        //  Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds.
+        //  Trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed.
+        etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);
+        
+        
 
-    /*  Setup a periodic timer that expires after 10 seconds.   */
-    etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);      /*  Trigger a timer after 10 seconds.   */
-    
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
-    /*<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><*/
+        while(1) {
 
-    while(1) {
-        printf("Hello, world\n");
+            #if (OAR_DEBUG_ENERGEST)
+                printf("(galiot/oar) > DEBUG > System Time: %lu \n", system_time);
+            #endif      /* OAR_DEBUG_ENERGEST */
 
-        /*  Wait for the periodic timer to expire and then restart the timer.   */
-        PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));
-        etimer_reset(&debug_timer);
-    }
+            /*  Wait for the periodic timer to expire and then restart the timer.   */
+            PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));
+            etimer_reset(&debug_timer);
+        }
 
     PROCESS_END();
 }
