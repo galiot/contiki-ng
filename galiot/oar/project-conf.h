@@ -79,6 +79,7 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define ENERGEST_CONF_ON                                                    1
+#define UIP_CONF_STATISTICS                                                 1
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -100,16 +101,16 @@
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 // enable/disable oar functionality, across the board
-#define OAR_CONF_FUNCTIONALITY                                              1
+#define OAR_CONF_FUNCTIONALITY                                              1      // (ON/OFF)
 
 // enable/disable console print for debug purposes
-#define OAR_CONF_DEBUG                                                      1
+#define OAR_CONF_DEBUG                                                      1      // (ON/OFF)
 
 // enable/disable dev (leds & buttons) functionality
-#define OAR_CONF_DEV                                                        1
+#define OAR_CONF_DEV                                                        1      // (ON/OFF)
 
 // enable/disable JSON creation
-#define OAR_CONF_JSON                                                       0
+#define OAR_CONF_JSON                                                       0      // (ON/OFF)
 
 /*---------------------------------------------------------------------------*/
 
@@ -165,7 +166,10 @@
     #define OAR_CONF_DEBUG_INTERVAL                                              3      // (SECONDS)
 
     // enable/disable the energest debugging (printing energest values)
-    #define OAR_CONF_DEBUG_ENERGEST                                              1 
+    #define OAR_CONF_DEBUG_ENERGEST                                              0      // (ON/OFF)
+
+    // enable/disable the UIP statistics debugging (printing UIP values)
+    #define OAR_CONF_DEBUG_STATISTICS                                            1      // (ON/OFF)
 
 
 
@@ -180,8 +184,14 @@
     #if OAR_CONF_DEBUG_ENERGEST
         #define OAR_DEBUG_ENERGEST                          OAR_CONF_DEBUG_ENERGEST
     #else   /*  OAR_CONF_DEBUG_ENERGEST  */
-        #define OAR_ENERGEST                                                     0 
+        #define OAR_DEBUG_ENERGEST                                               0 
     #endif  /*  OAR_CONF_DEBUG_ENERGEST  */
+
+    #if OAR_CONF_DEBUG_STATISTICS
+        #define OAR_DEBUG_STATISTICS                      OAR_CONF_DEBUG_STATISTICS
+    #else   /*  OAR_CONF_DEBUG_STATISTICS  */
+        #define OAR_DEBUG_STATISTICS                                             0 
+    #endif  /*  OAR_CONF_DEBUG_STATISTICS  */
 
     /*---------------------------------------------------------------------------*/
     /*---------------------------------------------------------------------------*/
