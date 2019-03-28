@@ -253,62 +253,65 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     
                         printf("\n");
 
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
-                        printf("[%8lu] DEBUG > \t IP STATISTICS   > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
+                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
+                        printf("[%8lu] DEBUG > \t   IP > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
+                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
+                        printf("[%8lu] DEBUG > \t   IP > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
+                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
                         
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
 
-                        printf("[%8lu] DEBUG > \t ICMP STATISTICS > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
-                        printf("[%8lu] DEBUG > \t ICMP STATISTICS > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
-                        printf("[%8lu] DEBUG > \t ICMP STATISTICS > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
-                        printf("[%8lu] DEBUG > \t ICMP STATISTICS > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
-                        printf("[%8lu] DEBUG > \t ICMP STATISTICS > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
+                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
+                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
+                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
+                        printf("[%8lu] DEBUG > \t ICMP > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
+                        printf("[%8lu] DEBUG > \t ICMP > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
 
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
 
+                        // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_TCP
 
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
-                            printf("[%8lu] DEBUG > \t TCP STATISTICS  > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
+                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
+                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
+                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
+                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
+                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
+                            printf("[%8lu] DEBUG > \t  TCP > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
+                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
+                            printf("[%8lu] DEBUG > \t  TCP > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
+                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                         
                         #endif  /* UIP_TCP */
+                        // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
 
+                        // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_UDP
 
-                            printf("[%8lu] DEBUG > \t UDP STATISTICS  > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
-                            printf("[%8lu] DEBUG > \t UDP STATISTICS  > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
-                            printf("[%8lu] DEBUG > \t UDP STATISTICS  > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
-                            printf("[%8lu] DEBUG > \t UDP STATISTICS  > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
+                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
+                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
+                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
+                            printf("[%8lu] DEBUG > \t  UDP > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
     
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                        
                         #endif  /* UIP_UDP */
+                        // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
             
-                        printf("[%8lu] DEBUG > \t ND6 STATISTICS  > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
-                        printf("[%8lu] DEBUG > \t ND6 STATISTICS  > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
-                        printf("[%8lu] DEBUG > \t ND6 STATISTICS  > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
+                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
+                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
+                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
 
                         printf("\n");
 
