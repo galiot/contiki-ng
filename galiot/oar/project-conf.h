@@ -76,15 +76,11 @@
 
 
 
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define ENERGEST_CONF_ON 1
+#define ENERGEST_CONF_ON                                                    1
 
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
-// (-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)-ENERGEST-(-)
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -93,9 +89,15 @@
 
 
 
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+
+
+
+
+
+
+
+
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 // enable/disable oar functionality, across the board
 #define OAR_CONF_FUNCTIONALITY                                              1
@@ -103,8 +105,11 @@
 // enable/disable console print for debug purposes
 #define OAR_CONF_DEBUG                                                      1
 
+// enable/disable dev (leds & buttons) functionality
+#define OAR_CONF_DEV                                                        1
+
 // enable/disable JSON creation
-#define OAR_CONF_JSON                                                       1
+#define OAR_CONF_JSON                                                       0
 
 /*---------------------------------------------------------------------------*/
 
@@ -118,7 +123,13 @@
     #define OAR_DEBUG                                           OAR_CONF_DEBUG
 #else   /*  OAR_CONF_DEBUG  */
     #define OAR_DEBUG                                                       0 
-#endif  /*  OAR_CONF_DEBUG  */               
+#endif  /*  OAR_CONF_DEBUG  */  
+
+#if OAR_CONF_DEV
+    #define OAR_DEV                                              OAR_CONF_DEV
+#else   /*  OAR_CONF_DEV  */
+    #define OAR_DEV                                                         0 
+#endif  /*  OAR_CONF_DEV  */  
 
 #if OAR_CONF_JSON
     #define OAR_JSON                                            OAR_CONF_JSON
@@ -126,9 +137,7 @@
     #define OAR_JSON                                                        0 
 #endif  /*  OAR_CONF_DEBUG  */
 
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 
 
@@ -140,9 +149,11 @@
 
 
 
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+
+
+
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 #if (OAR_DEBUG)
 
@@ -178,9 +189,8 @@
 
 #endif  /*  OAR_DEBUG   */
 
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-// <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 
 

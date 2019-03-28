@@ -42,23 +42,6 @@
 
 /*---------------------------------------------------------------------------*/
 
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-
-#include "project-conf.h"       // for vscode intellisense (make recipe includes it either way)
-
-// {}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}CONF{}
-
-
-
-
-
-
-#include "contiki.h"            /* Main include file for OS-specific modules. */
-#include <stdio.h>              /* For printf() */
-
-
-
-// DECLARATIONS
 
 
 
@@ -67,100 +50,373 @@
 
 
 
-/*---------------------------------------------------------------------------*/
 
-PROCESS(oar_debug_process, "oar debug process");
-AUTOSTART_PROCESSES(&oar_debug_process);
 
-/*---------------------------------------------------------------------------*/
+
+
+
+
+
+#include "contiki.h"                // main include file for OS-specific modules
+
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+#include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#include <stdio.h>                  // for prinntf()
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#include "sys/energest.h"
+
+// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+                                    // Texas Instruments CC2650 LaunchPad enabales the following dev I/0:
+
+#include "dev/leds.h"               // leds     (2):    LEDS_LED1, LEDS_LED2 (access both: LEDS_ALL)
+#include "dev/button-hal.h"         // buttons  (2):    button_hal_get_by_index(0), button_hal_get_by_index(1)    
+
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@
+// @*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@
+
+static unsigned long to_seconds(uint64_t time)
+{
+    return (unsigned long)(time / ENERGEST_SECOND);
+}
+
+// @*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@
+// @*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@*|*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+// (doc) A process is first declared at the top of a source file.
+// (doc) The PROCESS() macro takes two arguments:   
+// (doc)    one is the variable with which we identify the process, 
+// (doc)    and the other is the name of the process. 
+// (doc) On the second line, we tell Contiki-NG that this process should be automatically started directly after the system has booted up. 
+// (doc) Multiple processes can be specified here by separating them with commas. 
+
+
+PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
+PROCESS(oar_dev_process, "oar dev process");                        // process for testing dev I/O
+
+AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);          
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 PROCESS_THREAD(oar_debug_process, ev, data)
 {   
-
-
-
-
-
-
-
-
-
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-
-    // if debug functionality is disabled, do not print any values on serial, 
-    // exiting explicitly the oar_debug_process
     
-    #if !(OAR_DEBUG) 
+    #if !(OAR_DEBUG)
+
+        // (doc) A process can be stopped in three ways:
+        // (doc)    The process implicitly exits by allowing the PROCESS_END() statement to be reached and executed.
+        // (doc)    The process explicitly exits by calling PROCESS_EXIT() in the PROCESS_THREAD body.
+        // (doc)    Another process kills the process by calling process_exit().
+        // (doc) After stopping a process, it can be restarted from the beginning by calling process_start().
+
         PROCESS_EXIT();
-    #endif      /* OAR_DEBUG */
 
-    
-
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
-    // <>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>DEBUG<>
+    #else      /* OAR_DEBUG */
 
 
 
 
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            
+            static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
+            unsigned long int debug_system_time = clock_seconds();        
 
-
-
-
-
-
-    /*  An event-timer variable. Note that this variable must be static
-        in order to preserve the value across yielding. */
-    static struct etimer debug_timer;
-    
-    
-
-
-
-
-
-
-    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    // DEBUG DECLARATIONS
-    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    #if (OAR_DEBUG_ENERGEST)
-        unsigned long int system_time = clock_seconds();
-     #endif      /* OAR_DEBUG_ENERGEST */
-
-    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-
-
-
-
-
-
-
-
-
-    PROCESS_BEGIN();
-
-        //  Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds.
-        //  Trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed.
-        etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);
-        
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
 
-        while(1) {
 
-            #if (OAR_DEBUG_ENERGEST)
-                printf("(galiot/oar) > DEBUG > System Time: %lu \n", system_time);
-            #endif      /* OAR_DEBUG_ENERGEST */
 
-            /*  Wait for the periodic timer to expire and then restart the timer.   */
-            PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));
-            etimer_reset(&debug_timer);
+        PROCESS_BEGIN();
+
+            etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
+            
+            while(1) {
+
+                    // printf("[%8lu] DEBUG \t > \t hello world \n", debug_system_time);
+
+
+                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    
+                    energest_flush();       // Update all energest times.
+
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t CPU:            \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t LPM:            \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t DEEP LPM:       \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t TOTAL TIME:     \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(ENERGEST_GET_TOTAL_TIME()));
+                    printf("------------------- \t ---------- \t --------------- \t ---- \n");
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO LISTEN:   \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO TRANSMIT: \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
+                    printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO OFF:      \t %4lu \n",    debug_system_time,
+                                                                                            to_seconds(ENERGEST_GET_TOTAL_TIME()
+                                                                                            - energest_type_time(ENERGEST_TYPE_TRANSMIT)
+                                                                                            - energest_type_time(ENERGEST_TYPE_LISTEN)));
+                    printf("================== \t ========== \t =============== \t ==== \n");                                                               
+
+                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+
+                    // (doc) By calling PROCESS_WAIT_EVENT_UNTIL() in the area separated by the PROCESS_BEGIN() and PROCESS_END() calls, 
+                    // (doc) one can yield control to the scheduler, and only resume execution when an event is delivered. 
+                    // (doc) A condition is given as an argument to PROCESS_WAIT_EVENT_UNTIL(), 
+                    // (doc) and this condition must be fulfilled for the processes to continue execution after the call to PROCESS_WAIT_EVENT_UNTIL(). 
+                    // (doc) If the condition is not fulfilled, the process yields control back to the OS until a new event is delivered.
+                    
+                    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));         // Wait for the periodic timer to expire and then restart the timer.
+                    etimer_reset(&debug_timer);
+
+                    // (doc) To voluntarily release control the scheduler, one can call PROCESS_PAUSE(). 
+                    // (doc) The scheduler will then deliver any queued events, and then immediately schedule the paused process.
+
+                    // PROCESS_PAUSE();
+
+                    // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
+                    // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
+                    // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                    
+                    process_poll(&oar_dev_process);
+
+                
+                }
+
+        PROCESS_END();
+    }
+
+#endif      /* OAR_DEBUG */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROCESS_THREAD(oar_dev_process, ev, data)
+{
+    
+    #if !(OAR_DEV)
+
+        // (doc) A process can be stopped in three ways:
+        // (doc)    The process implicitly exits by allowing the PROCESS_END() statement to be reached and executed.
+        // (doc)    The process explicitly exits by calling PROCESS_EXIT() in the PROCESS_THREAD body.
+        // (doc)    Another process kills the process by calling process_exit().
+        // (doc) After stopping a process, it can be restarted from the beginning by calling process_start().
+
+        PROCESS_EXIT();
+
+    #else   /* OAR_DEV */
+        
+        
+        
+
+        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+        
+        button_hal_button_t *dev_btn;
+        unsigned long int dev_system_time = clock_seconds();
+
+        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+  
+  
+
+        PROCESS_BEGIN();
+
+            printf("[%8lu] DEV \t > \t device button count: %u.\n", dev_system_time, button_hal_button_count);
+
+            for (int i = 0; i < button_hal_button_count; i++)
+            {
+                dev_btn = button_hal_get_by_index(i);
+
+                if(dev_btn) 
+                {
+                    printf("[%8lu] DEV \t > \t %s on pin %u with ID=%d, Logic=%s, Pull=%s\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn), dev_btn->pin, i, dev_btn->negative_logic ? "Negative" : "Positive", dev_btn->pull == GPIO_HAL_PIN_CFG_PULL_UP ? "Pull Up" : "Pull Down");
+                }
+            }
+
+            while(1) {
+
+                // (doc) PROCESS_YIELD() will yield control back to the scheduler without expecting to be scheduled again shortly thereafter. 
+                // (doc) Instead, it will wait for an incoming event, similar to PROCESS_WAIT_EVENT_UNTIL(), but without a required condition argument. 
+                // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
+                // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);. 
+                // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                
+                PROCESS_YIELD();
+
+                // ---------------------------------------------------------------------------------------------------------------------
+
+                // leds_set(LEDS_ALL);
+                // leds_off(LEDS_ALL);
+                // leds_toggle(LEDS_ALL);
+                // leds_on(LEDS_ALL);
+
+                // leds_single_on(LEDS_LED1);
+                // leds_single_off(LEDS_LED1);
+                // leds_single_toggle(LEDS_LED1);
+
+                // leds_single_on(LEDS_LED2);
+                // leds_single_off(LEDS_LED2);
+                // leds_single_toggle(LEDS_LED2);
+
+
+                if (dev_system_time % 2 == 0)       // every even second, as long as oar_dev_process has control  
+                {
+                    leds_single_on(LEDS_LED1);
+                    leds_single_off(LEDS_LED2);
+                }
+                else                                // every odd second, , as long as oar_dev_process has control
+                {
+                    leds_single_off(LEDS_LED1);
+                    leds_single_on(LEDS_LED2);
+                }
+
+                // ---------------------------------------------------------------------------------------------------------------------
+
+                // press button
+                
+                if(ev == button_hal_press_event) 
+                {
+                    dev_btn = (button_hal_button_t *)data;
+                    printf("[%8lu] DEV \t > \t Press event (%s)\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 0 (press event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 1 (press event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+                }
+                
+                // release button
+
+                else if(ev == button_hal_release_event) 
+                {
+                    dev_btn = (button_hal_button_t *)data;
+                    printf("[%8lu] DEV \t > \t Release event (%s)\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 0 (release event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 1 (release event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+                }
+                
+                // keep button
+
+                else if(ev == button_hal_periodic_event) 
+                {
+                    dev_btn = (button_hal_button_t *)data;
+                    printf("[%8lu] DEV \t > \t Periodic event, %u seconds (%s)\n", dev_system_time, dev_btn->press_duration_seconds, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 0 (periodic event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+
+                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
+                    {
+                        printf("[%8lu] DEV \t > \t This was button 1 (periodic event), on pin %u\n", dev_system_time, dev_btn->pin);
+                    }
+
+                    if(dev_btn->press_duration_seconds > 5) 
+                    {
+                        printf("[%8lu] DEV \t > \t %s pressed for more than 5 secs. Do custom action\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
+                    }
+
+                }
+                
+                // ---------------------------------------------------------------------------------------------------------------------
+
+            }
+
+        PROCESS_END();
         }
-
-    PROCESS_END();
-}
-
-/*---------------------------------------------------------------------------*/
+    
+    #endif  /* OAR_DEV */
