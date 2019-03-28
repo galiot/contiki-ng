@@ -65,6 +65,7 @@
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
+#include "oar-addr.h"               // for creating strings out of ipaddr and lladdr
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -86,6 +87,7 @@
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
 
 
 
@@ -220,25 +222,16 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                         printf("\n");
 
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t CPU:            \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t LPM:            \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t DEEP LPM:       \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t TOTAL TIME:     \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(ENERGEST_GET_TOTAL_TIME()));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t CPU:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t LPM:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t DEEP LPM:       \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t TOTAL TIME:     \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME()));
 
                         printf("------------------------------------------------------------------------ \n");
 
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO LISTEN:   \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO TRANSMIT: \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO OFF:      \t %4lu \n",    debug_system_time,
-                                                                                                to_seconds(ENERGEST_GET_TOTAL_TIME()
-                                                                                                - energest_type_time(ENERGEST_TYPE_TRANSMIT)
-                                                                                                - energest_type_time(ENERGEST_TYPE_LISTEN)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO LISTEN:   \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO TRANSMIT: \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
+                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO OFF:      \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
                         
                         printf("\n");
 

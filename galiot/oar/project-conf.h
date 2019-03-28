@@ -169,7 +169,7 @@
     #define OAR_CONF_DEBUG_ENERGEST                                              0      // (ON/OFF)
 
     // enable/disable the UIP statistics debugging (printing UIP values)
-    #define OAR_CONF_DEBUG_STATISTICS                                            1      // (ON/OFF)
+    #define OAR_CONF_DEBUG_STATISTICS                                            0      // (ON/OFF)
 
 
 
