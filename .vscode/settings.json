@@ -1,3 +1,9 @@
 {
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "files.associations": {
+        "oar-itoa.h": "c",
+        "energest.h": "c",
+        "heapmem.h": "c",
+        "rpl.h": "c"
+    }
 }

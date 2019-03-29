@@ -58,6 +58,18 @@
 
 
 #include "contiki.h"                // main include file for OS-specific modules
+#include "lib/heapmem.h"
+
+#include "net/ipv6/uip.h"
+#include "net/ipv6/uiplib.h"
+#include "net/ipv6/uip-icmp6.h"
+#include "net/ipv6/uip-ds6.h"
+
+#if ROUTING_CONF_RPL_LITE
+    #include "net/routing/rpl-lite/rpl.h"
+#elif ROUTING_CONF_RPL_CLASSIC
+    #include "net/routing/rpl-classic/rpl.h"
+#endif
 
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
@@ -65,11 +77,13 @@
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
-#include "oar-addr.h"               // for creating strings out of ipaddr and lladdr
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 #include <stdio.h>                  // for prinntf()
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -109,6 +123,152 @@
 
 
 
+
+// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
+#if NETSTACK_CONF_WITH_IPV6
+
+    void oar_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
+    {
+        char buf[UIPLIB_IPV6_MAX_STR_LEN];
+        uiplib_ipaddr_snprint(buf, sizeof(buf), ipaddr);
+
+        strcpy(output, buf);
+    }
+    
+    // ---------------------------------------------------------------------------------------------------------------------------------
+
+    // static const char *oar_ds6_nbr_state_to_str(uint8_t state)
+    // {
+    //     switch(state) 
+    //     {
+    //         case NBR_INCOMPLETE:
+    //             return "Incomplete";
+
+    //         case NBR_REACHABLE:
+    //             return "Reachable";
+
+    //         case NBR_STALE:
+    //             return "Stale";
+
+    //         case NBR_DELAY:
+    //             return "Delay";
+
+    //         case NBR_PROBE:
+    //             return "Probe";
+
+    //         default:
+    //             return "Unknown";
+    //     }
+    // }
+
+#endif  /* NETSTACK_CONF_WITH_IPV6 */
+// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
+
+
+
+
+void oar_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+{
+    char buf[5]; 
+    if (lladdr == NULL)
+    {
+        strcpy(output, "(NULL LL addr");
+    }
+    else
+    {
+        unsigned int i;
+        for (i = 0; i < LINKADDR_SIZE; i++)
+        {
+            if (i > 0 && i % 2 == 0)
+            {
+                strcat(output, ".");
+            }
+            
+            
+            sprintf(buf, "%02x", lladdr->u8[i]);
+            strcat(output, buf);
+        }
+    }
+}
+
+
+
+
+// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
+#if ROUTING_CONF_RPL_LITE
+
+    // static const char *oar_rpl_state_to_str(enum rpl_dag_state state)
+    // {
+    //     switch(state) 
+    //     {
+    //         case DAG_INITIALIZED:
+    //             return "Initialized";
+    
+    //         case DAG_JOINED:
+    //             return "Joined";
+    
+    //         case DAG_REACHABLE:
+    //             return "Reachable";
+    
+    //         case DAG_POISONING:
+    //             return "Poisoning";
+    
+    //         default:
+    //         return "Unknown";
+    //     }
+    // }
+    
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    
+    // static const char *oar_rpl_mop_to_str(int mop)
+    // {
+    //     switch(mop) 
+    //     {
+    //         case RPL_MOP_NO_DOWNWARD_ROUTES:
+    //             return "No downward routes";
+    
+    //         case RPL_MOP_NON_STORING:
+    //             return "Non-storing";
+    
+    //         case RPL_MOP_STORING_NO_MULTICAST:
+    //             return "Storing";
+    
+    //         case RPL_MOP_STORING_MULTICAST:
+    //             return "Storing+multicast";
+    
+    //         default:
+    //             return "Unknown";
+    //     }
+    // }
+    
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    
+    // static const char *oar_rpl_ocp_to_str(int ocp)
+    // {
+    //     switch(ocp) 
+    //     {
+    //         case RPL_OCP_OF0:
+    //         return "OF0";
+    
+    //         case RPL_OCP_MRHOF:
+    //         return "MRHOF";
+            
+    //         default:
+    //         return "Unknown";
+    //     }
+    // }
+    
+#endif  /* ROUTING_CONF_RPL_LITE */
+// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
+    
+    
+
+
+
+
+
+
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #if (OAR_DEBUG_ENERGEST)
     static unsigned long to_seconds(uint64_t time)
@@ -117,6 +277,7 @@
     }
 #endif  /* OAR_DEBUG_ENERGEST */
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 
@@ -197,7 +358,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
             static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
-            unsigned long int debug_system_time = clock_seconds();        
+            unsigned long int debug_system_time = clock_seconds();      
 
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
@@ -211,6 +372,10 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             while(1) {
 
                     printf("[%8lu] DEBUG \t > \t hello world \n", debug_system_time);
+
+
+
+                    
 
 
 
@@ -246,25 +411,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     
                         printf("\n");
 
-                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
-                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
-                        printf("[%8lu] DEBUG > \t   IP > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
-                        printf("[%8lu] DEBUG > \t   IP > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
-                        printf("[%8lu] DEBUG > \t   IP > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
-                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
-                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
-                        printf("[%8lu] DEBUG > \t   IP > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
-                        printf("[%8lu] DEBUG > \t   IP > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
-                        printf("[%8lu] DEBUG > \t   IP > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
+                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
                         
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
 
-                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
-                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
-                        printf("[%8lu] DEBUG > \t ICMP > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
-                        printf("[%8lu] DEBUG > \t ICMP > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
-                        printf("[%8lu] DEBUG > \t ICMP > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
+                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
+                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
+                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
+                        printf("[%8lu] DEBUG > \t ICMP STATS > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
+                        printf("[%8lu] DEBUG > \t ICMP STATS > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
 
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
@@ -272,15 +437,15 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_TCP
 
-                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
-                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
-                            printf("[%8lu] DEBUG > \t  TCP > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
-                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
-                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
-                            printf("[%8lu] DEBUG > \t  TCP > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
-                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
-                            printf("[%8lu] DEBUG > \t  TCP > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
-                            printf("[%8lu] DEBUG > \t  TCP > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
+                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                         
@@ -291,10 +456,10 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_UDP
 
-                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
-                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
-                            printf("[%8lu] DEBUG > \t  UDP > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
-                            printf("[%8lu] DEBUG > \t  UDP > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
+                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
+                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
+                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
+                            printf("[%8lu] DEBUG > \t  UDP STATS > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
     
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
@@ -302,14 +467,52 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
             
-                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
-                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
-                        printf("[%8lu] DEBUG > \t  ND6 > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
+                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
+                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
+                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
 
                         printf("\n");
 
                     #endif      /* OAR_DEBUG_STATISTICS */
                     // <-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%
+
+                    
+
+
+
+                    // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$
+                    #if (OAR_DEBUG_SHELL)
+
+
+                    if(!curr_instance.used || rpl_neighbor_count() == 0) 
+                    {
+                        printf("[%8lu] DEBUG > \t SHELL > \t RPL NEIGHBOR (0/%d)\n", debug_system_time, rpl_neighbor_count());
+                    } 
+                    else 
+                    {
+                        rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+                        int oar_neighbor_count = 0;
+
+                        while(nbr != NULL) 
+                        {
+                            char buf[120];
+                            oar_neighbor_count++;
+                            
+                            rpl_neighbor_snprint(buf, sizeof(buf), nbr);
+                            printf("[%8lu] DEBUG > \t SHELL > \t RPL NEIGHBOR (%d/%d): %s\n", debug_system_time, oar_neighbor_count, rpl_neighbor_count(), buf);
+                            nbr = nbr_table_next(rpl_neighbors, nbr);
+                        }
+                    }
+
+                    #endif      /* OAR_DEBUG_SHELL */
+                    // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$
+
+
+
+
+
+
+
 
 
 

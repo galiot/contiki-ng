@@ -163,14 +163,16 @@
     /*---------------------------------------------------------------------------*/
     
     // set the frequency in seconds for printing to console 
-    #define OAR_CONF_DEBUG_INTERVAL                                              3      // (SECONDS)
+    #define OAR_CONF_DEBUG_INTERVAL                                             3       // (SECONDS)
 
-    // enable/disable the energest debugging (printing energest values)
-    #define OAR_CONF_DEBUG_ENERGEST                                              0      // (ON/OFF)
+    // enable/disable energest timings (printing energest values)
+    #define OAR_CONF_DEBUG_ENERGEST                                             0       // (ON/OFF)
 
-    // enable/disable the UIP statistics debugging (printing UIP values)
-    #define OAR_CONF_DEBUG_STATISTICS                                            0      // (ON/OFF)
+    // enable/disable UIP statistics debugging (printing UIP values)
+    #define OAR_CONF_DEBUG_STATISTICS                                           0       // (ON/OFF)
 
+    // enable/disable shell information (printing shell values)
+    #define OAR_CONF_DEBUG_SHELL                                                1       // (ON/OFF)
 
 
     /*---------------------------------------------------------------------------*/
@@ -192,6 +194,12 @@
     #else   /*  OAR_CONF_DEBUG_STATISTICS  */
         #define OAR_DEBUG_STATISTICS                                             0 
     #endif  /*  OAR_CONF_DEBUG_STATISTICS  */
+
+    #if OAR_CONF_DEBUG_SHELL
+        #define OAR_DEBUG_SHELL                                 OAR_CONF_DEBUG_SHELL
+    #else   /*  OAR_CONF_DEBUG_SHELL  */
+        #define OAR_DEBUG_SHELL                                                 0 
+    #endif  /*  OAR_CONF_DEBUG_SHELL  */
 
     /*---------------------------------------------------------------------------*/
     /*---------------------------------------------------------------------------*/
