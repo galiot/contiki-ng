@@ -71,6 +71,8 @@
     #include "net/routing/rpl-classic/rpl.h"
 #endif
 
+#include "net/routing/routing.h"    // for NETSTACK_ROUTING
+
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
@@ -121,146 +123,159 @@
 // |$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|
 // |$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|$|
 
-
-
-
 // &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
-#if NETSTACK_CONF_WITH_IPV6
-
-    void oar_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
-    {
-        char buf[UIPLIB_IPV6_MAX_STR_LEN];
-        uiplib_ipaddr_snprint(buf, sizeof(buf), ipaddr);
-
-        strcpy(output, buf);
-    }
-    
-    // ---------------------------------------------------------------------------------------------------------------------------------
-
-    // static const char *oar_ds6_nbr_state_to_str(uint8_t state)
-    // {
-    //     switch(state) 
-    //     {
-    //         case NBR_INCOMPLETE:
-    //             return "Incomplete";
-
-    //         case NBR_REACHABLE:
-    //             return "Reachable";
-
-    //         case NBR_STALE:
-    //             return "Stale";
-
-    //         case NBR_DELAY:
-    //             return "Delay";
-
-    //         case NBR_PROBE:
-    //             return "Probe";
-
-    //         default:
-    //             return "Unknown";
-    //     }
-    // }
-
-#endif  /* NETSTACK_CONF_WITH_IPV6 */
-// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
+#if (OAR_DEBUG_SHELL)
 
 
 
 
-void oar_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
-{
-    char buf[5]; 
-    if (lladdr == NULL)
-    {
-        strcpy(output, "(NULL LL addr");
-    }
-    else
-    {
-        unsigned int i;
-        for (i = 0; i < LINKADDR_SIZE; i++)
+
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    #if NETSTACK_CONF_WITH_IPV6
+
+        void oar_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
         {
-            if (i > 0 && i % 2 == 0)
+            char buf[UIPLIB_IPV6_MAX_STR_LEN];
+            memset(output, 0, sizeof(output));
+
+            uiplib_ipaddr_snprint(buf, sizeof(buf), ipaddr);
+
+            strcpy(output, buf);
+        }
+        
+        // -----------------------------------------------------------------------------------------------------------------------------
+
+        static const char *ds6_nbr_state_to_str(uint8_t state)
+        {
+            switch(state) 
             {
-                strcat(output, ".");
+                case NBR_INCOMPLETE:
+                    return "Incomplete";
+
+                case NBR_REACHABLE:
+                    return "Reachable";
+
+                case NBR_STALE:
+                    return "Stale";
+
+                case NBR_DELAY:
+                    return "Delay";
+
+                case NBR_PROBE:
+                    return "Probe";
+
+                default:
+                    return "Unknown";
             }
-            
-            
-            sprintf(buf, "%02x", lladdr->u8[i]);
-            strcat(output, buf);
+        }
+
+    #endif  /* NETSTACK_CONF_WITH_IPV6 */
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+
+    void oar_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+    {
+        char buf[5];
+        memset(output, 0, sizeof(output));
+    
+        if (lladdr == NULL)
+        {
+            strcpy(output, "(NULL LL addr");
+        }
+        else
+        {
+            unsigned int i;
+            for (i = 0; i < LINKADDR_SIZE; i++)
+            {
+                if (i > 0 && i % 2 == 0)
+                {
+                    strcat(output, ".");
+                }
+                
+                sprintf(buf, "%02x", lladdr->u8[i]);
+                strcat(output, buf);
+            }
         }
     }
-}
+    
+    
+    
+    
+    // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
+    #if ROUTING_CONF_RPL_LITE
+    
+        static const char *rpl_state_to_str(enum rpl_dag_state state)
+        {
+            switch(state) 
+            {
+                case DAG_INITIALIZED:
+                    return "Initialized";
+        
+                case DAG_JOINED:
+                    return "Joined";
+        
+                case DAG_REACHABLE:
+                    return "Reachable";
+        
+                case DAG_POISONING:
+                    return "Poisoning";
+        
+                default:
+                    return "Unknown";
+            }
+        }
+        
+        // -----------------------------------------------------------------------------------------------------------------------------
+        
+        static const char *rpl_mop_to_str(int mop)
+        {
+            switch(mop) 
+            {
+                case RPL_MOP_NO_DOWNWARD_ROUTES:
+                    return "No downward routes";
+        
+                case RPL_MOP_NON_STORING:
+                    return "Non-storing";
+        
+                case RPL_MOP_STORING_NO_MULTICAST:
+                    return "Storing";
+        
+                case RPL_MOP_STORING_MULTICAST:
+                    return "Storing+multicast";
+        
+                default:
+                    return "Unknown";
+            }
+        }
+        
+        // -----------------------------------------------------------------------------------------------------------------------------
+        
+        static const char *rpl_ocp_to_str(int ocp)
+        {
+            switch(ocp) 
+            {
+                case RPL_OCP_OF0:
+                return "OF0";
+        
+                case RPL_OCP_MRHOF:
+                return "MRHOF";
+                
+                default:
+                return "Unknown";
+            }
+        }
+        
+    #endif  /* ROUTING_CONF_RPL_LITE */
+    // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
 
 
 
 
+#endif  /* (OAR_DEBUG_SHELL) */
 // &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
-#if ROUTING_CONF_RPL_LITE
 
-    // static const char *oar_rpl_state_to_str(enum rpl_dag_state state)
-    // {
-    //     switch(state) 
-    //     {
-    //         case DAG_INITIALIZED:
-    //             return "Initialized";
-    
-    //         case DAG_JOINED:
-    //             return "Joined";
-    
-    //         case DAG_REACHABLE:
-    //             return "Reachable";
-    
-    //         case DAG_POISONING:
-    //             return "Poisoning";
-    
-    //         default:
-    //         return "Unknown";
-    //     }
-    // }
-    
-    // -------------------------------------------------------------------------------------------------------------------------------------
-    
-    // static const char *oar_rpl_mop_to_str(int mop)
-    // {
-    //     switch(mop) 
-    //     {
-    //         case RPL_MOP_NO_DOWNWARD_ROUTES:
-    //             return "No downward routes";
-    
-    //         case RPL_MOP_NON_STORING:
-    //             return "Non-storing";
-    
-    //         case RPL_MOP_STORING_NO_MULTICAST:
-    //             return "Storing";
-    
-    //         case RPL_MOP_STORING_MULTICAST:
-    //             return "Storing+multicast";
-    
-    //         default:
-    //             return "Unknown";
-    //     }
-    // }
-    
-    // -------------------------------------------------------------------------------------------------------------------------------------
-    
-    // static const char *oar_rpl_ocp_to_str(int ocp)
-    // {
-    //     switch(ocp) 
-    //     {
-    //         case RPL_OCP_OF0:
-    //         return "OF0";
-    
-    //         case RPL_OCP_MRHOF:
-    //         return "MRHOF";
-            
-    //         default:
-    //         return "Unknown";
-    //     }
-    // }
-    
-#endif  /* ROUTING_CONF_RPL_LITE */
-// &^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&^&
-    
     
 
 
@@ -277,7 +292,6 @@ void oar_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     }
 #endif  /* OAR_DEBUG_ENERGEST */
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 
 
@@ -358,10 +372,14 @@ PROCESS_THREAD(oar_debug_process, ev, data)
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
             static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
-            unsigned long int debug_system_time = clock_seconds();      
+            unsigned long int debug_system_time = clock_seconds(); 
+
+            char oar_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+            char oar_lladdr[UIPLIB_IPV6_MAX_STR_LEN];     
 
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        
+            
+            
 
 
 
@@ -371,7 +389,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             
             while(1) {
 
-                    printf("[%8lu] DEBUG \t > \t hello world \n", debug_system_time);
+                    // printf("[%8lu] DEBUG \t > \t hello world \n", debug_system_time);
 
 
 
@@ -473,7 +491,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                         printf("\n");
 
-                    #endif      /* OAR_DEBUG_STATISTICS */
+                    #endif      /* (OAR_DEBUG_STATISTICS) */
                     // <-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%
 
                     
@@ -484,27 +502,202 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     #if (OAR_DEBUG_SHELL)
 
 
-                    if(!curr_instance.used || rpl_neighbor_count() == 0) 
-                    {
-                        printf("[%8lu] DEBUG > \t SHELL > \t RPL NEIGHBOR (0/%d)\n", debug_system_time, rpl_neighbor_count());
-                    } 
-                    else 
-                    {
-                        rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
-                        int oar_neighbor_count = 0;
 
-                        while(nbr != NULL) 
-                        {
-                            char buf[120];
-                            oar_neighbor_count++;
+
+
+                        // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
+                        #if ROUTING_CONF_RPL_LITE
+
+
+                            if(!curr_instance.used || rpl_neighbor_count() == 0) 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor (0/%d)\n", debug_system_time, rpl_neighbor_count());
+                            } 
+                            else 
+                            {
+                                rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+                                int oar_rpl_neighbor_count = 0;
+
+                                while(nbr != NULL) 
+                                {
+                                    char buf[120];
+                                    oar_rpl_neighbor_count++;
+                                    
+                                    rpl_neighbor_snprint(buf, sizeof(buf), nbr);
+                                    printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor %d/%d: %s\n", debug_system_time, oar_rpl_neighbor_count, rpl_neighbor_count(), buf);
+                                    nbr = nbr_table_next(rpl_neighbors, nbr);
+                                }
+                            }
                             
-                            rpl_neighbor_snprint(buf, sizeof(buf), nbr);
-                            printf("[%8lu] DEBUG > \t SHELL > \t RPL NEIGHBOR (%d/%d): %s\n", debug_system_time, oar_neighbor_count, rpl_neighbor_count(), buf);
-                            nbr = nbr_table_next(rpl_neighbors, nbr);
-                        }
-                    }
 
-                    #endif      /* OAR_DEBUG_SHELL */
+                            // ---------------------------------------------------------------------------------------------------------
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                            
+
+                            if(!curr_instance.used) 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: None\n", debug_system_time);
+                            } 
+                            else 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: %u\n", debug_system_time, curr_instance.instance_id);
+
+                                if(NETSTACK_ROUTING.node_is_root()) 
+                                {
+                                    printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG root\n", debug_system_time);
+                                } 
+                                else 
+                                {
+                                    printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG node\n", debug_system_time);
+                                }
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG: ", debug_system_time);
+                                oar_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.dag_id); printf("%s", oar_ipaddr);
+                                printf(", version %u\n", curr_instance.dag.version);
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Prefix: ", debug_system_time);
+                                oar_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.prefix_info.prefix); printf("%s", oar_ipaddr); 
+                                printf("/%u\n", curr_instance.dag.prefix_info.length);
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) MOP: %s\n", debug_system_time, rpl_mop_to_str(curr_instance.mop));
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) OF: %s\n", debug_system_time, rpl_ocp_to_str(curr_instance.of->ocp));
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Hop rank increment: %u\n", debug_system_time, curr_instance.min_hoprankinc);
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Default lifetime: %lu seconds\n", debug_system_time, RPL_LIFETIME(curr_instance.default_lifetime));
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) State: %s\n", debug_system_time, rpl_state_to_str(curr_instance.dag.state));
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Preferred parent: ", debug_system_time);
+                                if(curr_instance.dag.preferred_parent) 
+                                {
+                                    oar_ipaddr_to_str(oar_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent)); printf("%s", oar_ipaddr);
+                                    printf(" (last DTSN: %u)\n", curr_instance.dag.preferred_parent->dtsn);
+                                } 
+                                else 
+                                {
+                                    printf("None\n");
+                                }
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Rank: %u\n", debug_system_time, curr_instance.dag.rank);
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Lowest rank: %u (%u)\n", debug_system_time, curr_instance.dag.lowest_rank, curr_instance.max_rankinc);
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DTSN out: %u\n", debug_system_time, curr_instance.dtsn_out);
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAO sequence: last sent %u, last acked %u\n", debug_system_time, curr_instance.dag.dao_last_seqno, curr_instance.dag.dao_last_acked_seqno);
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Trickle timer: current %u, min %u, max %u, redundancy %u\n", debug_system_time, curr_instance.dag.dio_intcurrent, curr_instance.dio_intmin, curr_instance.dio_intmin + curr_instance.dio_intdoubl, curr_instance.dio_redundancy);
+
+                            }
+
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                            
+
+                        #endif  /* ROUTING_CONF_RPL_LITE */
+                        // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
+
+
+
+
+                        printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_macaddr) Node MAC address: ", debug_system_time);
+                        oar_lladdr_to_str(oar_lladdr, &linkaddr_node_addr); printf("%s", oar_lladdr);
+                        printf("\n");
+
+
+
+
+
+                        // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        #if NETSTACK_CONF_WITH_IPV6
+
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                            uint8_t state;
+
+                            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+                            {
+                                state = uip_ds6_if.addr_list[i].state;
+                                if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
+                                {
+                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_ipaddr) Node IPv6 addresses: ", debug_system_time);
+                                    oar_ipaddr_to_str(oar_ipaddr, &uip_ds6_if.addr_list[i].ipaddr); printf("%s", oar_ipaddr);
+                                    printf("\n");
+                                }
+                            }
+
+                            // ---------------------------------------------------------------------------------------------------------
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                            uip_ds6_nbr_t *nbr;
+                            int oar_ip_neighbor_count = 0;
+
+                            nbr = uip_ds6_nbr_head();
+                            if(nbr == NULL) 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbors: none\n", debug_system_time);
+                            }
+                            else
+                            {
+                                while(nbr != NULL) 
+                                {
+                                    oar_ip_neighbor_count++;
+
+                                    printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbor %d: ", debug_system_time, oar_ip_neighbor_count);
+                                    oar_ipaddr_to_str(oar_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_ipaddr);
+                                    printf(" <-> ");
+                                    oar_lladdr_to_str(oar_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_lladdr);
+                                    printf(", router %u, state %s ", nbr->isrouter, ds6_nbr_state_to_str(nbr->state));
+                                    printf("\n");
+
+                                    nbr = uip_ds6_nbr_next(nbr);
+                                }
+                            }
+                        
+
+                        #endif  /* NETSTACK_CONF_WITH_IPV6 */
+                        // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        
+
+
+                        // TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+                        #if MAC_CONF_WITH_TSCH
+
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                            printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is coordinator: %u\n", debug_system_time, tsch_is_coordinator);
+                            printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is associated: %u\n", tsch_is_associated);
+                            
+                            if(tsch_is_associated) 
+                            {
+                                struct tsch_neighbor *n = tsch_queue_get_time_source();
+
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) PAN ID: 0x%x\n", debug_system_time, frame802154_get_pan_id());
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is PAN secured: %u\n", debug_system_time, tsch_is_pan_secured);
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Join priority: %u\n", debug_system_time, tsch_join_priority);
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Time source: ", debug_system_time);
+
+                                if(n != NULL) 
+                                {
+                                    oar_lladdr_to_str(oar_lladdr, &n->addr); printf("%s", oar_lladdr);
+                                    printf("\n");
+                                } 
+                                else 
+                                {
+                                    printf("none\n");
+                                }
+                                
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Last synchronized: %lu seconds ago\n", debug_system_time, (clock_time() - tsch_last_sync_time) / CLOCK_SECOND);
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Drift w.r.t. coordinator: %ld ppm\n", debug_system_time, tsch_adaptive_timesync_get_drift_ppm());
+                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Network uptime: %lu seconds\n", debug_system_time, (unsigned long)(tsch_get_network_uptime_ticks() / CLOCK_SECOND));
+                            }
+
+
+                        #endif  /* MAC_CONF_WITH_TSCH */
+                        // TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+                    printf("\n");
+
+                    #endif      /* (OAR_DEBUG_SHELL) */
                     // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$
 
 
@@ -541,9 +734,11 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 }
 
         PROCESS_END();
-    }
+    
+    #endif      /* OAR_DEBUG */
+}
 
-#endif      /* OAR_DEBUG */
+    
 
 
 
