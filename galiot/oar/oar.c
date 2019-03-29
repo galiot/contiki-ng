@@ -695,7 +695,130 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         #endif  /* MAC_CONF_WITH_TSCH */
                         // TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 
+
+
+
+                        // v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v
+                        #if NETSTACK_CONF_WITH_IPV6
+
+                            
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                            uip_ds6_defrt_t *default_route;
+
+                            default_route = uip_ds6_defrt_lookup(uip_ds6_defrt_choose());
+
+                            if(default_route != NULL) 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: ", debug_system_time);
+                                oar_ipaddr_to_str(oar_ipaddr, &default_route->ipaddr); printf("%s", oar_ipaddr);
+                                
+                                if(default_route->lifetime.interval != 0) 
+                                {
+                                    printf(" (lifetime: %lu seconds)\n", (unsigned long)default_route->lifetime.interval);
+                                } 
+                                else 
+                                {
+                                    printf(" (lifetime: infinite)\n");
+                                }
+                            } 
+                            else 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: None\n", debug_system_time);
+                            }
+
+
+
+                            // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
+                            #if UIP_CONF_IPV6_RPL
+
+
+                                printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                                if(uip_sr_num_nodes() > 0) 
+                                {
+                                    uip_sr_node_t *link;
+                                    
+                                    /* Our routing links */
+                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing links (%u in total):\n", debug_system_time, uip_sr_num_nodes());
+                                    
+                                    link = uip_sr_node_head();
+
+                                    while(link != NULL) 
+                                    {
+                                        char buf[100];
+                                        
+                                        uip_sr_link_snprint(buf, sizeof(buf), link);
+                                        
+                                        printf("-- %s\n", buf);
+                                        
+                                        link = uip_sr_node_next(link);
+                                    }
+                                } 
+                                else 
+                                {
+                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing links\n", debug_system_time);
+                                }
+
+
+                            #endif  /* UIP_CONF_IPV6_RPL */
+                            // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
+
+
+
+
+                            // 000000000000000000000000000000000000000000000000
+                            #if (UIP_MAX_ROUTES != 0)
+
+                            
+                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+                            if(uip_ds6_route_num_routes() > 0) 
+                            {
+                                uip_ds6_route_t *route;
+                                /* Our routing entries */
+                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing entries (%u in total):\n", debug_system_time, uip_ds6_route_num_routes());
+                                route = uip_ds6_route_head();
+                            
+                                while(route != NULL) 
+                                {
+                                    printf("-- ");
+                                    oar_ipaddr_to_str(oar_ipaddr, &route->ipaddr); printf("%s", oar_ipaddr);
+                                    printf(" via ");
+                                    oar_ipaddr_to_str(oar_ipaddr, uip_ds6_route_nexthop(route)); printf("%s", oar_ipaddr);
+
+                                    if((unsigned long)route->state.lifetime != 0xFFFFFFFF) 
+                                    {
+                                        printf(" (lifetime: %lu seconds)\n", (unsigned long)route->state.lifetime);
+                                    } 
+                                    else 
+                                    {
+                                        printf(" (lifetime: infinite)\n");
+                                    }
+                              
+                                    route = uip_ds6_route_next(route);
+                                }
+                            } 
+                            else 
+                            {
+                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing entries\n", debug_system_time);
+                            }
+
+
+                            #endif  /* (UIP_MAX_ROUTES != 0) */
+                            // 000000000000000000000000000000000000000000000000
+
+
+
+                        #endif  /* NETSTACK_CONF_WITH_IPV6 */
+                        // v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v6v
+
+                    
                     printf("\n");
+                    printf("\n");
+
+
+
 
                     #endif      /* (OAR_DEBUG_SHELL) */
                     // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$

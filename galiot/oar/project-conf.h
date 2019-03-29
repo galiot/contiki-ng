@@ -166,10 +166,10 @@
     #define OAR_CONF_DEBUG_INTERVAL                                             3       // (SECONDS)
 
     // enable/disable energest timings (printing energest values)
-    #define OAR_CONF_DEBUG_ENERGEST                                             0       // (ON/OFF)
+    #define OAR_CONF_DEBUG_ENERGEST                                             1       // (ON/OFF)
 
     // enable/disable UIP statistics debugging (printing UIP values)
-    #define OAR_CONF_DEBUG_STATISTICS                                           0       // (ON/OFF)
+    #define OAR_CONF_DEBUG_STATISTICS                                           1       // (ON/OFF)
 
     // enable/disable shell information (printing shell values)
     #define OAR_CONF_DEBUG_SHELL                                                1       // (ON/OFF)
