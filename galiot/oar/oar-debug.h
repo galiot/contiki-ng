@@ -100,9 +100,9 @@ void oar_debug_cmd_macaddr(unsigned long int system_time);
 
     void oar_debug_cmd_routes(unsigned long int system_time);
 
-
-
 #endif // (NETSTACK_CONF_WITH_IPV6)
+
+void oar_debug_(char dash, int times);
 
 
 
