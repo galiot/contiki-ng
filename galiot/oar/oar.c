@@ -181,7 +181,15 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             
             while(1) 
             {
-                oar_json_energest(clock_seconds());
+                
+                // =========================
+                printf("\n"); oar_debug_('=', 100); printf("\n");
+
+                oar_json_construct(oar_json_buf);
+                oar_json_print(oar_json_buf);
+
+                printf("\n"); oar_debug_('=', 100); printf("\n");
+                // =========================
                 
                 #if (OAR_DEBUG_ENERGEST)
 

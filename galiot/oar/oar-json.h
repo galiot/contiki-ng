@@ -6,8 +6,6 @@
 
 
 
-
-
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uiplib.h"
 #include "net/ipv6/uip-icmp6.h"
@@ -48,9 +46,11 @@ char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
-
-
-
+// ==================================================
+char oar_json_buf[500];
+void oar_json_print(char * str);
+void oar_json_construct(char * buf);
+// ==================================================
 
 
 
