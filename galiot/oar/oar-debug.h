@@ -1,7 +1,14 @@
-#ifndef PROJECT_DEBUG_H_
-#define PROJECT_DEBUG_H_
+#ifndef OAR_DEBUG_H_
+#define OAR_DEBUG_H_
 
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uiplib.h"
@@ -23,6 +30,11 @@
 
 #include "sys/energest.h"
 #include "net/ipv6/uip.h"
+
+
+
+
+
 
 
 
@@ -124,39 +136,10 @@ void oar_debug_(char dash, int times);
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif /* PROJECT_DEBUG_H_ */
+#endif // (OAR_DEBUG_H_)

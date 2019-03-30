@@ -8,7 +8,7 @@
 
 #if (ENERGEST_CONF_ON)
 
-    static unsigned long to_seconds(uint64_t time)
+    static unsigned long oar_debug_to_seconds(uint64_t time)
     {
         return (unsigned long)(time / ENERGEST_SECOND);
     }
@@ -21,13 +21,13 @@
 
         printf("\n");
 
-        printf("[%8lu] DEBUG > ENERGY >                                                                              CPU: %lu \n",    system_time, to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
-        printf("[%8lu] DEBUG > ENERGY >                                                                              LPM: %lu \n",    system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
-        printf("[%8lu] DEBUG > ENERGY >                                                                         DEEP LPM: %lu \n",    system_time, to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
-        printf("[%8lu] DEBUG > ENERGY >                                                                       TOTAL TIME: %lu \n",    system_time, to_seconds(ENERGEST_GET_TOTAL_TIME()));
-        printf("[%8lu] DEBUG > ENERGY >                                                                     RADIO LISTEN: %lu \n",    system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
-        printf("[%8lu] DEBUG > ENERGY >                                                                   RADIO TRANSMIT: %lu \n",    system_time, to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
-        printf("[%8lu] DEBUG > ENERGY >                                                                        RADIO OFF: %lu \n",    system_time, to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                              CPU: %lu \n",    system_time, oar_debug_to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                              LPM: %lu \n",    system_time, oar_debug_to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                         DEEP LPM: %lu \n",    system_time, oar_debug_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                       TOTAL TIME: %lu \n",    system_time, oar_debug_to_seconds(ENERGEST_GET_TOTAL_TIME()));
+        printf("[%8lu] DEBUG > ENERGY >                                                                     RADIO LISTEN: %lu \n",    system_time, oar_debug_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                   RADIO TRANSMIT: %lu \n",    system_time, oar_debug_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
+        printf("[%8lu] DEBUG > ENERGY >                                                                        RADIO OFF: %lu \n",    system_time, oar_debug_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
         
 }
 

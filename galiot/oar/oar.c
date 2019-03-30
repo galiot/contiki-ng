@@ -58,7 +58,6 @@
 
 
 #include "contiki.h"                // main include file for OS-specific modules
-#include "lib/heapmem.h"
 
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uiplib.h"
@@ -80,6 +79,7 @@
 
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
 #include "oar-debug.h"
+#include "oar-json.h"
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -181,6 +181,8 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             
             while(1) 
             {
+                oar_json_energest(clock_seconds());
+                
                 #if (OAR_DEBUG_ENERGEST)
 
                     oar_debug_energest(clock_seconds());
