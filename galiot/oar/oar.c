@@ -79,6 +79,7 @@
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
+#include "oar-debug.h"
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -145,29 +146,29 @@
         
         // -----------------------------------------------------------------------------------------------------------------------------
 
-        static const char *ds6_nbr_state_to_str(uint8_t state)
-        {
-            switch(state) 
-            {
-                case NBR_INCOMPLETE:
-                    return "Incomplete";
+        // static const char *ds6_nbr_state_to_str(uint8_t state)
+        // {
+        //     switch(state) 
+        //     {
+        //         case NBR_INCOMPLETE:
+        //             return "Incomplete";
 
-                case NBR_REACHABLE:
-                    return "Reachable";
+        //         case NBR_REACHABLE:
+        //             return "Reachable";
 
-                case NBR_STALE:
-                    return "Stale";
+        //         case NBR_STALE:
+        //             return "Stale";
 
-                case NBR_DELAY:
-                    return "Delay";
+        //         case NBR_DELAY:
+        //             return "Delay";
 
-                case NBR_PROBE:
-                    return "Probe";
+        //         case NBR_PROBE:
+        //             return "Probe";
 
-                default:
-                    return "Unknown";
-            }
-        }
+        //         default:
+        //             return "Unknown";
+        //     }
+        // }
 
     #endif  /* NETSTACK_CONF_WITH_IPV6 */
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -206,66 +207,66 @@
     // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
     #if ROUTING_CONF_RPL_LITE
     
-        static const char *rpl_state_to_str(enum rpl_dag_state state)
-        {
-            switch(state) 
-            {
-                case DAG_INITIALIZED:
-                    return "Initialized";
+        // static const char *rpl_state_to_str(enum rpl_dag_state state)
+        // {
+        //     switch(state) 
+        //     {
+        //         case DAG_INITIALIZED:
+        //             return "Initialized";
         
-                case DAG_JOINED:
-                    return "Joined";
+        //         case DAG_JOINED:
+        //             return "Joined";
         
-                case DAG_REACHABLE:
-                    return "Reachable";
+        //         case DAG_REACHABLE:
+        //             return "Reachable";
         
-                case DAG_POISONING:
-                    return "Poisoning";
+        //         case DAG_POISONING:
+        //             return "Poisoning";
         
-                default:
-                    return "Unknown";
-            }
-        }
+        //         default:
+        //             return "Unknown";
+        //     }
+        // }
         
-        // -----------------------------------------------------------------------------------------------------------------------------
+        // // -----------------------------------------------------------------------------------------------------------------------------
         
-        static const char *rpl_mop_to_str(int mop)
-        {
-            switch(mop) 
-            {
-                case RPL_MOP_NO_DOWNWARD_ROUTES:
-                    return "No downward routes";
+        // static const char *rpl_mop_to_str(int mop)
+        // {
+        //     switch(mop) 
+        //     {
+        //         case RPL_MOP_NO_DOWNWARD_ROUTES:
+        //             return "No downward routes";
         
-                case RPL_MOP_NON_STORING:
-                    return "Non-storing";
+        //         case RPL_MOP_NON_STORING:
+        //             return "Non-storing";
         
-                case RPL_MOP_STORING_NO_MULTICAST:
-                    return "Storing";
+        //         case RPL_MOP_STORING_NO_MULTICAST:
+        //             return "Storing";
         
-                case RPL_MOP_STORING_MULTICAST:
-                    return "Storing+multicast";
+        //         case RPL_MOP_STORING_MULTICAST:
+        //             return "Storing+multicast";
         
-                default:
-                    return "Unknown";
-            }
-        }
+        //         default:
+        //             return "Unknown";
+        //     }
+        // }
         
-        // -----------------------------------------------------------------------------------------------------------------------------
+        // // -----------------------------------------------------------------------------------------------------------------------------
         
-        static const char *rpl_ocp_to_str(int ocp)
-        {
-            switch(ocp) 
-            {
-                case RPL_OCP_OF0:
-                return "OF0";
+        // static const char *rpl_ocp_to_str(int ocp)
+        // {
+        //     switch(ocp) 
+        //     {
+        //         case RPL_OCP_OF0:
+        //         return "OF0";
         
-                case RPL_OCP_MRHOF:
-                return "MRHOF";
+        //         case RPL_OCP_MRHOF:
+        //         return "MRHOF";
                 
-                default:
-                return "Unknown";
-            }
-        }
+        //         default:
+        //         return "Unknown";
+        //     }
+        // }
         
     #endif  /* ROUTING_CONF_RPL_LITE */
     // [][][][][][][][][][][][]][][][][][][][][][][][][][][][][][][][][][][][]
@@ -286,10 +287,10 @@
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #if (OAR_DEBUG_ENERGEST)
-    static unsigned long to_seconds(uint64_t time)
-    {
-        return (unsigned long)(time / ENERGEST_SECOND);
-    }
+    // static unsigned long to_seconds(uint64_t time)
+    // {
+    //     return (unsigned long)(time / ENERGEST_SECOND);
+    // }
 #endif  /* OAR_DEBUG_ENERGEST */
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -372,10 +373,10 @@ PROCESS_THREAD(oar_debug_process, ev, data)
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
             static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
-            unsigned long int debug_system_time = clock_seconds(); 
+            // unsigned long int debug_system_time = clock_seconds(); 
 
-            char oar_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
-            char oar_lladdr[UIPLIB_IPV6_MAX_STR_LEN];     
+            // char oar_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+            // char oar_lladdr[UIPLIB_IPV6_MAX_STR_LEN];     
 
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             
@@ -401,21 +402,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                     #if (OAR_DEBUG_ENERGEST)
                     
-                        energest_flush();       // Update all energest times.
+                        // energest_flush();       // Update all energest times.
 
-                        printf("\n");
+                        // printf("\n");
 
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t CPU:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t LPM:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t DEEP LPM:       \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t TOTAL TIME:     \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME()));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t CPU:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_CPU)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t LPM:            \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LPM)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t DEEP LPM:       \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t TOTAL TIME:     \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME()));
 
-                        printf("------------------------------------------------------------------------ \n");
+                        // printf("------------------------------------------------------------------------ \n");
 
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO LISTEN:   \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO TRANSMIT: \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
-                        printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO OFF:      \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO LISTEN:   \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO TRANSMIT: \t %4lu \n",    debug_system_time, to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT)));
+                        // printf("[%8lu] DEBUG > \t ENERGEST > \t RADIO OFF:      \t %4lu \n",    debug_system_time, to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN)));
                         
+                        // printf("\n");
+
+                        oar_debug_energest(clock_seconds());
+
                         printf("\n");
 
                     #endif  /* OAR_DEBUG_ENERGEST */                                                               
@@ -427,27 +432,31 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // <-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%
                     #if (OAR_DEBUG_STATISTICS)
                     
-                        printf("\n");
-
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
-                        printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
                         
+
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.recv) %10lu > Number of received packets at the IP layer\n", debug_system_time, uip_stat.ip.recv);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.sent) %10lu > Number of sent packets at the IP layer\n", debug_system_time, uip_stat.ip.sent);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t  (ip.forwarded) %10lu > Number of forwarded packets at the IP layer\n", debug_system_time, uip_stat.ip.forwarded);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t       (ip.drop) %10lu > Number of dropped packets at the IP layer\n", debug_system_time, uip_stat.ip.drop);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.vhlerr) %10lu > Number of packets dropped due to wrong IP version or header length\n", debug_system_time, uip_stat.ip.vhlerr);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.hblenerr) %10lu > Number of packets dropped due to wrong IP length, high byte\n", debug_system_time, uip_stat.ip.hblenerr);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.lblenerr) %10lu > Number of packets dropped due to wrong IP length, low byte\n", debug_system_time, uip_stat.ip.lblenerr);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t    (ip.fragerr) %10lu > Number of packets dropped because they were IP fragments\n", debug_system_time, uip_stat.ip.fragerr);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t     (ip.chkerr) %10lu > Number of packets dropped due to IP checksum errors\n", debug_system_time, uip_stat.ip.chkerr);
+                        // printf("[%8lu] DEBUG > \t   IP STATS > \t   (ip.protoerr) %10lu > Number of packets dropped because they were neither ICMP, UDP nor TCP\n", debug_system_time, uip_stat.ip.protoerr);
+                        
+                        oar_debug_stats_ip(clock_seconds());
+
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
 
-                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
-                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
-                        printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
-                        printf("[%8lu] DEBUG > \t ICMP STATS > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
-                        printf("[%8lu] DEBUG > \t ICMP STATS > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
+                        // printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.recv) %10lu > Number of received ICMP packets\n", debug_system_time, uip_stat.icmp.recv);
+                        // printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.sent) %10lu > Number of sent ICMP packets\n", debug_system_time, uip_stat.icmp.sent);
+                        // printf("[%8lu] DEBUG > \t ICMP STATS > \t     (icmp.drop) %10lu > Number of dropped ICMP packets\n", debug_system_time, uip_stat.icmp.drop);
+                        // printf("[%8lu] DEBUG > \t ICMP STATS > \t  (icmp.typeerr) %10lu > Number of ICMP packets with a wrong type\n", debug_system_time, uip_stat.icmp.typeerr);
+                        // printf("[%8lu] DEBUG > \t ICMP STATS > \t   (icmp.chkerr) %10lu > Number of ICMP packets with a bad checksum\n", debug_system_time, uip_stat.icmp.chkerr);
+
+                        oar_debug_stats_icmp(clock_seconds());
 
                         printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
@@ -455,15 +464,17 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_TCP
 
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
-                            printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.recv) %10lu > Number of received TCP segments\n", debug_system_time, uip_stat.tcp.recv);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.sent) %10lu > Number of sent TCP segments\n", debug_system_time, uip_stat.tcp.sent);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t      (tcp.drop) %10lu > Number of dropped TCP segments\n", debug_system_time, uip_stat.tcp.drop);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.chkerr) %10lu > Number of TCP segments with a bad checksum\n", debug_system_time, uip_stat.tcp.chkerr);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.ackerr) %10lu > Number of TCP segments with a bad ACK number\n", debug_system_time, uip_stat.tcp.ackerr);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t       (tcp.rst) %10lu > Number of received TCP RST (reset) segments\n", debug_system_time, uip_stat.tcp.rst);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.rexmit) %10lu > Number of retransmitted TCP segments\n", debug_system_time, uip_stat.tcp.rexmit);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t   (tcp.syndrop) %10lu > Number of dropped SYNs because too few connections were available\n", debug_system_time, uip_stat.tcp.syndrop);
+                            // printf("[%8lu] DEBUG > \t  TCP STATS > \t    (tcp.synrst) %10lu > Number of SYNs for closed ports, triggering a RST\n", debug_system_time, uip_stat.tcp.synrst);
+
+                            oar_debug_stats_tcp(clock_seconds());
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                         
@@ -474,20 +485,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
                         #if UIP_UDP
 
-                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
-                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
-                            printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
-                            printf("[%8lu] DEBUG > \t  UDP STATS > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
-    
+                            // printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.drop) %10lu > Number of dropped UDP segments\n", debug_system_time, uip_stat.udp.drop);
+                            // printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.recv) %10lu > Number of received UDP segments\n", debug_system_time, uip_stat.udp.recv);
+                            // printf("[%8lu] DEBUG > \t  UDP STATS > \t      (udp.sent) %10lu > Number of sent UDP segments\n", debug_system_time, uip_stat.udp.sent);
+                            // printf("[%8lu] DEBUG > \t  UDP STATS > \t    (udp.chkerr) %10lu > Number of UDP segments with a bad checksum\n", debug_system_time, uip_stat.udp.chkerr);
+                            
+
+                            oar_debug_stats_udp(clock_seconds());
+
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
                         #endif  /* UIP_UDP */
                         // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
             
-                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
-                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
-                        printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
+                        // printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.drop) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.drop);
+                        // printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.recv) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.recv);
+                        // printf("[%8lu] DEBUG > \t  ND6 STATS > \t      (nd6.sent) %10lu > Number of dropped ND6 packets\n", debug_system_time, uip_stat.nd6.sent);
+
+                        oar_debug_stats_nd6(clock_seconds());
 
                         printf("\n");
 
@@ -509,86 +525,90 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         #if ROUTING_CONF_RPL_LITE
 
 
-                            if(!curr_instance.used || rpl_neighbor_count() == 0) 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor (0/%d)\n", debug_system_time, rpl_neighbor_count());
-                            } 
-                            else 
-                            {
-                                rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
-                                int oar_rpl_neighbor_count = 0;
+                            // if(!curr_instance.used || rpl_neighbor_count() == 0) 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor (0/%d)\n", debug_system_time, rpl_neighbor_count());
+                            // } 
+                            // else 
+                            // {
+                            //     rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+                            //     int oar_rpl_neighbor_count = 0;
 
-                                while(nbr != NULL) 
-                                {
-                                    char buf[120];
-                                    oar_rpl_neighbor_count++;
+                            //     while(nbr != NULL) 
+                            //     {
+                            //         char buf[120];
+                            //         oar_rpl_neighbor_count++;
                                     
-                                    rpl_neighbor_snprint(buf, sizeof(buf), nbr);
-                                    printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor %d/%d: %s\n", debug_system_time, oar_rpl_neighbor_count, rpl_neighbor_count(), buf);
-                                    nbr = nbr_table_next(rpl_neighbors, nbr);
-                                }
-                            }
+                            //         rpl_neighbor_snprint(buf, sizeof(buf), nbr);
+                            //         printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_rpl_nbr) RPL neighbor %d/%d: %s\n", debug_system_time, oar_rpl_neighbor_count, rpl_neighbor_count(), buf);
+                            //         nbr = nbr_table_next(rpl_neighbors, nbr);
+                            //     }
+                            // }
+
+                            oar_debug_cmd_rpl_nbr(clock_seconds());
                             
 
                             // ---------------------------------------------------------------------------------------------------------
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                             
 
-                            if(!curr_instance.used) 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: None\n", debug_system_time);
-                            } 
-                            else 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: %u\n", debug_system_time, curr_instance.instance_id);
+                            // if(!curr_instance.used) 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: None\n", debug_system_time);
+                            // } 
+                            // else 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Instance: %u\n", debug_system_time, curr_instance.instance_id);
 
-                                if(NETSTACK_ROUTING.node_is_root()) 
-                                {
-                                    printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG root\n", debug_system_time);
-                                } 
-                                else 
-                                {
-                                    printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG node\n", debug_system_time);
-                                }
+                            //     if(NETSTACK_ROUTING.node_is_root()) 
+                            //     {
+                            //         printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG root\n", debug_system_time);
+                            //     } 
+                            //     else 
+                            //     {
+                            //         printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG node\n", debug_system_time);
+                            //     }
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG: ", debug_system_time);
-                                oar_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.dag_id); printf("%s", oar_ipaddr);
-                                printf(", version %u\n", curr_instance.dag.version);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAG: ", debug_system_time);
+                            //     oar_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.dag_id); printf("%s", oar_ipaddr);
+                            //     printf(", version %u\n", curr_instance.dag.version);
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Prefix: ", debug_system_time);
-                                oar_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.prefix_info.prefix); printf("%s", oar_ipaddr); 
-                                printf("/%u\n", curr_instance.dag.prefix_info.length);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Prefix: ", debug_system_time);
+                            //     oar_debug_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.prefix_info.prefix); printf("%s", oar_ipaddr); 
+                            //     printf("/%u\n", curr_instance.dag.prefix_info.length);
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) MOP: %s\n", debug_system_time, rpl_mop_to_str(curr_instance.mop));
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) OF: %s\n", debug_system_time, rpl_ocp_to_str(curr_instance.of->ocp));
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Hop rank increment: %u\n", debug_system_time, curr_instance.min_hoprankinc);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) MOP: %s\n", debug_system_time, rpl_mop_to_str(curr_instance.mop));
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) OF: %s\n", debug_system_time, rpl_ocp_to_str(curr_instance.of->ocp));
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Hop rank increment: %u\n", debug_system_time, curr_instance.min_hoprankinc);
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Default lifetime: %lu seconds\n", debug_system_time, RPL_LIFETIME(curr_instance.default_lifetime));
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Default lifetime: %lu seconds\n", debug_system_time, RPL_LIFETIME(curr_instance.default_lifetime));
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) State: %s\n", debug_system_time, rpl_state_to_str(curr_instance.dag.state));
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) State: %s\n", debug_system_time, rpl_state_to_str(curr_instance.dag.state));
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Preferred parent: ", debug_system_time);
-                                if(curr_instance.dag.preferred_parent) 
-                                {
-                                    oar_ipaddr_to_str(oar_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent)); printf("%s", oar_ipaddr);
-                                    printf(" (last DTSN: %u)\n", curr_instance.dag.preferred_parent->dtsn);
-                                } 
-                                else 
-                                {
-                                    printf("None\n");
-                                }
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Preferred parent: ", debug_system_time);
+                            //     if(curr_instance.dag.preferred_parent) 
+                            //     {
+                            //         oar_ipaddr_to_str(oar_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent)); printf("%s", oar_ipaddr);
+                            //         printf(" (last DTSN: %u)\n", curr_instance.dag.preferred_parent->dtsn);
+                            //     } 
+                            //     else 
+                            //     {
+                            //         printf("None\n");
+                            //     }
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Rank: %u\n", debug_system_time, curr_instance.dag.rank);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Rank: %u\n", debug_system_time, curr_instance.dag.rank);
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Lowest rank: %u (%u)\n", debug_system_time, curr_instance.dag.lowest_rank, curr_instance.max_rankinc);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Lowest rank: %u (%u)\n", debug_system_time, curr_instance.dag.lowest_rank, curr_instance.max_rankinc);
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DTSN out: %u\n", debug_system_time, curr_instance.dtsn_out);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DTSN out: %u\n", debug_system_time, curr_instance.dtsn_out);
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAO sequence: last sent %u, last acked %u\n", debug_system_time, curr_instance.dag.dao_last_seqno, curr_instance.dag.dao_last_acked_seqno);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) DAO sequence: last sent %u, last acked %u\n", debug_system_time, curr_instance.dag.dao_last_seqno, curr_instance.dag.dao_last_acked_seqno);
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Trickle timer: current %u, min %u, max %u, redundancy %u\n", debug_system_time, curr_instance.dag.dio_intcurrent, curr_instance.dio_intmin, curr_instance.dio_intmin + curr_instance.dio_intdoubl, curr_instance.dio_redundancy);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t   (cmd_rpl_status) Trickle timer: current %u, min %u, max %u, redundancy %u\n", debug_system_time, curr_instance.dag.dio_intcurrent, curr_instance.dio_intmin, curr_instance.dio_intmin + curr_instance.dio_intdoubl, curr_instance.dio_redundancy);
 
-                            }
+                            // }
+
+                            oar_debug_cmd_rpl_status(clock_seconds());
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                             
@@ -599,9 +619,11 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
 
 
-                        printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_macaddr) Node MAC address: ", debug_system_time);
-                        oar_lladdr_to_str(oar_lladdr, &linkaddr_node_addr); printf("%s", oar_lladdr);
-                        printf("\n");
+                        // printf("[%8lu] DEBUG > \t SHELL > \t      (cmd_macaddr) Node MAC address: ", debug_system_time);
+                        // oar_lladdr_to_str(oar_lladdr, &linkaddr_node_addr); printf("%s", oar_lladdr);
+                        // printf("\n");
+
+                        oar_debug_cmd_macaddr(clock_seconds());
 
 
 
@@ -612,46 +634,50 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                            uint8_t state;
+                            // uint8_t state;
 
-                            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
-                            {
-                                state = uip_ds6_if.addr_list[i].state;
-                                if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
-                                {
-                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_ipaddr) Node IPv6 addresses: ", debug_system_time);
-                                    oar_ipaddr_to_str(oar_ipaddr, &uip_ds6_if.addr_list[i].ipaddr); printf("%s", oar_ipaddr);
-                                    printf("\n");
-                                }
-                            }
+                            // for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+                            // {
+                            //     state = uip_ds6_if.addr_list[i].state;
+                            //     if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
+                            //     {
+                            //         printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_ipaddr) Node IPv6 addresses: ", debug_system_time);
+                            //         oar_ipaddr_to_str(oar_ipaddr, &uip_ds6_if.addr_list[i].ipaddr); printf("%s", oar_ipaddr);
+                            //         printf("\n");
+                            //     }
+                            // }
+
+                            oar_debug_cmd_ipaddr(clock_seconds());
 
                             // ---------------------------------------------------------------------------------------------------------
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                            uip_ds6_nbr_t *nbr;
-                            int oar_ip_neighbor_count = 0;
+                            // uip_ds6_nbr_t *nbr;
+                            // int oar_ip_neighbor_count = 0;
 
-                            nbr = uip_ds6_nbr_head();
-                            if(nbr == NULL) 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbors: none\n", debug_system_time);
-                            }
-                            else
-                            {
-                                while(nbr != NULL) 
-                                {
-                                    oar_ip_neighbor_count++;
+                            // nbr = uip_ds6_nbr_head();
+                            // if(nbr == NULL) 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbors: none\n", debug_system_time);
+                            // }
+                            // else
+                            // {
+                            //     while(nbr != NULL) 
+                            //     {
+                            //         oar_ip_neighbor_count++;
 
-                                    printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbor %d: ", debug_system_time, oar_ip_neighbor_count);
-                                    oar_ipaddr_to_str(oar_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_ipaddr);
-                                    printf(" <-> ");
-                                    oar_lladdr_to_str(oar_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_lladdr);
-                                    printf(", router %u, state %s ", nbr->isrouter, ds6_nbr_state_to_str(nbr->state));
-                                    printf("\n");
+                            //         printf("[%8lu] DEBUG > \t SHELL > \t (cmd_ip_neighbors) Node IPv6 neighbor %d: ", debug_system_time, oar_ip_neighbor_count);
+                            //         oar_ipaddr_to_str(oar_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_ipaddr);
+                            //         printf(" <-> ");
+                            //         oar_lladdr_to_str(oar_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_lladdr);
+                            //         printf(", router %u, state %s ", nbr->isrouter, ds6_nbr_state_to_str(nbr->state));
+                            //         printf("\n");
 
-                                    nbr = uip_ds6_nbr_next(nbr);
-                                }
-                            }
+                            //         nbr = uip_ds6_nbr_next(nbr);
+                            //     }
+                            // }
+
+                            oar_debug_cmd_ip_neighbors(clock_seconds());
                         
 
                         #endif  /* NETSTACK_CONF_WITH_IPV6 */
@@ -664,32 +690,34 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                            printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is coordinator: %u\n", debug_system_time, tsch_is_coordinator);
-                            printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is associated: %u\n", tsch_is_associated);
+                            // printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is coordinator: %u\n", debug_system_time, tsch_is_coordinator);
+                            // printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is associated: %u\n", tsch_is_associated);
                             
-                            if(tsch_is_associated) 
-                            {
-                                struct tsch_neighbor *n = tsch_queue_get_time_source();
+                            // if(tsch_is_associated) 
+                            // {
+                            //     struct tsch_neighbor *n = tsch_queue_get_time_source();
 
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) PAN ID: 0x%x\n", debug_system_time, frame802154_get_pan_id());
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is PAN secured: %u\n", debug_system_time, tsch_is_pan_secured);
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Join priority: %u\n", debug_system_time, tsch_join_priority);
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Time source: ", debug_system_time);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) PAN ID: 0x%x\n", debug_system_time, frame802154_get_pan_id());
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Is PAN secured: %u\n", debug_system_time, tsch_is_pan_secured);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Join priority: %u\n", debug_system_time, tsch_join_priority);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Time source: ", debug_system_time);
 
-                                if(n != NULL) 
-                                {
-                                    oar_lladdr_to_str(oar_lladdr, &n->addr); printf("%s", oar_lladdr);
-                                    printf("\n");
-                                } 
-                                else 
-                                {
-                                    printf("none\n");
-                                }
+                            //     if(n != NULL) 
+                            //     {
+                            //         oar_lladdr_to_str(oar_lladdr, &n->addr); printf("%s", oar_lladdr);
+                            //         printf("\n");
+                            //     } 
+                            //     else 
+                            //     {
+                            //         printf("none\n");
+                            //     }
                                 
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Last synchronized: %lu seconds ago\n", debug_system_time, (clock_time() - tsch_last_sync_time) / CLOCK_SECOND);
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Drift w.r.t. coordinator: %ld ppm\n", debug_system_time, tsch_adaptive_timesync_get_drift_ppm());
-                                printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Network uptime: %lu seconds\n", debug_system_time, (unsigned long)(tsch_get_network_uptime_ticks() / CLOCK_SECOND));
-                            }
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Last synchronized: %lu seconds ago\n", debug_system_time, (clock_time() - tsch_last_sync_time) / CLOCK_SECOND);
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Drift w.r.t. coordinator: %ld ppm\n", debug_system_time, tsch_adaptive_timesync_get_drift_ppm());
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t  (cmd_tsch_status) Network uptime: %lu seconds\n", debug_system_time, (unsigned long)(tsch_get_network_uptime_ticks() / CLOCK_SECOND));
+                            // }
+
+                            oar_debug_cmd_tsch_status(clock_seconds());
 
 
                         #endif  /* MAC_CONF_WITH_TSCH */
@@ -704,109 +732,111 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                             
                             printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                            uip_ds6_defrt_t *default_route;
+                            // uip_ds6_defrt_t *default_route;
 
-                            default_route = uip_ds6_defrt_lookup(uip_ds6_defrt_choose());
+                            // default_route = uip_ds6_defrt_lookup(uip_ds6_defrt_choose());
 
-                            if(default_route != NULL) 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: ", debug_system_time);
-                                oar_ipaddr_to_str(oar_ipaddr, &default_route->ipaddr); printf("%s", oar_ipaddr);
+                            // if(default_route != NULL) 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: ", debug_system_time);
+                            //     oar_ipaddr_to_str(oar_ipaddr, &default_route->ipaddr); printf("%s", oar_ipaddr);
                                 
-                                if(default_route->lifetime.interval != 0) 
-                                {
-                                    printf(" (lifetime: %lu seconds)\n", (unsigned long)default_route->lifetime.interval);
-                                } 
-                                else 
-                                {
-                                    printf(" (lifetime: infinite)\n");
-                                }
-                            } 
-                            else 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: None\n", debug_system_time);
-                            }
+                            //     if(default_route->lifetime.interval != 0) 
+                            //     {
+                            //         printf(" (lifetime: %lu seconds)\n", (unsigned long)default_route->lifetime.interval);
+                            //     } 
+                            //     else 
+                            //     {
+                            //         printf(" (lifetime: infinite)\n");
+                            //     }
+                            // } 
+                            // else 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Default route: None\n", debug_system_time);
+                            // }
+
+                            oar_debug_cmd_routes(clock_seconds());
 
 
 
-                            // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
-                            #if UIP_CONF_IPV6_RPL
+                            // // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
+                            // #if UIP_CONF_IPV6_RPL
 
 
-                                printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                                // printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                                if(uip_sr_num_nodes() > 0) 
-                                {
-                                    uip_sr_node_t *link;
+                                // if(uip_sr_num_nodes() > 0) 
+                                // {
+                                //     uip_sr_node_t *link;
                                     
-                                    /* Our routing links */
-                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing links (%u in total):\n", debug_system_time, uip_sr_num_nodes());
+                                //     /* Our routing links */
+                                //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing links (%u in total):\n", debug_system_time, uip_sr_num_nodes());
                                     
-                                    link = uip_sr_node_head();
+                                //     link = uip_sr_node_head();
 
-                                    while(link != NULL) 
-                                    {
-                                        char buf[100];
+                                //     while(link != NULL) 
+                                //     {
+                                //         char buf[100];
                                         
-                                        uip_sr_link_snprint(buf, sizeof(buf), link);
+                                //         uip_sr_link_snprint(buf, sizeof(buf), link);
                                         
-                                        printf("-- %s\n", buf);
+                                //         printf("-- %s\n", buf);
                                         
-                                        link = uip_sr_node_next(link);
-                                    }
-                                } 
-                                else 
-                                {
-                                    printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing links\n", debug_system_time);
-                                }
+                                //         link = uip_sr_node_next(link);
+                                //     }
+                                // } 
+                                // else 
+                                // {
+                                //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing links\n", debug_system_time);
+                                // }
 
 
-                            #endif  /* UIP_CONF_IPV6_RPL */
-                            // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
+                            // #endif  /* UIP_CONF_IPV6_RPL */
+                            // // v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL|v6|RPL
 
 
 
 
-                            // 000000000000000000000000000000000000000000000000
-                            #if (UIP_MAX_ROUTES != 0)
+                            // // 000000000000000000000000000000000000000000000000
+                            // #if (UIP_MAX_ROUTES != 0)
 
                             
-                            printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                            // printf("------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
-                            if(uip_ds6_route_num_routes() > 0) 
-                            {
-                                uip_ds6_route_t *route;
-                                /* Our routing entries */
-                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing entries (%u in total):\n", debug_system_time, uip_ds6_route_num_routes());
-                                route = uip_ds6_route_head();
+                            // if(uip_ds6_route_num_routes() > 0) 
+                            // {
+                            //     uip_ds6_route_t *route;
+                            //     /* Our routing entries */
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) Routing entries (%u in total):\n", debug_system_time, uip_ds6_route_num_routes());
+                            //     route = uip_ds6_route_head();
                             
-                                while(route != NULL) 
-                                {
-                                    printf("-- ");
-                                    oar_ipaddr_to_str(oar_ipaddr, &route->ipaddr); printf("%s", oar_ipaddr);
-                                    printf(" via ");
-                                    oar_ipaddr_to_str(oar_ipaddr, uip_ds6_route_nexthop(route)); printf("%s", oar_ipaddr);
+                            //     while(route != NULL) 
+                            //     {
+                            //         printf("-- ");
+                            //         oar_ipaddr_to_str(oar_ipaddr, &route->ipaddr); printf("%s", oar_ipaddr);
+                            //         printf(" via ");
+                            //         oar_ipaddr_to_str(oar_ipaddr, uip_ds6_route_nexthop(route)); printf("%s", oar_ipaddr);
 
-                                    if((unsigned long)route->state.lifetime != 0xFFFFFFFF) 
-                                    {
-                                        printf(" (lifetime: %lu seconds)\n", (unsigned long)route->state.lifetime);
-                                    } 
-                                    else 
-                                    {
-                                        printf(" (lifetime: infinite)\n");
-                                    }
+                            //         if((unsigned long)route->state.lifetime != 0xFFFFFFFF) 
+                            //         {
+                            //             printf(" (lifetime: %lu seconds)\n", (unsigned long)route->state.lifetime);
+                            //         } 
+                            //         else 
+                            //         {
+                            //             printf(" (lifetime: infinite)\n");
+                            //         }
                               
-                                    route = uip_ds6_route_next(route);
-                                }
-                            } 
-                            else 
-                            {
-                                printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing entries\n", debug_system_time);
-                            }
+                            //         route = uip_ds6_route_next(route);
+                            //     }
+                            // } 
+                            // else 
+                            // {
+                            //     printf("[%8lu] DEBUG > \t SHELL > \t       (cmd_routes) No routing entries\n", debug_system_time);
+                            // }
 
 
-                            #endif  /* (UIP_MAX_ROUTES != 0) */
-                            // 000000000000000000000000000000000000000000000000
+                            // #endif  /* (UIP_MAX_ROUTES != 0) */
+                            // // 000000000000000000000000000000000000000000000000
 
 
 
