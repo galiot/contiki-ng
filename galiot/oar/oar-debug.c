@@ -157,7 +157,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 #if (NETSTACK_CONF_WITH_IPV6)
 
     // function that provides context for ds6 neighbor state
-    const char *ds6_nbr_state_to_str(uint8_t state)
+    const char *oar_debug_ds6_nbr_state_to_str(uint8_t state)
     {
         switch(state) 
         {
@@ -177,7 +177,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 #if (ROUTING_CONF_RPL_LITE)
 
     // function that provides context for RPL directed acyclic graph (DAG) state
-    const char *rpl_state_to_str(enum rpl_dag_state state)
+    const char *oar_debug_rpl_state_to_str(enum rpl_dag_state state)
     {
         switch(state) 
         {
@@ -191,7 +191,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
     // ----------------------------------------------------------------------------
     // function that provides context for RPL mode of operation (MOP) state
-    const char *rpl_mop_to_str(int mop)
+    const char *oar_debug_rpl_mop_to_str(int mop)
     {
         switch(mop) 
         {
@@ -205,7 +205,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     
     // ----------------------------------------------------------------------------
     // function that provides context for RPL objective code point (OCP)
-    const char *rpl_ocp_to_str(int ocp)
+    const char *oar_debug_rpl_ocp_to_str(int ocp)
     {
         switch(ocp) 
         {
@@ -266,23 +266,23 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
             }
             
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                         DAG: ", system_time);
-                oar_debug_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.dag_id); printf("%s", oar_ipaddr);
+                oar_debug_ipaddr_to_str(oar_debug_ipaddr, &curr_instance.dag.dag_id); printf("%s", oar_debug_ipaddr);
                 printf(", version %u\n", curr_instance.dag.version);
 
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                      Prefix: ", system_time);
-                oar_debug_ipaddr_to_str(oar_ipaddr, &curr_instance.dag.prefix_info.prefix); printf("%s", oar_ipaddr); 
+                oar_debug_ipaddr_to_str(oar_debug_ipaddr, &curr_instance.dag.prefix_info.prefix); printf("%s", oar_debug_ipaddr); 
                 printf("/%u\n", curr_instance.dag.prefix_info.length);
 
-            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                         MOP: %s\n", system_time, rpl_mop_to_str(curr_instance.mop));
-            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                          OF: %s\n", system_time, rpl_ocp_to_str(curr_instance.of->ocp));
+            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                         MOP: %s\n", system_time, oar_debug_rpl_mop_to_str(curr_instance.mop));
+            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                          OF: %s\n", system_time, oar_debug_rpl_ocp_to_str(curr_instance.of->ocp));
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                          Hop rank increment: %u\n", system_time, curr_instance.min_hoprankinc);
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                            Default lifetime: %lu seconds\n", system_time, RPL_LIFETIME(curr_instance.default_lifetime));
-            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                       State: %s\n", system_time, rpl_state_to_str(curr_instance.dag.state));
+            printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                                       State: %s\n", system_time, oar_debug_rpl_state_to_str(curr_instance.dag.state));
         
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                            Preferred parent: ", system_time);
             if(curr_instance.dag.preferred_parent) 
             {
-                oar_debug_ipaddr_to_str(oar_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent)); printf("%s", oar_ipaddr);
+                oar_debug_ipaddr_to_str(oar_debug_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent)); printf("%s", oar_debug_ipaddr);
                 printf(" (last DTSN: %u)\n", curr_instance.dag.preferred_parent->dtsn);
             } 
             else 
@@ -306,7 +306,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 void oar_debug_cmd_macaddr(unsigned long int system_time)
 {
     printf("[%8lu] DEBUG >   INFO >      (cmd_macaddr) >                                            Node MAC address: ", system_time);
-        oar_debug_lladdr_to_str(oar_lladdr, &linkaddr_node_addr); printf("%s", oar_lladdr);
+        oar_debug_lladdr_to_str(oar_debug_lladdr, &linkaddr_node_addr); printf("%s", oar_debug_lladdr);
         printf("\n");
 }
 
@@ -324,7 +324,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
             if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
             {
                 printf("[%8lu] DEBUG >   INFO >       (cmd_ipaddr) >                                         Node IPv6 addresses: ", system_time);
-                    oar_debug_ipaddr_to_str(oar_ipaddr, &uip_ds6_if.addr_list[i].ipaddr); printf("%s", oar_ipaddr);
+                    oar_debug_ipaddr_to_str(oar_debug_ipaddr, &uip_ds6_if.addr_list[i].ipaddr); printf("%s", oar_debug_ipaddr);
                     printf("\n");
             }
         }
@@ -349,10 +349,10 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
                 oar_ip_neighbor_count++;
 
                 printf("[%8lu] DEBUG >   INFO > (cmd_ip_neighbors) >                                        Node IPv6 neighbor %d: ", system_time, oar_ip_neighbor_count);
-                    oar_debug_ipaddr_to_str(oar_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_ipaddr);
+                    oar_debug_ipaddr_to_str(oar_debug_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_debug_ipaddr);
                     printf(" <-> ");
-                    oar_debug_lladdr_to_str(oar_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_lladdr);
-                    printf(", router %u, state %s ", nbr->isrouter, ds6_nbr_state_to_str(nbr->state));
+                    oar_debug_lladdr_to_str(oar_debug_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_debug_lladdr);
+                    printf(", router %u, state %s ", nbr->isrouter, oar_debug_ds6_nbr_state_to_str(nbr->state));
                     printf("\n");
 
                 nbr = uip_ds6_nbr_next(nbr);
@@ -382,7 +382,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
             printf("[%8lu] DEBUG >   INFO >  (cmd_tsch_status) >                                             Time source: ", system_time);
             if(n != NULL) 
             {
-                oar_debug_lladdr_to_str(oar_lladdr, &n->addr); printf("%s", oar_lladdr);
+                oar_debug_lladdr_to_str(oar_debug_lladdr, &n->addr); printf("%s", oar_debug_lladdr);
                 printf("\n");
             } 
             else 
@@ -411,7 +411,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         if(default_route != NULL) 
         {
             printf("[%8lu] DEBUG >   INFO >       (cmd_routes) >                                               Default route: ", system_time);
-                oar_debug_ipaddr_to_str(oar_ipaddr, &default_route->ipaddr); printf("%s", oar_ipaddr);
+                oar_debug_ipaddr_to_str(oar_debug_ipaddr, &default_route->ipaddr); printf("%s", oar_debug_ipaddr);
                 if(default_route->lifetime.interval != 0) 
                 {
                     printf(" (lifetime: %lu seconds)\n", (unsigned long)default_route->lifetime.interval);
@@ -471,9 +471,9 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
                 while(route != NULL) 
                 {
                     printf("-- ");
-                    oar_debug_ipaddr_to_str(oar_ipaddr, &route->ipaddr); printf("%s", oar_ipaddr);
+                    oar_debug_ipaddr_to_str(oar_debug_ipaddr, &route->ipaddr); printf("%s", oar_debug_ipaddr);
                     printf(" via ");
-                    oar_debug_ipaddr_to_str(oar_ipaddr, uip_ds6_route_nexthop(route)); printf("%s", oar_ipaddr);
+                    oar_debug_ipaddr_to_str(oar_debug_ipaddr, uip_ds6_route_nexthop(route)); printf("%s", oar_debug_ipaddr);
 
                     if((unsigned long)route->state.lifetime != 0xFFFFFFFF) 
                     {

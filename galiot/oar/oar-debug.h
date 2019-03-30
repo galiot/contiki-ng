@@ -24,8 +24,11 @@
 #include "sys/energest.h"
 #include "net/ipv6/uip.h"
 
-// ----------------------------------------------------------------------------
-// Energest
+
+
+void oar_debug_(char dash, int times);
+
+// ========================================================================================== // Energest
 
 #if (ENERGEST_CONF_ON)
 
@@ -34,91 +37,105 @@
 
 #endif // (ENERGEST_CONF_ON)
 
-// ----------------------------------------------------------------------------
-// uIP TCP/IP Statistics
+// ========================================================================================== // uIP TCP/IP Statistics
 
 #if (UIP_CONF_STATISTICS)
 
     void oar_debug_stats_ip(unsigned long int system_time);
     void oar_debug_stats_icmp(unsigned long int system_time);
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #if (UIP_TCP)
 
         void oar_debug_stats_tcp(unsigned long int system_time);
 
     #endif // (UIP_TCP)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #if (UIP_UDP)
 
         void oar_debug_stats_udp(unsigned long int system_time);
 
     #endif // (UIP_UDP)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     void oar_debug_stats_nd6(unsigned long int system_time);
 
 #endif // (UIP_CONF_STATISTICS)
 
-// ----------------------------------------------------------------------------
-// contiki-ng Shell (gets)
+// ========================================================================================== // contiki-ng Shell (gets)
 
-#if (NETSTACK_CONF_WITH_IPV6)
+#if (OAR_DEBUG_SHELL)
 
-    void oar_debug_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (NETSTACK_CONF_WITH_IPV6)
+    
+        void oar_debug_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr);
+    
+    #endif // (NETSTACK_CONF_WITH_IPV6)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#endif // (NETSTACK_CONF_WITH_IPV6)
-void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr);
+    void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr);
+    
+    const char *oar_debug_ds6_nbr_state_to_str(uint8_t state);
+    const char *oar_debug_rpl_state_to_str(enum rpl_dag_state state);
+    const char *oar_debug_rpl_mop_to_str(int mop);
+    const char *oar_debug_rpl_ocp_to_str(int ocp);
+    
+    char oar_debug_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+    char oar_debug_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (ROUTING_CONF_RPL_LITE)
+    
+        void oar_debug_cmd_rpl_nbr(unsigned long int system_time);
+        void oar_debug_cmd_rpl_status(unsigned long int system_time);
+    
+    #endif // (ROUTING_CONF_RPL_LITE)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    void oar_debug_cmd_macaddr(unsigned long int system_time);
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (NETSTACK_CONF_WITH_IPV6)
+    
+        void oar_debug_cmd_ipaddr(unsigned long int system_time);
+        void oar_debug_cmd_ip_neighbors(unsigned long int system_time);
+    
+    #endif // (NETSTACK_CONF_WITH_IPV6)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (MAC_CONF_WITH_TSCH)
+    
+        void oar_debug_cmd_tsch_status(unsigned long int system_time);
+    
+    #endif // (MAC_CONF_WITH_TSCH)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (NETSTACK_CONF_WITH_IPV6)
+    
+        void oar_debug_cmd_routes(unsigned long int system_time);
+    
+    #endif // (NETSTACK_CONF_WITH_IPV6)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-const char *ds6_nbr_state_to_str(uint8_t state);
-const char *rpl_state_to_str(enum rpl_dag_state state);
-const char *rpl_mop_to_str(int mop);
-const char *rpl_ocp_to_str(int ocp);
-
-char oar_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
-char oar_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
-
-#if (ROUTING_CONF_RPL_LITE)
-
-    void oar_debug_cmd_rpl_nbr(unsigned long int system_time);
-    void oar_debug_cmd_rpl_status(unsigned long int system_time);
-
-#endif // (ROUTING_CONF_RPL_LITE)
-
-void oar_debug_cmd_macaddr(unsigned long int system_time);
-
-#if NETSTACK_CONF_WITH_IPV6
-
-    void oar_debug_cmd_ipaddr(unsigned long int system_time);
-    void oar_debug_cmd_ip_neighbors(unsigned long int system_time);
-
-#endif // (NETSTACK_CONF_WITH_IPV6)
-
-#if MAC_CONF_WITH_TSCH
-
-    void oar_debug_cmd_tsch_status(unsigned long int system_time);
-
-#endif // (MAC_CONF_WITH_TSCH)
-
-#if (NETSTACK_CONF_WITH_IPV6)
-
-    void oar_debug_cmd_routes(unsigned long int system_time);
-
-#endif // (NETSTACK_CONF_WITH_IPV6)
-
-void oar_debug_(char dash, int times);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif // (OAR_DEBUG_SHELL)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
