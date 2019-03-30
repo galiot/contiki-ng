@@ -161,7 +161,6 @@ AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
 
 PROCESS_THREAD(oar_debug_process, ev, data)
 {   
-    
     #if !(OAR_DEBUG)
 
         // (doc) A process can be stopped in three ways:
@@ -172,165 +171,152 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
         PROCESS_EXIT();
 
-    #else      /* OAR_DEBUG */
+    #else // !(OAR_DEBUG)
 
-
-
-
-        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            
-            static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.     
-
-        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            
-            
-
-
+        static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.     
 
         PROCESS_BEGIN();
 
             etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
             
-            while(1) {
+            while(1) 
+            {
+                #if (OAR_DEBUG_ENERGEST)
 
-                    // printf("[%8lu] DEBUG \t > \t hello world \n", debug_system_time);
+                    oar_debug_energest(clock_seconds());
+                    oar_debug_('-', 192);
 
+                #endif  // OAR_DEBUG_ENERGEST
 
+                // --------------------------------------------------------------------------------                                                               
 
+                #if (OAR_DEBUG_STATISTICS)
                     
-
-
-
-
-                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    #if (OAR_DEBUG_ENERGEST)
-
-                        oar_debug_energest(clock_seconds());
-                        oar_debug_('-', 192);
-
-                    #endif  /* OAR_DEBUG_ENERGEST */                                                               
-                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-
-
-
-
-                    // <-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%
-                    #if (OAR_DEBUG_STATISTICS)
-                    
-                        oar_debug_stats_ip(clock_seconds());
-                        printf("\n");
-                        
-                        oar_debug_stats_icmp(clock_seconds());
-                        printf("\n");
-                        
-
-                        #if UIP_TCP
-
-                            oar_debug_stats_tcp(clock_seconds());
-                            printf("\n");                 
-                        
-                        #endif  /* UIP_TCP */
-
-                        #if UIP_UDP
-
-                            oar_debug_stats_udp(clock_seconds());
-                            printf("\n");
-
-                        #endif  /* UIP_UDP */
-                   
-                        oar_debug_stats_nd6(clock_seconds());
-                        oar_debug_('-', 192);
-
-                    #endif      /* (OAR_DEBUG_STATISTICS) */
-                    // <-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%-><-%
-
-                    
-
-
-
-                    // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$
-                    #if (OAR_DEBUG_SHELL)
-
-                        #if ROUTING_CONF_RPL_LITE
-
-                            oar_debug_cmd_rpl_nbr(clock_seconds());
-                            printf("\n");
-                            oar_debug_cmd_rpl_status(clock_seconds());
-                            printf("\n");
-                            
-
-                        #endif  /* ROUTING_CONF_RPL_LITE */
-
-                        oar_debug_cmd_macaddr(clock_seconds());
-                        printf("\n");
-
-                        #if NETSTACK_CONF_WITH_IPV6
-
-                            oar_debug_cmd_ipaddr(clock_seconds());
-                            printf("\n");
-                            oar_debug_cmd_ip_neighbors(clock_seconds());
-                            printf("\n");
-
-                        #endif  /* NETSTACK_CONF_WITH_IPV6 */
-                     
-                        #if MAC_CONF_WITH_TSCH
-
-                            oar_debug_cmd_tsch_status(clock_seconds());
-                            printf("\n");
-
-
-                        #endif  /* MAC_CONF_WITH_TSCH */
-
-                        #if NETSTACK_CONF_WITH_IPV6
-
-                            oar_debug_cmd_routes(clock_seconds());
-
-                        #endif  /* NETSTACK_CONF_WITH_IPV6 */
-                    
+                    oar_debug_stats_ip(clock_seconds());
                     printf("\n");
 
-                    #endif      /* (OAR_DEBUG_SHELL) */
-                    // $-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$-$
-
-
-
-
-
-
-
-
-
-
-
-                    // (doc) By calling PROCESS_WAIT_EVENT_UNTIL() in the area separated by the PROCESS_BEGIN() and PROCESS_END() calls, 
-                    // (doc) one can yield control to the scheduler, and only resume execution when an event is delivered. 
-                    // (doc) A condition is given as an argument to PROCESS_WAIT_EVENT_UNTIL(), 
-                    // (doc) and this condition must be fulfilled for the processes to continue execution after the call to PROCESS_WAIT_EVENT_UNTIL(). 
-                    // (doc) If the condition is not fulfilled, the process yields control back to the OS until a new event is delivered.
+                    oar_debug_stats_icmp(clock_seconds());
+                    printf("\n");
                     
-                    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));         // Wait for the periodic timer to expire and then restart the timer.
-                    etimer_reset(&debug_timer);
+                    // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                    #if UIP_TCP
 
-                    // (doc) To voluntarily release control the scheduler, one can call PROCESS_PAUSE(). 
-                    // (doc) The scheduler will then deliver any queued events, and then immediately schedule the paused process.
-
-                    // PROCESS_PAUSE();
-
-                    // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
-                    // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
-                    // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                        oar_debug_stats_tcp(clock_seconds());
+                        printf("\n");                 
                     
-                    process_poll(&oar_dev_process);
+                    #endif  /* UIP_TCP */
+                    // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                    // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                    #if UIP_UDP
 
+                        oar_debug_stats_udp(clock_seconds());
+                        printf("\n");
+
+                    #endif  /* UIP_UDP */
+                    // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
                 
-                }
+                    oar_debug_stats_nd6(clock_seconds());
+                    oar_debug_('-', 192);
+
+                #endif // (OAR_DEBUG_STATISTICS)
+
+                // -------------------------------------------------------------------------------- 
+                
+                #if (OAR_DEBUG_SHELL)
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    #if ROUTING_CONF_RPL_LITE
+
+                        oar_debug_cmd_rpl_nbr(clock_seconds());
+                        printf("\n");
+
+                        oar_debug_cmd_rpl_status(clock_seconds());
+                        printf("\n");
+                        
+                    #endif  /* ROUTING_CONF_RPL_LITE */
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                    oar_debug_cmd_macaddr(clock_seconds());
+                    printf("\n");
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    #if NETSTACK_CONF_WITH_IPV6
+
+                        oar_debug_cmd_ipaddr(clock_seconds());
+                        printf("\n");
+                        oar_debug_cmd_ip_neighbors(clock_seconds());
+                        printf("\n");
+
+                    #endif  /* NETSTACK_CONF_WITH_IPV6 */
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    #if MAC_CONF_WITH_TSCH
+
+                        oar_debug_cmd_tsch_status(clock_seconds());
+                        printf("\n");
+
+                    #endif  /* MAC_CONF_WITH_TSCH */
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    #if NETSTACK_CONF_WITH_IPV6
+
+                        oar_debug_cmd_routes(clock_seconds());
+
+                    #endif  /* NETSTACK_CONF_WITH_IPV6 */
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    printf("\n");
+
+                #endif // (OAR_DEBUG_SHELL)
+                
+                // (doc) By calling PROCESS_WAIT_EVENT_UNTIL() in the area separated by the PROCESS_BEGIN() and PROCESS_END() calls, 
+                // (doc) one can yield control to the scheduler, and only resume execution when an event is delivered. 
+                // (doc) A condition is given as an argument to PROCESS_WAIT_EVENT_UNTIL(), 
+                // (doc) and this condition must be fulfilled for the processes to continue execution after the call to PROCESS_WAIT_EVENT_UNTIL(). 
+                // (doc) If the condition is not fulfilled, the process yields control back to the OS until a new event is delivered.
+                
+                PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));         // Wait for the periodic timer to expire and then restart the timer.
+                etimer_reset(&debug_timer);
+
+                // (doc) To voluntarily release control the scheduler, one can call PROCESS_PAUSE(). 
+                // (doc) The scheduler will then deliver any queued events, and then immediately schedule the paused process.
+
+                // PROCESS_PAUSE();
+
+                // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
+                // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
+                // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                
+                process_poll(&oar_dev_process);
+
+            }
 
         PROCESS_END();
     
-    #endif      /* OAR_DEBUG */
+    #endif // (OAR_DEBUG)
 }
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
