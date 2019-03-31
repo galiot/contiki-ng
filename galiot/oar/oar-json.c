@@ -264,6 +264,7 @@ void oar_json_append_energy(char * buf)
     sprintf(str,    "{" );                              strcat(buf, str);
     // -------------------------------------------------------------------------------
 
+    sprintf(str,        "\""    "energestUsed"  "\""    ":" "true"                                                                                                                                             );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "cpu"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "lpm"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "deepLpm"       "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                           );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -285,6 +286,7 @@ void oar_json_append_energy(char * buf)
     sprintf(str,    "{" );                                 strcat(buf, str);
     // -------------------------------------------------------------------------------
 
+    sprintf(str,        "\""    "energestUsed"  "\""    ":" "false" );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "cpu"           "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "lpm"           "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "deepLpm"       "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -399,6 +401,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "tcpUsed"   "\""    ":" "true"                          );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.tcp.recv      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.tcp.sent      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.tcp.drop      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -421,6 +424,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "tcpUsed"   "\""    ":" "false" );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -447,6 +451,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "udpUsed"   "\""    ":" "true"                          );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.udp.drop      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.udp.recv      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.udp.sent      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -464,6 +469,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "udpUsed"   "\""    ":" "false" );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -547,6 +553,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "tcpUsed"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -569,6 +576,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "tcpUsed"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -595,6 +603,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "udpUsed"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
@@ -612,6 +621,7 @@ void oar_json_append_stats(char * buf)
     
     sprintf(str, "{" );  strcat(buf, str);
     
+    sprintf(str,    "\""    "udpUsed"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
