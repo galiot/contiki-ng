@@ -1331,7 +1331,7 @@ void oar_json_append_net(char * buf)
         sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "%s"        "\""        ,oar_json_ipaddr        );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
 
         if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); }
-        else                                        { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); } 
+        else                                        { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str); } 
     }
     else
     {
