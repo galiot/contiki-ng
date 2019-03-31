@@ -678,32 +678,10 @@ void oar_json_append_net(char * buf)
     // ####################################################################################################################################################################################
     #if (ROUTING_CONF_RPL_LITE)
 
+
+
+
     sprintf(str,        "\""    "rplLiteUsed"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -781,6 +759,173 @@ void oar_json_append_net(char * buf)
 
 
 
+    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    sprintf(str, ",");  strcat(buf, str);
+    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "rplStatus"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+
+
+
+    if(!curr_instance.used)             
+    { 
+        sprintf(str,        "\""    "instanceId"    "\""    ":" "\""  "none"      "\""                                );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "\""    "dag"        "\""    ":" );         strcat(buf, str);
+        sprintf(str,        "{" );                                      strcat(buf, str);
+        // ------------------------------------------------------------------------------
+        
+            sprintf(str,        "\""    "valid"             "\""    ":"       "false"   );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagType"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagId"             "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagVersion"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagPrefix"         "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagPrefixLength"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "state"             "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "preferredParent"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "rank"              "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "lowestRank"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "maxRankInc"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "\""    "daoSequence"        "\""    ":" );         strcat(buf, str);
+            sprintf(str,        "{" );                                      strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+            sprintf(str,    "\""    "valid"             "\""    ":"         "false" );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lastSent"  "\""            ":"         "null"  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lastAcked" "\""            ":"         "null"  );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "}" );                                  strcat(buf, str);
+            // sprintf(str,        "," );                                  strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+        sprintf(str,        "\""    "mop"               "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "of"                "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "hopRankIncrement"  "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "defaultLifetime"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "dtsnOut"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,    "\""    "trickleTimer"  "\""    ":" );  strcat(buf, str);
+        sprintf(str,    "{"                                 );  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+            sprintf(str,    "\""    "valid"         "\""    ":"       "false"   );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "currentt"      "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "nim"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "max"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "redundancy"    "\""    ":"       "null"    );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        // sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+        
+
+
+
+
+    } 
+    else                                
+    { 
+        sprintf(str,    "\""    "instanceId"    "\""    ":"                 "%u"                ,curr_instance.instance_id  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "\""    "dag"        "\""    ":" );         strcat(buf, str);
+        sprintf(str,        "{" );                                      strcat(buf, str);
+        // ------------------------------------------------------------------------------
+        
+            sprintf(str,    "\""    "valid"         "\""    ":"                 "true"                                                          );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+            if(NETSTACK_ROUTING.node_is_root()) { sprintf(str,    "\""    "dagType"     "\""    ":" "\""  "root"      "\""  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str); } 
+            else                                { sprintf(str,    "\""    "dagType"     "\""    ":" "\""  "node"      "\""  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str); } 
+    
+            oar_json_ipaddr_to_str(oar_json_ipaddr, &curr_instance.dag.dag_id);
+            sprintf(str,    "\""    "dagId"         "\""    ":"     "\""        "%s" "\""           ,oar_json_ipaddr                                        );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            
+            sprintf(str,    "\""    "dagVersion"    "\""    ":"                 "%u"                ,curr_instance.dag.version                              );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+            oar_json_ipaddr_to_str(oar_json_ipaddr, &curr_instance.dag.prefix_info.prefix);
+            sprintf(str,    "\""    "dagPrefix"         "\""    ":"     "\""    "%s" "\""           ,oar_json_ipaddr                                        );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            
+            sprintf(str,    "\""    "dagPrefixLength"   "\""    ":"                 "%u"            ,curr_instance.dag.prefix_info.length                   );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "state"             "\""    ":"     "\""        "%s" "\""       ,oar_json_rpl_state_to_str(curr_instance.dag.state)    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+            if (curr_instance.dag.preferred_parent) 
+            {
+                oar_json_ipaddr_to_str(oar_json_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
+                sprintf(str,    "\""    "preferredParent"   "\""    ":"     "\""        "%s"    "\""       ,oar_json_ipaddr     );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            }
+            else
+            {
+                sprintf(str,    "\""    "preferredParent"   "\""    ":"     "\""        "none"  "\""                            );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            }
+
+            sprintf(str,    "\""    "rank"              "\""    ":"                 "%u"                ,curr_instance.dag.rank                                 );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lowestRank"        "\""    ":"                 "%u"                ,curr_instance.dag.lowest_rank                          );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "maxRankInc"        "\""    ":"                 "%u"                ,curr_instance.max_rankinc                              );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "\""    "daoSequence"        "\""    ":" );         strcat(buf, str);
+            sprintf(str,        "{" );                                      strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+                sprintf(str,    "\""    "valid"             "\""    ":" "true"                                         );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+                sprintf(str,    "\""    "lastSent"  "\""            ":" "%u"    ,curr_instance.dag.dao_last_seqno       );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+                sprintf(str,    "\""    "lastAcked" "\""            ":" "%u"    ,curr_instance.dag.dao_last_acked_seqno );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "}" );                                  strcat(buf, str);
+            // sprintf(str,        "," );                                  strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+        sprintf(str,    "\""    "mop"               "\""    ":"     "\""        "%s" "\""           ,oar_json_rpl_mop_to_str(curr_instance.mop)            );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,    "\""    "of"                "\""    ":"     "\""        "%s" "\""           ,oar_json_rpl_ocp_to_str(curr_instance.of->ocp)        );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,    "\""    "hopRankIncrement"  "\""    ":"                 "%u"                ,curr_instance.min_hoprankinc                           );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,    "\""    "defaultLifetime"   "\""    ":"                 "%lu"               ,RPL_LIFETIME(curr_instance.default_lifetime)           );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,    "\""    "dtsnOut"           "\""    ":"                 "%u"                ,curr_instance.dtsn_out                                 );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "\""    "trickleTimer"  "\""    ":" );          strcat(buf, str);
+        sprintf(str,        "{" );                                          strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+            sprintf(str,    "\""    "valid"         "\""    ":" "true"                                                          );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "current"       "\""    ":" "%u"    ,curr_instance.dag.dio_intcurrent                       );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "min"           "\""    ":" "%u"    ,curr_instance.dio_intmin                               );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "max"           "\""    ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "redundency"    "\""    ":" "%u"    ,curr_instance.dio_redundancy                           );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        // sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+    }
 
 
 
@@ -800,6 +945,27 @@ void oar_json_append_net(char * buf)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -808,27 +974,10 @@ void oar_json_append_net(char * buf)
     #else   // (ROUTING_CONF_RPL_LITE)
     // ####################################################################################################################################################################################
 
+
+
+
     sprintf(str,        "\""    "rplLiteUsed"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -863,6 +1012,83 @@ void oar_json_append_net(char * buf)
 
 
 
+    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    sprintf(str, ",");  strcat(buf, str);
+    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "rplStatus"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,        "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+
+    sprintf(str,        "\""    "instanceId"    "\""    ":" "\""  "none"      "\""                                );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "\""    "dag"        "\""    ":" );         strcat(buf, str);
+        sprintf(str,        "{" );                                      strcat(buf, str);
+        // ------------------------------------------------------------------------------
+        
+            sprintf(str,        "\""    "valid"             "\""    ":"       "false"   );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagType"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagId"             "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagVersion"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagPrefix"         "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "dagPrefixLength"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "state"             "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "preferredParent"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "rank"              "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "lowestRank"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "maxRankInc"        "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "\""    "daoSequence"        "\""    ":" );         strcat(buf, str);
+            sprintf(str,        "{" );                                      strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+            sprintf(str,    "\""    "valid"             "\""    ":"         "false" );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lastSent"  "\""            ":"         "null"  );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lastAcked" "\""            ":"         "null"  );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+
+            // ------------------------------------------------------------------------------
+            sprintf(str,        "}" );                                  strcat(buf, str);
+            // sprintf(str,        "," );                                  strcat(buf, str);
+            // ------------------------------------------------------------------------------
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+        sprintf(str,        "\""    "mop"               "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "of"                "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "hopRankIncrement"  "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "defaultLifetime"   "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+        sprintf(str,        "\""    "dtsnOut"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,    "\""    "trickleTimer"  "\""    ":" );  strcat(buf, str);
+        sprintf(str,    "{"                                 );  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+
+            sprintf(str,    "\""    "valid"         "\""    ":"       "false"   );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "currentt"      "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "nim"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "max"           "\""    ":"       "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "redundancy"    "\""    ":"       "null"    );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+
+        // ------------------------------------------------------------------------------
+        sprintf(str,        "}" );                                  strcat(buf, str);
+        // sprintf(str,        "," );                                  strcat(buf, str);
+        // ------------------------------------------------------------------------------
+        
 
 
 
@@ -883,6 +1109,10 @@ void oar_json_append_net(char * buf)
 
 
 
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
