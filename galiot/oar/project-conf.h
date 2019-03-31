@@ -34,7 +34,7 @@
 
 
 
-#define OAR_CONF_MOTE_COLOR                                    "RED"
+
 
 
 
@@ -78,8 +78,15 @@
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#define OAR_CONF_MOTE_COLOR                                                 "RED"
+
 #define ENERGEST_CONF_ON                                                    1
 #define UIP_CONF_STATISTICS                                                 1
+
+/* NBR_TABLE_CONF_MAX_NEIGHBORS specifies the maximum number of neighbors
+    that each node will be able to handle. */
+
+#define NBR_TABLE_CONF_MAX_NEIGHBORS                                        5
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

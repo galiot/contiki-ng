@@ -642,8 +642,166 @@ void oar_json_append_stats(char * buf)
     
     #endif  // (UIP_CONF_STATISTICS)
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 }
+
+
+    // (cmd_rpl_nbr) >                                                RPL neighbor          rpl_neighbor_count() 
+
+
+
+void oar_json_append_net(char * buf)
+{
+    char str[128];
+    
+    // -------------------------------------------------------------------------------
+    sprintf(str,    "\""    "net"    "\""    ":" );  strcat(buf, str);   
+    sprintf(str,    "{" );                              strcat(buf, str);
+    // -------------------------------------------------------------------------------
+
+
+
+
+    // ####################################################################################################################################################################################
+    #if (ROUTING_CONF_RPL_LITE)
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "rplNbr"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    
+    sprintf(str,        "\""    "rplLite"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    if (!curr_instance.used || rpl_neighbor_count() == 0)
+    {
+        
+        if (!curr_instance.used)    { sprintf(str,    "\""    "currentInstanceUsed"   "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str); }
+        else                        { sprintf(str,    "\""    "currentInstanceUsed"   "\""    ":" "true"    );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str); }
+     
+        sprintf(str,    "\""    "rplNeighborCount"      "\""    ":" "%u"    ,rpl_neighbor_count()  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "rplNeighbors"      "\""    ":" );  strcat(buf, str);  
+        sprintf(str,    "["      );                                 strcat(buf, str);
+
+        for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+        {
+            sprintf(str,    "null"  );  strcat(buf, str);
+            if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    }
+    else
+    {
+        
+        rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+
+        int oar_json_rpl_neighbor_count = 0;
+
+        sprintf(str,    "\""    "currentInstanceUsed"   "\""    ":" "true"     );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "rplNeighborCount"      "\""    ":" "%u"    ,rpl_neighbor_count()   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "rplNeighbors"      "\""    ":" );  strcat(buf, str);  
+        sprintf(str,    "["      );                                 strcat(buf, str);
+
+        while(nbr != NULL)
+        {
+            oar_json_rpl_neighbor_count++;
+            
+            char temp_str[120]; 
+            rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);
+
+            sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+            if (oar_json_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str,    "," );  strcat(buf, str); }
+
+            nbr = nbr_table_next(rpl_neighbors, nbr);
+        }
+        
+        for (int i = oar_json_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+        {
+            sprintf(str,    "null"  );  strcat(buf, str);
+            if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    }
+    
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+    // ####################################################################################################################################################################################
+    #else   // (ROUTING_CONF_RPL_LITE)
+    // ####################################################################################################################################################################################
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "rplNbr"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    
+    sprintf(str,        "\""    "rplLite"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,    "\""    "currentInstanceUsed"   "\""    ":" "null"     );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rplNeighborCount"      "\""    ":" "null"     );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    sprintf(str,    "\""    "rplNeighbors"      "\""    ":" );  strcat(buf, str);  
+    sprintf(str,    "["      );                                 strcat(buf, str);
+
+    for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+    {
+        sprintf(str,    "null"  );  strcat(buf, str);
+        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+    }
+
+    sprintf(str,    "]"      );                                 strcat(buf, str);
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    #endif  // (ROUTING_CONF_RPL_LITE)
+    // ####################################################################################################################################################################################
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // sprintf(str,        "\""    "cpu"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "lpm"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "deepLpm"       "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                           );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "totalTime"     "\""    ":" "%lu"   ,oar_json_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                            );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "radioListen"   "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                             );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "radioTransmit" "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                           );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    // sprintf(str,        "\""    "radioOff"      "\""    ":" "%lu"   ,oar_json_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))    );  strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+    
+    // ------------------------------------------------------------------------------
+    sprintf(str,    "}" );  strcat(buf, str);
+    // ------------------------------------------------------------------------------
+}
+
+
+
+
+
+
+
 
 
 
@@ -662,6 +820,8 @@ void oar_json_construct(char * buf)
     oar_json_append_energy(buf);
     oar_json_bridge(buf);
     oar_json_append_stats(buf);
+    oar_json_bridge(buf);
+    oar_json_append_net(buf);
     oar_json_exit(buf);
 }
 

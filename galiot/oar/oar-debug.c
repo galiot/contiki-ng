@@ -230,15 +230,15 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         else 
         {
             rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
-            int oar_rpl_neighbor_count = 0;
+            int oar_debug_rpl_neighbor_count = 0;
     
             while(nbr != NULL) 
             {
                 char buf[120];
-                oar_rpl_neighbor_count++;
+                oar_debug_rpl_neighbor_count++;
                 
                 rpl_neighbor_snprint(buf, sizeof(buf), nbr);
-                printf("[%8lu] DEBUG >   INFO >      (cmd_rpl_nbr) >                                            RPL neighbor %d/%d: %s\n",  system_time, oar_rpl_neighbor_count, rpl_neighbor_count(), buf);
+                printf("[%8lu] DEBUG >   INFO >      (cmd_rpl_nbr) >                                            RPL neighbor %d/%d: %s\n",  system_time, oar_debug_rpl_neighbor_count, rpl_neighbor_count(), buf);
                 nbr = nbr_table_next(rpl_neighbors, nbr);
             }
         }
@@ -335,7 +335,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
     void oar_debug_cmd_ip_neighbors(unsigned long int system_time)
     {
         uip_ds6_nbr_t *nbr;
-        int oar_ip_neighbor_count = 0;
+        int oar_debug_ip_neighbor_count = 0;
 
         nbr = uip_ds6_nbr_head();
         if(nbr == NULL) 
@@ -346,9 +346,9 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         {
             while(nbr != NULL) 
             {
-                oar_ip_neighbor_count++;
+                oar_debug_ip_neighbor_count++;
 
-                printf("[%8lu] DEBUG >   INFO > (cmd_ip_neighbors) >                                        Node IPv6 neighbor %d: ", system_time, oar_ip_neighbor_count);
+                printf("[%8lu] DEBUG >   INFO > (cmd_ip_neighbors) >                                        Node IPv6 neighbor %d: ", system_time, oar_debug_ip_neighbor_count);
                     oar_debug_ipaddr_to_str(oar_debug_ipaddr, uip_ds6_nbr_get_ipaddr(nbr)); printf("%s", oar_debug_ipaddr);
                     printf(" <-> ");
                     oar_debug_lladdr_to_str(oar_debug_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr)); printf("%s", oar_debug_lladdr);
