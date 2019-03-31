@@ -1331,7 +1331,7 @@ void oar_json_append_net(char * buf)
         sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "%s"        "\""        ,oar_json_ipaddr        );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
 
         if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); }
-        else                                        { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str); } 
+        else                                        { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str); }   // sprintf(str, "," );  strcat(buf, str);  
     }
     else
     {
@@ -1339,9 +1339,341 @@ void oar_json_append_net(char * buf)
         sprintf(str,   "\""         "lifetimeSeconds"   "\""        ":"                 "null"                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str);
 
     }
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (UIP_CONF_IPV6_RPL)
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingLinks"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    int oar_json_uip_sr_links_count = 0;
+    
+
+    if (uip_sr_num_nodes() > 0)
+    {
+        
+       
+        uip_sr_node_t *link;
+        link = uip_sr_node_head();
+
+        
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "links"             "\""    ":" );      strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+        
+        
+        while(link != NULL) 
+        {
+            char goa_buf[100];
+            oar_json_uip_sr_links_count++;
+
+            uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
+            
+            sprintf(str,    "\""    "%s"    "\""    ,goa_buf ); strcat(buf, str);
+            
+            if (oar_json_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+
+            
+            link = uip_sr_node_next(link);
+        }
+
+        for (int j = oar_json_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+        sprintf(str,    "\""    "uipSrLinkCount"    "\""    ":" "%u"    ,oar_json_uip_sr_links_count );  strcat(buf, str); 
+
+
+
+
+    }
+    else
+    {
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "links"             "\""    ":" );      strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+        
+        sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+        sprintf(str,    "\""    "uipSrLinkCount"    "\""    ":"    "\""    "none"  "\""    );  strcat(buf, str); 
+        
+    }
+    
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # else  // (UIP_CONF_IPV6_RPL)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingLinks"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    sprintf(str,    "\""    "links"             "\""    ":" );      strcat(buf, str);
+    sprintf(str,    "["      );                                     strcat(buf, str);
+
+    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+    {
+        
+        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+        
+        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+    }
+        
+    sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    sprintf(str,    "\""    "uipSrLink_count"    "\""    ":"    "null"  );  strcat(buf, str); 
+
+
+
+
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+    #endif  // (UIP_CONF_IPV6_RPL)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #if (UIP_MAX_ROUTES != 0)
+
+    sprintf(str, "," );  strcat(buf, str);
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingEntries"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid" "\""    ":" "true"                                  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    
+
+    if(uip_ds6_route_num_routes() > 0)
+    {
+        uip_ds6_route_t *route;
+        sprintf(str,    "\""    "total" "\""    ":" "%u"      ,uip_ds6_route_num_routes()   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+        route = uip_ds6_route_head();
+        int oar_json_ds6_route_count = 0;
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "entries"             "\""    ":" );      strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+        
+        
+        while(route != NULL) 
+        {
+            oar_json_ds6_route_count++;
+            sprintf(str,    "{" );  strcat(buf, str);
+
+            oar_json_ipaddr_to_str(oar_json_ipaddr, &route->ipaddr);
+            sprintf(str,    "\""    "route"     "\""    ":" "\""    "%s"    "\""    ,oar_json_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+            oar_json_ipaddr_to_str(oar_json_ipaddr, uip_ds6_route_nexthop(route));
+            sprintf(str,    "\""    "via"       "\""    ":" "\""    "%s"    "\""    ,oar_json_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+            if ((unsigned long)route->state.lifetime != 0xFFFFFFFF) { sprintf(str,  "\""  "lifetime"    "\""    ":"         "%u"                ,(unsigned long)route->state.lifetime); strcat(buf, str); }
+            else                                                    { sprintf(str,  "\""  "lifetime"    "\""    ":" "\""    "infinite"  "\""                                         ); strcat(buf, str); }
+
+            sprintf(str,    "}" );  strcat(buf, str);
+        
+            if (oar_json_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+        }
+
+        for (int j = oar_json_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "{" );  strcat(buf, str);
+
+            sprintf(str,    "\""    "route"     "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "via"       "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lifetime"  "\""    ":" "null"  ); strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+
+            sprintf(str,    "}" );  strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    }
+    else
+    {
+        sprintf(str,    "\""    "total" "\""    ":" "\""    "none"  "\""    );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "entries"             "\""    ":" );    strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "{" );  strcat(buf, str);
+
+            sprintf(str,    "\""    "route"     "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "via"       "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "lifetime"  "\""    ":" "null"  ); strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+
+            sprintf(str,    "}" );  strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);   
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    }
     
 
 
+
+
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #else   // (UIP_MAX_ROUTES != 0)
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+    sprintf(str, "," );  strcat(buf, str);
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingEntries"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid" "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    sprintf(str,    "\""    "total" "\""    ":" "null"  );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    sprintf(str,    "\""    "entries"             "\""    ":" );    strcat(buf, str);
+    sprintf(str,    "["      );                                     strcat(buf, str);
+
+    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+    {
+        
+        sprintf(str,    "{" );  strcat(buf, str);
+
+        sprintf(str,    "\""    "route"     "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "via"       "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "lifetime"  "\""    ":" "null"  ); strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+
+        sprintf(str,    "}" );  strcat(buf, str);
+        
+        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+    }
+
+    sprintf(str,    "]"      );                                 strcat(buf, str);   
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    
+
+
+
+
+
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #endif  // (UIP_MAX_ROUTES != 0)
 
 
 
@@ -1358,6 +1690,10 @@ void oar_json_append_net(char * buf)
     sprintf(str, "}" ); strcat(buf, str);
     // sprintf(str,    "," );  strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% // routes
+
+
+
+
 
 
 
@@ -1506,6 +1842,216 @@ void oar_json_append_net(char * buf)
     sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "null"      "\""                                );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
     sprintf(str,   "\""         "lifetimeSeconds"   "\""        ":"                 "null"                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str);
 
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #if (UIP_CONF_IPV6_RPL)
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingLinks"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "links"             "\""    ":" );      strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+        
+    sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    sprintf(str,    "\""    "uipSrLinkCount"    "\""    ":"    "null"  );  strcat(buf, str); 
+
+
+
+
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #else  // (UIP_CONF_IPV6_RPL)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingLinks"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "links"             "\""    ":" );      strcat(buf, str);
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+        {
+            
+            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+            
+            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
+        
+    sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+    sprintf(str,    "\""    "uipSrLink_count"    "\""    ":"    "null"  );  strcat(buf, str); 
+
+
+
+
+
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,        "}" );  strcat(buf, str);
+    // sprintf(str, "," );  strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #endif  // (UIP_CONF_IPV6_RPL)
+
+
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #if (UIP_MAX_ROUTES != 0)
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingEntries"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid" "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    sprintf(str,    "\""    "total" "\""    ":" "null"  );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    sprintf(str,    "\""    "entries"             "\""    ":" );    strcat(buf, str);
+    sprintf(str,    "["      );                                     strcat(buf, str);            
+
+    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+    {
+        
+        sprintf(str,    "{" );  strcat(buf, str);
+
+        sprintf(str,    "\""    "route"     "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "via"       "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "lifetime"  "\""    ":" "null"  ); strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+
+        sprintf(str,    "}" );  strcat(buf, str);
+        
+        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+    }
+
+    sprintf(str,    "]"      );                                 strcat(buf, str);   
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+
+
+
+
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #else   // (UIP_MAX_ROUTES != 0)
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+    sprintf(str, "," );  strcat(buf, str);
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    sprintf(str,    "\""    "routingEntries"      "\""    ":" );      strcat(buf, str);  
+    sprintf(str,    "{"      );                                     strcat(buf, str);
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    sprintf(str,    "\""    "valid" "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    sprintf(str,    "\""    "total" "\""    ":" "null"  );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+    sprintf(str,    "\""    "entries"             "\""    ":" );        strcat(buf, str);
+    sprintf(str,    "["      );                                         strcat(buf, str);           
+
+    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+    {
+        
+        sprintf(str,    "{" );  strcat(buf, str);
+
+        sprintf(str,    "\""    "route"     "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "via"       "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,    "\""    "lifetime"  "\""    ":" "null"  ); strcat(buf, str);    // sprintf(str, "," );  strcat(buf, str);
+
+        sprintf(str,    "}" );  strcat(buf, str);
+        
+        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+    }
+
+    sprintf(str,    "]"      );                                 strcat(buf, str);   
+    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #endif  // (UIP_MAX_ROUTES != 0)
     
 
 
