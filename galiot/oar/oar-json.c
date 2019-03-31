@@ -663,6 +663,36 @@ void oar_json_append_stats(char * buf)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void oar_json_append_net(char * buf)
 {
     char str[128];
@@ -1088,7 +1118,76 @@ void oar_json_append_net(char * buf)
         sprintf(str,        "}" );                                  strcat(buf, str);
         // sprintf(str,        "," );                                  strcat(buf, str);
         // ------------------------------------------------------------------------------
-        
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+    #endif  // (ROUTING_CONF_RPL_LITE)
+    // ####################################################################################################################################################################################
+    
+    sprintf(str,    "," );  strcat(buf, str);
+
+    oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+    sprintf(str,    "\""    "nodeMacAddress"    "\""    ":" "\""    "%s"    "\""    ,oar_json_lladdr    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+
+    // ####################################################################################################################################################################################
+    #if (NETSTACK_CONF_WITH_IPV6)
+
+    sprintf(str,        "\""    "ipv6Used"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "ipaddr"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+        uint8_t state;
+        int oar_json_ipaddr_count = 0;
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "nodeIpv6addresses"      "\""    ":" ); strcat(buf, str);  
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+        {
+            state = uip_ds6_if.addr_list[i].state;
+
+            if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
+            {
+                oar_json_ipaddr_count++;
+                
+                oar_json_ipaddr_to_str(oar_json_ipaddr, &uip_ds6_if.addr_list[i].ipaddr);
+                sprintf(str,    "\""    "%s"    "\""    ,oar_json_ipaddr    );  strcat(buf, str);
+
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+
+            }
+            else
+            {
+                
+                sprintf(str,    "\""    "null"  "\""                        );  strcat(buf, str);
+                
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+            }
+            
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+        sprintf(str,    "\""    "addrIssuedCount"           "\""    ":" "%u"    ,oar_json_ipaddr_count                               );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -1098,6 +1197,43 @@ void oar_json_append_net(char * buf)
 
 
 
+
+
+
+
+
+    // ####################################################################################################################################################################################
+    #else   // (NETSTACK_CONF_WITH_IPV6)
+    // ####################################################################################################################################################################################
+
+    sprintf(str,        "\""    "ipv6Used"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "ipaddr"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        sprintf(str,        "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "nodeIpv6addresses"      "\""    ":" ); strcat(buf, str);  
+        sprintf(str,    "["      );                                     strcat(buf, str);
+
+        for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+        {
+            sprintf(str,    "\""    "null"  "\""                        );  strcat(buf, str);
+                
+            if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+        }
+
+        sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+        sprintf(str,    "\""    "addrIssuedCount"           "\""    ":" "null"  );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
 
 
 
@@ -1113,13 +1249,22 @@ void oar_json_append_net(char * buf)
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str, "}" ); strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
 
 
 
 
-    #endif  // (ROUTING_CONF_RPL_LITE)
+
+
+
+
+    #endif  // (NETSTACK_CONF_WITH_IPV6)
     // ####################################################################################################################################################################################
     
+
+
+
+
     
     
     
