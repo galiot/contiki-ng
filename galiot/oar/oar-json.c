@@ -264,7 +264,7 @@ void oar_json_append_energy(char * buf)
     sprintf(str,    "{" );                              strcat(buf, str);
     // -------------------------------------------------------------------------------
 
-    sprintf(str,        "\""    "energestUsed"  "\""    ":" "true"                                                                                                                                             );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,        "\""    "valid"         "\""    ":" "true"                                                                                                                                             );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "cpu"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "lpm"           "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                                );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "deepLpm"       "\""    ":" "%lu"   ,oar_json_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                           );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -286,7 +286,7 @@ void oar_json_append_energy(char * buf)
     sprintf(str,    "{" );                                 strcat(buf, str);
     // -------------------------------------------------------------------------------
 
-    sprintf(str,        "\""    "energestUsed"  "\""    ":" "false" );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,        "\""    "valid"         "\""    ":" "false" );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "cpu"           "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "lpm"           "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,        "\""    "deepLpm"       "\""    ":" "null"  );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -354,6 +354,8 @@ void oar_json_append_stats(char * buf)
     sprintf(str,    "\""   "stats"  "\""    ":" );  strcat(buf, str);
     sprintf(str,    "{" );                          strcat(buf, str);
     // --------------------------------------------------------------------------------
+
+    sprintf(str,    "\""    "valid"      "\""    ":" "true");  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
@@ -506,6 +508,8 @@ void oar_json_append_stats(char * buf)
     sprintf(str,    "\""   "stats"  "\""    ":" );  strcat(buf, str);
     sprintf(str,    "{" );                          strcat(buf, str);
     // --------------------------------------------------------------------------------
+
+    sprintf(str,    "\""    "valid"      "\""    ":" "false");  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
@@ -674,12 +678,42 @@ void oar_json_append_net(char * buf)
     // ####################################################################################################################################################################################
     #if (ROUTING_CONF_RPL_LITE)
 
+    sprintf(str,        "\""    "rplLiteUsed"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str,        "\""    "rplNbr"        "\""    ":" );  strcat(buf, str);
     sprintf(str, "{" );                                         strcat(buf, str);
-    
-    sprintf(str,        "\""    "rplLite"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
 
     if (!curr_instance.used || rpl_neighbor_count() == 0)
     {
@@ -747,9 +781,54 @@ void oar_json_append_net(char * buf)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // ####################################################################################################################################################################################
     #else   // (ROUTING_CONF_RPL_LITE)
     // ####################################################################################################################################################################################
+
+    sprintf(str,        "\""    "rplLiteUsed"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -757,9 +836,9 @@ void oar_json_append_net(char * buf)
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str,        "\""    "rplNbr"        "\""    ":" );  strcat(buf, str);
     sprintf(str, "{" );                                         strcat(buf, str);
-    
-    sprintf(str,        "\""    "rplLite"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    sprintf(str,        "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
 
     sprintf(str,    "\""    "currentInstanceUsed"   "\""    ":" "null"     );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
     sprintf(str,    "\""    "rplNeighborCount"      "\""    ":" "null"     );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -780,6 +859,33 @@ void oar_json_append_net(char * buf)
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str, "}" ); strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #endif  // (ROUTING_CONF_RPL_LITE)
     // ####################################################################################################################################################################################
