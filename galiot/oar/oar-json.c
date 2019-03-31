@@ -1199,99 +1199,102 @@ void oar_json_append_net(char * buf)
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str,    "}" );  strcat(buf, str);
-    // sprintf(str,    "," );  strcat(buf, str);
+    sprintf(str,    "," );  strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // sprintf(str,        "\""    "ipNbr"        "\""    ":" );  strcat(buf, str);
-    // sprintf(str, "{" );                                         strcat(buf, str);
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "ipNbr"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    //     sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
         
-    //     uip_ds6_nbr_t *nbr;
-    //     int oar_json_ip_neighbor_count = 0;
+        uip_ds6_nbr_t *nbr;
+        int oar_json_ip_neighbor_count = 0;
 
-    //     nbr = uip_ds6_nbr_head();
+        nbr = uip_ds6_nbr_head();
 
-    //     if(nbr == NULL)
-    //     {
+        if(nbr == NULL)
+        {
             
-    //         // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-    //         sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
-    //         sprintf(str,    "["      );                                    strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+            sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
+            sprintf(str,    "["      );                                    strcat(buf, str);
 
-    //         for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
-    //         {
-    //             sprintf(str,    "{" );  strcat(buf, str);
+            for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+            {
+                sprintf(str,    "{" );  strcat(buf, str);
                 
-    //             sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
+                sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
 
-    //             sprintf(str,    "}" );  strcat(buf, str);
+                sprintf(str,    "}" );  strcat(buf, str);
 
-    //             if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-    //         }
+                if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+            }
 
-    //         sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
-    //         // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+            sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-    //         sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
-    //     }
-    //     else
-    //     {
+            sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
+        }
+        else
+        {
             
-    //         // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-    //         sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
-    //         sprintf(str,    "["      );                                    strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+            sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
+            sprintf(str,    "["      );                                    strcat(buf, str);
             
-    //         while(nbr != NULL)
-    //         {
-    //             oar_json_ip_neighbor_count++;
+            while(nbr != NULL)
+            {
+                oar_json_ip_neighbor_count++;
                 
-    //             sprintf(str,    "{" );  strcat(buf, str);
+                sprintf(str,    "{" );  strcat(buf, str);
                 
-    //             oar_json_ipaddr_to_str(oar_json_ipaddr, uip_ds6_nbr_get_ipaddr(nbr));
-    //             sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_ipaddr                            ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                oar_json_ipaddr_to_str(oar_json_ipaddr, uip_ds6_nbr_get_ipaddr(nbr));
+                sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_ipaddr                            ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
 
-    //             oar_json_lladdr_to_str(oar_json_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr));
-    //             sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_lladdr                            ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                oar_json_lladdr_to_str(oar_json_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr));
+                sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_lladdr                            ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
 
-    //             sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_ds6_nbr_state_to_str(nbr->state) ); strcat(buf, str);
+                sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_ds6_nbr_state_to_str(nbr->state) ); strcat(buf, str);
 
-    //             sprintf(str,    "}" );  strcat(buf, str);
+                sprintf(str,    "}" );  strcat(buf, str);
 
-    //             if (oar_json_ip_neighbor_count == NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
-    //         }
-
-    //         for (int j = oar_json_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
-    //         {
-    //             sprintf(str,    "{" );  strcat(buf, str);
+                if (oar_json_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
                 
-    //             sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //             sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
+                nbr = uip_ds6_nbr_next(nbr);
+            }
 
-    //             sprintf(str,    "}" );  strcat(buf, str);
+            for (int j = oar_json_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+            {
+                
+                sprintf(str,    "{" );  strcat(buf, str);
+                
+                sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
 
-    //             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-    //         }
+                sprintf(str,    "}" );  strcat(buf, str);
 
-    //         sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
-    //         // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+                if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+            }
 
-    //         sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
-    //     }
+            sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+            sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
+        }
         
 
 
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // sprintf(str, "}" ); strcat(buf, str);
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
@@ -1344,47 +1347,47 @@ void oar_json_append_net(char * buf)
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str,    "}" );  strcat(buf, str);
-    // sprintf(str,    "," );  strcat(buf, str);
+    sprintf(str,    "," );  strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // sprintf(str,        "\""    "ipNeighbors"        "\""    ":" );  strcat(buf, str);
-    // sprintf(str, "{" );                                         strcat(buf, str);
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "ipNeighbors"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                         strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    //     sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
 
-    //     int oar_json_ip_neighbor_count = 0;
+        int oar_json_ip_neighbor_count = 0;
 
-    //     // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-    //     sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
-    //     sprintf(str,    "["      );                                    strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "\""    "nodeIpv6neigbors"      "\""    ":" ); strcat(buf, str);  
+        sprintf(str,    "["      );                                    strcat(buf, str);
 
-    //     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
-    //     {
-    //         sprintf(str,    "{" );  strcat(buf, str);
+        for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+        {
+            sprintf(str,    "{" );  strcat(buf, str);
 
-    //         sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //         sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //         sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-    //         sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
+            sprintf(str,    "\""    "ipAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "llAddr"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "router"    "\""    ":" "null"  ); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "state"     "\""    ":" "null"  ); strcat(buf, str);
 
-    //         sprintf(str,    "}" );  strcat(buf, str);
+            sprintf(str,    "}" );  strcat(buf, str);
 
-    //         if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-    //     }
+            if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+        }
 
-    //     sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
-    //     // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+        sprintf(str,    "]"      );                                 strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-    //     sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
-
-
+        sprintf(str,    "\""    "ipNbrCount"    "\""    ":" "%u"    ,oar_json_ip_neighbor_count );  strcat(buf, str); 
 
 
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // sprintf(str, "}" ); strcat(buf, str);
-    // // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
