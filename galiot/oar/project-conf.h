@@ -34,7 +34,7 @@
 
 
 
-
+#define OAR_CONF_MOTE_COLOR                                    "RED"
 
 
 
