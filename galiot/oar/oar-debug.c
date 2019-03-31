@@ -40,27 +40,27 @@
 
     void oar_debug_stats_ip(unsigned long int system_time)
     {
-        printf("[%8lu] DEBUG >  STATS >          (ip.recv) >                            received packets at the IP layer: %lu\n",                                system_time, uip_stat.ip.recv);
-        printf("[%8lu] DEBUG >  STATS >          (ip.sent) >                                sent packets at the IP layer: %lu\n",                                    system_time, uip_stat.ip.sent);
-        printf("[%8lu] DEBUG >  STATS >     (ip.forwarded) >                           forwarded packets at the IP layer: %lu\n",                               system_time, uip_stat.ip.forwarded);
-        printf("[%8lu] DEBUG >  STATS >          (ip.drop) >                             dropped packets at the IP layer: %lu\n",                                 system_time, uip_stat.ip.drop);
-        printf("[%8lu] DEBUG >  STATS >        (ip.vhlerr) >    packets dropped due to wrong IP version or header length: %lu\n",        system_time, uip_stat.ip.vhlerr);
-        printf("[%8lu] DEBUG >  STATS >      (ip.hblenerr) >           packets dropped due to wrong IP length, high byte: %lu\n",               system_time, uip_stat.ip.hblenerr);
-        printf("[%8lu] DEBUG >  STATS >      (ip.lblenerr) >            packets dropped due to wrong IP length, low byte: %lu\n",                system_time, uip_stat.ip.lblenerr);
-        printf("[%8lu] DEBUG >  STATS >       (ip.fragerr) >              packets dropped because they were IP fragments: %lu\n",                  system_time, uip_stat.ip.fragerr);
-        printf("[%8lu] DEBUG >  STATS >        (ip.chkerr) >                   packets dropped due to IP checksum errors: %lu\n",                       system_time, uip_stat.ip.chkerr);
-        printf("[%8lu] DEBUG >  STATS >      (ip.protoerr) > packets dropped because they were neither ICMP, UDP nor TCP: %lu\n",     system_time, uip_stat.ip.protoerr);                  
+        printf("[%8lu] DEBUG >  STATS >          (ip.recv) >                            received packets at the IP layer: %lu\n",       system_time, uip_stat.ip.recv);
+        printf("[%8lu] DEBUG >  STATS >          (ip.sent) >                                sent packets at the IP layer: %lu\n",       system_time, uip_stat.ip.sent);
+        printf("[%8lu] DEBUG >  STATS >     (ip.forwarded) >                           forwarded packets at the IP layer: %lu\n",       system_time, uip_stat.ip.forwarded);
+        printf("[%8lu] DEBUG >  STATS >          (ip.drop) >                             dropped packets at the IP layer: %lu\n",       system_time, uip_stat.ip.drop);
+        printf("[%8lu] DEBUG >  STATS >        (ip.vhlerr) >    packets dropped due to wrong IP version or header length: %lu\n",       system_time, uip_stat.ip.vhlerr);
+        printf("[%8lu] DEBUG >  STATS >      (ip.hblenerr) >           packets dropped due to wrong IP length, high byte: %lu\n",       system_time, uip_stat.ip.hblenerr);
+        printf("[%8lu] DEBUG >  STATS >      (ip.lblenerr) >            packets dropped due to wrong IP length, low byte: %lu\n",       system_time, uip_stat.ip.lblenerr);
+        printf("[%8lu] DEBUG >  STATS >       (ip.fragerr) >              packets dropped because they were IP fragments: %lu\n",       system_time, uip_stat.ip.fragerr);
+        printf("[%8lu] DEBUG >  STATS >        (ip.chkerr) >                   packets dropped due to IP checksum errors: %lu\n",       system_time, uip_stat.ip.chkerr);
+        printf("[%8lu] DEBUG >  STATS >      (ip.protoerr) > packets dropped because they were neither ICMP, UDP nor TCP: %lu\n",       system_time, uip_stat.ip.protoerr);                  
     }
 
     // ----------------------------------------------------------------------------
     
     void oar_debug_stats_icmp(unsigned long int system_time)
     {
-        printf("[%8lu] DEBUG >  STATS >        (icmp.recv) >                                       received ICMP packets: %lu\n",               system_time, uip_stat.icmp.recv);
-        printf("[%8lu] DEBUG >  STATS >        (icmp.sent) >                                           sent ICMP packets: %lu\n",                   system_time, uip_stat.icmp.sent);
-        printf("[%8lu] DEBUG >  STATS >        (icmp.drop) >                                        dropped ICMP packets: %lu\n",                system_time, uip_stat.icmp.drop);
-        printf("[%8lu] DEBUG >  STATS >     (icmp.typeerr) >                              ICMP packets with a wrong type: %lu\n",      system_time, uip_stat.icmp.typeerr);
-        printf("[%8lu] DEBUG >  STATS >      (icmp.chkerr) >                            ICMP packets with a bad checksum: %lu\n",    system_time, uip_stat.icmp.chkerr);
+        printf("[%8lu] DEBUG >  STATS >        (icmp.recv) >                                       received ICMP packets: %lu\n",   system_time, uip_stat.icmp.recv);
+        printf("[%8lu] DEBUG >  STATS >        (icmp.sent) >                                           sent ICMP packets: %lu\n",   system_time, uip_stat.icmp.sent);
+        printf("[%8lu] DEBUG >  STATS >        (icmp.drop) >                                        dropped ICMP packets: %lu\n",   system_time, uip_stat.icmp.drop);
+        printf("[%8lu] DEBUG >  STATS >     (icmp.typeerr) >                              ICMP packets with a wrong type: %lu\n",   system_time, uip_stat.icmp.typeerr);
+        printf("[%8lu] DEBUG >  STATS >      (icmp.chkerr) >                            ICMP packets with a bad checksum: %lu\n",   system_time, uip_stat.icmp.chkerr);
     
     }
 
@@ -70,15 +70,15 @@
     
         void oar_debug_stats_tcp(unsigned long int system_time)
         {
-            printf("[%8lu] DEBUG >  STATS >         (tcp.recv) >                                       received TCP segments: %lu\n",                                       system_time, uip_stat.tcp.recv);
-            printf("[%8lu] DEBUG >  STATS >         (tcp.sent) >                                           sent TCP segments: %lu\n",                                           system_time, uip_stat.tcp.sent);
-            printf("[%8lu] DEBUG >  STATS >         (tcp.drop) >                                        dropped TCP segments: %lu\n",                                        system_time, uip_stat.tcp.drop);
-            printf("[%8lu] DEBUG >  STATS >       (tcp.chkerr) >                            TCP segments with a bad checksum: %lu\n",                            system_time, uip_stat.tcp.chkerr);
-            printf("[%8lu] DEBUG >  STATS >       (tcp.ackerr) >                          TCP segments with a bad ACK number: %lu\n",                          system_time, uip_stat.tcp.ackerr);
-            printf("[%8lu] DEBUG >  STATS >          (tcp.rst) >                           received TCP RST (reset) segments: %lu\n",                           system_time, uip_stat.tcp.rst);
-            printf("[%8lu] DEBUG >  STATS >       (tcp.rexmit) >                                  retransmitted TCP segments: %lu\n",                                  system_time, uip_stat.tcp.rexmit);
-            printf("[%8lu] DEBUG >  STATS >      (tcp.syndrop) >     dropped SYNs because too few connections were available: %lu\n",     system_time, uip_stat.tcp.syndrop);
-            printf("[%8lu] DEBUG >  STATS >       (tcp.synrst) >                     SYNs for closed ports, triggering a RST: %lu\n",                     system_time, uip_stat.tcp.synrst);
+            printf("[%8lu] DEBUG >  STATS >         (tcp.recv) >                                       received TCP segments: %lu\n",   system_time, uip_stat.tcp.recv);     
+            printf("[%8lu] DEBUG >  STATS >         (tcp.sent) >                                           sent TCP segments: %lu\n",   system_time, uip_stat.tcp.sent);    
+            printf("[%8lu] DEBUG >  STATS >         (tcp.drop) >                                        dropped TCP segments: %lu\n",   system_time, uip_stat.tcp.drop);    
+            printf("[%8lu] DEBUG >  STATS >       (tcp.chkerr) >                            TCP segments with a bad checksum: %lu\n",   system_time, uip_stat.tcp.chkerr);  
+            printf("[%8lu] DEBUG >  STATS >       (tcp.ackerr) >                          TCP segments with a bad ACK number: %lu\n",   system_time, uip_stat.tcp.ackerr);  
+            printf("[%8lu] DEBUG >  STATS >          (tcp.rst) >                           received TCP RST (reset) segments: %lu\n",   system_time, uip_stat.tcp.rst);   
+            printf("[%8lu] DEBUG >  STATS >       (tcp.rexmit) >                                  retransmitted TCP segments: %lu\n",   system_time, uip_stat.tcp.rexmit); 
+            printf("[%8lu] DEBUG >  STATS >      (tcp.syndrop) >     dropped SYNs because too few connections were available: %lu\n",   system_time, uip_stat.tcp.syndrop);
+            printf("[%8lu] DEBUG >  STATS >       (tcp.synrst) >                     SYNs for closed ports, triggering a RST: %lu\n",   system_time, uip_stat.tcp.synrst); 
         }
 
     #endif /* (UIP_TCP) */
@@ -89,10 +89,10 @@
     
         void oar_debug_stats_udp(unsigned long int system_time)
         {
-            printf("[%8lu] DEBUG >  STATS >         (udp.drop) >                                        dropped UDP segments: %lu\n",                system_time, uip_stat.udp.drop);
-            printf("[%8lu] DEBUG >  STATS >         (udp.recv) >                                       received UDP segments: %lu\n",               system_time, uip_stat.udp.recv);
-            printf("[%8lu] DEBUG >  STATS >         (udp.sent) >                                           sent UDP segments: %lu\n",                   system_time, uip_stat.udp.sent);
-            printf("[%8lu] DEBUG >  STATS >       (udp.chkerr) >                            UDP segments with a bad checksum: %lu\n",    system_time, uip_stat.udp.chkerr);
+            printf("[%8lu] DEBUG >  STATS >         (udp.drop) >                                        dropped UDP segments: %lu\n",   system_time, uip_stat.udp.drop);   
+            printf("[%8lu] DEBUG >  STATS >         (udp.recv) >                                       received UDP segments: %lu\n",   system_time, uip_stat.udp.recv);   
+            printf("[%8lu] DEBUG >  STATS >         (udp.sent) >                                           sent UDP segments: %lu\n",   system_time, uip_stat.udp.sent);   
+            printf("[%8lu] DEBUG >  STATS >       (udp.chkerr) >                            UDP segments with a bad checksum: %lu\n",   system_time, uip_stat.udp.chkerr);
         }
 
     #endif /* (UIP_UDP) */

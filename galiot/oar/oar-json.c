@@ -289,15 +289,347 @@ void oar_json_append_energy(char * buf)
     sprintf(str,    "}"                                             );  strcat(buf, str);
 
     #endif  // (ENERGEST_CONF_ON)
-
-
-
-
-
-
-
 }
 
+//       (ip.recv) >                            received packets at the IP layer
+//       (ip.sent) >                                sent packets at the IP layer
+//  (ip.forwarded) >                           forwarded packets at the IP layer
+//       (ip.drop) >                             dropped packets at the IP layer
+//     (ip.vhlerr) >    packets dropped due to wrong IP version or header length
+//   (ip.hblenerr) >           packets dropped due to wrong IP length, high byte
+//   (ip.lblenerr) >            packets dropped due to wrong IP length, low byte
+//    (ip.fragerr) >              packets dropped because they were IP fragments
+//     (ip.chkerr) >                   packets dropped due to IP checksum errors
+//   (ip.protoerr) > packets dropped because they were neither ICMP, UDP nor TCP
+
+//     (icmp.recv) >                                       received ICMP packets
+//     (icmp.sent) >                                           sent ICMP packets
+//     (icmp.drop) >                                        dropped ICMP packets
+//  (icmp.typeerr) >                              ICMP packets with a wrong type
+//   (icmp.chkerr) >                            ICMP packets with a bad checksum
+
+//      (tcp.recv) >                                       received TCP segments
+//      (tcp.sent) >                                           sent TCP segments
+//      (tcp.drop) >                                        dropped TCP segments
+//    (tcp.chkerr) >                            TCP segments with a bad checksum
+//    (tcp.ackerr) >                          TCP segments with a bad ACK number
+//       (tcp.rst) >                           received TCP RST (reset) segments
+//    (tcp.rexmit) >                                  retransmitted TCP segments
+//   (tcp.syndrop) >     dropped SYNs because too few connections were available
+//    (tcp.synrst) >                     SYNs for closed ports, triggering a RST
+
+//      (udp.drop) >                                        dropped UDP segments
+//      (udp.recv) >                                       received UDP segments
+//      (udp.sent) >                                           sent UDP segments
+//    (udp.chkerr) >                            UDP segments with a bad checksum
+
+//      (nd6.drop) >                                         dropped ND6 packets
+//      (nd6.recv) >                                         dropped ND6 packets
+//      (nd6.sent) >                                         dropped ND6 packets
+
+void oar_json_append_stats(char * buf)
+{
+    char str[128];
+    
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    #if (UIP_CONF_STATISTICS)
+
+    // -------------------------------------------------------------------------------
+    sprintf(str,    "\""   "stats"  "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );  strcat(buf, str);
+    // --------------------------------------------------------------------------------
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    sprintf(str,        "\""    "ip"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.ip.recv       );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.ip.sent       );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "forwarded" "\""    ":" "%lu"   ,uip_stat.ip.forwarded  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.ip.drop       );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "vhlerr"    "\""    ":" "%lu"   ,uip_stat.ip.vhlerr     );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "hblenerr"  "\""    ":" "%lu"   ,uip_stat.ip.hblenerr   );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "lblenerr"  "\""    ":" "%lu"   ,uip_stat.ip.lblenerr   );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "fragerr"   "\""    ":" "%lu"   ,uip_stat.ip.fragerr    );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "%lu"   ,uip_stat.ip.chkerr     );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "protoerr"  "\""    ":" "%lu"   ,uip_stat.ip.protoerr   );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    sprintf(str,        "\""    "icmp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.icmp.recv     );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.icmp.sent     );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.icmp.drop     );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "typeerr"   "\""    ":" "%lu"   ,uip_stat.icmp.typeerr  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "%lu"   ,uip_stat.icmp.chkerr   );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str);                                                                                                                                                                              
+
+    // ############################################################
+    #if (UIP_TCP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    sprintf(str,        "\""    "tcp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.tcp.recv      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.tcp.sent      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.tcp.drop      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "%lu"   ,uip_stat.tcp.chkerr    );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "ackerr"    "\""    ":" "%lu"   ,uip_stat.tcp.ackerr    );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rst"       "\""    ":" "%lu"   ,uip_stat.tcp.rst       );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rexmit"    "\""    ":" "%lu"   ,uip_stat.tcp.rexmit    );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "syndrop"   "\""    ":" "%lu"   ,uip_stat.tcp.syndrop   );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "synrst"    "\""    ":" "%lu"   ,uip_stat.tcp.synrst    );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+    
+    #else   // (UIP,TCP)
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                                                                        
+
+    sprintf(str,        "\""    "tcp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "ackerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rst"       "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rexmit"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "syndrop"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "synrst"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+    
+    #endif  // (UIP_TCP)
+    // ############################################################
+
+    // ############################################################
+    #if (UIP_UDP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    sprintf(str,        "\""    "udp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "drop"      "\""    ":" "%lu"   ,uip_stat.udp.drop      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"      "\""    ":" "%lu"   ,uip_stat.udp.recv      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "%lu"   ,uip_stat.udp.sent      );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "%lu"   ,uip_stat.udp.chkerr    );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+
+    #else   // (UIP,UDP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    sprintf(str,        "\""    "udp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+
+    #endif  // (UIP_UDP)
+    // ############################################################
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    
+    sprintf(str,        "\""    "nd6"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+
+    sprintf(str,    "\""    "drop"  "\""    ":" "%lu"   ,uip_stat.nd6.drop  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"  "\""    ":" "%lu"   ,uip_stat.nd6.recv  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"  "\""    ":" "%lu"   ,uip_stat.nd6.sent  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+    
+    // ------------------------------------------------------------------------------------
+    sprintf(str, "}" ); strcat(buf, str);
+    // -------------------------------------------------------------------------------
+    
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    #else   // (UIP_CONF_STATISTICS)
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    // -------------------------------------------------------------------------------
+    sprintf(str,    "\""   "stats"  "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );  strcat(buf, str);
+    // --------------------------------------------------------------------------------
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    sprintf(str,        "\""    "ip"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "forwarded" "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "vhlerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "hblenerr"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "lblenerr"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "fragerr"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "protoerr"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    sprintf(str,        "\""    "icmp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "typeerr"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str);                                                                                                                                                                              
+
+    // ############################################################
+    #if (UIP_TCP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    sprintf(str,        "\""    "tcp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "ackerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rst"       "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rexmit"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "syndrop"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "synrst"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+    
+    #else   // (UIP,TCP)
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                                                                                                        
+
+    sprintf(str,        "\""    "tcp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "ackerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rst"       "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "rexmit"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "syndrop"   "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "synrst"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                                                                                                                                                      
+
+    sprintf(str, "}" ); strcat(buf, str);
+    
+    #endif  // (UIP_TCP)
+    // ############################################################
+
+    // ############################################################
+    #if (UIP_UDP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    sprintf(str,        "\""    "udp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+
+    #else   // (UIP,UDP)
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    sprintf(str,        "\""    "udp"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+    
+    sprintf(str,    "\""    "drop"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"      "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "chkerr"    "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+
+    #endif  // (UIP_UDP)
+    // ############################################################
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, ",");  strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    
+    sprintf(str,        "\""    "nd6"        "\""    ":" );  strcat(buf, str);
+    
+    sprintf(str, "{" );  strcat(buf, str);
+
+    sprintf(str,    "\""    "drop"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "recv"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,    "\""    "sent"  "\""    ":" "null"  );  strcat(buf, str); sprintf(str, "," );  //strcat(buf, str);                                                     
+
+    sprintf(str, "}" ); strcat(buf, str); 
+    
+    // ------------------------------------------------------------------------------------
+    sprintf(str, "}" ); strcat(buf, str);
+    // -------------------------------------------------------------------------------
+    
+    #endif  // (UIP_CONF_STATISTICS)
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+}
 
 
 
@@ -314,6 +646,8 @@ void oar_json_construct(char * buf)
     oar_json_append_id(buf);
     oar_json_bridge(buf);
     oar_json_append_energy(buf);
+    oar_json_bridge(buf);
+    oar_json_append_stats(buf);
     oar_json_exit(buf);
 }
 
