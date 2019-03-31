@@ -47,7 +47,7 @@ char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 // ==================================================
-char oar_json_buf[500];
+char oar_json_buf[1000];
 void oar_json_print(char * str);
 void oar_json_construct(char * buf);
 // ==================================================
