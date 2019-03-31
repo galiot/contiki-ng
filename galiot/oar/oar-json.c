@@ -8,6 +8,81 @@
 #include "sys/stack-check.h"
 #include "dev/watchdog.h"
 
+#include "net/link-stats.h"
+
+
+
+// *************************************************************
+
+
+
+static int
+max_acceptable_rank(void)
+{
+  if(curr_instance.max_rankinc == 0) {
+    /* There is no max rank increment */
+    return RPL_INFINITE_RANK;
+  } else {
+    /* Make sure not to exceed RPL_INFINITE_RANK */
+    return MIN((uint32_t)curr_instance.dag.lowest_rank + curr_instance.max_rankinc, RPL_INFINITE_RANK);
+  }
+}
+
+static int
+acceptable_rank(rpl_rank_t rank)
+{
+  return rank != RPL_INFINITE_RANK
+      && rank >= ROOT_RANK
+      && rank <= max_acceptable_rank();
+}
+
+
+
+static rpl_nbr_t *
+best_parent(int fresh_only)
+{
+  rpl_nbr_t *nbr;
+  rpl_nbr_t *best = NULL;
+
+  if(curr_instance.used == 0) {
+    return NULL;
+  }
+
+  /* Search for the best parent according to the OF */
+  for(nbr = nbr_table_head(rpl_neighbors); nbr != NULL; nbr = nbr_table_next(rpl_neighbors, nbr)) {
+
+    if(!acceptable_rank(nbr->rank) || !curr_instance.of->nbr_is_acceptable_parent(nbr)) {
+      /* Exclude neighbors with a rank that is not acceptable) */
+      continue;
+    }
+
+    if(fresh_only && !rpl_neighbor_is_fresh(nbr)) {
+      /* Filter out non-fresh nerighbors if fresh_only is set */
+      continue;
+    }
+
+#if UIP_ND6_SEND_NS
+    {
+    uip_ds6_nbr_t *ds6_nbr = rpl_get_ds6_nbr(nbr);
+    /* Exclude links to a neighbor that is not reachable at a NUD level */
+    if(ds6_nbr == NULL || ds6_nbr->state != NBR_REACHABLE) {
+      continue;
+    }
+    }
+#endif /* UIP_ND6_SEND_NS */
+
+    /* Now we have an acceptable parent, check if it is the new best */
+    best = curr_instance.of->best_parent(best, nbr);
+  }
+
+  return best;
+}
+
+// *********************************************************************************************
+
+
+
+
 
 
 
@@ -737,7 +812,24 @@ void oar_json_append_net(char * buf)
 
         for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
         {
-            sprintf(str,    "null"  );  strcat(buf, str);
+            sprintf(str,    "{"      ); strcat(buf, str);
+
+            sprintf(str,    "\""    "ipAddr"                    "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rank"                      "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "linkMetric"                "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rankViaNbr"                "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "freshStats"                "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rootRank"                  "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "bestNbr"                   "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "acceptRank_AND_acceptPrnt" "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "prefParent"                "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+
+            sprintf(str,    "\""    "lastTxMinutesAgo"          "\""    ":" "null"  );  strcat(buf, str);  sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "betterParentSinceMinute"   "\""    ":" "null"  );  strcat(buf, str);
+
+            sprintf(str,    "}"      ); strcat(buf, str);
+
+            //sprintf(str,    "null"  );  strcat(buf, str);
             if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
         }
 
@@ -762,12 +854,52 @@ void oar_json_append_net(char * buf)
         {
             oar_json_rpl_neighbor_count++;
             
-            char temp_str[120]; 
-            rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);
+            // char temp_str[120]; 
+            
+            rpl_nbr_t *oar_json_rpl_nbr_best = best_parent(0);
+            const struct link_stats *oar_json_rpl_nbr_stats = rpl_neighbor_get_link_stats(nbr);
+            clock_time_t oar_json_rpl_nbr_clock_now = clock_time();
 
-            sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+            sprintf(str,    "{"      ); strcat(buf, str);
+
+            oar_json_ipaddr_to_str(oar_json_ipaddr, rpl_neighbor_get_ipaddr(nbr));
+            sprintf(str,    "\""    "ipAddr"                    "\""    ":"     "\""        "%s" "\""          ,oar_json_ipaddr   );                                                       strcat(buf, str);                            sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rank"                      "\""    ":"                 "%5u"              ,nbr->rank   );  strcat(buf, str);                                      sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "linkMetric"                "\""    ":"                 "%5u"              ,rpl_neighbor_get_link_metric(nbr)   );                                                     strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rankViaNbr"                "\""    ":"                 "%u"               ,rpl_neighbor_rank_via_nbr(nbr)   );                                                 strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "freshStats"                "\""    ":"                 "%2u"              ,oar_json_rpl_nbr_stats != NULL ? oar_json_rpl_nbr_stats->freshness : 0);  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+            sprintf(str,    "\""    "rootRank"                  "\""    ":"                 "%s"               ,(nbr->rank == ROOT_RANK) ? "true" : "false"   );                                     strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "bestNbr"                   "\""    ":"                 "%s"               ,nbr == oar_json_rpl_nbr_best ? "true" : "false"   );                                                                             strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "acceptRank_AND_acceptPrnt" "\""    ":"                 "%s"               ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"   );             strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,    "\""    "prefParent"                "\""    ":"                 "%s"               ,nbr == curr_instance.dag.preferred_parent ? "true" : "false" );                                                              strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+
+            if(oar_json_rpl_nbr_stats->last_tx_time > 0) 
+            {
+                sprintf(str,    "\""    "lastTxMinutesAgo"         "\""    ":"     "%u"           ,(unsigned)((oar_json_rpl_nbr_clock_now - oar_json_rpl_nbr_stats->last_tx_time) / (60 * CLOCK_SECOND)) );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            }
+            else
+            {
+                sprintf(str,    "\""    "lastTxMinutesAgo"         "\""    ":"     "\""        "null" "\"" );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            }
+
+            if(nbr->better_parent_since > 0) 
+            {
+                sprintf(str,    "\""    "betterParentSinceMinute"         "\""    ":"     "%u"           ,(unsigned)((oar_json_rpl_nbr_clock_now - nbr->better_parent_since) / (60 * CLOCK_SECOND)) );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+            }
+            else
+            {
+                sprintf(str,    "\""    "betterParentSinceMinute"         "\""    ":"     "null"   );  strcat(buf, str);   // sprintf(str,    "," );  strcat(buf, str);
+            }
+            
+            sprintf(str,    "}"      ); strcat(buf, str);
+
+            
+            // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);
+
+            // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+            
+            
             if (oar_json_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str,    "," );  strcat(buf, str); }
-
             nbr = nbr_table_next(rpl_neighbors, nbr);
         }
         
