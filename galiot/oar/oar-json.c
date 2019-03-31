@@ -1204,7 +1204,7 @@ void oar_json_append_net(char * buf)
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str,        "\""    "ipNbr"        "\""    ":" );  strcat(buf, str);
-    sprintf(str, "{" );                                         strcat(buf, str);
+    sprintf(str, "{" );                                        strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
@@ -1294,7 +1294,114 @@ void oar_json_append_net(char * buf)
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str, "}" ); strcat(buf, str);
+    sprintf(str,    "," );  strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% // ipNbr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "routes"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                        strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,        "\""    "valid"           "\""    ":" "true"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+    uip_ds6_defrt_t *default_route;
+    default_route = uip_ds6_defrt_lookup(uip_ds6_defrt_choose());
+
+    if(default_route != NULL)
+    {
+        oar_json_ipaddr_to_str(oar_json_ipaddr, &default_route->ipaddr);
+        sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "%s"        "\""        ,oar_json_ipaddr        );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+        if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); }
+        else                                        { sprintf(str,   "\""    "lifetimeSeconds"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); } 
+    }
+    else
+    {
+        sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "none"      "\""                                );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+        sprintf(str,   "\""         "lifetimeSeconds"   "\""        ":"                 "null"                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str);
+
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // sprintf(str,    "," );  strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% // routes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1388,6 +1495,36 @@ void oar_json_append_net(char * buf)
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     sprintf(str, "}" ); strcat(buf, str);
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str,        "\""    "routes"        "\""    ":" );  strcat(buf, str);
+    sprintf(str, "{" );                                        strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    sprintf(str,        "\""    "valid"           "\""    ":" "false"   );  strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+    
+    sprintf(str,    "\""        "defaultRoute"      "\""        ":"     "\""        "null"      "\""                                );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+    sprintf(str,   "\""         "lifetimeSeconds"   "\""        ":"                 "null"                                          );  strcat(buf, str);   // sprintf(str, "," );  strcat(buf, str);
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    sprintf(str, "}" ); strcat(buf, str);
+    // sprintf(str,    "," );  strcat(buf, str);
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% // routes
 
 
 
