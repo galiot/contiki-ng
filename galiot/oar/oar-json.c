@@ -128,7 +128,7 @@ static rpl_nbr_t *best_parent(int fresh_only)
 // ----------------------------------------------------------------------------
 // function that provides context for ds6 neighbor state
 
-const char *oar_json_ds6_nbr_state_to_str(uint8_t state)
+static const char *oar_json_ds6_nbr_state_to_str(uint8_t state)
 {
     switch(state) 
     {
@@ -144,7 +144,7 @@ const char *oar_json_ds6_nbr_state_to_str(uint8_t state)
 // ----------------------------------------------------------------------------
 // function that provides context for RPL directed acyclic graph (DAG) state
 
-const char *oar_json_rpl_state_to_str(enum rpl_dag_state state)
+static const char *oar_json_rpl_state_to_str(enum rpl_dag_state state)
 {
     switch(state) 
     {
@@ -159,7 +159,7 @@ const char *oar_json_rpl_state_to_str(enum rpl_dag_state state)
 // ----------------------------------------------------------------------------
 // function that provides context for RPL mode of operation (MOP) state
 
-const char *oar_json_rpl_mop_to_str(int mop)
+static const char *oar_json_rpl_mop_to_str(int mop)
 {
     switch(mop) 
     {
@@ -174,7 +174,7 @@ const char *oar_json_rpl_mop_to_str(int mop)
 // ----------------------------------------------------------------------------
 // function that provides context for RPL objective code point (OCP)
 
-const char *oar_json_rpl_ocp_to_str(int ocp)
+static const char *oar_json_rpl_ocp_to_str(int ocp)
 {
     switch(ocp) 
     {
@@ -208,7 +208,7 @@ const char *oar_json_rpl_ocp_to_str(int ocp)
 
 // ----------------------------------------------------------------------------
 
-void oar_json_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
+static void oar_json_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
 {
     char buf[UIPLIB_IPV6_MAX_STR_LEN];  // UIPLIB_IPV6_MAX_STR_LEN == 40
     
@@ -220,7 +220,7 @@ void oar_json_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr)
 
 // ----------------------------------------------------------------------------
 
-void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+static void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
 {
     char buf[5];    // temporary string, local scope
     memset(output, 0, sizeof(output));  // initialization of outpout string (else concatenates)
@@ -311,7 +311,7 @@ void oar_json_print(char * buf)
 // ----------------------------------------------------------------------------
 // function that initializes (empties) the json string
 
-void oar_json_init(char * buf)
+static void oar_json_init(char * buf)
 {
     memset(buf, 0, sizeof(buf));        // initialization
 }
@@ -319,7 +319,7 @@ void oar_json_init(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends the entry '{' json character to the string
 
-void oar_json_enter(char * buf)
+static void oar_json_enter(char * buf)
 {
     char str[128];
     sprintf(str,    "{" );  strcat(buf, str);
@@ -328,7 +328,7 @@ void oar_json_enter(char * buf)
 // ----------------------------------------------------------------------------
 // function that connects the sections og the json, appending and ',' char
 
-void oar_json_bridge(char * buf)
+static void oar_json_bridge(char * buf)
 {
     char str[128];
     sprintf(str,    "," );  strcat(buf, str);
@@ -337,7 +337,7 @@ void oar_json_bridge(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends the exit '}' json character to the string
 
-void oar_json_exit(char * buf)
+static void oar_json_exit(char * buf)
 {
     char str[128];
     sprintf(str,    "}" );  strcat(buf, str);
@@ -363,7 +363,7 @@ void oar_json_exit(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends SYSTEM section to the json string
 
-void oar_json_append_system(char * buf)
+static void oar_json_append_system(char * buf)
 {
     char str[128];
 
@@ -435,7 +435,7 @@ void oar_json_append_system(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends ID section to the json string
 
-void oar_json_append_id(char * buf)
+static void oar_json_append_id(char * buf)
 {
     char str[128];
 
@@ -463,7 +463,7 @@ void oar_json_append_id(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends ENERGY section to the json string
 
-void oar_json_append_energy(char * buf)
+static void oar_json_append_energy(char * buf)
 {
     char str[128];
 
@@ -569,7 +569,7 @@ void oar_json_append_energy(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends STATS section to the json string
 
-void oar_json_append_stats(char * buf)
+static void oar_json_append_stats(char * buf)
 {
     char str[128];
     
@@ -999,7 +999,7 @@ void oar_json_append_stats(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends NET section to the json string
 
-void oar_json_append_net(char * buf)
+static void oar_json_append_net(char * buf)
 {
     char str[128];
     

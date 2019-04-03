@@ -34,12 +34,12 @@
 
 
 
-void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr);
+// void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr);
     
-const char *oar_json_ds6_nbr_state_to_str(uint8_t state);
-const char *oar_json_rpl_state_to_str(enum rpl_dag_state state);
-const char *oar_json_rpl_mop_to_str(int mop);
-const char *oar_json_rpl_ocp_to_str(int ocp);
+// const char *oar_json_ds6_nbr_state_to_str(uint8_t state);
+// const char *oar_json_rpl_state_to_str(enum rpl_dag_state state);
+// const char *oar_json_rpl_mop_to_str(int mop);
+// const char *oar_json_rpl_ocp_to_str(int ocp);
 
 char oar_json_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
 char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];

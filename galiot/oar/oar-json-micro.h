@@ -1,7 +1,7 @@
 #ifndef OAR_JSON_MICRO_H_
 #define OAR_JSON_MICRO_H_
 
-
+#include "project-conf.h"
 
 
 
@@ -47,7 +47,7 @@ char oar_json_micro_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 // ==================================================
-char oar_json_micro_buf[500];
+char oar_json_micro_buf[OAR_CONF_JSON_MICRO_BUF_SIZE];
 void oar_json_micro_print(char * str);
 void oar_json_micro_construct(char * buf);
 // ==================================================

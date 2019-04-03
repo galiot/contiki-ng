@@ -117,7 +117,7 @@
 //---------------------------------------------------------------------------
 
 // enable/disable JSON creation
-#define OAR_CONF_JSON                                                       0                   // (ON/OFF)
+#define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
 #define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO
@@ -125,10 +125,10 @@
 //---------------------------------------------------------------------------
 
 // enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      0                   // (ON/OFF) 
+#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
 
 // set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          2000                 // *sizeof(char)
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1400                 // *sizeof(char)
 
 // set the encryption key
 #define OAR_CRYPT_KEY_1                                                     'K' 
@@ -140,7 +140,27 @@
 
 
 
+//---------------------------------------------------------------------------
+// OAR_CONF_JSON_TYPE: COMPACT //////////////////////////////////////////////
+// --------------------------------------------------------------------------
 
+#define OAR_CONF_JSON_COMPACT_ID                                            1
+#define OAR_CONF_JSON_COMPACT_NRG                                           1
+#define OAR_CONF_JSON_COMPACT_STATS                                         1
+#define OAR_CONF_JSON_COMPACT_NET                                           1
+#define OAR_CONF_JSON_COMPACT_RPL                                           1
+
+//---------------------------------------------------------------------------
+// OAR_CONF_JSON_TYPE: MICRO //////////////////////////////////////////////
+// --------------------------------------------------------------------------
+
+#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1400
+
+#define OAR_CONF_JSON_MICRO_ID                                              1
+#define OAR_CONF_JSON_MICRO_NRG                                             1
+#define OAR_CONF_JSON_MICRO_STATS                                           1
+#define OAR_CONF_JSON_MICRO_NET                                             1
+#define OAR_CONF_JSON_MICRO_RPL                                             1
 
 
 

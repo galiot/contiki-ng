@@ -185,8 +185,12 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             // char *encrypted_oar_json;
             // char *decrypted_oar_json;
             
-            char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
-            char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+            #if (OAR_CONF_JSON && OAR_CRYPT)
+
+            // char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+            // char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+
+            #endif
 
 
 
@@ -197,6 +201,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             {
                 
                 // ====================================================================================================
+                #if (OAR_CONF_JSON)
 
                 printf("\n"); oar_debug_('=', 100); printf("\n");
 
@@ -260,16 +265,19 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 // decrypted_oar_json[400] = '\0';
 
                 
-                
-                oar_crypt(oar_json_micro_buf, encrypted_oar_json);
-                printf("%s\n", encrypted_oar_json);
-                printf("\n");
-                printf("length of en: %d\n", strlen(encrypted_oar_json));
-                printf("\n");
-                oar_crypt(encrypted_oar_json, decrypted_oar_json);
-                printf("%s\n", decrypted_oar_json);
-                printf("\n");
-                printf("length of de: %d\n", strlen(decrypted_oar_json));
+                #if (OAR_CRYPT)
+
+                    oar_crypt(oar_json_micro_buf, encrypted_oar_json);
+                    printf("%s\n", encrypted_oar_json);
+                    printf("\n");
+                    printf("length of en: %d\n", strlen(encrypted_oar_json));
+                    printf("\n");
+                    oar_crypt(encrypted_oar_json, decrypted_oar_json);
+                    printf("%s\n", decrypted_oar_json);
+                    printf("\n");
+                    printf("length of de: %d\n", strlen(decrypted_oar_json));
+
+                #endif
 
                 
 
@@ -300,7 +308,9 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 // free(encrypted_oar_json);
 
                 printf("\n"); oar_debug_('=', 100); printf("\n");
-
+                
+                #endif
+                // ================================================================================================
 
 
 

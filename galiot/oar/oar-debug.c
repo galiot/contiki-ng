@@ -226,7 +226,7 @@
     // IPADDR ---> STRING /////////////////////////////////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    void oar_debug_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
+    static void oar_debug_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
     {
         char buf[UIPLIB_IPV6_MAX_STR_LEN];                                      // UIPLIB_IPV6_MAX_STR_LEN == 40
         
@@ -243,7 +243,7 @@
 // LLADDR ---> STRING /////////////////////////////////////////////////////////////
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+static void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
 {
     char buf[5];                                                            // temporary string, local scope
     memset(output, 0, sizeof(output));                                      // initialization of outpout string (else concatenates)
@@ -274,7 +274,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // ------------------------------------------------------------
     // function that provides context for ds6 neighbor state //////
     // ------------------------------------------------------------
-    const char *oar_debug_ds6_nbr_state_to_str(uint8_t state)
+    static const char *oar_debug_ds6_nbr_state_to_str(uint8_t state)
     {
         switch(state) 
         {
@@ -295,7 +295,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // -------------------------------------------------------------------------
     // function that provides context for RPL directed acyclic graph (DAG) state
     // -------------------------------------------------------------------------
-    const char *oar_debug_rpl_state_to_str(enum rpl_dag_state state)
+    static const char *oar_debug_rpl_state_to_str(enum rpl_dag_state state)
     {
         switch(state) 
         {
@@ -310,7 +310,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // --------------------------------------------------------------------
     // function that provides context for RPL mode of operation (MOP) state
     // --------------------------------------------------------------------
-    const char *oar_debug_rpl_mop_to_str(int mop)
+    static const char *oar_debug_rpl_mop_to_str(int mop)
     {
         switch(mop) 
         {
@@ -325,7 +325,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // -----------------------------------------------------------------
     // function that provides context for RPL objective code point (OCP)
     // -----------------------------------------------------------------
-    const char *oar_debug_rpl_ocp_to_str(int ocp)
+    static const char *oar_debug_rpl_ocp_to_str(int ocp)
     {
         switch(ocp) 
         {

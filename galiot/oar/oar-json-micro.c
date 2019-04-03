@@ -1,4 +1,5 @@
 #include "oar-json-micro.h"
+#include "project-conf.h"
 
 #include "contiki.h"
 #include "contiki-net.h"
@@ -27,6 +28,14 @@
  * Simon Duquennoy <simon.duquennoy@inria.fr>           *
  *                                                      
  ****************************************************** */
+
+// ###################################
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_RPL) ////////
+// ===================================
+// ===================================
+// ===================================
 
 // ----------------------------------------------------------------------------
 
@@ -103,6 +112,14 @@ static rpl_nbr_t *best_parent(int fresh_only)
     return best;
 }
 
+// ===================================
+// ===================================
+// ===================================
+#endif // (OAR_CONF_JSON_MICRO_RPL) //
+// ===================================
+// ===================================
+// ===================================
+
 // ----------------------------------------------------------------------------
 
 /* ******************************************************
@@ -116,6 +133,14 @@ static rpl_nbr_t *best_parent(int fresh_only)
  * Simon Duquennoy <simon.duquennoy@inria.fr>           *
  *                                                      
  ****************************************************** */ 
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_RPL) ////////
+// ===================================
+// ===================================
+// ===================================
 
 // ----------------------------------------------------------------------------
 // function that provides context for ds6 neighbor state
@@ -178,6 +203,14 @@ static const char *oar_json_micro_rpl_ocp_to_str(int ocp)
 
 // ----------------------------------------------------------------------------
 
+// ===================================
+// ===================================
+// ===================================
+#endif // (OAR_CONF_JSON_MICRO_RPL) //
+// ===================================
+// ===================================
+// ===================================
+
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -199,6 +232,14 @@ static const char *oar_json_micro_rpl_ocp_to_str(int ocp)
 // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
 // ----------------------------------------------------------------------------
+
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
+#if (OAR_CONF_JSON_MICRO_ID || OAR_CONF_JSON_MICRO_NET || OAR_CONF_JSON_MICRO_RPL) /////
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
 
 static void oar_json_micro_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
 {
@@ -237,7 +278,21 @@ static void oar_json_micro_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     }
 }
 
-// ----------------------------------------------------------------------------
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
+#endif // (OAR_CONF_JSON_MICRO_ID || OAR_CONF_JSON_MICRO_NET || OAR_CONF_JSON_MICRO_RPL)
+// =====================================================================================
+// =====================================================================================
+// =====================================================================================
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_NRG) ////////
+// ===================================
+// ===================================
+// ===================================
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 // #########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON))#########
@@ -253,6 +308,14 @@ static void oar_json_micro_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 // #########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON))#########
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// ===================================
+// ===================================
+// ===================================
+#endif // (OAR_CONF_JSON_MICRO_NRG) //
+// ===================================
+// ===================================
+// ===================================
 
 // ----------------------------------------------------------------------------
 
@@ -271,9 +334,18 @@ static void oar_json_micro_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 
 
-// ====================================================================================================================
 
-char oar_json_micro_buf[500];    // global string: will contain the json
+
+
+
+
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ####################################################################################################################
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+char oar_json_micro_buf[OAR_CONF_JSON_MICRO_BUF_SIZE];    // global string: will contain the json
 
 // ----------------------------------------------------------------------------
 
@@ -282,11 +354,9 @@ void oar_json_micro_print(char * buf)
     printf("%s\n", buf);
 }
 
-// ----------------------------------------------------------------------------
-
-// ====================================================================================================================
-
-
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ####################################################################################################################
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -294,11 +364,22 @@ void oar_json_micro_print(char * buf)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // MAIN FUNCTIONS                                                           >>>>> BELOW <<<<<
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // ----------------------------------------------------------------------------
 // function that initializes (empties) the json string
@@ -335,7 +416,13 @@ static void oar_json_micro_exit(char * buf)
     sprintf(str,    "}" );  strcat(buf, str);
 }
 
-
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_ID) /////////
+// ===================================
+// ===================================
+// ===================================
 
 // ----------------------------------------------------------------------------
 // function that appends ID section to the json string
@@ -365,10 +452,26 @@ static void oar_json_micro_append_id(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
+// ===================================
+// ===================================
+// ===================================
+#endif //(OAR_CONF_JSON_MICRO_ID) ////
+// ===================================
+// ===================================
+// ===================================
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_NRG) ////////
+// ===================================
+// ===================================
+// ===================================
+
 // ----------------------------------------------------------------------------
 // function that appends ENERGY section to the json string
 
-static void oar_json_micro_append_erg(char * buf)
+static void oar_json_micro_append_nrg(char * buf)
 {
     char str[128];
 
@@ -379,19 +482,19 @@ static void oar_json_micro_append_erg(char * buf)
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START energy{} //////////////////////////////
-        sprintf(str, "\"" "erg" "\"" ":"    ); strcat(buf, str);   
+        sprintf(str, "\"" "nrg" "\"" ":"    ); strcat(buf, str);   
         sprintf(str, "{"                    ); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "energest"         "\"" ":" "true"                                                                                                                                             );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "energest"    "\"" ":" "true"                                                                                                                                                 );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
 
-            sprintf(str, "\"" "cpu"           "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                                );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "lpm"           "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                                );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "dLpm"       "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "tT"     "\"" ":" "%lu"   ,oar_json_micro_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                            );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rLs"   "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                             );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rTx" "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rO"      "\"" ":" "%lu"   ,oar_json_micro_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))    );  strcat(buf, str); 
+            sprintf(str, "\"" "cpu"         "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "lpm"         "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "dLpm"        "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "tT"          "\"" ":" "%lu"   ,oar_json_micro_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                          );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "rLs"         "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "rTx"         "\"" ":" "%lu"   ,oar_json_micro_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "rO"          "\"" ":" "%lu"   ,oar_json_micro_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))  );  strcat(buf, str); 
             
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}" ); strcat(buf, str);
@@ -407,19 +510,19 @@ static void oar_json_micro_append_erg(char * buf)
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START energy{} //////////////////////////////
-        sprintf(str, "\"" "erg" "\"" ":"    ); strcat(buf, str);   
+        sprintf(str, "\"" "nrg" "\"" ":"    ); strcat(buf, str);   
         sprintf(str, "{"                    ); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "energest"         "\"" ":" "false" ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "energest"    "\"" ":" "false"    ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
 
-            sprintf(str, "\"" "cpu"           "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "lpm"           "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "dLpm"       "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "tT"     "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rLs"   "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rTx" "\"" ":" "null"  ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rO"      "\"" ":" "null"  ); strcat(buf, str);
+            sprintf(str, "\"" "cpu"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "lpm"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "dLpm"        "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "tT"          \"" ":"  "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "rLs"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "rTx"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "rO"          "\"" ":" "null"     ); strcat(buf, str);
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}" ); strcat(buf, str);
@@ -430,6 +533,25 @@ static void oar_json_micro_append_erg(char * buf)
     #endif
     // ########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!
 }
+
+// ===================================
+// ===================================
+// ===================================
+#endif //(OAR_CONF_JSON_MICRO_NRG) ///
+// ===================================
+// ===================================
+// ===================================
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_STATS) //////
+// ===================================
+// ===================================
+// ===================================
+
+// ----------------------------------------------------------------------------
+// function that appends STATS section to the json string
 
 static void oar_json_micro_append_stats(char * buf)
 {
@@ -478,13 +600,13 @@ static void oar_json_micro_append_stats(char * buf)
             sprintf(str, "\"" "rx"        "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
             sprintf(str, "\"" "tx"        "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
             sprintf(str, "\"" "fw"   "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "dr"        "\"" ":" "null"   ); strcat(buf, str); // sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "vhlerr"      "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "hblenerr"    "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "lblenerr"    "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "fragerr"     "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "chkerr"      "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            // sprintf(str, "\"" "protoerr"    "\"" ":" "null"   ); strcat(buf, str);                                                                                                                                                                      
+            sprintf(str, "\"" "dr"        "\"" ":" "null"   ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "vhlerr"      "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "hblenerr"    "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "lblenerr"    "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "fragerr"     "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "chkerr"      "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "protoerr"    "\"" ":" "null"   ); strcat(buf, str);                                                                                                                                                                      
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}"); strcat(buf, str);
@@ -495,6 +617,25 @@ static void oar_json_micro_append_stats(char * buf)
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
 }
+
+// ===================================
+// ===================================
+// ===================================
+#endif //(OAR_CONF_JSON_MICRO_STATS) /
+// ===================================
+// ===================================
+// ===================================
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_NET) ////////
+// ===================================
+// ===================================
+// ===================================
+
+// ----------------------------------------------------------------------------
+// function that appends NET section to the json string
 
 static void oar_json_micro_append_net(char * buf)
 {
@@ -642,6 +783,25 @@ static void oar_json_micro_append_net(char * buf)
     // SECTION END net{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
+
+// ===================================
+// ===================================
+// ===================================
+#endif // (OAR_CONF_JSON_MICRO_NET) //
+// ===================================
+// ===================================
+// ===================================
+
+// ===================================
+// ===================================
+// ===================================
+#if (OAR_CONF_JSON_MICRO_RPL) ////////
+// ===================================
+// ===================================
+// ===================================
+
+// ----------------------------------------------------------------------------
+// function that appends RPL section to the json string
 
 static void oar_json_micro_append_rpl(char * buf)
 {
@@ -1134,6 +1294,13 @@ static void oar_json_micro_append_rpl(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
+// ===================================
+// ===================================
+// ===================================
+#endif // (OAR_CONF_JSON_MICRO_RPL) //
+// ===================================
+// ===================================
+// ===================================
 
 
 
@@ -1143,16 +1310,37 @@ void oar_json_micro_construct(char * buf)
 {
     oar_json_micro_init(buf);
     oar_json_micro_enter(buf);
-    oar_json_micro_append_id(buf);
-    oar_json_micro_bridge(buf);
-    oar_json_micro_append_erg(buf);
-    oar_json_micro_bridge(buf);
-    oar_json_micro_append_stats(buf);
-    oar_json_micro_bridge(buf);
-    oar_json_micro_append_net(buf);
-    oar_json_micro_bridge(buf);
-    oar_json_micro_append_rpl(buf);
-    oar_json_micro_exit(buf);
+    
+    #if (OAR_CONF_JSON_MICRO_ID)
+
+        oar_json_micro_append_id(buf);
+        oar_json_micro_bridge(buf);
+    
+    #endif
+    #if (OAR_CONF_JSON_MICRO_NRG)
+
+        oar_json_micro_append_nrg(buf);
+        oar_json_micro_bridge(buf);
+
+    #endif
+    #if (OAR_CONF_JSON_MICRO_STATS)
+
+        oar_json_micro_append_stats(buf);
+        oar_json_micro_bridge(buf);
+
+    #endif
+    #if (OAR_CONF_JSON_MICRO_NET)
+
+        oar_json_micro_append_net(buf);
+        oar_json_micro_bridge(buf);
+
+    #endif
+    #if (OAR_CONF_JSON_MICRO_RPL)
+
+        oar_json_micro_append_rpl(buf);
+        oar_json_micro_exit(buf);
+
+    #endif
 }
 
 
