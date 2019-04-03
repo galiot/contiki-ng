@@ -34,7 +34,7 @@
 
 
 
-
+#define UIP_CONF_TCP 1
 
 
 

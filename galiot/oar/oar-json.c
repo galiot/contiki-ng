@@ -2327,8 +2327,8 @@ void oar_json_append_net(char * buf)
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
                         }
 
-                        sprintf(str,    "]"      );                                 strcat(buf, str);   
-                        // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+                        sprintf(str, "]"); strcat(buf, str);
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]  
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 sprintf(str, "}"); strcat(buf, str); ////////////////
@@ -2355,9 +2355,14 @@ void oar_json_append_net(char * buf)
 
                     sprintf(str,    "\""    "total" "\""    ":" "null"  );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
 
-                    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-                    sprintf(str,    "\""    "entries"             "\""    ":" );        strcat(buf, str);
-                    sprintf(str,    "["      );                                         strcat(buf, str);           
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRY START net{} > routes{} > routingEntries{} > entries[]
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "entries" "\"" ":"); strcat(buf, str); ///////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    
+                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);       
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
@@ -2375,8 +2380,9 @@ void oar_json_append_net(char * buf)
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
                     }
 
-                    sprintf(str,    "]"      );                                 strcat(buf, str);   
-                    // [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]  
+
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 sprintf(str, "}"); strcat(buf, str); ////////////////
