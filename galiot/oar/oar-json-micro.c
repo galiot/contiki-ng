@@ -1338,9 +1338,10 @@ void oar_json_micro_construct(char * buf)
     #if (OAR_CONF_JSON_MICRO_RPL)
 
         oar_json_micro_append_rpl(buf);
-        oar_json_micro_exit(buf);
-
+        
     #endif
+
+    oar_json_micro_exit(buf);
 }
 
 

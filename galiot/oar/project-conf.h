@@ -67,18 +67,7 @@
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?*/
 /*|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?-|-?*/
 
-
-
-
-
-
-
-
-
-
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-#define OAR_CONF_MOTE_COLOR                                                 "RED"
 
 #define ENERGEST_CONF_ON                                                    1
 #define UIP_CONF_STATISTICS                                                 1
@@ -87,12 +76,13 @@
     that each node will be able to handle. */
 
 #define NBR_TABLE_CONF_MAX_NEIGHBORS                                        5
-
+#define UIP_CONF_TCP                                                        1
+                                                        
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#define OAR_CONF_MOTE_COLOR                                                 "RED"
 
-
-
+//---------------------------------------------------------------------------
 
 // enable/disable oar functionality, across the board
 #define OAR_CONF_FUNCTIONALITY                                              1                   // (ON/OFF)
@@ -123,35 +113,17 @@
 #define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO
 
 //---------------------------------------------------------------------------
-
-// enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
-
-// set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1400                 // *sizeof(char)
-
-// set the encryption key
-#define OAR_CRYPT_KEY_1                                                     'K' 
-#define OAR_CRYPT_KEY_2                                                     'C'                 // any chars, and any size array
-#define OAR_CRYPT_KEY_3                                                     'Q' 
-
-
-
-
-
-
-//---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: COMPACT //////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
-#define OAR_CONF_JSON_COMPACT_ID                                            1
-#define OAR_CONF_JSON_COMPACT_NRG                                           1
-#define OAR_CONF_JSON_COMPACT_STATS                                         1
-#define OAR_CONF_JSON_COMPACT_NET                                           1
-#define OAR_CONF_JSON_COMPACT_RPL                                           1
+// #define OAR_CONF_JSON_COMPACT_ID                                            1
+// #define OAR_CONF_JSON_COMPACT_NRG                                           1
+// #define OAR_CONF_JSON_COMPACT_STATS                                         1
+// #define OAR_CONF_JSON_COMPACT_NET                                           1
+// #define OAR_CONF_JSON_COMPACT_RPL                                           1
 
 //---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: MICRO //////////////////////////////////////////////
+// OAR_CONF_JSON_TYPE: MICRO ////////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
 #define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1400
@@ -160,7 +132,29 @@
 #define OAR_CONF_JSON_MICRO_NRG                                             1
 #define OAR_CONF_JSON_MICRO_STATS                                           1
 #define OAR_CONF_JSON_MICRO_NET                                             1
-#define OAR_CONF_JSON_MICRO_RPL                                             1
+#define OAR_CONF_JSON_MICRO_RPL                                             0
+
+//---------------------------------------------------------------------------
+
+// enable/disable JSON encryption
+#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
+
+// set the encryption string size
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1400                // *sizeof(char)
+
+// set the encryption key
+#define OAR_CRYPT_KEY_1                                                     'K'                 // any chars, and any size array
+#define OAR_CRYPT_KEY_2                                                     'C'                 // any chars, and any size array
+#define OAR_CRYPT_KEY_3                                                     'Q'                 // any chars, and any size array
+
+// enable/disable decryption
+#define OAR_CONF_CRYPT_DECRYPT                                              1                   // (ON/OFF)
+
+//---------------------------------------------------------------------------
+
+// enable/disable on-board device functionality
+// leds, buttons, sensors, etc.
+#define OAR_CONF_DEV                                                        1                   // (ON/OFF)
 
 
 
