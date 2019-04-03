@@ -271,7 +271,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                 // ====================================================================================================
 
-                if (OAR_CONF_DEBUG)
+                #if (OAR_CONF_DEBUG)
                 
                     #if (OAR_CONF_DEBUG_ENERGY)
 

@@ -126,7 +126,7 @@
 // OAR_CONF_JSON_TYPE: MICRO ////////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
-#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1400
+#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1450
 
 #define OAR_CONF_JSON_MICRO_ID                                              1
 #define OAR_CONF_JSON_MICRO_NRG                                             1
@@ -140,7 +140,7 @@
 #define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
 
 // set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1400                // *sizeof(char)
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1450                // *sizeof(char)
 
 // set the encryption key
 #define OAR_CRYPT_KEY_1                                                     'K'                 // any chars, and any size array
