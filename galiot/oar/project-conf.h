@@ -94,130 +94,46 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-
 // enable/disable oar functionality, across the board
-#define OAR_CONF_FUNCTIONALITY                                              1      // (ON/OFF)
+#define OAR_CONF_FUNCTIONALITY                                              1                   // (ON/OFF)
+
+//---------------------------------------------------------------------------
 
 // enable/disable console print for debug purposes
-#define OAR_CONF_DEBUG                                                      1      // (ON/OFF)
+#define OAR_CONF_DEBUG                                                      1                   // (ON/OFF)
 
-// enable/disable dev (leds & buttons) functionality
-#define OAR_CONF_DEV                                                        1      // (ON/OFF)
+// set the frequency in seconds for printing to console 
+#define OAR_CONF_DEBUG_INTERVAL                                             3                   // SECONDS LOOP
+
+// enable/disable energest timings (printing energest values)
+#define OAR_CONF_DEBUG_ENERGY                                               0                   // (ON/OFF)
+
+// enable/disable UIP statistics debugging (printing UIP values)
+#define OAR_CONF_DEBUG_STATISTICS                                           0                   // (ON/OFF)
+
+// enable/disable shell information (printing shell values)
+#define OAR_CONF_DEBUG_NETWORK                                              0                   // (ON/OFF)
+
+//---------------------------------------------------------------------------
 
 // enable/disable JSON creation
-#define OAR_CONF_JSON                                                       0      // (ON/OFF)
+#define OAR_CONF_JSON                                                       0                   // (ON/OFF)
 
-/*---------------------------------------------------------------------------*/
+// set the JSON type
+#define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO
 
-#if OAR_CONF_FUNCTIONALITY
-    #define OAR_FUNCTIONALITY                           OAR_CONF_FUNCTIONALITY
-#else   /*  OAR_CONF_FUNCTIONALITY  */
-    #define OAR_FUNCTIONALITY                                               0 
-#endif  /*  OAR_CONF_FUNCTIONALITY  */               
+//---------------------------------------------------------------------------
 
-#if OAR_CONF_DEBUG
-    #define OAR_DEBUG                                           OAR_CONF_DEBUG
-#else   /*  OAR_CONF_DEBUG  */
-    #define OAR_DEBUG                                                       0 
-#endif  /*  OAR_CONF_DEBUG  */  
+// enable/disable JSON encryption
+#define OAR_CONF_CRYPT                                                      0                   // (ON/OFF) 
 
-#if OAR_CONF_DEV
-    #define OAR_DEV                                              OAR_CONF_DEV
-#else   /*  OAR_CONF_DEV  */
-    #define OAR_DEV                                                         0 
-#endif  /*  OAR_CONF_DEV  */  
+// set the encryption string size
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          2000                 // *sizeof(char)
 
-#if OAR_CONF_JSON
-    #define OAR_JSON                                            OAR_CONF_JSON
-#else   /*  OAR_CONF_DEBUG  */
-    #define OAR_JSON                                                        0 
-#endif  /*  OAR_CONF_DEBUG  */
-
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-#if (OAR_DEBUG)
-
-    /*---------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------*/
-    
-    // set the frequency in seconds for printing to console 
-    #define OAR_CONF_DEBUG_INTERVAL                                             3       // (SECONDS)
-
-    // enable/disable energest timings (printing energest values)
-    #define OAR_CONF_DEBUG_ENERGEST                                             1       // (ON/OFF)
-
-    // enable/disable UIP statistics debugging (printing UIP values)
-    #define OAR_CONF_DEBUG_STATISTICS                                           1       // (ON/OFF)
-
-    // enable/disable shell information (printing shell values)
-    #define OAR_CONF_DEBUG_SHELL                                                1       // (ON/OFF)
-
-
-    /*---------------------------------------------------------------------------*/
-
-    #if OAR_CONF_DEBUG_INTERVAL
-        #define OAR_DEBUG_INTERVAL                          OAR_CONF_DEBUG_INTERVAL
-    #else   /*  OAR_CONF_DEBUG_ENERGEST  */
-        #define OAR_DEBUG_INTERVAL                                              10 
-    #endif  /*  OAR_CONF_DEBUG_ENERGEST  */
-
-    #if OAR_CONF_DEBUG_ENERGEST
-        #define OAR_DEBUG_ENERGEST                          OAR_CONF_DEBUG_ENERGEST
-    #else   /*  OAR_CONF_DEBUG_ENERGEST  */
-        #define OAR_DEBUG_ENERGEST                                               0 
-    #endif  /*  OAR_CONF_DEBUG_ENERGEST  */
-
-    #if OAR_CONF_DEBUG_STATISTICS
-        #define OAR_DEBUG_STATISTICS                      OAR_CONF_DEBUG_STATISTICS
-    #else   /*  OAR_CONF_DEBUG_STATISTICS  */
-        #define OAR_DEBUG_STATISTICS                                             0 
-    #endif  /*  OAR_CONF_DEBUG_STATISTICS  */
-
-    #if OAR_CONF_DEBUG_SHELL
-        #define OAR_DEBUG_SHELL                                 OAR_CONF_DEBUG_SHELL
-    #else   /*  OAR_CONF_DEBUG_SHELL  */
-        #define OAR_DEBUG_SHELL                                                 0 
-    #endif  /*  OAR_CONF_DEBUG_SHELL  */
-
-    /*---------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------*/
-
-#endif  /*  OAR_DEBUG   */
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
+// set the encryption key
+#define OAR_CRYPT_KEY_1                                                     'K' 
+#define OAR_CRYPT_KEY_2                                                     'C'                 // any chars, and any size array
+#define OAR_CRYPT_KEY_3                                                     'Q' 
 
 
 

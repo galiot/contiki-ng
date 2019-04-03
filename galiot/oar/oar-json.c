@@ -281,7 +281,7 @@ void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 // ====================================================================================================================
 
-char oar_json_buf[1000];    // global string: will contain the json
+char oar_json_buf[4000];    // global string: will contain the json
 
 // ----------------------------------------------------------------------------
 
@@ -2188,7 +2188,7 @@ void oar_json_append_net(char * buf)
 
             sprintf(str, "\"" "valid"           "\"" ":"        "false"     ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
 
-            sprintf(str, "\"" "defaultRoute"    "\"" ":" "\""   "null"  "\""); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "defaultRoute"    "\"" ":"        "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
             sprintf(str, "\"" "lifetimeSeconds" "\"" ":"        "null"      ); strcat(buf, str);   
 
 

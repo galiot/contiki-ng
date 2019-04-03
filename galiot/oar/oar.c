@@ -72,6 +72,8 @@
 
 #include "net/routing/routing.h"    // for NETSTACK_ROUTING
 
+// #include "os/lib/heapmem.h"
+
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
@@ -80,6 +82,9 @@
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
 #include "oar-debug.h"
 #include "oar-json.h"
+#include "oar-json-compact.h"
+#include "oar-json-micro.h"
+#include "oar-crypt.h"
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -161,7 +166,7 @@ AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
 
 PROCESS_THREAD(oar_debug_process, ev, data)
 {   
-    #if !(OAR_DEBUG)
+    #if !(OAR_CONF_FUNCTIONALITY)
 
         // (doc) A process can be stopped in three ways:
         // (doc)    The process implicitly exits by allowing the PROCESS_END() statement to be reached and executed.
@@ -171,47 +176,156 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
         PROCESS_EXIT();
 
-    #else // !(OAR_DEBUG)
+    #else // !(OAR_CONF_FUNCTIONALITY)
 
-        static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.     
-
+        static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
+        
         PROCESS_BEGIN();
 
-            etimer_set(&debug_timer, CLOCK_SECOND * OAR_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
+            // char *encrypted_oar_json;
+            // char *decrypted_oar_json;
+            
+            char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+            char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+
+
+
+
+            etimer_set(&debug_timer, CLOCK_SECOND * OAR_CONF_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
             
             while(1) 
             {
                 
-                // =========================
-                printf("\n"); oar_debug_('=', 100); printf("\n");
-
-                oar_json_construct(oar_json_buf);
-                oar_json_print(oar_json_buf);
+                // ====================================================================================================
 
                 printf("\n"); oar_debug_('=', 100); printf("\n");
-                // =========================
+
+                #if (OAR_CONF_JSON_TYPE == 1)
+                    
+                    oar_json_construct(oar_json_buf);
+                    oar_json_print(oar_json_buf);
+                    
+                    printf("\n");
+                    printf("length of oar_json_buf: %d\n", strlen(oar_json_buf));
+
+                #endif
+
+                #if (OAR_CONF_JSON_TYPE == 2)
+
+                    oar_json_compact_construct(oar_json_compact_buf);
+                    oar_json_compact_print(oar_json_compact_buf);
+                    
+                    printf("\n");
+                    printf("length of oar_json_compact_buf: %d\n", strlen(oar_json_compact_buf));
+
+                #endif
+
+                #if (OAR_CONF_JSON_TYPE == 3)
                 
-                #if (OAR_DEBUG_ENERGEST)
+                    oar_json_micro_construct(oar_json_micro_buf);
+                    oar_json_micro_print(oar_json_micro_buf);
+                    
+                    printf("\n");
+                    printf("length of json_micro_buf: %d\n", strlen(oar_json_micro_buf));
+                
+                #endif
 
-                    oar_debug_energest(clock_seconds());
+
+                printf("\n"); oar_debug_('=', 100); printf("\n");
+                // ====================================================================================================
+
+                // CCCCCCCCCCCCCCCCCCCCCCCCC
+                // char *encrypted_oar_json = heapmem_alloc(sizeof(char)*(20+1));
+                // char *decrypted_oar_json = heapmem_alloc(sizeof(*decrypted_oar_json));
+
+                // encrypted_oar_json = (char*) malloc(400*sizeof(char));
+                // decrypted_oar_json = (char*) malloc(400*sizeof(char));
+                
+
+                // strcpy(encrypted_oar_json, oar_json_micro_buf);
+                // strcpy(decrypted_oar_json, oar_json_micro_buf);
+
+                // for (int k=0; k < 400; k++)
+                // {
+                //     encrypted_oar_json[k] = 'e';
+                // }
+
+                // encrypted_oar_json[400] = '\0';
+
+                // for (int k=0; k < 400; k++)
+                // {
+                //     decrypted_oar_json[k] = 'd';
+                // }
+
+                // decrypted_oar_json[400] = '\0';
+
+                
+                
+                oar_crypt(oar_json_micro_buf, encrypted_oar_json);
+                printf("%s\n", encrypted_oar_json);
+                printf("\n");
+                printf("length of en: %d\n", strlen(encrypted_oar_json));
+                printf("\n");
+                oar_crypt(encrypted_oar_json, decrypted_oar_json);
+                printf("%s\n", decrypted_oar_json);
+                printf("\n");
+                printf("length of de: %d\n", strlen(decrypted_oar_json));
+
+                
+
+                // printf("length of json: %d\n", strlen(oar_json_buf));
+                // printf("\n");
+
+                // printf("ENCRYPTED:\n");
+                // printf("\n");
+
+                
+
+                // oar_crypt(oar_json_buf, encrypted_oar_json);
+
+                // printf("%s\n", encrypted_oar_json);
+                // printf("length of encrypted: %d\n", strlen(encrypted_oar_json));
+
+                // printf("\n");
+
+                // oar_crypt(encrypted_oar_json, decrypted_oar_json);
+
+                // printf("%s\n", decrypted_oar_json);
+                // printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
+
+                
+                
+                // heapmem_free(encrypted_oar_json);
+                // heapmem_free(decrypted_oar_json);
+                // free(encrypted_oar_json);
+
+                printf("\n"); oar_debug_('=', 100); printf("\n");
+
+
+
+
+                
+                #if (OAR_CONF_DEBUG_ENERGY)
+
+                    oar_debug_energy(clock_seconds());
                     oar_debug_('-', 192);
 
-                #endif  // OAR_DEBUG_ENERGEST
+                #endif  // OAR_CONF_DEBUG_ENERGY
 
                 // --------------------------------------------------------------------------------                                                               
 
-                #if (OAR_DEBUG_STATISTICS)
+                #if (OAR_CONF_DEBUG_STATISTICS)
                     
-                    oar_debug_stats_ip(clock_seconds());
+                    oar_debug_statistics_ip(clock_seconds());
                     printf("\n");
 
-                    oar_debug_stats_icmp(clock_seconds());
+                    oar_debug_statistics_icmp(clock_seconds());
                     printf("\n");
                     
                     // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
                     #if UIP_TCP
 
-                        oar_debug_stats_tcp(clock_seconds());
+                        oar_debug_statistics_tcp(clock_seconds());
                         printf("\n");                 
                     
                     #endif  /* UIP_TCP */
@@ -219,42 +333,42 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
                     #if UIP_UDP
 
-                        oar_debug_stats_udp(clock_seconds());
+                        oar_debug_statistics_udp(clock_seconds());
                         printf("\n");
 
                     #endif  /* UIP_UDP */
                     // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
                 
-                    oar_debug_stats_nd6(clock_seconds());
+                    oar_debug_statistics_nd6(clock_seconds());
                     oar_debug_('-', 192);
 
-                #endif // (OAR_DEBUG_STATISTICS)
+                #endif // (OAR_CONF_DEBUG_STATISTICS)
 
                 // -------------------------------------------------------------------------------- 
                 
-                #if (OAR_DEBUG_SHELL)
+                #if (OAR_CONF_DEBUG_NETWORK)
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     #if ROUTING_CONF_RPL_LITE
 
-                        oar_debug_cmd_rpl_nbr(clock_seconds());
+                        oar_debug_net_rpl_nbr(clock_seconds());
                         printf("\n");
 
-                        oar_debug_cmd_rpl_status(clock_seconds());
+                        oar_debug_net_rpl_status(clock_seconds());
                         printf("\n");
                         
                     #endif  /* ROUTING_CONF_RPL_LITE */
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    oar_debug_cmd_macaddr(clock_seconds());
+                    oar_debug_net_macaddr(clock_seconds());
                     printf("\n");
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     #if NETSTACK_CONF_WITH_IPV6
 
-                        oar_debug_cmd_ipaddr(clock_seconds());
+                        oar_debug_net_ipaddr(clock_seconds());
                         printf("\n");
-                        oar_debug_cmd_ip_neighbors(clock_seconds());
+                        oar_debug_net_ip_neighbors(clock_seconds());
                         printf("\n");
 
                     #endif  /* NETSTACK_CONF_WITH_IPV6 */
@@ -262,7 +376,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     #if MAC_CONF_WITH_TSCH
 
-                        oar_debug_cmd_tsch_status(clock_seconds());
+                        oar_debug_net_tsch_status(clock_seconds());
                         printf("\n");
 
                     #endif  /* MAC_CONF_WITH_TSCH */
@@ -270,14 +384,14 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     #if NETSTACK_CONF_WITH_IPV6
 
-                        oar_debug_cmd_routes(clock_seconds());
+                        oar_debug_net_routes(clock_seconds());
 
                     #endif  /* NETSTACK_CONF_WITH_IPV6 */
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     printf("\n");
 
-                #endif // (OAR_DEBUG_SHELL)
+                #endif // (OAR_CONF_DEBUG_NETWORK)
                 
                 // (doc) By calling PROCESS_WAIT_EVENT_UNTIL() in the area separated by the PROCESS_BEGIN() and PROCESS_END() calls, 
                 // (doc) one can yield control to the scheduler, and only resume execution when an event is delivered. 
@@ -297,13 +411,14 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
                 // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
                 
-                process_poll(&oar_dev_process);
+                // process_poll(&oar_dev_process);
 
             }
 
+       
         PROCESS_END();
     
-    #endif // (OAR_DEBUG)
+    #endif // (OAR_CONF_FUNCTIONALITY)
 }
 
     
@@ -489,6 +604,8 @@ PROCESS_THREAD(oar_dev_process, ev, data)
             }
 
         PROCESS_END();
-        }
+
+        #endif  /* OAR_DEV */
+    }
     
-    #endif  /* OAR_DEV */
+    

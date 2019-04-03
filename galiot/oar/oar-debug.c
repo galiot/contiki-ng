@@ -3,8 +3,32 @@
 
 
 
-// ====================================================================================================================
-// contiki-ng Energest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  OAR_DEBUG_ENERGY *
+
+
+
+
 
 #if (ENERGEST_CONF_ON)
 
@@ -15,7 +39,7 @@
 
     // ------------------------------------------------------------------------
 
-    void oar_debug_energest(unsigned long int system_time)
+    void oar_debug_energy(unsigned long int system_time)
     {
         energest_flush();       // Update all energest times.
 
@@ -31,14 +55,50 @@
         
 }
 
-#endif /* (ENERGEST_CONF_ON) */
+#else   /* (ENERGEST_CONF_ON) */
 
-// ====================================================================================================================
-// uIP TCP/IP statistics
+    void oar_debug_energy(unsigned long int system_time)    { printf("[%8lu] DEBUG > ENERGY > energest: DISABLED\n", system_time); }
+
+#endif   /* (ENERGEST_CONF_ON) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  OAR_DEBUG_STATISTICS
+
+
+
+
+
+
+
+
+
 
 #if (UIP_CONF_STATISTICS)
 
-    void oar_debug_stats_ip(unsigned long int system_time)
+    // ------------------------------------------------------------
+    // IP COUNTERS ////////////////////////////////////////////////
+    // ------------------------------------------------------------
+    
+    void oar_debug_statistics_ip(unsigned long int system_time)
     {
         printf("[%8lu] DEBUG >  STATS >          (ip.recv) >                            received packets at the IP layer: %lu\n",       system_time, uip_stat.ip.recv);
         printf("[%8lu] DEBUG >  STATS >          (ip.sent) >                                sent packets at the IP layer: %lu\n",       system_time, uip_stat.ip.sent);
@@ -52,9 +112,11 @@
         printf("[%8lu] DEBUG >  STATS >      (ip.protoerr) > packets dropped because they were neither ICMP, UDP nor TCP: %lu\n",       system_time, uip_stat.ip.protoerr);                  
     }
 
-    // ----------------------------------------------------------------------------
+    // ------------------------------------------------------------
+    // ICMP COUNTERS //////////////////////////////////////////////
+    // ------------------------------------------------------------
     
-    void oar_debug_stats_icmp(unsigned long int system_time)
+    void oar_debug_statistics_icmp(unsigned long int system_time)
     {
         printf("[%8lu] DEBUG >  STATS >        (icmp.recv) >                                       received ICMP packets: %lu\n",   system_time, uip_stat.icmp.recv);
         printf("[%8lu] DEBUG >  STATS >        (icmp.sent) >                                           sent ICMP packets: %lu\n",   system_time, uip_stat.icmp.sent);
@@ -64,11 +126,13 @@
     
     }
 
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
     #if (UIP_TCP)
     
-        void oar_debug_stats_tcp(unsigned long int system_time)
+        // ------------------------------------------------------------
+        // TCP COUNTERS //////////////////////////////////////////////
+        // ------------------------------------------------------------
+        
+        void oar_debug_statistics_tcp(unsigned long int system_time)
         {
             printf("[%8lu] DEBUG >  STATS >         (tcp.recv) >                                       received TCP segments: %lu\n",   system_time, uip_stat.tcp.recv);     
             printf("[%8lu] DEBUG >  STATS >         (tcp.sent) >                                           sent TCP segments: %lu\n",   system_time, uip_stat.tcp.sent);    
@@ -87,7 +151,11 @@
 
     #if (UIP_UDP)
     
-        void oar_debug_stats_udp(unsigned long int system_time)
+        // ------------------------------------------------------------
+        // UDP COUNTERS //////////////////////////////////////////////
+        // ------------------------------------------------------------
+        
+        void oar_debug_statistics_udp(unsigned long int system_time)
         {
             printf("[%8lu] DEBUG >  STATS >         (udp.drop) >                                        dropped UDP segments: %lu\n",   system_time, uip_stat.udp.drop);   
             printf("[%8lu] DEBUG >  STATS >         (udp.recv) >                                       received UDP segments: %lu\n",   system_time, uip_stat.udp.recv);   
@@ -96,23 +164,68 @@
         }
 
     #endif /* (UIP_UDP) */
-
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    void oar_debug_stats_nd6(unsigned long int system_time)
+    // ------------------------------------------------------------
+    // ND6 COUNTERS ///////////////////////////////////////////////
+    // ------------------------------------------------------------
+    
+    void oar_debug_statistics_nd6(unsigned long int system_time)
     {
         printf("[%8lu] DEBUG >  STATS >         (nd6.drop) >                                         dropped ND6 packets: %lu\n", system_time, uip_stat.nd6.drop);
         printf("[%8lu] DEBUG >  STATS >         (nd6.recv) >                                         dropped ND6 packets: %lu\n", system_time, uip_stat.nd6.recv);
         printf("[%8lu] DEBUG >  STATS >         (nd6.sent) >                                         dropped ND6 packets: %lu\n", system_time, uip_stat.nd6.sent);
     }
 
-#endif /* (UIP_CONF_STATISTICS) */
+#else   /* (UIP_CONF_STATISTICS) */
 
-// ====================================================================================================================
-// contiki-ng Shell (gets)
+    void oar_debug_statistics_ip(unsigned long int system_time)     { printf("[%8lu] DEBUG >  STATS >   uip_Statistics: DISABLED\n", system_time); }
+    void oar_debug_statistics_icmp(unsigned long int system_time)   { printf("[%8lu] DEBUG >  STATS >   uip_Statistics: DISABLED\n", system_time); }
+    void oar_debug_statistics_tcp(unsigned long int system_time)    { printf("[%8lu] DEBUG >  STATS >   uip_Statistics: DISABLED\n", system_time); }
+    void oar_debug_statistics_udp(unsigned long int system_time)    { printf("[%8lu] DEBUG >  STATS >   uip_Statistics: DISABLED\n", system_time); }
+    void oar_debug_statistics_nd6(unsigned long int system_time)    { printf("[%8lu] DEBUG >  STATS >   uip_Statistics: DISABLED\n", system_time); }    
 
+#endif  /* (UIP_CONF_STATISTICS) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+//  ==========================================================================================================================================================================================
+// OAR_DEBUG_NETWORK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 #if (NETSTACK_CONF_WITH_IPV6)
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // IPADDR ---> STRING /////////////////////////////////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
     void oar_debug_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
     {
         char buf[UIPLIB_IPV6_MAX_STR_LEN];                                      // UIPLIB_IPV6_MAX_STR_LEN == 40
@@ -123,9 +236,12 @@
         strcpy(output, buf);                                                    // cannot return string, local scope
     }
 
-#endif // (NETSTACK_CONF_WITH_IPV6)
+#endif
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// LLADDR ---> STRING /////////////////////////////////////////////////////////////
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
 {
@@ -152,11 +268,12 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     }
 }
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 #if (NETSTACK_CONF_WITH_IPV6)
 
-    // function that provides context for ds6 neighbor state
+    // ------------------------------------------------------------
+    // function that provides context for ds6 neighbor state //////
+    // ------------------------------------------------------------
     const char *oar_debug_ds6_nbr_state_to_str(uint8_t state)
     {
         switch(state) 
@@ -170,13 +287,14 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         }
     }
 
-#endif // (NETSTACK_CONF_WITH_IPV6)
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#endif
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
+// #### (OAR_DEBUG_NETWORK) > (ROUTING_CONF_RPL_LITE)#### (OAR_DEBUG_NETWORK) > (ROUTING_CONF_RPL_LITE)#### (OAR_DEBUG_NETWORK) > (ROUTING_CONF_RPL_LITE)#### (OAR_DEBUG_NETWORK) > (ROUTING_CONF_RPL_LITE)#### (OAR_DEBUG_NETWORK) > (ROUTING_CONF_RPL_LITE)
 #if (ROUTING_CONF_RPL_LITE)
 
+    // -------------------------------------------------------------------------
     // function that provides context for RPL directed acyclic graph (DAG) state
+    // -------------------------------------------------------------------------
     const char *oar_debug_rpl_state_to_str(enum rpl_dag_state state)
     {
         switch(state) 
@@ -189,8 +307,9 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         }
     }
 
-    // ----------------------------------------------------------------------------
+    // --------------------------------------------------------------------
     // function that provides context for RPL mode of operation (MOP) state
+    // --------------------------------------------------------------------
     const char *oar_debug_rpl_mop_to_str(int mop)
     {
         switch(mop) 
@@ -203,8 +322,9 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         }
     }
     
-    // ----------------------------------------------------------------------------
+    // -----------------------------------------------------------------
     // function that provides context for RPL objective code point (OCP)
+    // -----------------------------------------------------------------
     const char *oar_debug_rpl_ocp_to_str(int ocp)
     {
         switch(ocp) 
@@ -217,10 +337,21 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 #endif // (ROUTING_CONF_RPL_LITE)
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
+
+
+
+
+
+
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 #if (ROUTING_CONF_RPL_LITE)
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > RPL-LITE NEIGHBORS ///////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     void oar_debug_cmd_rpl_nbr(unsigned long int system_time)
     {
         if(!curr_instance.used || rpl_neighbor_count() == 0) 
@@ -231,7 +362,7 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         {
             rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
             int oar_debug_rpl_neighbor_count = 0;
-    
+
             while(nbr != NULL) 
             {
                 char buf[120];
@@ -244,7 +375,9 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
         }
     }
 
-    // ----------------------------------------------------------------------------
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > RPL-LITE STATUS //////////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     void oar_debug_cmd_rpl_status(unsigned long int system_time)
     {
@@ -297,11 +430,15 @@ void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
             printf("[%8lu] DEBUG >   INFO >   (cmd_rpl_status) >                                               Trickle timer: current %u, min %u, max %u, redundancy %u\n", system_time, curr_instance.dag.dio_intcurrent, curr_instance.dio_intmin, curr_instance.dio_intmin + curr_instance.dio_intdoubl, curr_instance.dio_redundancy);
 
         }
-    }
+}
 
 #endif // (ROUTING_CONF_RPL_LITE)
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// DEBUG > MAC ADDRESS //////////////////////////////////////////////////
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 void oar_debug_cmd_macaddr(unsigned long int system_time)
 {
@@ -310,10 +447,13 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         printf("\n");
 }
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 #if NETSTACK_CONF_WITH_IPV6
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > IPv6 ADDRESS /////////////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     void oar_debug_cmd_ipaddr(unsigned long int system_time)
     {
         uint8_t state;
@@ -330,7 +470,9 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         }
     }
 
-    // ----------------------------------------------------------------------------
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > IPv6 NEIGHBORS ///////////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     void oar_debug_cmd_ip_neighbors(unsigned long int system_time)
     {
@@ -360,12 +502,15 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         }
     }
 
-#endif // (NETSTACK_CONF_WITH_IPV6)
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#endif
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
+// #### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)
 #if MAC_CONF_WITH_TSCH
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > TSCH STATUS //////////////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     void oar_debug_cmd_tsch_status(unsigned long int system_time)
     {
         printf("[%8lu] DEBUG >   INFO >  (cmd_tsch_status) >                                              Is coordinator: %u\n", system_time, tsch_is_coordinator);
@@ -396,12 +541,15 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
         }
     }
 
-#endif // (MAC_CONF_WITH_TSCH)
-
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+#endif
+// #### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)#### (OAR_DEBUG_NETWORK) > (MAC_CONF_WITH_TSCH)
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
 #if (NETSTACK_CONF_WITH_IPV6)
 
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // DEBUG > IPv6 ROUTES //////////////////////////////////////////////////
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     void oar_debug_cmd_routes(unsigned long int system_time)
     {
         uip_ds6_defrt_t *default_route;
@@ -428,6 +576,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        // #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL) 
         #if (UIP_CONF_IPV6_RPL)
 
             if(uip_sr_num_nodes() > 0) 
@@ -455,10 +604,9 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
                 printf("[%8lu] DEBUG >   INFO >       (cmd_routes) >                                               Routing links: None\n", system_time);
             }
 
-        #endif // (UIP_CONF_IPV6_RPL)
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+        #endif
+        // #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_CONF_IPV6_RPL)
+        // #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)
         #if (UIP_MAX_ROUTES != 0)
 
             if(uip_ds6_route_num_routes() > 0) 
@@ -493,9 +641,26 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
             }
 
         #endif // (UIP_MAX_ROUTES != 0)
+        // #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6) > (UIP_MAX_ROUTES != 0)
     }
 
 #endif // (NETSTACK_CONF_WITH_IPV6)
+// #### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)#### (OAR_DEBUG_NETWORK) > (NETSTACK_CONF_WITH_IPV6)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ====================================================================================================================
 // dash Style

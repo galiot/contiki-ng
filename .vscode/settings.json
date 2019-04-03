@@ -4,6 +4,7 @@
         "oar-itoa.h": "c",
         "energest.h": "c",
         "heapmem.h": "c",
-        "rpl.h": "c"
+        "rpl.h": "c",
+        "platform.h": "c"
     }
 }
