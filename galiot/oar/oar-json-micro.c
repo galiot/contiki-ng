@@ -1336,42 +1336,116 @@ void oar_json_micro_construct(char * buf)
 
 
 //  {
-//  	"id": {
-//  		"t": 72,
-//  		"mac": "0012.4b00.0f83.b601",
-//  		"cd": "RED"
-//  	},
-//  	"nrg": {
-//  		"energest": true,
-//  		"cpu": 3,
-//  		"lpm": 68,
-//  		"dLpm": 0,
-//  		"tT": 72,
-//  		"rLs": 72,
-//  		"rTx": 0,
-//  		"rO": 0
-//  	},
-//  	"stats": {
-//  		"uipStats": true,
-//  		"rx": 10,
-//  		"tx": 9,
-//  		"fw": 0,
-//  		"dr": 0,
-//  		"vhlE": 0,
-//  		"hblE": 0,
-//  		"lblE": 0,
-//  		"fragE": 0,
-//  		"chkE": 0,
-//  		"protE": 0
-//  	},
-//  	"net": {
-//  		"IPv6": true,
-//  		"addr": ["null", "fd00::212:4b00:f83:b601", "fe80::212:4b00:f83:b601"], *
-//  		"route": {
-//  			"df": "fe80::212:4b00:f24:8385",
-//  			"lt": "infinite"
-//  		}
-//  	}
+//      "id": {
+//          "t": 105,
+//          "mac": "0012.4b00.0f83.b601",
+//          "cd": "RED"
+//      },
+//      "nrg": {
+//          "energest": true,
+//          "cpu": 19,
+//          "lpm": 85,
+//          "dLpm": 0,
+//          "tT": 105,
+//          "rLs": 105,
+//          "rTx": 0,
+//          "rO": 0
+//      },
+//      "stats": {
+//          "uipStats": true,
+//          "rx": 12,
+//          "tx": 10,
+//          "fw": 0,
+//          "dr": 0,
+//          "vhlE": 0,
+//          "hblE": 0,
+//          "lblE": 0,
+//          "fragE": 0,
+//          "chkE": 0,
+//          "protE": 0
+//      },
+//      "net": {
+//          "IPv6": true,
+//          "addr": ["null", "fd00::212:4b00:f83:b601", "fe80::212:4b00:f83:b601"],
+//          "route": {
+//              "df": "fe80::212:4b00:f24:8385",
+//              "lt": "infinite"
+//          }
+//      },
+//      "rpl": {
+//          "rplLite": true,
+//          "nbr": {
+//              "inst": true,
+//              "cnt": 3,
+//              "nbrs": [{
+//                  "addr": "fe80::212:4b00:f82:da03",
+//                  "rank": 256,
+//                  "lMetr": 128,
+//                  "rankNbr": 384,
+//                  "f": 0,
+//                  "r": false,
+//                  "b": false,
+//                  "a": true,
+//                  "p": false,
+//                  "lastTx": null,
+//                  "bSince": null
+//              }, {
+//                  "addr": "fe80::212:4b00:f24:8385",
+//                  "rank": 128,
+//                  "lMetr": 128,
+//                  "rankNbr": 256,
+//                  "f": 5,
+//                  "r": true,
+//                  "b": true,
+//                  "a": true,
+//                  "p": true,
+//                  "lastTx": 0,
+//                  "bSince": null
+//              }, {
+//                  "addr": "fe80::212:4b00:f82:a600",
+//                  "rank": 307,
+//                  "lMetr": 128,
+//                  "rankNbr": 435,
+//                  "f": 0,
+//                  "r": false,
+//                  "b": false,
+//                  "a": true,
+//                  "p": false,
+//                  "lastTx": null,
+//                  "bSince": null
+//              }, null, null]
+//          },
+//          "status": {
+//              "instId": 0,
+//              "dag": {
+//                  "dType": "node",
+//                  "dId": "fd00::212:4b00:f24:8385",
+//                  "dVer": 240,
+//                  "dPf": "fd00::",
+//                  "dPfLen": 64,
+//                  "state": "Reachable",
+//                  "pPrnt": "fe80::212:4b00:f24:8385",
+//                  "rank": 256,
+//                  "lRank": 256,
+//                  "maxRankInc": 1024,
+//                  "dao": {
+//                      "lastSent": 241,
+//                      "lastAcked": 241
+//                  }
+//              },
+//              "mop": "Non-storing",
+//              "of": "MRHOF",
+//              "hopRankInc": 128,
+//              "defLt": 1800,
+//              "dtsnOut": 240,
+//              "trickleT": {
+//                  "curr": 15,
+//                  "min": 12,
+//                  "max": 20,
+//                  "redund": 0
+//              }
+//          }
+//      }
 //  }
 
 

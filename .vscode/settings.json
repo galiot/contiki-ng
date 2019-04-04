@@ -5,6 +5,8 @@
         "energest.h": "c",
         "heapmem.h": "c",
         "rpl.h": "c",
-        "platform.h": "c"
+        "platform.h": "c",
+        "contiki-net.h": "c",
+        "oar-json-tiny.h": "c"
     }
 }

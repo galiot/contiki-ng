@@ -110,7 +110,7 @@
 #define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
-#define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO
+#define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO || 4: TINY
 
 //---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: FULL //////////////////////////////////////////////
@@ -138,6 +138,18 @@
 #define OAR_CONF_JSON_MICRO_RPL                                             1                   // (ON/OFF)
 
 //---------------------------------------------------------------------------
+// OAR_CONF_JSON_TYPE: TINY /////////////////////////////////////////////////
+// --------------------------------------------------------------------------
+
+#define OAR_CONF_JSON_TINY_BUF_SIZE                                         1800                // *sizeof(char)
+
+#define OAR_CONF_JSON_TINY_ID                                               1                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_NRG                                              1                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_NET                                              1                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF)
+
+//---------------------------------------------------------------------------
 
 // enable/disable JSON encryption
 #define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
@@ -163,6 +175,28 @@
 
 
 
+
+// /* UIP_CONF_BUFFER_SIZE specifies how much memory should be reserved
+//    for the uIP packet buffer. This sets an upper bound on the largest
+//    IP packet that can be received by the system. */
+// #ifndef UIP_CONF_BUFFER_SIZE
+// #define UIP_CONF_BUFFER_SIZE 1280
+// #endif /* UIP_CONF_BUFFER_SIZE */
+
+// /**
+//  * The TCP maximum segment size.
+//  *
+//  * This is should not be to set to more than
+//  * UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN.
+//  */
+// #ifdef UIP_CONF_TCP_MSS
+// #if UIP_CONF_TCP_MSS > (UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN)
+// #error UIP_CONF_TCP_MSS is too large for the current UIP_BUFSIZE
+// #endif /* UIP_CONF_TCP_MSS > (UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN) */
+// #define UIP_TCP_MSS     (UIP_CONF_TCP_MSS)
+// #else /* UIP_CONF_TCP_MSS */
+// #define UIP_TCP_MSS     (UIP_BUFSIZE - UIP_LLH_LEN - UIP_TCPIP_HLEN)
+// #endif /* UIP_CONF_TCP_MSS */
 
 
 
