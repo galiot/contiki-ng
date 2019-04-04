@@ -4,7 +4,7 @@
 
 
 
-
+#include "project-conf.h"
 
 #include "net/ipv6/uip.h"
 #include "net/ipv6/uiplib.h"
@@ -41,20 +41,17 @@
 // const char *oar_json_rpl_mop_to_str(int mop);
 // const char *oar_json_rpl_ocp_to_str(int ocp);
 
-char oar_json_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
-char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
+// char oar_json_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+// char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
 // ==================================================
-char oar_json_buf[4000];
+char oar_json_buf[OAR_CONF_JSON_BUF_SIZE];
 void oar_json_print(char * str);
 void oar_json_construct(char * buf);
 // ==================================================
 
-
-
-void oar_json_energest(unsigned long int system_time);
 
 
 

@@ -41,20 +41,17 @@
 // const char *oar_json_micro_rpl_mop_to_str(int mop);
 // const char *oar_json_micro_rpl_ocp_to_str(int ocp);
 
-char oar_json_micro_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
-char oar_json_micro_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
+// char oar_json_micro_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+// char oar_json_micro_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
 // ==================================================
 char oar_json_micro_buf[OAR_CONF_JSON_MICRO_BUF_SIZE];
+
 void oar_json_micro_print(char * str);
 void oar_json_micro_construct(char * buf);
 // ==================================================
-
-
-
-void oar_json_energest(unsigned long int system_time);
 
 
 

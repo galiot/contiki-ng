@@ -36,82 +36,88 @@
  *                                                      
  ****************************************************** */
 
-// ----------------------------------------------------------------------------
+// ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+#if (ROUTING_CONF_RPL_LITE)
 
-static int max_acceptable_rank(void)
-{
-    if(curr_instance.max_rankinc == 0) 
+    // ----------------------------------------------------------------------------
+
+    static int max_acceptable_rank(void)
     {
-        
-        return RPL_INFINITE_RANK;   // There is no max rank increment
-    } 
-    else 
-    {
-        
-        return MIN((uint32_t)curr_instance.dag.lowest_rank + curr_instance.max_rankinc, RPL_INFINITE_RANK); // Make sure not to exceed RPL_INFINITE_RANK
-    }
-}
-
-// ----------------------------------------------------------------------------
-
-static int acceptable_rank(rpl_rank_t rank)
-{
-    return rank != RPL_INFINITE_RANK
-        && rank >= ROOT_RANK
-        && rank <= max_acceptable_rank();
-}
-
-// ----------------------------------------------------------------------------
-
-static rpl_nbr_t *best_parent(int fresh_only)
-{
-    rpl_nbr_t *nbr;
-    rpl_nbr_t *best = NULL;
-
-    if(curr_instance.used == 0) 
-    {
-        return NULL;
-    }
-
-    for(nbr = nbr_table_head(rpl_neighbors); nbr != NULL; nbr = nbr_table_next(rpl_neighbors, nbr)) // Search for the best parent according to the OF
-    {
-        if(!acceptable_rank(nbr->rank) || !curr_instance.of->nbr_is_acceptable_parent(nbr)) 
+        if(curr_instance.max_rankinc == 0) 
         {
-            continue;   // Exclude neighbors with a rank that is not acceptable)
-        }
-
-        if(fresh_only && !rpl_neighbor_is_fresh(nbr)) 
-        {
-            continue;   // Filter out non-fresh nerighbors if fresh_only is set
-        }
-
-        
-        // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
-        
-        #if (UIP_ND6_SEND_NS)
-        {
-            uip_ds6_nbr_t *ds6_nbr = rpl_get_ds6_nbr(nbr);
             
-            if(ds6_nbr == NULL || ds6_nbr->state != NBR_REACHABLE)  // Exclude links to a neighbor that is not reachable at a NUD level
-            {
-                continue;
-            }
+            return RPL_INFINITE_RANK;   // There is no max rank increment
+        } 
+        else 
+        {
+            
+            return MIN((uint32_t)curr_instance.dag.lowest_rank + curr_instance.max_rankinc, RPL_INFINITE_RANK); // Make sure not to exceed RPL_INFINITE_RANK
         }
-        #endif
-        
-        // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
-        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        
-
-        /* Now we have an acceptable parent, check if it is the new best */
-        best = curr_instance.of->best_parent(best, nbr);
     }
 
-    return best;
-}
+    // ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
+    static int acceptable_rank(rpl_rank_t rank)
+    {
+        return rank != RPL_INFINITE_RANK
+            && rank >= ROOT_RANK
+            && rank <= max_acceptable_rank();
+    }
+
+    // ----------------------------------------------------------------------------
+
+    static rpl_nbr_t *best_parent(int fresh_only)
+    {
+        rpl_nbr_t *nbr;
+        rpl_nbr_t *best = NULL;
+
+        if(curr_instance.used == 0) 
+        {
+            return NULL;
+        }
+
+        for(nbr = nbr_table_head(rpl_neighbors); nbr != NULL; nbr = nbr_table_next(rpl_neighbors, nbr)) // Search for the best parent according to the OF
+        {
+            if(!acceptable_rank(nbr->rank) || !curr_instance.of->nbr_is_acceptable_parent(nbr)) 
+            {
+                continue;   // Exclude neighbors with a rank that is not acceptable)
+            }
+
+            if(fresh_only && !rpl_neighbor_is_fresh(nbr)) 
+            {
+                continue;   // Filter out non-fresh nerighbors if fresh_only is set
+            }
+
+            
+            // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+            // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
+            
+            #if (UIP_ND6_SEND_NS)
+            {
+                uip_ds6_nbr_t *ds6_nbr = rpl_get_ds6_nbr(nbr);
+                
+                if(ds6_nbr == NULL || ds6_nbr->state != NBR_REACHABLE)  // Exclude links to a neighbor that is not reachable at a NUD level
+                {
+                    continue;
+                }
+            }
+            #endif
+            
+            // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
+            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            
+
+            /* Now we have an acceptable parent, check if it is the new best */
+            best = curr_instance.of->best_parent(best, nbr);
+        }
+
+        return best;
+    }
+
+    // ----------------------------------------------------------------------------
+
+#endif //(ROUTING_CONF_RPL_LITE)
+// ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
 
 /* ******************************************************
  * os/net/routing/rpl-lite/rpl-neighbors.c              *
@@ -128,63 +134,75 @@ static rpl_nbr_t *best_parent(int fresh_only)
 // ----------------------------------------------------------------------------
 // function that provides context for ds6 neighbor state
 
-static const char *oar_json_ds6_nbr_state_to_str(uint8_t state)
-{
-    switch(state) 
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+#if (NETSTACK_CONF_WITH_IPV6)
+
+    static const char *oar_json_ds6_nbr_state_to_str(uint8_t state)
     {
-        case NBR_INCOMPLETE:    return "Incomplete";
-        case NBR_REACHABLE:     return "Reachable";
-        case NBR_STALE:         return "Stale";
-        case NBR_DELAY:         return "Delay";
-        case NBR_PROBE:         return "Probe";
-        default:                return "Unknown";
+        switch(state) 
+        {
+            case NBR_INCOMPLETE:    return "Incomplete";
+            case NBR_REACHABLE:     return "Reachable";
+            case NBR_STALE:         return "Stale";
+            case NBR_DELAY:         return "Delay";
+            case NBR_PROBE:         return "Probe";
+            default:                return "Unknown";
+        }
     }
-}
 
-// ----------------------------------------------------------------------------
-// function that provides context for RPL directed acyclic graph (DAG) state
+#endif //(NETSTACK_CONF_WITH_IPV6)
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+// ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+#if (ROUTING_CONF_RPL_LITE)
 
-static const char *oar_json_rpl_state_to_str(enum rpl_dag_state state)
-{
-    switch(state) 
+    // ----------------------------------------------------------------------------
+    // function that provides context for RPL directed acyclic graph (DAG) state
+
+    static const char *oar_json_rpl_state_to_str(enum rpl_dag_state state)
     {
-        case DAG_INITIALIZED:   return "Initialized";
-        case DAG_JOINED:        return "Joined";
-        case DAG_REACHABLE:     return "Reachable";
-        case DAG_POISONING:     return "Poisoning";
-        default:                return "Unknown";
+        switch(state) 
+        {
+            case DAG_INITIALIZED:   return "Initialized";
+            case DAG_JOINED:        return "Joined";
+            case DAG_REACHABLE:     return "Reachable";
+            case DAG_POISONING:     return "Poisoning";
+            default:                return "Unknown";
+        }
     }
-}
 
-// ----------------------------------------------------------------------------
-// function that provides context for RPL mode of operation (MOP) state
+    // ----------------------------------------------------------------------------
+    // function that provides context for RPL mode of operation (MOP) state
 
-static const char *oar_json_rpl_mop_to_str(int mop)
-{
-    switch(mop) 
+    static const char *oar_json_rpl_mop_to_str(int mop)
     {
-        case RPL_MOP_NO_DOWNWARD_ROUTES: return "No downward routes";
-        case RPL_MOP_NON_STORING: return "Non-storing";
-        case RPL_MOP_STORING_NO_MULTICAST: return "Storing";
-        case RPL_MOP_STORING_MULTICAST: return "Storing+multicast";
-        default: return "Unknown";
+        switch(mop) 
+        {
+            case RPL_MOP_NO_DOWNWARD_ROUTES: return "No downward routes";
+            case RPL_MOP_NON_STORING: return "Non-storing";
+            case RPL_MOP_STORING_NO_MULTICAST: return "Storing";
+            case RPL_MOP_STORING_MULTICAST: return "Storing+multicast";
+            default: return "Unknown";
+        }
     }
-}
 
-// ----------------------------------------------------------------------------
-// function that provides context for RPL objective code point (OCP)
+    // ----------------------------------------------------------------------------
+    // function that provides context for RPL objective code point (OCP)
 
-static const char *oar_json_rpl_ocp_to_str(int ocp)
-{
-    switch(ocp) 
+    static const char *oar_json_rpl_ocp_to_str(int ocp)
     {
-        case RPL_OCP_OF0: return "OF0";
-        case RPL_OCP_MRHOF: return "MRHOF";
-        default: return "Unknown";
+        switch(ocp) 
+        {
+            case RPL_OCP_OF0: return "OF0";
+            case RPL_OCP_MRHOF: return "MRHOF";
+            default: return "Unknown";
+        }
     }
-}
 
-// ----------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
+
+#endif //(ROUTING_CONF_RPL_LITE)
+// ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+
 
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -206,17 +224,24 @@ static const char *oar_json_rpl_ocp_to_str(int ocp)
 // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+#if (NETSTACK_CONF_WITH_IPV6)
+
 // ----------------------------------------------------------------------------
 
-static void oar_json_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
-{
-    char buf[UIPLIB_IPV6_MAX_STR_LEN];  // UIPLIB_IPV6_MAX_STR_LEN == 40
-    
-    memset(output, 0, sizeof(output));  // initialization of outpout string
-    uiplib_ipaddr_snprint(buf, sizeof(buf), ipaddr);    // function that creates string from ipaddr
+    static void oar_json_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
+    {
+        char buf[UIPLIB_IPV6_MAX_STR_LEN];  // UIPLIB_IPV6_MAX_STR_LEN == 40
+        
+        memset(output, 0, sizeof(output));  // initialization of outpout string
+        uiplib_ipaddr_snprint(buf, sizeof(buf), ipaddr);    // function that creates string from ipaddr
 
-    strcpy(output, buf);    // cannot return string, local scope
-}
+        strcpy(output, buf);    // cannot return string, local scope
+    }
+
+#endif //(NETSTACK_CONF_WITH_IPV6)
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+
 
 // ----------------------------------------------------------------------------
 
@@ -291,6 +316,16 @@ void oar_json_print(char * buf)
 }
 
 // ----------------------------------------------------------------------------
+
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+#if (NETSTACK_CONF_WITH_IPV6)
+
+     static char oar_json_ipaddr[UIPLIB_IPV6_MAX_STR_LEN];
+
+#endif //(NETSTACK_CONF_WITH_IPV6)
+// ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+
+static char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 // ====================================================================================================================
 

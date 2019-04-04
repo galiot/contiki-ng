@@ -113,26 +113,29 @@
 #define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO
 
 //---------------------------------------------------------------------------
+// OAR_CONF_JSON_TYPE: FULL //////////////////////////////////////////////
+// --------------------------------------------------------------------------
+
+#define OAR_CONF_JSON__BUF_SIZE                                             5000                // *sizeof(char) 
+
+
+//---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: COMPACT //////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
-// #define OAR_CONF_JSON_COMPACT_ID                                            1
-// #define OAR_CONF_JSON_COMPACT_NRG                                           1
-// #define OAR_CONF_JSON_COMPACT_STATS                                         1
-// #define OAR_CONF_JSON_COMPACT_NET                                           1
-// #define OAR_CONF_JSON_COMPACT_RPL                                           1
+#define OAR_CONF_JSON_COMPACT_BUF_SIZE                                      2200                // *sizeof(char) 
 
 //---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: MICRO ////////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
-#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1450
+#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        2200                // *sizeof(char)
 
-#define OAR_CONF_JSON_MICRO_ID                                              1
-#define OAR_CONF_JSON_MICRO_NRG                                             1
-#define OAR_CONF_JSON_MICRO_STATS                                           1
-#define OAR_CONF_JSON_MICRO_NET                                             1
-#define OAR_CONF_JSON_MICRO_RPL                                             0
+#define OAR_CONF_JSON_MICRO_ID                                              1                   // (ON/OFF)
+#define OAR_CONF_JSON_MICRO_NRG                                             1                   // (ON/OFF)
+#define OAR_CONF_JSON_MICRO_STATS                                           1                   // (ON/OFF)
+#define OAR_CONF_JSON_MICRO_NET                                             1                   // (ON/OFF)
+#define OAR_CONF_JSON_MICRO_RPL                                             1                   // (ON/OFF)
 
 //---------------------------------------------------------------------------
 
@@ -140,7 +143,7 @@
 #define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
 
 // set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1450                // *sizeof(char)
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          2200                // *sizeof(char)
 
 // set the encryption key
 #define OAR_CRYPT_KEY_1                                                     'K'                 // any chars, and any size array

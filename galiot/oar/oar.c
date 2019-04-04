@@ -81,9 +81,19 @@
 
 #include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
 #include "oar-debug.h"
-#include "oar-json.h"
-#include "oar-json-compact.h"
-#include "oar-json-micro.h"
+
+#if (OAR_CONF_JSON_TYPE == 1)
+    #include "oar-json.h"
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 2)
+    #include "oar-json-compact.h"
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 3)
+    #include "oar-json-micro.h"
+#endif
+
 #include "oar-crypt.h"
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -219,6 +229,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         printf("\n");
                         printf("length of oar_json_buf: %d\n", strlen(oar_json_buf));
 
+                        #if (OAR_CONF_CRYPT)
+
+                            oar_crypt(oar_json_buf, encrypted_oar_json);
+                            printf("%s\n", encrypted_oar_json);
+                            printf("\n");
+                            printf("length of en: %d\n", strlen(encrypted_oar_json));
+                            printf("\n");
+                            
+                            #if (OAR_CONF_CRYPT_DECRYPT)
+
+                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
+                                printf("%s\n", decrypted_oar_json);
+                                printf("\n");
+                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+
+                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+                        #endif // (OAR_CONF_CRYPT)
+
                     #endif
 
                     #if (OAR_CONF_JSON_TYPE == 2)
@@ -229,6 +258,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         printf("\n");
                         printf("length of oar_json_compact_buf: %d\n", strlen(oar_json_compact_buf));
 
+                        #if (OAR_CONF_CRYPT)
+
+                            oar_crypt(oar_json_compact_buf, encrypted_oar_json);
+                            printf("%s\n", encrypted_oar_json);
+                            printf("\n");
+                            printf("length of en: %d\n", strlen(encrypted_oar_json));
+                            printf("\n");
+                            
+                            #if (OAR_CONF_CRYPT_DECRYPT)
+
+                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
+                                printf("%s\n", decrypted_oar_json);
+                                printf("\n");
+                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+
+                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+                        #endif // (OAR_CONF_CRYPT)
+
                     #endif
 
                     #if (OAR_CONF_JSON_TYPE == 3)
@@ -238,6 +286,25 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         
                         printf("\n");
                         printf("length of json_micro_buf: %d\n", strlen(oar_json_micro_buf));
+
+                        #if (OAR_CONF_CRYPT)
+
+                            oar_crypt(oar_json_micro_buf, encrypted_oar_json);
+                            printf("%s\n", encrypted_oar_json);
+                            printf("\n");
+                            printf("length of en: %d\n", strlen(encrypted_oar_json));
+                            printf("\n");
+                            
+                            #if (OAR_CONF_CRYPT_DECRYPT)
+
+                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
+                                printf("%s\n", decrypted_oar_json);
+                                printf("\n");
+                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+
+                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+                        #endif // (OAR_CONF_CRYPT)
                     
                     #endif
 
@@ -246,24 +313,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
                     // ====================================================================================================
                     
-                    #if (OAR_CONF_CRYPT)
-
-                        oar_crypt(oar_json_micro_buf, encrypted_oar_json);
-                        printf("%s\n", encrypted_oar_json);
-                        printf("\n");
-                        printf("length of en: %d\n", strlen(encrypted_oar_json));
-                        printf("\n");
-                        
-                        #if (OAR_CONF_CRYPT_DECRYPT)
-
-                            oar_crypt(encrypted_oar_json, decrypted_oar_json);
-                            printf("%s\n", decrypted_oar_json);
-                            printf("\n");
-                            printf("length of de: %d\n", strlen(decrypted_oar_json));
-
-                        #endif // (OAR_CONF_CRYPT_DECRYPT)
-
-                    #endif // (OAR_CONF_CRYPT)
+                    
 
                     printf("\n"); oar_debug_('=', 100); printf("\n");
                 
