@@ -72,7 +72,7 @@
 
 #include "net/routing/routing.h"    // for NETSTACK_ROUTING
 
-// #include "os/lib/heapmem.h"
+#include "os/lib/heapmem.h"
 
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
 // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
@@ -176,6 +176,32 @@ AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
 
 PROCESS_THREAD(oar_debug_process, ev, data)
 {   
+
+    // #if (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
+
+    //             // char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+    //             char *encrypted_oar_json = encrypted_oar_json = (char*) heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE)*sizeof(char));  // *+1 for '\0' character
+
+    //             // for (int i = 0; i < OAR_CONF_CRYPT_BUFFER_SIZE; i++) { encrypted_oar_json[i] = 'e'; }
+    //             // encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE + 1] = '\0';
+    //             // memset(encrypted_oar_json, 0, sizeof((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)));
+                
+    //             #if (OAR_CONF_CRYPT_DECRYPT)
+
+    //                 // char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
+    //                 char *decrypted_oar_json = decrypted_oar_json = (char*) heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE)*sizeof(char));  // *+1 for '\0' character
+
+    //                 // for (int i = 0; i < OAR_CONF_CRYPT_BUFFER_SIZE; i++) { encrypted_oar_json[i] = 'e'; }
+    //                 // encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE + 1] = '\0';
+    //                 //memset(decrypted_oar_json, 0, sizeof((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)));
+
+    //             #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+    //         #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
+
+
+
+
     #if !(OAR_CONF_FUNCTIONALITY)
 
         // (doc) A process can be stopped in three ways:
@@ -195,17 +221,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             // char *encrypted_oar_json;
             // char *decrypted_oar_json;
             
-            #if (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
-
-                char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
-                
-                #if (OAR_CONF_CRYPT_DECRYPT)
-
-                    char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
-
-                #endif // (OAR_CONF_CRYPT_DECRYPT)
-
-            #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
+            
 
 
 
@@ -215,197 +231,312 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             while(1) 
             {
                 
-                // ====================================================================================================
+                // ================================================================================================================================================================
+                // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // ================================================================================================================================================================
                 
                 #if (OAR_CONF_JSON)
 
-                    printf("\n"); oar_debug_('=', 100); printf("\n");
+                    // ------------------------------------------------------------------------------------------------------------------------
+                    // EXTENDED JSON //////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // ------------------------------------------------------------------------------------------------------------------------
 
-                    #if (OAR_CONF_JSON_TYPE == 1)
+                    #if (OAR_CONF_JSON_TYPE == 1) // use the compact json (./oar-json-compact.h) [project-conf.h]
+
+                        oar_json_construct(oar_json_buf); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                        oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
                         
-                        oar_json_construct(oar_json_buf);
-                        oar_json_print(oar_json_buf);
-                        
-                        printf("\n");
-                        printf("length of oar_json_buf: %d\n", strlen(oar_json_buf));
+                        printf("\n"); printf("length of extended json: %d\n", strlen(oar_json_buf));
 
-                        #if (OAR_CONF_CRYPT)
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                            oar_crypt(oar_json_buf, encrypted_oar_json);
-                            printf("%s\n", encrypted_oar_json);
-                            printf("\n");
-                            printf("length of en: %d\n", strlen(encrypted_oar_json));
-                            printf("\n");
+                        #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
+
+                            char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char));     // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                            printf("\n"); oar_debug_('-', 100); printf("\n");   // print a seperation line > new line and inline '-' 100 times (function found in oar-debug.h)
                             
-                            #if (OAR_CONF_CRYPT_DECRYPT)
+                            if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+                            {
+                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+                            
+                               free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            }
+                            else // // if heap memory could be allocated for decrypted_oar_json...
+                            {
+                                oar_crypt(oar_json_buf, encrypted_oar_json); // encrypt oar_json_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                                
+                                printf("%s\n", encrypted_oar_json); printf("\n");
+                                printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
 
-                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
-                                printf("%s\n", decrypted_oar_json);
-                                printf("\n");
-                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                // DECRYPTION ///////////////////////////////////////
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                
+                                #if (OAR_CONF_CRYPT_DECRYPT)
 
-                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+                                    char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
+                                    printf("\n"); oar_debug_('~', 100); // print a seperation line > new line and inline '~' 100 times (function found in oar-debug.h)
+                                    
+                                    if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                                    {
+                                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+                                    }
+                                    else // if heap memory could be allocated for decrypted_oar_json...
+                                    {
+                                        oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+ 
+                                        printf("%s\n", decrypted_oar_json); printf("\n"); 
+                                        printf("length of decrypted string: %d\n", strlen(decrypted_oar_json));
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                    }
+
+                                #endif // (OAR_CONF_CRYPT_DECRYPT)
+                            }
+                            
                         #endif // (OAR_CONF_CRYPT)
 
-                    #endif
+                    #endif // (OAR_CONF_JSON_TYPE == 2)
 
-                    #if (OAR_CONF_JSON_TYPE == 2)
+                    // ------------------------------------------------------------------------------------------------------------------------
+                    // COMPACT JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // ------------------------------------------------------------------------------------------------------------------------
 
-                        oar_json_compact_construct(oar_json_compact_buf);
-                        oar_json_compact_print(oar_json_compact_buf);
+                    #if (OAR_CONF_JSON_TYPE == 2) // use the compact json (./oar-json-compact.h) [project-conf.h]
+
+                        oar_json_compact_construct(oar_json_compact_buf); // construct oar_json_compact_buf (function found in ./oar_json_micro.h)
+                        oar_json_compact_print(oar_json_compact_buf); // print oar_json_compact_buf (function found in ./oar_json_micro.h)
                         
-                        printf("\n");
-                        printf("length of oar_json_compact_buf: %d\n", strlen(oar_json_compact_buf));
+                        printf("\n"); printf("length of compact json: %d\n", strlen(oar_json_compact_buf));
 
-                        #if (OAR_CONF_CRYPT)
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                            oar_crypt(oar_json_compact_buf, encrypted_oar_json);
-                            printf("%s\n", encrypted_oar_json);
-                            printf("\n");
-                            printf("length of en: %d\n", strlen(encrypted_oar_json));
-                            printf("\n");
+                        #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
+
+                            char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char));     // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                            printf("\n"); oar_debug_('-', 100); printf("\n");   // print a seperation line > new line and inline '-' 100 times (function found in oar-debug.h)
                             
-                            #if (OAR_CONF_CRYPT_DECRYPT)
+                            if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+                            {
+                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+                            
+                               free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            }
+                            else // // if heap memory could be allocated for decrypted_oar_json...
+                            {
+                                oar_crypt(oar_json_compact_buf, encrypted_oar_json); // encrypt oar_json_compact_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                                
+                                printf("%s\n", encrypted_oar_json); printf("\n");
+                                printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
 
-                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
-                                printf("%s\n", decrypted_oar_json);
-                                printf("\n");
-                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                // DECRYPTION ///////////////////////////////////////
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                
+                                #if (OAR_CONF_CRYPT_DECRYPT)
 
-                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+                                    char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
+                                    printf("\n"); oar_debug_('~', 100); // print a seperation line > new line and inline '~' 100 times (function found in oar-debug.h)
+                                    
+                                    if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                                    {
+                                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+                                    }
+                                    else // if heap memory could be allocated for decrypted_oar_json...
+                                    {
+                                        oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+ 
+                                        printf("%s\n", decrypted_oar_json); printf("\n"); 
+                                        printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                    }
+
+                                #endif // (OAR_CONF_CRYPT_DECRYPT)
+                            }
+                            
                         #endif // (OAR_CONF_CRYPT)
 
-                    #endif
+                    #endif // (OAR_CONF_JSON_TYPE == 2)
 
-                    #if (OAR_CONF_JSON_TYPE == 3)
+                    // ------------------------------------------------------------------------------------------------------------------------
+                    // MICRO JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // ------------------------------------------------------------------------------------------------------------------------
+
+                    #if (OAR_CONF_JSON_TYPE == 3) // use the micro json (./oar-json-micro.h) [project-conf.h]
                     
-                        oar_json_micro_construct(oar_json_micro_buf);
-                        oar_json_micro_print(oar_json_micro_buf);
+                        oar_json_micro_construct(oar_json_micro_buf); // construct oar_json_micro_buf (function found in ./oar_json_micro.h)
+                        oar_json_micro_print(oar_json_micro_buf); // print oar_json_micro_buf (function found in ./oar_json_micro.h)
                         
-                        printf("\n");
-                        printf("length of json_micro_buf: %d\n", strlen(oar_json_micro_buf));
+                        printf("\n"); printf("length of micro json: %d\n", strlen(oar_json_micro_buf));
 
-                        #if (OAR_CONF_CRYPT)
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                            oar_crypt(oar_json_micro_buf, encrypted_oar_json);
-                            printf("%s\n", encrypted_oar_json);
-                            printf("\n");
-                            printf("length of en: %d\n", strlen(encrypted_oar_json));
-                            printf("\n");
+                        #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
+
+                            char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char));     // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                            printf("\n"); oar_debug_('-', 100); printf("\n");   // print a seperation line > new line and inline '-' 100 times (function found in oar-debug.h)
                             
-                            #if (OAR_CONF_CRYPT_DECRYPT)
+                            if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+                            {
+                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+                            
+                               free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            }
+                            else // // if heap memory could be allocated for decrypted_oar_json...
+                            {
+                                oar_crypt(oar_json_micro_buf, encrypted_oar_json); // encrypt oar_json_micro_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                                
+                                printf("%s\n", encrypted_oar_json); printf("\n");
+                                printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
 
-                                oar_crypt(encrypted_oar_json, decrypted_oar_json);
-                                printf("%s\n", decrypted_oar_json);
-                                printf("\n");
-                                printf("length of de: %d\n", strlen(decrypted_oar_json));
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                // DECRYPTION ///////////////////////////////////////
+                                // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                                
+                                #if (OAR_CONF_CRYPT_DECRYPT)
 
-                            #endif // (OAR_CONF_CRYPT_DECRYPT)
+                                    char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
+                                    printf("\n"); oar_debug_('~', 100); // print a seperation line > new line and inline '~' 100 times (function found in oar-debug.h)
+                                    
+                                    if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                                    {
+                                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+                                    }
+                                    else // if heap memory could be allocated for decrypted_oar_json...
+                                    {
+                                        oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+ 
+                                        printf("%s\n", decrypted_oar_json); printf("\n"); 
+                                        printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
+
+                                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                        free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                    }
+
+                                #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+                            }
+                            
                         #endif // (OAR_CONF_CRYPT)
-                    
-                    #endif
 
+                    #endif // (OAR_CONF_JSON_TYPE == 3)
 
-                    printf("\n"); oar_debug_('=', 100); printf("\n");
-
-                    // ====================================================================================================
-                    
-                    
-
-                    printf("\n"); oar_debug_('=', 100); printf("\n");
+                    printf("\n"); oar_debug_('=', 100); printf("\n");   // print a seperation line > new line and inline '=' 100 times (function found in oar-debug.h)
                 
                 #endif // (OAR_CONF_JSON)
 
-                // ====================================================================================================
+                // ================================================================================================================================================================
+                // DEBUG //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // ================================================================================================================================================================
 
                 #if (OAR_CONF_DEBUG)
+
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                    // ENERGY CONSUMPTION VALUES ////////////////////////
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
                 
-                    #if (OAR_CONF_DEBUG_ENERGY)
+                    #if (OAR_CONF_DEBUG_ENERGY) // print the energy consumption values... [project-conf.h]
 
-                        oar_debug_energy(clock_seconds());
-                        oar_debug_('-', 192);
+                        oar_debug_energy(clock_seconds());                                  // (function found in ./oar-debug.c)
+                        oar_debug_('-', 192);                                               // (function found in ./oar-debug.c)
 
-                    #endif  // OAR_CONF_DEBUG_ENERGY
+                    #endif // OAR_CONF_DEBUG_ENERGY
 
-                    // --------------------------------------------------------------------------------                                                               
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                    // UIP STATISTICS ///////////////////////////////////
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::                                                              
 
-                    #if (OAR_CONF_DEBUG_STATISTICS)
+                    #if (OAR_CONF_DEBUG_STATISTICS) // print the uip statistics... [project-conf.h]
                         
-                        oar_debug_statistics_ip(clock_seconds());
-                        printf("\n");
+                        oar_debug_statistics_ip(clock_seconds());           printf("\n");   // (function found in ./oar-debug.c)                                  
 
-                        oar_debug_statistics_icmp(clock_seconds());
-                        printf("\n");
+                        oar_debug_statistics_icmp(clock_seconds());         printf("\n");   // (function found in ./oar-debug.c) 
+
                         
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if UIP_TCP
 
-                            oar_debug_statistics_tcp(clock_seconds());
-                            printf("\n");                 
+                            oar_debug_statistics_tcp(clock_seconds());      printf("\n");   // (function found in ./oar-debug.c)                
                         
                         #endif  /* UIP_TCP */
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if UIP_UDP
 
-                            oar_debug_statistics_udp(clock_seconds());
-                            printf("\n");
+                            oar_debug_statistics_udp(clock_seconds());      printf("\n");   // (function found in ./oar-debug.c)
 
                         #endif  /* UIP_UDP */
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                     
-                        oar_debug_statistics_nd6(clock_seconds());
-                        oar_debug_('-', 192);
+                        oar_debug_statistics_nd6(clock_seconds());                          // (function found in ./oar-debug.c)
+                        oar_debug_('-', 192);                                               // (function found in ./oar-debug.c)
 
                     #endif // (OAR_CONF_DEBUG_STATISTICS)
 
-                    // -------------------------------------------------------------------------------- 
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                    // NETWORKING INFO //////////////////////////////////
+                    // ::::::::::::::::::::::::::::::::::::::::::::::::::  
                     
-                    #if (OAR_CONF_DEBUG_NETWORK)
+                    #if (OAR_CONF_DEBUG_NETWORK) // print the networking info... [project-conf.h]
 
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if ROUTING_CONF_RPL_LITE
 
-                            oar_debug_net_rpl_nbr(clock_seconds());
-                            printf("\n");
-
-                            oar_debug_net_rpl_status(clock_seconds());
-                            printf("\n");
+                            oar_debug_net_rpl_nbr(clock_seconds());         printf("\n");   // (function found in ./oar-debug.c)
+                            oar_debug_net_rpl_status(clock_seconds());      printf("\n");   // (function found in ./oar-debug.c)
                             
-                        #endif  /* ROUTING_CONF_RPL_LITE */
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        #endif /* ROUTING_CONF_RPL_LITE */
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
 
-                        oar_debug_net_macaddr(clock_seconds());
-                        printf("\n");
+                        oar_debug_net_macaddr(clock_seconds());             printf("\n");   // (function found in ./oar-debug.c)
 
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if NETSTACK_CONF_WITH_IPV6
 
-                            oar_debug_net_ipaddr(clock_seconds());
-                            printf("\n");
-                            oar_debug_net_ip_neighbors(clock_seconds());
-                            printf("\n");
+                            oar_debug_net_ipaddr(clock_seconds());          printf("\n");    // (function found in ./oar-debug.c)
+                            oar_debug_net_ip_neighbors(clock_seconds());    printf("\n");    // (function found in ./oar-debug.c)
+                            
 
                         #endif  /* NETSTACK_CONF_WITH_IPV6 */
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if MAC_CONF_WITH_TSCH
 
-                            oar_debug_net_tsch_status(clock_seconds());
-                            printf("\n");
+                            oar_debug_net_tsch_status(clock_seconds());      printf("\n");  // (function found in ./oar-debug.c)
 
                         #endif  /* MAC_CONF_WITH_TSCH */
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                         #if NETSTACK_CONF_WITH_IPV6
 
-                            oar_debug_net_routes(clock_seconds());
+                            oar_debug_net_routes(clock_seconds());                          // (function found in ./oar-debug.c)
 
                         #endif  /* NETSTACK_CONF_WITH_IPV6 */
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // -+-+-+-+-+-+-+-+-+-+-+-+--+-+-+-+-+-+-+
                     
                         printf("\n");
 
@@ -435,10 +566,20 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
             }
 
-       
+            
+
         PROCESS_END();
+
+        //  #if (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
+
+        //         heapmem_free(encrypted_oar_json);
+        //         heapmem_free(decrypted_oar_json);
+
+        // #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
     
     #endif // (OAR_CONF_FUNCTIONALITY)
+
+    
 }
 
     

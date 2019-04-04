@@ -306,7 +306,7 @@ static void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 // ====================================================================================================================
 
-char oar_json_buf[4000];    // global string: will contain the json
+char oar_json_buf[OAR_CONF_JSON_BUF_SIZE];    // global string: will contain the json
 
 // ----------------------------------------------------------------------------
 
