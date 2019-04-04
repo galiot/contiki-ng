@@ -10,11 +10,21 @@
 
 #include "net/link-stats.h"
 
-// Static functions which needed to be copied                               >>>>> BELOW <<<<<
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+
+
+
+
+
+
+
+
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// STATIC FUNCTIONS (which needed to be copied)  >>>>> BELOW <<<<< ////////////////////////////////////////////////////
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 /* ******************************************************
  * os/net/routing/rpl-lite/rpl-neighbors.c              *
@@ -32,6 +42,8 @@
 #if (ROUTING_CONF_RPL_LITE)
 
     // ----------------------------------------------------------------------------
+    // FROM os/net/routing/rpl-neighbor.h /////////////////////////////////////////
+    // ----------------------------------------------------------------------------
 
     static int max_acceptable_rank(void)
     {
@@ -48,6 +60,8 @@
     }
 
     // ----------------------------------------------------------------------------
+    // FROM os/net/routing/rpl-neighbor.h /////////////////////////////////////////
+    // ----------------------------------------------------------------------------
 
     static int acceptable_rank(rpl_rank_t rank)
     {
@@ -56,6 +70,8 @@
             && rank <= max_acceptable_rank();
     }
 
+    // ----------------------------------------------------------------------------
+    // FROM os/net/routing/rpl-neighbor.h /////////////////////////////////////////
     // ----------------------------------------------------------------------------
 
     static rpl_nbr_t *best_parent(int fresh_only)
@@ -80,10 +96,7 @@
                 continue;   // Filter out non-fresh nerighbors if fresh_only is set
             }
 
-            
-            // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-            // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
-            
+            // ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS)
             #if (UIP_ND6_SEND_NS)
             {
                 uip_ds6_nbr_t *ds6_nbr = rpl_get_ds6_nbr(nbr);
@@ -94,10 +107,7 @@
                 }
             }
             #endif
-            
-            // #########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########(UIP_ND6_SEND_NS)#########
-            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            
+            //  ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS) ######## (UIP_ND6_SEND_NS)
 
             /* Now we have an acceptable parent, check if it is the new best */
             best = curr_instance.of->best_parent(best, nbr);
@@ -106,10 +116,10 @@
         return best;
     }
 
-    // ----------------------------------------------------------------------------
-
 #endif //(ROUTING_CONF_RPL_LITE)
 // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+
+
 
 /* ******************************************************
  * os/net/routing/rpl-lite/rpl-neighbors.c              *
@@ -127,7 +137,8 @@
 #if (ROUTING_CONF_RPL_LITE)
 
     // ----------------------------------------------------------------------------
-    // function that provides context for ds6 neighbor state
+    // function that provides context for ds6 neighbor state //////////////////////
+    // ----------------------------------------------------------------------------
 
     // static const char *oar_json_compact_ds6_nbr_state_to_str(uint8_t state)
     // {
@@ -143,7 +154,8 @@
     // }
 
     // ----------------------------------------------------------------------------
-    // function that provides context for RPL directed acyclic graph (DAG) state
+    // function that provides context for RPL directed acyclic graph (DAG) state //
+    // ----------------------------------------------------------------------------
 
     static const char *oar_json_compact_rpl_state_to_str(enum rpl_dag_state state)
     {
@@ -158,7 +170,8 @@
     }
 
     // ----------------------------------------------------------------------------
-    // function that provides context for RPL mode of operation (MOP) state
+    // function that provides context for RPL mode of operation (MOP) state ///////
+    // ----------------------------------------------------------------------------
 
     static const char *oar_json_compact_rpl_mop_to_str(int mop)
     {
@@ -173,7 +186,8 @@
     }
 
     // ----------------------------------------------------------------------------
-    // function that provides context for RPL objective code point (OCP)
+    // function that provides context for RPL objective code point (OCP) //////////
+    // ----------------------------------------------------------------------------
 
     static const char *oar_json_compact_rpl_ocp_to_str(int ocp)
     {
@@ -185,17 +199,10 @@
         }
     }
 
-    // ----------------------------------------------------------------------------
-
 #endif //(ROUTING_CONF_RPL_LITE)
 // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
 
 
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-// Static functions which needed to be copied                               >>>>> ABOVE <<<<<
 
 
 
@@ -204,18 +211,17 @@
 
 
 
-
-// HELPER FUNCTIONS                                                         >>>>> BELOW <<<<<
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-
-// ----------------------------------------------------------------------------
+// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
+// HELPER FUNCTIONS  >>>>> BELOW <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 
 // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
 #if (NETSTACK_CONF_WITH_IPV6)
 
+    // ----------------------------------------------------------------------------
+    // IPADDR --> STRING //////////////////////////////////////////////////////////
+    // ----------------------------------------------------------------------------
+    
     static void oar_json_compact_ipaddr_to_str(char *output, const uip_ipaddr_t *ipaddr) 
     {
         char buf[UIPLIB_IPV6_MAX_STR_LEN];  // UIPLIB_IPV6_MAX_STR_LEN == 40
@@ -229,7 +235,8 @@
 #endif //(NETSTACK_CONF_WITH_IPV6)
 // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
 
-
+// ----------------------------------------------------------------------------
+// LLADDR --> STRING //////////////////////////////////////////////////////////
 // ----------------------------------------------------------------------------
 
 static void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
@@ -257,11 +264,7 @@ static void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladd
     }
 }
 
-// ----------------------------------------------------------------------------
-
-// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 // #########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON))#########
-
 #if (ENERGEST_CONF_ON)
 
     static unsigned long oar_json_compact_to_seconds(uint64_t time)
@@ -270,17 +273,8 @@ static void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladd
     }
 
 #endif
-
 // #########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON)#########(ENERGEST_CONF_ON))#########
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-// ----------------------------------------------------------------------------
-
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
-// HELPER FUNCTIONS                                                         >>>>> ABOVE <<<<<
 
 
 
@@ -292,6 +286,9 @@ static void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladd
 
 
 // ====================================================================================================================
+// DECLARATIONS ///////////////////////////////////////////////////////////////////////////////////////////////////////
+// ====================================================================================================================
+
 
 char oar_json_compact_buf[OAR_CONF_JSON_COMPACT_BUF_SIZE];    // global string: will contain the json
 
@@ -315,7 +312,6 @@ void oar_json_compact_print(char * buf)
 static char oar_json_compact_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
-// ====================================================================================================================
 
 
 
@@ -325,14 +321,15 @@ static char oar_json_compact_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
-// MAIN FUNCTIONS                                                           >>>>> BELOW <<<<<
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> BELOW <<<<< ///////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that initializes (empties) the json string
+// function that initializes (empties) the json string ////////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_init(char * buf)
 {
@@ -340,7 +337,8 @@ static void oar_json_compact_init(char * buf)
 }
 
 // ----------------------------------------------------------------------------
-// function that appends the entry '{' json character to the string
+// function that appends the entry '{' json character to the string ///////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_enter(char * buf)
 {
@@ -349,7 +347,8 @@ static void oar_json_compact_enter(char * buf)
 }
 
 // ----------------------------------------------------------------------------
-// function that connects the sections og the json, appending and ',' char
+// function that connects the sections og the json, appending and ',' char ////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_bridge(char * buf)
 {
@@ -358,7 +357,8 @@ static void oar_json_compact_bridge(char * buf)
 }
 
 // ----------------------------------------------------------------------------
-// function that appends the exit '}' json character to the string
+// function that appends the exit '}' json character to the string ////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_exit(char * buf)
 {
@@ -366,10 +366,13 @@ static void oar_json_compact_exit(char * buf)
     sprintf(str,    "}" );  strcat(buf, str);
 }
 
-
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that appends ID section to the json string
+// function that appends ID section to the json string ////////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_append_id(char * buf)
 {
@@ -396,8 +399,13 @@ static void oar_json_compact_append_id(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
 // ----------------------------------------------------------------------------
-// function that appends ENERGY section to the json string
+// function that appends ENERGY section to the json string ////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_append_erg(char * buf)
 {
@@ -461,6 +469,14 @@ static void oar_json_compact_append_erg(char * buf)
     #endif
     // ########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!
 }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends STATS section to the json string /////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_append_stats(char * buf)
 {
@@ -526,6 +542,14 @@ static void oar_json_compact_append_stats(char * buf)
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
 }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends NET section to the json string ////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_append_net(char * buf)
 {
@@ -673,6 +697,14 @@ static void oar_json_compact_append_net(char * buf)
     // SECTION END net{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL section to the json string ///////////////////////
+// ----------------------------------------------------------------------------
 
 static void oar_json_compact_append_rpl(char * buf)
 {
@@ -1169,6 +1201,10 @@ static void oar_json_compact_append_rpl(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> ABOVE <<<<< ///////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
 
 
 
@@ -1189,5 +1225,127 @@ void oar_json_compact_construct(char * buf)
     oar_json_compact_append_rpl(buf);
     oar_json_compact_exit(buf);
 }
+
+
+
+
+
+
+
+
+//    {
+//        "id": {
+//            "systemTime": 75,
+//            "macAddr": "0012.4b00.0f83.b601",
+//            "systemCode": "RED"
+//        },
+//        "erg": {
+//            "energest": true,
+//            "cpu": 30,
+//            "lpm": 44,
+//            "deepLpm": 0,
+//            "totalTime": 75,
+//            "radioListen": 75,
+//            "radioTransmit": 0,
+//            "radioOff": 0
+//        },
+//        "stats": {
+//            "uipStats": true,
+//            "recv": 8,
+//            "sent": 10,
+//            "forwarded": 0,
+//            "drop": 0,
+//            "vhlerr": 0,
+//            "hblenerr": 0,
+//            "lblenerr": 0,
+//            "fragerr": 0,
+//            "chkerr": 0,
+//            "protoerr": 0
+//        },
+//        "net": {
+//            "IPv6": true,
+//            "addresses": ["null", "fd00::212:4b00:f83:b601", "fe80::212:4b00:f83:b601"],
+//            "routes": {
+//                "defaultRoute": "fe80::212:4b00:f24:8385",
+//                "lifetimeSeconds": "infinite"
+//            }
+//        },
+//        "rpl": {
+//            "rplLite": true,
+//            "rplNbr": {
+//                "currentInstanceUsed": true,
+//                "rplNeighborCount": 3,
+//                "rplNeighbors": [{
+//                    "ipAddr": "fe80::212:4b00:f24:8385",
+//                    "rank": 128,
+//                    "linkMetric": 128,
+//                    "rankViaNbr": 256,
+//                    "freshStats": 5,
+//                    "rootRank": true,
+//                    "bestNbr": true,
+//                    "acceptRank_AND_acceptPrnt": true,
+//                    "prefParent": true,
+//                    "lastTxMinutesAgo": 1,
+//                    "betterParentSinceMinute": null
+//                }, {
+//                    "ipAddr": "fe80::212:4b00:f82:a600",
+//                    "rank": 256,
+//                    "linkMetric": 128,
+//                    "rankViaNbr": 384,
+//                    "freshStats": 1,
+//                    "rootRank": false,
+//                    "bestNbr": false,
+//                    "acceptRank_AND_acceptPrnt": true,
+//                    "prefParent": false,
+//                    "lastTxMinutesAgo": 0,
+//                    "betterParentSinceMinute": null
+//                }, {
+//                    "ipAddr": "fe80::212:4b00:f82:da03",
+//                    "rank": 281,
+//                    "linkMetric": 128,
+//                    "rankViaNbr": 409,
+//                    "freshStats": 0,
+//                    "rootRank": false,
+//                    "bestNbr": false,
+//                    "acceptRank_AND_acceptPrnt": true,
+//                    "prefParent": false,
+//                    "lastTxMinutesAgo": null,
+//                    "betterParentSinceMinute": null
+//                }, null, null]
+//            },
+//            "rplStatus": {
+//                "instanceId": 0,
+//                "dag": {
+//                    "dagType": "node",
+//                    "dagId": "fd00::212:4b00:f24:8385",
+//                    "dagVersion": 9,
+//                    "dagPrefix": "fd00::",
+//                    "dagPrefixLength": 64,
+//                    "state": "Reachable",
+//                    "preferredParent": "fe80::212:4b00:f24:8385",
+//                    "rank": 256,
+//                    "lowestRank": 256,
+//                    "maxRankInc": 1024,
+//                    "daoSequence": {
+//                        "valid": true,
+//                        "lastSent": 241,
+//                        "lastAcked": 241
+//                    }
+//                },
+//                "mop": "Non-storing",
+//                "of": "MRHOF",
+//                "hopRankIncrement": 128,
+//                "defaultLifetime": 1800,
+//                "dtsnOut": 240,
+//                "trickleTimer": {
+//                    "valid": true,
+//                    "current": 16,
+//                    "min": 12,
+//                    "max": 20,
+//                    "redundency": 0
+//                }
+//            }
+//        }
+//    }
 
 
