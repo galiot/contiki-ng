@@ -182,20 +182,134 @@ AUTOSTART_PROCESSES(&oar_moor_process);
 
 
 
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// os/net/ipv6/psock.h MACROS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// The structure that holds the state of a buffer.
+// The structure has no user-visible elements, 
+// but is used through the functions provided by the library.
+//
+// struct psock_buf 
+// {
+//     uint8_t *ptr;
+//     unsigned short left;
+// };
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// The representation of a protosocket.
+// The protosocket structrure is an opaque structure with no user-visible elements.
+//
+// struct psock 
+// {
+//     struct pt pt, psockpt;  /* Protothreads - one that's using the psock functions, and one that runs inside the psock functions.    */
+//     const uint8_t *sendptr; /* Pointer to the next data to be sent.                                                                  */
+//     uint8_t *readptr;       /* Pointer to the next data to be read.                                                                  */
+//     uint8_t *bufptr;        /* Pointer to the buffer used for buffering incoming data.                                               */
+//     uint16_t sendlen;       /* The number of bytes left to be sent.                                                                  */
+//     uint16_t readlen;       /* The number of bytes left to be read.                                                                  */
+//     struct psock_buf buf;   /* The structure holding the state of the input buffer.                                                  */
+//     unsigned int bufsize;   /* The size of the input buffer.                                                                         */
+//     unsigned char state;    /* The state of the protosocket.                                                                         */
+// };
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Start the protosocket protothread in a function.
+//
+// This macro starts the protothread associated with the protosocket 
+// and must come before other protosocket calls in the function it is used.
+//
+//
+// #define PSOCK_BEGIN(psock) PT_BEGIN(&((psock)->pt)) PT_THREAD(psock_send(struct psock *psock, const uint8_t *buf, unsigned int len)); // psock (struct psock *): A pointer to the protosocket to be started.
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Send data.
+//
+// This macro sends data over a protosocket. 
+// The protosocket protothread blocks UNTIL (all data has been sent) 
+// AND (is known to have been received by the remote end of the TCP connection).
+//
+// #define PSOCK_SEND(psock, data, datalen) PT_WAIT_THREAD(&((psock)->pt), psock_send(psock, data, datalen)) // datalen (unsigned int): The length of the data that is to be sent.
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Declare the end of a protosocket's protothread.
+//
+// This macro is used for declaring that the protosocket's protothread ends. 
+// It must always be used together with a matching PSOCK_BEGIN() macro.
+// 
+// #define PSOCK_END(psock) PT_END(&((psock)->pt)) // psock (struct psock *): A pointer to the protosocket.
+
+
+
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ./httpd-simple.h MACROS //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// #define SEND_STRING(s, str) PSOCK_SEND(s, (uint8_t *)str, strlen(str))
+
+// struct httpd_state 
+// {
+//     struct timer timer;
+//     struct psock sin, sout;
+//     struct pt outputpt;
+//     char inputbuf[HTTPD_PATHLEN + 24];
+//     char filename[HTTPD_PATHLEN];
+//     httpd_simple_script_t script;
+//     char state;
+// };
+
+// typedef char (*httpd_simple_script_t)        struct httpd_state (*s);
+//                                          --> 
+// now the string httpd_simple_script_t[]   -->  struct httpd_state s[]                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 
 /*---------------------------------------------------------------------------*/
+// 
 
 //static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
     char buff[1000];
 
-    PSOCK_BEGIN(&s->sout);
-        //SEND_STRING(&s->sout, TOP);
+    PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
+        
 
         // int temperature = 15 + rand() % 25;
         // int humidity = 80 + rand() % 10;
@@ -222,12 +336,11 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
         strcpy(buff, "{ \" test0623chars \" : \"fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03--------------\" }");
 
-        printf("send json to requester\n");
+        printf("SENDING JSON\n");
 
-        SEND_STRING(&s->sout, buff);
-        //SEND_STRING(&s->sout, BOTTOM);
+        SEND_STRING(&s->sout, buff); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
 
-    PSOCK_END(&s->sout);
+    PSOCK_END(&s->sout); // Declare the end of a protosocket's protothread.
 }
 
 /*---------------------------------------------------------------------------*/
@@ -268,7 +381,7 @@ PROCESS_THREAD(oar_moor_process, ev, data)
         PROCESS_NAME(webserver_process);
         process_start(&webserver_process, NULL);
 
-        //LOG_INFO("Web Sense started\n");
+        printf("MOOR PROCESS STARTED\n");
 
     PROCESS_END();
 }

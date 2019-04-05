@@ -115,7 +115,7 @@ static PT_THREAD(handle_output(struct httpd_state *s))
     PT_BEGIN(&s->outputpt);
 
         s->script = NULL;
-        s->script = httpd_simple_get_script(&s->filename[1]);
+        s->script = httpd_simple_get_script(&s->filename[1]); // (return generate_routes) [./oar.c]
         
         if(s->script == NULL) 
         {
