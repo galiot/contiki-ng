@@ -84,8 +84,11 @@
 
 //---------------------------------------------------------------------------
 
-// enable/disable oar functionality, across the board
-#define OAR_CONF_FUNCTIONALITY                                              1                   // (ON/OFF)
+// enable/disable debug functionality, across the board
+#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON/OFF)
+
+// enable/disable moor functionality, across the board
+#define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON/OFF)
 
 //---------------------------------------------------------------------------
 

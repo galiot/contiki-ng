@@ -1,0 +1,24 @@
+// int temperature = 15 + rand() % 25;
+// int humidity = 80 + rand() % 10;
+
+// sprintf(buff,"{\"temp\":%u,\"hum\":%u}", temperature, humidity);
+
+// 575 ok
+// 599 ok
+// 599 + 2 + 24 + 3 = 
+
+// 610 OK
+// 613 OK
+// 614 OK
+
+// 615 NOT OK
+// 520 NOT OK
+// 623 NOT OK
+// 671 NOT OK
+
+
+// TOTAL: 643? YES. TOTAL IS 643 CHARACTERS, PERIOD
+
+
+
+strcpy(buff, "{ \" test0623chars \" : \"fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03--------------\" }");

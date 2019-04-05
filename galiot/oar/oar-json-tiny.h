@@ -29,6 +29,8 @@
 void oar_json_tiny_print(char * str);
 void oar_json_tiny_construct(char * buf);
 
+void oar_json_tiny_discrete_construct(char * buf, int i);
+
 #endif // (OAR_JSON_TINY_H_)
 
 //  {

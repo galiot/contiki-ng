@@ -168,7 +168,7 @@ static PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
     /*  SEND_STRING(&s->sout, s->ptr);                              */
     /*                                                              */
     /****************************************************************/             
-/
+    
     // in case a packet with a 200 OK        header needs to be sent (in this case, statusdr <-- http_header_200[] = {"HTTP/1.0 404 Not found\r\nServer: moor\r\nConnection: close\r\n"})
     // in case a packet with a 404 NOT FOUND header needs to be sent (in this case, statusdr <-- http_header_200[] = {"HTTP/1.0 200 OK\r\nServer: moor\r\nConnection: close\r\n"})
     SEND_STRING(&s->sout, statushdr);   

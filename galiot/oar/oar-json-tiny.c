@@ -1328,6 +1328,92 @@ void oar_json_tiny_construct(char * buf)
     oar_json_tiny_exit(buf);
 }
 
+void oar_json_tiny_discrete_construct(char * buf, int i)
+{   
+    char str[32];
+    switch (i)
+    {
+        case 0:
+            oar_json_tiny_init(buf);
+            oar_json_tiny_enter(buf);
+
+            sprintf(str, "\"" "part" "\"" ":" "%d", i); strcat(buf, str);
+
+            #if (OAR_CONF_JSON_TINY_ID)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_id(buf);
+    
+            #endif
+            #if (OAR_CONF_JSON_TINY_NRG)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_nrg(buf);
+
+            #endif
+
+                oar_json_tiny_exit(buf);
+
+            break;
+        
+        case 1:
+            oar_json_tiny_init(buf);
+            oar_json_tiny_enter(buf);
+
+            sprintf(str, "\"" "part" "\"" ":" "%d", i); strcat(buf, str);
+
+            #if (OAR_CONF_JSON_TINY_ID)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_id(buf);
+    
+            #endif
+            #if (OAR_CONF_JSON_TINY_STATS)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_stats(buf);
+
+            #endif
+
+                oar_json_tiny_exit(buf);
+
+            break;
+        
+        case 2:
+            oar_json_tiny_init(buf);
+            oar_json_tiny_enter(buf);
+
+            sprintf(str, "\"" "part" "\"" ":" "%d", i); strcat(buf, str);
+
+            #if (OAR_CONF_JSON_TINY_ID)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_id(buf);
+    
+            #endif
+            #if (OAR_CONF_JSON_TINY_NET)
+
+                oar_json_tiny_bridge(buf);
+                oar_json_tiny_append_net(buf);
+
+            #endif
+
+                oar_json_tiny_exit(buf);
+
+            break;
+
+        default:
+            oar_json_tiny_init(buf);
+            oar_json_tiny_enter(buf);
+
+            sprintf(str, "\"" "part" "\"" ":" "%d", i); strcat(buf, str);
+
+            oar_json_tiny_exit(buf);
+
+            break;
+    }
+}
+
 
 
 

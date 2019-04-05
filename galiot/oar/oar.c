@@ -159,8 +159,18 @@ PROCESS(oar_dev_process, "oar dev process");                        // process f
 PROCESS(webserver_process, "webserver process");
 PROCESS(oar_moor_process, "oar moor process");
 
-//AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process); 
-AUTOSTART_PROCESSES(&oar_moor_process);          
+#if (OAR_CONF_DEBUG_FUNCTIONALITY)
+
+    AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
+
+#endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
+
+#if (OAR_CONF_MOOR_FUNCTIONALITY)
+
+    int part = 0;
+    AUTOSTART_PROCESSES(&oar_moor_process);
+
+#endif // (OAR_CONF_MOOR_FUNCTIONALITY)
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -309,32 +319,39 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     char buff[1000];
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
-        
 
-        // int temperature = 15 + rand() % 25;
-        // int humidity = 80 + rand() % 10;
+        #if (OAR_CONF_JSON_TYPE == 4) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
+                        
+            char *oar_json_tiny_discrete_buf = (char *)malloc((512+1)*sizeof(char)); // allocate OAR_CONF_JSON_TINY_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_tiny_buf > char *oar_json_tiny_discrete_buf = (char *)heapmem_alloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
-        // sprintf(buff,"{\"temp\":%u,\"hum\":%u}", temperature, humidity);
+            if (oar_json_tiny_discrete_buf == NULL) // if heap memory couldn't be allocated for oar_json_tiny_discrete_buf...
+            {
+                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR TINY JSON\n", OAR_CONF_JSON_TINY_BUF_SIZE);
 
-        // 575 ok
-        // 599 ok
-        // 599 + 2 + 24 + 3 = 
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buff, "{ \" error \" : \" NOT ENOUGH MEMORY FOR JSON ALLOCATION \" }");
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                
+                free(oar_json_tiny_discrete_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+            }
+            else
+            {
+                oar_json_tiny_discrete_construct(oar_json_tiny_discrete_buf, part); // construct oar_json_tiny_discrete_buf (function found in ./oar_json_micro.h)
+                
+                printf("\n"); printf("length of tiny discrete json part %d: %d\n", part, strlen(oar_json_tiny_discrete_buf));
+                
+                part++;
+                part = part % 3;
 
-        // 610 OK
-        // 613 OK
-        // 614 OK
-
-        // 615 NOT OK
-        // 520 NOT OK
-        // 623 NOT OK
-        // 671 NOT OK
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buff, oar_json_tiny_discrete_buf);
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-        // TOTAL: 643? YES. TOTAL IS 643 CHARACTERS, PERIOD
-
-
-
-        strcpy(buff, "{ \" test0623chars \" : \"fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03--------------\" }");
+                free(oar_json_tiny_discrete_buf); // release the memory allocated for oar_json_tiny_buf > heapmem_free(oar_json_tiny_buf); (for platform specific os/lib/heapmem.h)
+            }
+            
+        #endif // (OAR_CONF_JSON_TYPE == 4)
 
         printf("SENDING JSON\n");
 
@@ -356,6 +373,7 @@ PROCESS_THREAD(webserver_process, ev, data)
             PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
             httpd_appcall(data);
         }
+
 
     PROCESS_END();
 }
@@ -403,33 +421,7 @@ PROCESS_THREAD(oar_moor_process, ev, data)
 
 PROCESS_THREAD(oar_debug_process, ev, data)
 {   
-
-    // #if (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
-
-    //             // char encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
-    //             char *encrypted_oar_json = encrypted_oar_json = (char*) heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE)*sizeof(char));  // *+1 for '\0' character
-
-    //             // for (int i = 0; i < OAR_CONF_CRYPT_BUFFER_SIZE; i++) { encrypted_oar_json[i] = 'e'; }
-    //             // encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE + 1] = '\0';
-    //             // memset(encrypted_oar_json, 0, sizeof((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)));
-                
-    //             #if (OAR_CONF_CRYPT_DECRYPT)
-
-    //                 // char decrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE];
-    //                 char *decrypted_oar_json = decrypted_oar_json = (char*) heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE)*sizeof(char));  // *+1 for '\0' character
-
-    //                 // for (int i = 0; i < OAR_CONF_CRYPT_BUFFER_SIZE; i++) { encrypted_oar_json[i] = 'e'; }
-    //                 // encrypted_oar_json[OAR_CONF_CRYPT_BUFFER_SIZE + 1] = '\0';
-    //                 //memset(decrypted_oar_json, 0, sizeof((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)));
-
-    //             #endif // (OAR_CONF_CRYPT_DECRYPT)
-
-    //         #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
-
-
-
-
-    #if !(OAR_CONF_FUNCTIONALITY)
+    #if !(OAR_CONF_DEBUG_FUNCTIONALITY)
 
         // (doc) A process can be stopped in three ways:
         // (doc)    The process implicitly exits by allowing the PROCESS_END() statement to be reached and executed.
@@ -439,7 +431,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
         PROCESS_EXIT();
 
-    #else // !(OAR_CONF_FUNCTIONALITY)
+    #else // !(OAR_CONF_DEBUG_FUNCTIONALITY)
 
         static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
         
@@ -928,7 +920,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
         // #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
     
-    #endif // (OAR_CONF_FUNCTIONALITY)
+    #endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
 
     
 }
