@@ -368,12 +368,6 @@ httpd_simple_script_t httpd_simple_get_script(const char *name)
 
 /*---------------------------------------------------------------------------*/
 
-/* Declare and auto-start this file's process */
-// PROCESS(web_sense_db, "Web Sense-db");
-// AUTOSTART_PROCESSES(&web_sense_db);
-
-/*---------------------------------------------------------------------------*/
-
 PROCESS_THREAD(oar_moor_process, ev, data)
 {
     PROCESS_BEGIN();
