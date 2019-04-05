@@ -110,14 +110,13 @@
 #define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
-#define OAR_CONF_JSON_TYPE                                                  1                   // 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
+#define OAR_CONF_JSON_TYPE                                                  4                   // 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
 
 //---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: EXTENDED /////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
 #define OAR_CONF_JSON_EXTENDED_BUF_SIZE                                     5000                // *sizeof(char) 
-
 
 //---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: COMPACT //////////////////////////////////////////////
