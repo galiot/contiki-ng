@@ -110,13 +110,13 @@
 #define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
-#define OAR_CONF_JSON_TYPE                                                  3                   // 1: FULL || 2: COMPACT || 3: MICRO || 4: TINY
+#define OAR_CONF_JSON_TYPE                                                  1                   // 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
 
 //---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: FULL //////////////////////////////////////////////
+// OAR_CONF_JSON_TYPE: EXTENDED /////////////////////////////////////////////
 // --------------------------------------------------------------------------
 
-#define OAR_CONF_JSON_BUF_SIZE                                              5000                // *sizeof(char) 
+#define OAR_CONF_JSON_EXTENDED_BUF_SIZE                                     5000                // *sizeof(char) 
 
 
 //---------------------------------------------------------------------------
@@ -152,7 +152,7 @@
 //---------------------------------------------------------------------------
 
 // enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
+#define OAR_CONF_CRYPT                                                      0                   // (ON/OFF) 
 
 // set the encryption string size
 #define OAR_CONF_CRYPT_BUFFER_SIZE                                          1800                // *sizeof(char)

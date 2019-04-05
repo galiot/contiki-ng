@@ -290,7 +290,7 @@ static void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladd
 // ====================================================================================================================
 
 
-char oar_json_compact_buf[OAR_CONF_JSON_COMPACT_BUF_SIZE];    // global string: will contain the json
+// char oar_json_compact_buf[OAR_CONF_JSON_COMPACT_BUF_SIZE];    // global string: will contain the json
 
 // ----------------------------------------------------------------------------
 

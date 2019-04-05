@@ -333,7 +333,7 @@ static void oar_json_tiny_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 // ====================================================================================================================
 
 
-char oar_json_tiny_buf[OAR_CONF_JSON_TINY_BUF_SIZE];    // global string: will contain the json
+// static char oar_json_tiny_buf[OAR_CONF_JSON_TINY_BUF_SIZE];    // global string: will contain the json
 
 // ----------------------------------------------------------------------------
 
@@ -977,7 +977,7 @@ static void oar_json_tiny_exit(char * buf)
                             sprintf(str, "\"" "pP"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             sprintf(str, "\"" "rk"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             sprintf(str, "\"" "lRk"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "maxRkI"  "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // SUBSECTION START rpl{} > rplStatus{} > dag{} > daoSequence{}
@@ -1071,7 +1071,7 @@ static void oar_json_tiny_exit(char * buf)
 
                             sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "maxRkI"  "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "mRkI"    "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // SUBSECTION START rpl{} > rplStatus{} > dag{} > daoSequence{}
@@ -1205,7 +1205,7 @@ static void oar_json_tiny_exit(char * buf)
                         sprintf(str, "\"" "pP"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         sprintf(str, "\"" "rk"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "maxRkI"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         // SUBSECTION START rpl{} > rplStatus{} > dag{} > daoSequence{}
@@ -1426,7 +1426,7 @@ void oar_json_tiny_construct(char * buf)
 //                  "pP": "fe80::212:4b00:f24:8385",
 //                  "rk": 256,
 //                  "lRk": 256,
-//                  "maxRkI": 1024,
+//                  "mRkI": 1024,
 //                  "dao": {
 //                      "lS": 241,
 //                      "lA": 241
