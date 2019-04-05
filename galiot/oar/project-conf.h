@@ -85,10 +85,10 @@
 //---------------------------------------------------------------------------
 
 // enable/disable debug functionality, across the board
-#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON/OFF)
+#define OAR_CONF_DEBUG_FUNCTIONALITY                                        1                   // (ON/OFF)
 
 // enable/disable moor functionality, across the board
-#define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON/OFF)
+#define OAR_CONF_MOOR_FUNCTIONALITY                                         0                   // (ON/OFF)
 
 //---------------------------------------------------------------------------
 
@@ -113,7 +113,13 @@
 #define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
-#define OAR_CONF_JSON_TYPE                                                  4                   // 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
+#define OAR_CONF_JSON_TYPE                                                  0                   // 0: QUANTIZED: || 2: COMPACT || 3: MICRO || 4: TINY
+
+//---------------------------------------------------------------------------
+// OAR_CONF_JSON_TYPE: QUANTIZED ////////////////////////////////////////////
+// --------------------------------------------------------------------------
+
+#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    1800                // *sizeof(char) 
 
 //---------------------------------------------------------------------------
 // OAR_CONF_JSON_TYPE: EXTENDED /////////////////////////////////////////////

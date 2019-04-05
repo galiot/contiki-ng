@@ -7,6 +7,7 @@
         "rpl.h": "c",
         "platform.h": "c",
         "contiki-net.h": "c",
-        "oar-json-tiny.h": "c"
+        "oar-json-tiny.h": "c",
+        "uip-icmp6.h": "c"
     }
 }
