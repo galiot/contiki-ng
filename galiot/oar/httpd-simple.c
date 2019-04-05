@@ -86,11 +86,11 @@ MEMB(conns, struct httpd_state, CONNS);
 #define ISO_period  0x2e
 #define ISO_slash   0x2f
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 static const char *NOT_FOUND = "<html><body bgcolor=\"white\"><center><h1>404 - file not found</h1></center></body></html>";
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 static PT_THREAD(send_string(struct httpd_state *s, const char *str))
 {
@@ -102,7 +102,7 @@ static PT_THREAD(send_string(struct httpd_state *s, const char *str))
     PSOCK_END(&s->sout);
 }
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 const char http_content_type_html[] = "Content-type: text/html\r\n\r\n";            // not really needed, as our server services only packets with Content-type: application/json or 200/404 messages
 const char http_content_type_json[] = "Content-type: application/json\r\n\r\n";
@@ -117,58 +117,58 @@ static PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
 
     PSOCK_BEGIN(&s->sout);
 
-    /****************************************************************
-     * 
-     * ptr = strrchr(s->filename, ISO_period);                      *
-     *                                                              *
-     * if(ptr == NULL)                                              *
-     * {                                                            *
-     *     s->ptr = http_content_type_plain;                        *
-     * }                                                            *
-     * else                                                         *
-     * {                                                            *
-     *     if(strcmp(http_html, ptr) == 0)                          *
-     *     {                                                        *
-     *         s->ptr = http_content_type_html;                     *
-     *     }                                                        *
-     *     else                                                     *
-     *     {                                                        *
-     *         if(strcmp(http_css, ptr) == 0)                       *
-     *         {                                                    *
-     *             s->ptr = http_content_type_css;                  *
-     *         }                                                    *
-     *         else                                                 *
-     *         {                                                    *
-     *             if(strcmp(http_png, ptr) == 0)                   *
-     *             {                                                *
-     *                 s->ptr = http_content_type_png;              *
-     *             }                                                *
-     *             else                                             *
-     *             {                                                *
-     *                 if(strcmp(http_gif, ptr) == 0)               *
-     *                 {                                            *
-     *                     s->ptr = http_content_type_gif;          *
-     *                 }                                            *
-     *                 else                                         *
-     *                 {                                            *
-     *                     if(strcmp(http_jpg, ptr) == 0)           *
-     *                     {                                        *
-     *                         s->ptr = http_content_type_jpg;      *    
-     *                     }                                        *
-     *                     else                                     *
-     *                     {                                        *                                
-     *                         s->ptr = http_content_type_binary;   *      
-     *                     }                                        *
-     *                 }                                            *
-     *             }                                                *
-     *         }                                                    *
-     *     }                                                        *
-     * }                                                            *
-     *                                                              *
-     * SEND_STRING(&s->sout, s->ptr);                               *
-     *                                                              *
-     ****************************************************************/             
-
+    /****************************************************************/
+    /*                                                              */
+    /*  ptr = strrchr(s->filename, ISO_period);                     */
+    /*                                                              */
+    /*  if(ptr == NULL)                                             */
+    /*  {                                                           */
+    /*      s->ptr = http_content_type_plain;                       */
+    /*  }                                                           */
+    /*  else                                                        */
+    /*  {                                                           */
+    /*      if(strcmp(http_html, ptr) == 0)                         */
+    /*      {                                                       */
+    /*          s->ptr = http_content_type_html;                    */
+    /*      }                                                       */
+    /*      else                                                    */
+    /*      {                                                       */
+    /*          if(strcmp(http_css, ptr) == 0)                      */
+    /*          {                                                   */
+    /*              s->ptr = http_content_type_css;                 */
+    /*          }                                                   */
+    /*          else                                                */
+    /*          {                                                   */
+    /*              if(strcmp(http_png, ptr) == 0)                  */
+    /*              {                                               */
+    /*                  s->ptr = http_content_type_png;             */
+    /*              }                                               */
+    /*              else                                            */
+    /*              {                                               */
+    /*                  if(strcmp(http_gif, ptr) == 0)              */
+    /*                  {                                           */
+    /*                      s->ptr = http_content_type_gif;         */
+    /*                  }                                           */
+    /*                  else                                        */
+    /*                  {                                           */
+    /*                      if(strcmp(http_jpg, ptr) == 0)          */
+    /*                      {                                       */
+    /*                          s->ptr = http_content_type_jpg;     */    
+    /*                      }                                       */
+    /*                      else                                    */
+    /*                      {                                       */                                
+    /*                          s->ptr = http_content_type_binary;  */      
+    /*                      }                                       */
+    /*                  }                                           */
+    /*              }                                               */
+    /*          }                                                   */
+    /*      }                                                       */
+    /*  }                                                           */
+    /*                                                              */
+    /*  SEND_STRING(&s->sout, s->ptr);                              */
+    /*                                                              */
+    /****************************************************************/             
+/
     // in case a packet with a 200 OK        header needs to be sent (in this case, statusdr <-- http_header_200[] = {"HTTP/1.0 404 Not found\r\nServer: moor\r\nConnection: close\r\n"})
     // in case a packet with a 404 NOT FOUND header needs to be sent (in this case, statusdr <-- http_header_200[] = {"HTTP/1.0 200 OK\r\nServer: moor\r\nConnection: close\r\n"})
     SEND_STRING(&s->sout, statushdr);   
@@ -179,10 +179,12 @@ static PT_THREAD(send_headers(struct httpd_state *s, const char *statushdr))
     PSOCK_END(&s->sout);
 }
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 const char http_header_200[] = "HTTP/1.0 200 OK\r\nServer: moor\r\nConnection: close\r\n";
 const char http_header_404[] = "HTTP/1.0 404 Not found\r\nServer: moor\r\nConnection: close\r\n";
+
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 // -------------------------------------------------------------------------------------------------
 // this process gets the "generate_routes" process from ./oar.c and:
@@ -227,6 +229,8 @@ static PT_THREAD(handle_output(struct httpd_state *s))
 
     PT_END(&s->outputpt);
 }
+
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 // -------------------------------------------------------------------------------------------------
 // this process reads the GET message that tis received by the mote.
@@ -304,7 +308,7 @@ static PT_THREAD(handle_input(struct httpd_state *s))
     PSOCK_END(&s->sin); // Start the protosocket protothread in a function.
 }
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 static void handle_connection(struct httpd_state *s)
 {
@@ -316,7 +320,7 @@ static void handle_connection(struct httpd_state *s)
     }
 }
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 //  struct httpd_state;
 //  typedef char (*httpd_simple_script_t)   (struct httpd_state *s);
@@ -401,7 +405,7 @@ void httpd_appcall(void *state)
     }
 }
 
-/*---------------------------------------------------------------------------*/
+// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 void httpd_init(void)
 {
@@ -416,4 +420,3 @@ void httpd_init(void)
 
     #endif /* URLCONV */
 }
-/*---------------------------------------------------------------------------*/

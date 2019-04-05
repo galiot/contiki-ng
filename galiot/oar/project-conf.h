@@ -80,7 +80,7 @@
                                                         
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define OAR_CONF_MOTE_COLOR                                                 "RED"
+#define OAR_CONF_MOTE_COLOR                                                 "RED"               // CODE NAME FOR MOTE
 
 //---------------------------------------------------------------------------
 
@@ -147,6 +147,15 @@
 #define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_NET                                              1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF)
+
+#define OAR_CONF_JSON_TINY_DISCRITIZATION                                   0                   // (ON/OFF)
+
+#define OAR_CONF_JSON_TINY_DISCRITIZATION_COUNT                             0                   // TOTAL DISCRETE PARTS
+
+#define OAR_CONF_JSON_TINY_DISCRETE_NRG                                     0                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_DISCRETE_STATS                                   0                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_DISCRETE_NET                                     0                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_DISCRETE_RPL                                     0                   // (ON/OFF)
 
 //---------------------------------------------------------------------------
 
