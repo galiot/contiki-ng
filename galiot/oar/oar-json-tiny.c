@@ -451,10 +451,10 @@ static void oar_json_tiny_exit(char * buf)
         sprintf(str, "{"                ); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
-            sprintf(str,        "\""    "t"    "\""    ":"        "%lu"                                    ,clock_seconds()    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+            sprintf(str,        "\""    "t"     "\""    ":"        "%lu"                                    ,clock_seconds()    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
     
             oar_json_tiny_lladdr_to_str(oar_json_tiny_lladdr, &linkaddr_node_addr);
-            sprintf(str,        "\""    "mac"       "\""    ":" "\""    "%s"                        "\""        ,oar_json_tiny_lladdr    ); strcat(buf, str); // sprintf(str, ","); strcat(buf, str);
+            sprintf(str,        "\""    "mac"   "\""    ":" "\""    "%s"                        "\""        ,oar_json_tiny_lladdr    ); strcat(buf, str); // sprintf(str, ","); strcat(buf, str);
     
             // sprintf(str,        "\""    "cd"    "\""    ":" "\""    OAR_CONF_MOTE_COLOR         "\""                            );  strcat(buf, str);
         
@@ -491,15 +491,15 @@ static void oar_json_tiny_exit(char * buf)
             sprintf(str, "{"                    ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "e"    "\"" ":" "true"                                                                                                                                                 );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "en"    "\"" ":" "true"                                                                                                                                                 );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
 
-                sprintf(str, "\"" "c"         "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "l"         "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "dL"        "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "tT"          "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                          );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "rL"         "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "rT"         "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-                sprintf(str, "\"" "rO"          "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))  );  strcat(buf, str); 
+                sprintf(str, "\"" "cp"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "lp"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "dL"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "tT"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                          );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "rL"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "rT"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+                sprintf(str, "\"" "rO"  "\"" ":" "%lu"   ,oar_json_tiny_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))  );  strcat(buf, str); 
                 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "}" ); strcat(buf, str);
@@ -519,15 +519,15 @@ static void oar_json_tiny_exit(char * buf)
             sprintf(str, "{"                    ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "e"    "\"" ":" "false"    ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "en"  "\"" ":" "false"    ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
 
-                sprintf(str, "\"" "c"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "l"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dL"        "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tT"          \"" ":"  "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "rL"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "rT"         "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "rO"          "\"" ":" "null"     ); strcat(buf, str);
+                sprintf(str, "\"" "cp"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "lp"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dL"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "tT"  "\"" ":"  "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "rL"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "rT"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "rO"  "\"" ":" "null"     ); strcat(buf, str);
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "}" ); strcat(buf, str);
@@ -559,22 +559,22 @@ static void oar_json_tiny_exit(char * buf)
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION START stats{} ///////////////////////////////////
-            sprintf(str, "\""   "st"  "\""    ":"); strcat(buf, str);
+            sprintf(str, "\""   "st"  "\""    ":"   ); strcat(buf, str);
             sprintf(str, "{"                        ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "uS"    "\"" ":" "true"                       ); strcat(buf, str);   sprintf(str, ","); strcat(buf, str);        
+                sprintf(str, "\"" "uS"  "\"" ":" "true"                       ); strcat(buf, str);   sprintf(str, ","); strcat(buf, str);        
                 
-                sprintf(str, "\"" "rx"          "\"" ":" "%lu" ,uip_stat.ip.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"          "\"" ":" "%lu" ,uip_stat.ip.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fw"          "\"" ":" "%lu" ,uip_stat.ip.forwarded ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"          "\"" ":" "%lu" ,uip_stat.ip.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "vE"        "\"" ":" "%lu" ,uip_stat.ip.vhlerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "hE"        "\"" ":" "%lu" ,uip_stat.ip.hblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lE"        "\"" ":" "%lu" ,uip_stat.ip.lblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fE"       "\"" ":" "%lu" ,uip_stat.ip.fragerr   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"        "\"" ":" "%lu" ,uip_stat.ip.chkerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "pE"       "\"" ":" "%lu" ,uip_stat.ip.protoerr  ); strcat(buf, str);                                                                                                                                                                                         
+                sprintf(str, "\"" "rx"  "\"" ":" "%lu" ,uip_stat.ip.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "%lu" ,uip_stat.ip.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "fw"  "\"" ":" "%lu" ,uip_stat.ip.forwarded ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "%lu" ,uip_stat.ip.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "vE"  "\"" ":" "%lu" ,uip_stat.ip.vhlerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "hE"  "\"" ":" "%lu" ,uip_stat.ip.hblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "lE"  "\"" ":" "%lu" ,uip_stat.ip.lblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "fE"  "\"" ":" "%lu" ,uip_stat.ip.fragerr   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "%lu" ,uip_stat.ip.chkerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "pE"  "\"" ":" "%lu" ,uip_stat.ip.protoerr  ); strcat(buf, str);                                                                                                                                                                                         
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "}"); strcat(buf, str);
@@ -592,18 +592,18 @@ static void oar_json_tiny_exit(char * buf)
             sprintf(str, "{"                        ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "uS"    "\"" ":" "false"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);       
+                sprintf(str, "\"" "uS"  "\"" ":" "false"  );  strcat(buf, str); sprintf(str, "," );  strcat(buf, str);       
                 
-                sprintf(str, "\"" "rx"         "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"         "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fw"         "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"         "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "vE"       "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "hE"       "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lE"       "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fE"      "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"       "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "pE"      "\"" ":" "null"   ); strcat(buf, str);                                                                                                                                                                      
+                sprintf(str, "\"" "rx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "fw"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "vE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "hE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "lE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "fE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "pE"  "\"" ":" "null"   ); strcat(buf, str);                                                                                                                                                                      
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "}"); strcat(buf, str);
@@ -687,8 +687,8 @@ static void oar_json_tiny_exit(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START net{} > route{} ///////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "rt" "\"" ":" ); strcat(buf, str);
-            sprintf(str, "{"                    ); strcat(buf, str);
+            sprintf(str, "\"" "rt"  "\"" ":"); strcat(buf, str);
+            sprintf(str, "{"                ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 uip_ds6_defrt_t *default_route;
@@ -697,15 +697,15 @@ static void oar_json_tiny_exit(char * buf)
                 if(default_route != NULL)
                 {
                     oar_json_tiny_ipaddr_to_str(oar_json_tiny_ipaddr, &default_route->ipaddr);
-                    sprintf(str,    "\""        "df"      "\""        ":"     "\""        "%s"        "\""        ,oar_json_tiny_ipaddr    );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+                    sprintf(str,    "\""    "df"    "\""    ":" "\""    "%s"    "\""    ,oar_json_tiny_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
 
                     if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); }
                     else                                        { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str); }   // sprintf(str, "," );  strcat(buf, str);  
                 }
                 else
                 {
-                    sprintf(str,    "\""        "df"      "\""        ":"     "\""        "none"      "\""                                  );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
-                    sprintf(str,    "\""        "lt"      "\""        ":"                 "null"                                            );  strcat(buf, str);   
+                    sprintf(str,    "\""    "df"    "\""    ":" "\""    "none"  "\""                            );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+                    sprintf(str,    "\""    "lt"    "\""    ":"         "null"                                  );  strcat(buf, str);   
 
                 }
 
@@ -752,11 +752,11 @@ static void oar_json_tiny_exit(char * buf)
             // SUBSECTION START net{} > route{} ///////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "\"" "rt" "\"" ":" ); strcat(buf, str);
-            sprintf(str, "{"                    ); strcat(buf, str);
+            sprintf(str, "{"                ); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "df"  "\"" ":"        "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "lt"  "\"" ":"        "null"      ); strcat(buf, str);   
+                sprintf(str, "\"" "df"  "\"" ":"    "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "lt"  "\"" ":"    "null"      ); strcat(buf, str);   
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             sprintf(str, "}"); strcat(buf, str);
@@ -834,16 +834,16 @@ static void oar_json_tiny_exit(char * buf)
                                 // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                                 sprintf(str, "{"); strcat(buf, str);
 
-                                    sprintf(str, "\"" "ad"    "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "rk"    "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "lM"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "ad"  "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "rk"  "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "lM"  "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
                                     sprintf(str, "\"" "rkN" "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "f"       "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "r"       "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "b"       "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "a"       "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "p"       "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-                                    sprintf(str, "\"" "lTx"  "\"" ":" "null"); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+                                    sprintf(str, "\"" "f"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "r"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "b"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "a"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "p"   "\"" ":" "null"); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                                    sprintf(str, "\"" "lTx" "\"" ":" "null"); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
                                     sprintf(str, "\"" "bS"  "\"" ":" "null"); strcat(buf, str);
 
                                 sprintf(str, "}"); strcat(buf, str);
@@ -862,8 +862,8 @@ static void oar_json_tiny_exit(char * buf)
 
                         int oar_json_tiny_rpl_neighbor_count = 0;
 
-                        sprintf(str, "\"" "i"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "c"        "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "i"   "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "c"   "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
 
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         // !(!curr_instance.used || rpl_neighbor_count() == 0)
@@ -890,14 +890,14 @@ static void oar_json_tiny_exit(char * buf)
                                     oar_json_tiny_ipaddr_to_str(oar_json_tiny_ipaddr, rpl_neighbor_get_ipaddr(nbr));
                                     sprintf(str, "\"" "ad"                              "\"" ":" "\""   "%s"    "\""       ,oar_json_tiny_ipaddr); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
                                     
-                                    sprintf(str, "\"" "rk"    "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "lM"   "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                                     sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "f"       "\"" ":"    "%2u"   ,oar_json_tiny_rpl_nbr_stats != NULL ? oar_json_tiny_rpl_nbr_stats->freshness : 0                                  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "r"       "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "b"       "\"" ":"    "%s"    ,nbr == oar_json_tiny_rpl_nbr_best ? "true" : "false"                                                               ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "a"       "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                    sprintf(str, "\"" "p"       "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_tiny_rpl_nbr_stats != NULL ? oar_json_tiny_rpl_nbr_stats->freshness : 0                                  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_tiny_rpl_nbr_best ? "true" : "false"                                                               ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                    sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
                                     if(oar_json_tiny_rpl_nbr_stats->last_tx_time > 0) 
                                     {
@@ -917,7 +917,7 @@ static void oar_json_tiny_exit(char * buf)
                                         sprintf(str, "\"" "bS"  "\"" ":"    "null"                                                                                                                        ); strcat(buf, str);  
                                     }
                                     
-                                sprintf(str,    "}"      ); strcat(buf, str);
+                                sprintf(str,    "}" ); strcat(buf, str);
                                 // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                                 
                                 // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
@@ -968,14 +968,14 @@ static void oar_json_tiny_exit(char * buf)
                         sprintf(str, "{"                ); strcat(buf, str);
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         
-                            sprintf(str, "\"" "dT"       "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "dId"         "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "dVer"        "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "dPf"         "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "dPfL"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "st"       "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "pP"       "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "rk"        "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "dT"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "dId"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "dVer"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "dPf"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "st"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "pP"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "rk"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             sprintf(str, "\"" "lRk"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             sprintf(str, "\"" "maxRkI"  "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             
@@ -1005,11 +1005,11 @@ static void oar_json_tiny_exit(char * buf)
                         sprintf(str, ",");  strcat(buf, str);
                         // ?????????????????????????????????? 
 
-                        sprintf(str, "\"" "mop"         "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "of"          "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "hRkI"  "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "dLt"       "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "dO"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                        sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                        sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                        sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                        sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                        sprintf(str, "\"" "dO"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
 
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         // SUBSECTION START rpl{} > rplStatus{} > trickleTimer{} ///////
@@ -1018,10 +1018,10 @@ static void oar_json_tiny_exit(char * buf)
                         sprintf(str, "{"                        ); strcat(buf, str);
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                            sprintf(str,    "\""    "cur"      "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                            sprintf(str,    "\""    "nim"       "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                            sprintf(str,    "\""    "max"       "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                            sprintf(str,    "\""    "red"    "\""    ":" "null"    );  strcat(buf, str);   
+                            sprintf(str,    "\""    "cur"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+                            sprintf(str,    "\""    "nim"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+                            sprintf(str,    "\""    "max"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
+                            sprintf(str,    "\""    "red"   "\""    ":" "null"    );  strcat(buf, str);   
 
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         // SUBSECTION END rpl{} > rplStatus{} > tricleTimer{}
@@ -1049,28 +1049,28 @@ static void oar_json_tiny_exit(char * buf)
                             else                                { sprintf(str, "\"" "dT" "\"" ":" "\"" "node" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
                     
                             oar_json_tiny_ipaddr_to_str(oar_json_tiny_ipaddr, &curr_instance.dag.dag_id);
-                            sprintf(str, "\"" "dId"         "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "dId"     "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             
-                            sprintf(str, "\"" "dVer"        "\"" ":"        "%u"            ,curr_instance.dag.version                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "dVer"    "\"" ":"        "%u"            ,curr_instance.dag.version                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
                             oar_json_tiny_ipaddr_to_str(oar_json_tiny_ipaddr, &curr_instance.dag.prefix_info.prefix);
-                            sprintf(str, "\"" "dPf"        "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "dPf"     "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             
-                            sprintf(str, "\"" "dPfL"      "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "st"       "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_state_to_str(curr_instance.dag.state)     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "dPfL"    "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "st"      "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_state_to_str(curr_instance.dag.state)     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
                             if (curr_instance.dag.preferred_parent) 
                             {
                                 oar_json_tiny_ipaddr_to_str(oar_json_tiny_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
-                                sprintf(str, "\"" "pP" "\"" ":" "\"" "%s"      "\""    ,oar_json_tiny_ipaddr    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                                sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_tiny_ipaddr    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             }
                             else
                             {
                                 sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                             }
 
-                            sprintf(str, "\"" "rk"        "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "lRk"       "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             sprintf(str, "\"" "maxRkI"  "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1080,8 +1080,8 @@ static void oar_json_tiny_exit(char * buf)
                             sprintf(str, "{"                        ); strcat(buf, str); //
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                                sprintf(str, "\"" "lS"    "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                                sprintf(str, "\"" "lA"   "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); strcat(buf, str);   
+                                sprintf(str, "\"" "lS"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                sprintf(str, "\"" "lA"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); strcat(buf, str);   
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // SUSECTION END rpl{} > rplStatus{} > dag{} > daoSequence{}
@@ -1099,11 +1099,11 @@ static void oar_json_tiny_exit(char * buf)
                         sprintf(str, ",");  strcat(buf, str);
                         // ?????????????????????????????????? 
 
-                        sprintf(str, "\"" "mop"         "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_mop_to_str(curr_instance.mop)       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "of"          "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_ocp_to_str(curr_instance.of->ocp)   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "hRkI"  "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dLt"       "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dtsnO"     "\"" ":"        "%u"            ,curr_instance.dtsn_out                                 ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "mop"     "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_mop_to_str(curr_instance.mop)       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "of"      "\"" ":" "\""   "%s"    "\""    ,oar_json_tiny_rpl_ocp_to_str(curr_instance.of->ocp)   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "hRkI"    "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dLt"     "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dtsnO"   "\"" ":"        "%u"            ,curr_instance.dtsn_out                                 ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         // SUBSECTION START rpl{} > rplStatus{} > trickleTimer{} ///////
@@ -1113,10 +1113,10 @@ static void oar_json_tiny_exit(char * buf)
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         
-                            sprintf(str, "\"" "cur"    "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "min"     "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "max"     "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "red"  "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); strcat(buf, str);    
+                            sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "max" "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "red" "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); strcat(buf, str);    
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     sprintf(str, "}"); strcat(buf, str);
@@ -1146,8 +1146,8 @@ static void oar_json_tiny_exit(char * buf)
             
                 // sprintf(str, "\"" "valid"               "\""  ":" "false"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
-                sprintf(str, "\"" "i"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "c"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rpl{} > rplNbr{} > rplNeighbors[] //////////
@@ -1196,15 +1196,15 @@ static void oar_json_tiny_exit(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     
                         
-                        sprintf(str, "\"" "dT"       "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dId"         "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dVer"        "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dPf"         "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dPfL"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "st"       "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dT"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dVer"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dPf"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "st"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         sprintf(str, "\"" "pP"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "rk"        "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "lRk"       "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "rk"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         sprintf(str, "\"" "maxRkI"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                         
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1215,8 +1215,8 @@ static void oar_json_tiny_exit(char * buf)
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                             
-                            sprintf(str, "\"" "lS"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                            sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);    
+                            sprintf(str, "\"" "lS"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                            sprintf(str, "\"" "lA"  "\"" ":" "null"     ); strcat(buf, str);    
 
 
                         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1235,11 +1235,11 @@ static void oar_json_tiny_exit(char * buf)
                     sprintf(str, ",");  strcat(buf, str);
                     // ?????????????????????????????????? 
 
-                    sprintf(str, "\"" "mop"         "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "of"          "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "hRkI"  "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dLt"        "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dtsnO"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "dtsnO"   "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBSECTION START rpl{} > rplStatus{} > trickleTimer{} ///////
@@ -1249,10 +1249,10 @@ static void oar_json_tiny_exit(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         
-                        sprintf(str, "\"" "cur"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "nim"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "max"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "red"  "\"" ":" "null"     ); strcat(buf, str);    
+                        sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                        sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 sprintf(str, "}"); strcat(buf, str);
