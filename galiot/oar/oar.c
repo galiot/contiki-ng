@@ -156,10 +156,11 @@
 
 PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
 PROCESS(oar_dev_process, "oar dev process");                        // process for testing dev I/O
-PROCESS(webserver_process, "webserver_process");
-PROCESS(oar_moor_process, "oar dev process");
+PROCESS(webserver_process, "webserver process");
+PROCESS(oar_moor_process, "oar moor process");
 
-AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);          
+//AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process); 
+AUTOSTART_PROCESSES(&oar_moor_process);          
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -187,83 +188,89 @@ AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 
 /*---------------------------------------------------------------------------*/
+
 //static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
-  char buff[1000];
+    char buff[1000];
 
-  PSOCK_BEGIN(&s->sout);
-  //SEND_STRING(&s->sout, TOP);
+    PSOCK_BEGIN(&s->sout);
+        //SEND_STRING(&s->sout, TOP);
 
-  // int temperature = 15 + rand() % 25;
-  // int humidity = 80 + rand() % 10;
+        // int temperature = 15 + rand() % 25;
+        // int humidity = 80 + rand() % 10;
 
-  // sprintf(buff,"{\"temp\":%u,\"hum\":%u}", temperature, humidity);
+        // sprintf(buff,"{\"temp\":%u,\"hum\":%u}", temperature, humidity);
 
-  // 575 ok
-  // 599 ok
-  // 599 + 2 + 24 + 3 = 
+        // 575 ok
+        // 599 ok
+        // 599 + 2 + 24 + 3 = 
 
-  // 610 OK
-  // 613 OK
-  // 614 OK
+        // 610 OK
+        // 613 OK
+        // 614 OK
 
-  // 615 NOT OK
-  // 520 NOT OK
-  // 623 NOT OK
-  // 671 NOT OK
-
-
-  // TOTAL: 643? YES. TOTAL IS 643 CHARACTERS, PERIOD
+        // 615 NOT OK
+        // 520 NOT OK
+        // 623 NOT OK
+        // 671 NOT OK
 
 
+        // TOTAL: 643? YES. TOTAL IS 643 CHARACTERS, PERIOD
 
-  strcpy(buff, "{ \" test0623chars \" : \"fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03--------------\" }");
 
-  printf("send json to requester\n");
 
-  SEND_STRING(&s->sout, buff);
-  //SEND_STRING(&s->sout, BOTTOM);
+        strcpy(buff, "{ \" test0623chars \" : \"fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03 fd00::212:4b00:f82:da03--------------\" }");
 
-  PSOCK_END(&s->sout);
+        printf("send json to requester\n");
+
+        SEND_STRING(&s->sout, buff);
+        //SEND_STRING(&s->sout, BOTTOM);
+
+    PSOCK_END(&s->sout);
 }
+
 /*---------------------------------------------------------------------------*/
 
 PROCESS_THREAD(webserver_process, ev, data)
 {
-  PROCESS_BEGIN();
+    PROCESS_BEGIN();
 
-  httpd_init();
+        httpd_init();
 
-  while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
-    httpd_appcall(data);
-  }
+        while(1) 
+        {
+            PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
+            httpd_appcall(data);
+        }
 
-  PROCESS_END();
+    PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
-httpd_simple_script_t
-httpd_simple_get_script(const char *name)
+
+httpd_simple_script_t httpd_simple_get_script(const char *name)
 {
-  return generate_routes;
+    return generate_routes;
 }
+
 /*---------------------------------------------------------------------------*/
+
 /* Declare and auto-start this file's process */
 // PROCESS(web_sense_db, "Web Sense-db");
 // AUTOSTART_PROCESSES(&web_sense_db);
 
 /*---------------------------------------------------------------------------*/
+
 PROCESS_THREAD(oar_moor_process, ev, data)
 {
-  PROCESS_BEGIN();
+    PROCESS_BEGIN();
 
-  PROCESS_NAME(webserver_process);
-  process_start(&webserver_process, NULL);
+        PROCESS_NAME(webserver_process);
+        process_start(&webserver_process, NULL);
 
-  //LOG_INFO("Web Sense started\n");
+        //LOG_INFO("Web Sense started\n");
 
-  PROCESS_END();
+    PROCESS_END();
 }
 
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!

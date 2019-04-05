@@ -17,7 +17,7 @@ http.listen(3000, function(){
 // blue
 var dataPusher = setInterval(function () {
 
-    request.get('http://[fd00::212:4b00:f82:da03]/',function(err,res,body){ 
+    request.get('http://[fd00::212:4b00:f83:b601]/',function(err,res,body){ 
         if(err){
             console.log(err);
             return;
