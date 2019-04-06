@@ -174,7 +174,8 @@
 #define OAR_CONF_JSON_TINY_NRG                                              1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_NET                                              1                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF)
+#define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF) 
+                                                                                                // [== 0 >< MOOR]
 
 // #define OAR_CONF_JSON_TINY_DISCRITIZATION                                0                   // (ON/OF
 
@@ -195,10 +196,9 @@
 // set the encryption string size
 #define OAR_CONF_CRYPT_BUFFER_SIZE                                          1800                // *sizeof(char)
 
-// set the encryption key
-#define OAR_CRYPT_KEY_1                                                     'K'                 // any chars, and any size array
-#define OAR_CRYPT_KEY_2                                                     'C'                 // any chars, and any size array
-#define OAR_CRYPT_KEY_3                                                     'Q'                 // any chars, and any size array
+// </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
+// key[] = {'!', '@', '#', '$', '%', '^', '&', '*'} /////////////////////////////////////////// // hardcoded ./galiot/oar-crypt.c
+// </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 
 // enable/disable decryption
 #define OAR_CONF_CRYPT_DECRYPT                                              1                   // (ON/OFF)

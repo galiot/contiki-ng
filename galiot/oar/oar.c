@@ -339,6 +339,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     char buff[OAR_CONF_MOOR_BUFFER_SIZE];
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
+    leds_single_on(LEDS_LED1);
 
     // JJJJJJJJJJ
     // JJJJJJJJJJ
@@ -439,6 +440,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                             else // if heap memory could be allocated for decrypted_oar_json...
                             {
                                 oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+                                
 
                                 printf("%s\n", decrypted_oar_json); printf("\n"); 
                                 printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
@@ -660,6 +662,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
         SEND_STRING(&s->sout, buff); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
     }
     
+    leds_single_off(LEDS_LED1);
     PSOCK_END(&s->sout); // Declare the end of a protosocket's protothread.
 }
 
@@ -696,6 +699,7 @@ PROCESS_THREAD(oar_moor_process, ev, data)
         PROCESS_NAME(webserver_process);
         process_start(&webserver_process, NULL);
 
+        leds_single_on(LEDS_LED2);
         printf("MOOR PROCESS STARTED\n");
 
     PROCESS_END();
