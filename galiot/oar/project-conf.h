@@ -90,7 +90,21 @@
 // enable/disable moor functionality, across the board
 #define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON/OFF)
 
-//---------------------------------------------------------------------------
+// **************************************************************************
+// MOOR CONTSTANTS //////////////////////////////////////////////////////////
+// **************************************************************************
+
+// set the buffer size for staging the sending json
+#define OAR_CONF_MOOR_BUFFER_SIZE                                           512                 // BYTES *sizeof(char)
+                                                                                                // [< OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH]
+
+// set the maximum payload length for the packets send to unconstrained
+#define OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH                                    512                 // BYTES *sizeof(char) 
+                                                                                                // [< 643 != ECONNRESET/ETIMEDOUT]
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// DEBUG CONSTANTS //////////////////////////////////////////////////////////
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // enable/disable console print for debug purposes
 #define OAR_CONF_DEBUG                                                      1                   // (ON/OFF)
@@ -107,37 +121,42 @@
 // enable/disable shell information (printing shell values)
 #define OAR_CONF_DEBUG_NETWORK                                              0                   // (ON/OFF)
 
-//---------------------------------------------------------------------------
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// JSON CONSTANTS ///////////////////////////////////////////////////////////
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // enable/disable JSON creation
 #define OAR_CONF_JSON                                                       1                   // (ON/OFF)
 
 // set the JSON type
-#define OAR_CONF_JSON_TYPE                                                  0                   // 0: QUANTIZED: || 2: COMPACT || 3: MICRO || 4: TINY
+#define OAR_CONF_JSON_TYPE                                                  0                   // 0: QUANTIZED: || 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
 
-//---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: QUANTIZED ////////////////////////////////////////////
-// --------------------------------------------------------------------------
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
+// OAR_CONF_JSON_TYPE: QUANTIZED ///////////////
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    1800                // *sizeof(char) 
+#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    512                 // BYTES *sizeof(char) 
+                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
-//---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: EXTENDED /////////////////////////////////////////////
-// --------------------------------------------------------------------------
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
+// OAR_CONF_JSON_TYPE: EXTENDED ////////////////
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_EXTENDED_BUF_SIZE                                     5000                // *sizeof(char) 
+#define OAR_CONF_JSON_EXTENDED_BUF_SIZE                                     5000                // BYTES *sizeof(char) 
+                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
-//---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: COMPACT //////////////////////////////////////////////
-// --------------------------------------------------------------------------
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
+// OAR_CONF_JSON_TYPE: COMPACT /////////////////
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_COMPACT_BUF_SIZE                                      2200                // *sizeof(char) 
+#define OAR_CONF_JSON_COMPACT_BUF_SIZE                                      2200                // BYTES *sizeof(char) 
+                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
-//---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: MICRO ////////////////////////////////////////////////
-// --------------------------------------------------------------------------
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
+// OAR_CONF_JSON_TYPE: MICRO ///////////////////
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1800                // *sizeof(char)
+#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1800                // BYTES *sizeof(char) [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 #define OAR_CONF_JSON_MICRO_ID                                              1                   // (ON/OFF)
 #define OAR_CONF_JSON_MICRO_NRG                                             1                   // (ON/OFF)
@@ -145,11 +164,11 @@
 #define OAR_CONF_JSON_MICRO_NET                                             1                   // (ON/OFF)
 #define OAR_CONF_JSON_MICRO_RPL                                             1                   // (ON/OFF)
 
-//---------------------------------------------------------------------------
-// OAR_CONF_JSON_TYPE: TINY /////////////////////////////////////////////////
-// --------------------------------------------------------------------------
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
+// OAR_CONF_JSON_TYPE: TINY ////////////////////
+// ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_TINY_BUF_SIZE                                         1800                // *sizeof(char)
+#define OAR_CONF_JSON_TINY_BUF_SIZE                                         1800                // BYTES *sizeof(char)
 
 #define OAR_CONF_JSON_TINY_ID                                               1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_NRG                                              1                   // (ON/OFF)
@@ -157,19 +176,21 @@
 #define OAR_CONF_JSON_TINY_NET                                              1                   // (ON/OFF)
 #define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF)
 
-#define OAR_CONF_JSON_TINY_DISCRITIZATION                                   0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRITIZATION                                0                   // (ON/OF
 
-#define OAR_CONF_JSON_TINY_DISCRITIZATION_COUNT                             0                   // TOTAL DISCRETE PARTS
+// #define OAR_CONF_JSON_TINY_DISCRITIZATION_COUNT                          0                   // TOTAL DISCRETE PAR
 
-#define OAR_CONF_JSON_TINY_DISCRETE_NRG                                     0                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_DISCRETE_STATS                                   0                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_DISCRETE_NET                                     0                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_DISCRETE_RPL                                     0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRETE_NRG                                  0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRETE_STATS                                0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRETE_NET                                  0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRETE_RPL                                  0                   // (ON/OFF)
 
-//---------------------------------------------------------------------------
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// ENCRYPTION / DECRYPTION CONSTANTS ////////////////////////////////////////
+// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      0                   // (ON/OFF) 
+#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
 
 // set the encryption string size
 #define OAR_CONF_CRYPT_BUFFER_SIZE                                          1800                // *sizeof(char)

@@ -21,8 +21,12 @@ void oar_crypt(char *input, char *output)
 	
     for(i = 0; i < strlen(input); i++) 
     {
-		output[i] = input[i] ^ key[i % (sizeof(key)/sizeof(char))];
+        output[i] = input[i] ^ key[i % (sizeof(key)/sizeof(char))];
 	}
 
     output[strlen(input)] = '\0';           // output string needs to be explicitly ended for the encrypted string size to be equal to the unecrypted, reducing security (helps debugging though) 
+
+
+    // be careful!!! the algorithm encrypt/decrypts the FULL LENGTH for input and output string.
+    // so they MUST be the same size, REGARDLESS of the \0 charecter!!!
 }
