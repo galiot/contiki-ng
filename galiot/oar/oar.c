@@ -145,6 +145,7 @@
 
 
 
+
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -165,7 +166,13 @@ PROCESS(oar_moor_process, "oar moor process");
 
 #if (OAR_CONF_DEBUG_FUNCTIONALITY)
 
-    int quantum_id = 0;
+    #if (OAR_CONF_JSON == 1) 
+        #if (OAR_CONF_JSON_TYPE == 0)
+
+            int quantum_id = 0;
+        
+        #endif    
+    #endif
 
     AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
 
@@ -173,7 +180,14 @@ PROCESS(oar_moor_process, "oar moor process");
 
 #if (OAR_CONF_MOOR_FUNCTIONALITY)
 
-    int part = 0;
+    #if (OAR_CONF_JSON == 1) 
+        #if (OAR_CONF_JSON_TYPE == 0)
+
+            int quantum_id = 0;
+        
+        #endif    
+    #endif
+
     AUTOSTART_PROCESSES(&oar_moor_process);
 
 #endif // (OAR_CONF_MOOR_FUNCTIONALITY)
@@ -326,42 +340,292 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
 
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+
+    // ================================================================================================================================================================
+    // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ================================================================================================================================================================
+            
+    #if (OAR_CONF_JSON)
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        // EXTENDED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // ------------------------------------------------------------------------------------------------------------------------
+
+        #if (OAR_CONF_JSON_TYPE == 1) // use the extended json (./oar-json-extended.h) [project-conf.h]
+
+            printf("EXTENDED JSON TOO LARGE FOR SENDING - PLEASE CHOOSE OTHER TYPE IN project-conf.h\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+            
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("STAGING ERROR JSON\n"); //////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buff, "{ \" error \" : \" EXTENDED JSON \" }");
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+        #endif // (OAR_CONF_JSON_TYPE == 1)
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        // COMPACT JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // ------------------------------------------------------------------------------------------------------------------------
+
+        #if (OAR_CONF_JSON_TYPE == 2) // use the compact json (./oar-json-compact.h) [project-conf.h]
+
+            printf("COMPACT JSON TOO LARGE FOR SENDING - PLEASE CHOOSE OTHER TYPE IN project-conf.h\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+            
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("STAGING ERROR JSON\n"); /////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buff, "{ \" error \" : \" COMPACT JSON \" }");
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+        #endif // (OAR_CONF_JSON_TYPE == 2)
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        // TINY JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // ------------------------------------------------------------------------------------------------------------------------
+    
         #if (OAR_CONF_JSON_TYPE == 4) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
-                        
-            char *oar_json_tiny_discrete_buf = (char *)malloc((512+1)*sizeof(char)); // allocate OAR_CONF_JSON_TINY_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_tiny_buf > char *oar_json_tiny_discrete_buf = (char *)heapmem_alloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+                    
+            char *oar_json_tiny_buf = (char *)malloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_TINY_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_tiny_buf > char *oar_json_tiny_buf = (char *)heapmem_alloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
-            if (oar_json_tiny_discrete_buf == NULL) // if heap memory couldn't be allocated for oar_json_tiny_discrete_buf...
+            if (oar_json_tiny_buf == NULL) // if heap memory couldn't be allocated for oar_json_tiny_buf...
             {
-                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR TINY JSON\n", OAR_CONF_JSON_TINY_BUF_SIZE);
+                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR EXTENDED JSON\n", OAR_CONF_JSON_TINY_BUF_SIZE);
 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buff, "{ \" error \" : \" NOT ENOUGH MEMORY FOR JSON ALLOCATION \" }");
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("STAGING ERROR JSON\n"); /////////////////////////////////////////////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR TINY JSON ALLOCASTION \" }");
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 
-                free(oar_json_tiny_discrete_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                free(oar_json_tiny_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
             }
             else
             {
-                oar_json_tiny_discrete_construct(oar_json_tiny_discrete_buf, part); // construct oar_json_tiny_discrete_buf (function found in ./oar_json_micro.h)
+                oar_json_tiny_construct(oar_json_tiny_buf); // construct oar_json_tiny_buf (function found in ./oar_json_micro.h)
+                oar_json_tiny_print(oar_json_tiny_buf); // print oar_json_tiny_buf (function found in ./oar_json_micro.h)
                 
-                printf("\n"); printf("length of tiny discrete json part %d: %d\n", part, strlen(oar_json_tiny_discrete_buf));
-                
-                part++;
-                part = part % 3;
+                printf("\n"); printf("length of tiny json: %d\n", strlen(oar_json_tiny_buf));
 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buff, oar_json_tiny_discrete_buf);
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+                #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
 
-                free(oar_json_tiny_discrete_buf); // release the memory allocated for oar_json_tiny_buf > heapmem_free(oar_json_tiny_buf); (for platform specific os/lib/heapmem.h)
+                    char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                    printf("\n");
+                    
+                    if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+                    {
+                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        printf("STAGING ERROR JSON\n"); //////////////////////////////////////////////////////////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR ENCRYPTED JSON ALLOCASTION \" }");
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    
+                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                    }
+                    else // // if heap memory could be allocated for decrypted_oar_json...
+                    {
+                        oar_crypt(oar_json_tiny_buf, encrypted_oar_json); // encrypt oar_json_tiny_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                        
+                        printf("%s\n", encrypted_oar_json); printf("\n");
+                        printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
+
+                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                        // DECRYPTION ///////////////////////////////////////
+                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                        
+                        #if (OAR_CONF_CRYPT_DECRYPT)
+
+                            char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                            printf("\n");
+                            
+                            if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                            {
+                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+                            }
+                            else // if heap memory could be allocated for decrypted_oar_json...
+                            {
+                                oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+
+                                printf("%s\n", decrypted_oar_json); printf("\n"); 
+                                printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
+
+                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            }
+
+                        #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+                    }
+                    
+                    #else // (OAR_CONF_CRYPT)
+
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    printf("STAGING TINY JSON"); ///
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    strcpy(buff, oar_json_tiny_buf);
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+                #endif // (OAR_CONF_CRYPT)
+
+                free(oar_json_tiny_buf); // release the memory allocated for oar_json_tiny_buf > heapmem_free(oar_json_tiny_buf); (for platform specific os/lib/heapmem.h)
             }
             
-        #endif // (OAR_CONF_JSON_TYPE == 4)
+        #endif // (OAR_CONF_JSON_TYPE == 1)
 
-        printf("SENDING JSON\n");
+        // ------------------------------------------------------------------------------------------------------------------------
+        // QUANTIZED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // ------------------------------------------------------------------------------------------------------------------------
 
-        SEND_STRING(&s->sout, buff); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
+        #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]
+                    
+            char *oar_json_quantized_buf = (char *)malloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_QUANTIZED_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_quantized_buf > char *oar_json_quantized_buf = (char *)heapmem_alloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+            if (oar_json_quantized_buf == NULL) // if heap memory couldn't be allocated for oar_json_quantized_buf...
+            {
+                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR QUANTIZED JSON\n", OAR_CONF_JSON_QUANTIZED_BUF_SIZE);
+
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("STAGING ERROR JSON\n"); //////////////////////////////////////////////////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR QUANTIZED JSON ALLOCASTION \" }");
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                
+                free(oar_json_quantized_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+            }
+            else
+            {
+                oar_json_quantized_construct(oar_json_quantized_buf, quantum_id % 11); // construct oar_json_quantized_buf (function found in ./oar_json_micro.h)
+                oar_json_quantized_print(oar_json_quantized_buf); // print oar_json_quantized_buf (function found in ./oar_json_micro.h)
+                
+                printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_quantized_buf));
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
+
+                    char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                    printf("\n");
+                    
+                    if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+                    {
+                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        printf("STAGING ERROR JSON\n"); //////////////////////////////////////////////////////////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR ENCRYPTED JSON ALLOCASTION \" }");
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    
+                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                    }
+                    else // // if heap memory could be allocated for decrypted_oar_json...
+                    {
+                        oar_crypt(oar_json_quantized_buf, encrypted_oar_json); // encrypt oar_json_quantized_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                        
+                        printf("%s\n", encrypted_oar_json); printf("\n");
+                        printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
+
+                        
+                        printf("STAGING ENCRYPTED QUANTIZED JSON, QUANTUM: %d\n", quantum_id);
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        strcpy(buff, oar_json_tiny_discrete_buf);
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                        // DECRYPTION ///////////////////////////////////////
+                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
+                        
+                        #if (OAR_CONF_CRYPT_DECRYPT)
+
+                            char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+                            printf("\n");
+                            
+                            if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                            {
+                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+
+                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+                            }
+                            else // if heap memory could be allocated for decrypted_oar_json...
+                            {
+                                oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+
+                                printf("%s\n", decrypted_oar_json); printf("\n"); 
+                                printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
+
+                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            }
+
+                        #endif // (OAR_CONF_CRYPT_DECRYPT)
+                    }
+                    
+                #else // (OAR_CONF_CRYPT)
+
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    printf("STAGING QUANTIZED JSON, QUANTUM: %d\n", quantum_id);
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    strcpy(buff, oar_json_quantized_buf); //////////////////
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+                #endif // (OAR_CONF_CRYPT)
+
+                free(oar_json_quantized_buf); // release the memory allocated for oar_json_quantized_buf > heapmem_free(oar_json_quantized_buf); (for platform specific os/lib/heapmem.h)
+                
+                quantum_id++;
+                quantum_id %= 10999;
+            }
+                
+        #endif // (OAR_CONF_JSON_TYPE == 0)
+
+    #else // (OAR_CONF_JSON)
+
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        printf("STAGING NULL JSON\n"); ////
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        strcpy(buff, "\" JSON \" : null "); 
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+    #endif // (OAR_CONF_JSON)
+
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+
+    printf("\n"); printf("SENDING JSON\n");
+    SEND_STRING(&s->sout, buff); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
 
     PSOCK_END(&s->sout); // Declare the end of a protosocket's protothread.
 }
@@ -446,11 +710,6 @@ PROCESS_THREAD(oar_debug_process, ev, data)
             // char *encrypted_oar_json;
             // char *decrypted_oar_json;
             
-            
-
-
-
-
             etimer_set(&debug_timer, CLOCK_SECOND * OAR_CONF_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
 
             while(1) 
@@ -463,7 +722,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 #if (OAR_CONF_JSON)
 
                     // ------------------------------------------------------------------------------------------------------------------------
-                    // QUANTIZED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // QUANTIZED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ------------------------------------------------------------------------------------------------------------------------
 
                     #if (OAR_CONF_JSON_TYPE == 0) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
@@ -478,7 +737,6 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         }
                         else
                         {
-                            
                             oar_json_quantized_construct(oar_json_quantized_buf, quantum_id % 11); // construct oar_json_quantized_buf (function found in ./oar_json_micro.h)
                             oar_json_quantized_print(oar_json_quantized_buf); // print oar_json_quantized_buf (function found in ./oar_json_micro.h)
                             
@@ -556,7 +814,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // EXTENDED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ------------------------------------------------------------------------------------------------------------------------
 
-                    #if (OAR_CONF_JSON_TYPE == 1) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
+                    #if (OAR_CONF_JSON_TYPE == 1) // use the extended json (./oar-json-extended.h) [project-conf.h]
                         
                         char *oar_json_extended_buf = (char *)malloc((OAR_CONF_JSON_EXTENDED_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_EXTENDED_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_extended_buf > char *oar_json_extended_buf = (char *)heapmem_alloc((OAR_CONF_JSON_EXTENDED_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
@@ -571,7 +829,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                             oar_json_extended_construct(oar_json_extended_buf); // construct oar_json_extended_buf (function found in ./oar_json_micro.h)
                             oar_json_extended_print(oar_json_extended_buf); // print oar_json_extended_buf (function found in ./oar_json_micro.h)
                             
-                            printf("\n"); printf("length of tiny json: %d\n", strlen(oar_json_extended_buf));
+                            printf("\n"); printf("length of extended json: %d\n", strlen(oar_json_extended_buf));
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
@@ -639,7 +897,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                     // COMPACT JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ------------------------------------------------------------------------------------------------------------------------
 
-                    #if (OAR_CONF_JSON_TYPE == 2) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
+                    #if (OAR_CONF_JSON_TYPE == 2) // use the compact json (./oar-json-compact.h) [project-conf.h]
                         
                         char *oar_json_compact_buf = (char *)malloc((OAR_CONF_JSON_COMPACT_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_COMPACT_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_compact_buf > char *oar_json_compact_buf = (char *)heapmem_alloc((OAR_CONF_JSON_COMPACT_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
@@ -654,7 +912,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                             oar_json_compact_construct(oar_json_compact_buf); // construct oar_json_compact_buf (function found in ./oar_json_micro.h)
                             oar_json_compact_print(oar_json_compact_buf); // print oar_json_compact_buf (function found in ./oar_json_micro.h)
                             
-                            printf("\n"); printf("length of tiny json: %d\n", strlen(oar_json_compact_buf));
+                            printf("\n"); printf("length of compact json: %d\n", strlen(oar_json_compact_buf));
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
