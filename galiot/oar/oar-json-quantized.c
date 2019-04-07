@@ -537,7 +537,7 @@ static void oar_json_quantized_append_dev(char * buf)
 // ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that appends ENERGY section to the json string ////////////////////
+// function that appends ENERGY STATISTICS section to the json string /////////
 // ----------------------------------------------------------------------------
 
 static void oar_json_quantized_append_nrg(char * buf)
@@ -611,7 +611,7 @@ static void oar_json_quantized_append_nrg(char * buf)
 // function that appends IP STATS section to the json string //////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_IP(char * buf)
+static void oar_json_quantized_append_stats_ip(char * buf)
 {
     char str[128];
     
@@ -720,7 +720,7 @@ static void oar_json_quantized_append_stats_IP(char * buf)
 // function that appends ICMP STATS section to the json string ////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_ICMP(char * buf)
+static void oar_json_quantized_append_stats_icmp(char * buf)
 {
     char str[128];
     
@@ -819,7 +819,7 @@ static void oar_json_quantized_append_stats_ICMP(char * buf)
 // function that appends TRANSPORT STATS section to the json string ///////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_transport(char * buf)
+static void oar_json_quantized_append_stats_tcp_udp(char * buf)
 {
     char str[128];
     
@@ -1129,24 +1129,24 @@ static void oar_json_quantized_append_stats_nd6(char * buf)
 // ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that appends NET section to the json string ////////////////////
+// function that appends IPv6 ADDRESSES section to the json string ////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_net(char * buf)
+static void oar_json_quantized_append_ipv6_addr(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION START net{} /////////////////////////////////
+    // SECTION START addr{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "net" "\"" ":"    ); strcat(buf, str);   
+    sprintf(str, "\"" "addr" "\"" ":"    ); strcat(buf, str);   
     sprintf(str, "{"                    ); strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     #if (NETSTACK_CONF_WITH_IPV6)
 
-        sprintf(str, "\"" "v6" "\"" ":" "true"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
 
         // ??????????????????????????????????
         sprintf(str, ",");  strcat(buf, str);
@@ -1155,9 +1155,9 @@ static void oar_json_quantized_append_net(char * buf)
         uint8_t state;
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SUBARRAY START net{} > addr[] /////////////////////////////////
+        // SUBARRAY START net{} > ad[] ///////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "addr" "\"" ":"         ); strcat(buf, str);  
+        sprintf(str, "\"" "ad" "\"" ":"         ); strcat(buf, str); ///// 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
@@ -1186,107 +1186,23 @@ static void oar_json_quantized_append_net(char * buf)
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SUBARRAY END  net{} > addr[] /////////////
+        // SUBARRAY END  addr{} > addr[] ////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
 
-        // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
-        // ?????????????????????????????????? 
-
-            uip_ds6_nbr_t *nbr;
-            int oar_json_quantized_ip_neighbor_count = 0;
-
-            nbr = uip_ds6_nbr_head();
-
-            if(nbr == NULL)
-            {
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                //  (nbr == NULL) ///////////////////////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBARRAY START net{} > nbrs[] > //////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ///////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                    // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
-
-                    for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
-                    {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
-                    }
-
-                    sprintf(str, "]"); strcat(buf, str);
-                    // [][][][][][][][][][][][][][][][][]
-                
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBARRAY END  net{} > nbrs[] /////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
-            }
-            else
-            {
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                //  (nbr == NULL) ///////////////////////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBARRAY START net{} > nbrs[] > //////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ///////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-                    sprintf(str, "["); strcat(buf, str);
-                
-                    while(nbr != NULL)
-                    {
-                        oar_json_quantized_ip_neighbor_count++;
-                        
-                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{"); strcat(buf, str);
-                        
-                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_nbr_get_ipaddr(nbr));
-                            sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr                            ); strcat(buf, str);    sprintf(str, ",");  strcat(buf, str);
-
-                            oar_json_quantized_lladdr_to_str(oar_json_quantized_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr));
-                            sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_lladdr                            ); strcat(buf, str);    sprintf(str, ",");  strcat(buf, str);
-
-                            sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); strcat(buf, str);    sprintf(str, ",");  strcat(buf, str);
-                            sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ds6_nbr_state_to_str(nbr->state)  ); strcat(buf, str);
-
-                        sprintf(str, "}"); strcat(buf, str);
-                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-
-                        if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
-                        
-                        nbr = uip_ds6_nbr_next(nbr);
-                    }
-
-                    for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
-                    {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
-                    }
-
-                sprintf(str, "]"); strcat(buf, str);
-                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-            }
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SUBARRAY END  net{} > nbrs[] /////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        
     
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     #else
 
-        sprintf(str, "\"" "v6" "\"" ":" "false"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
 
         // ??????????????????????????????????
         sprintf(str, ",");  strcat(buf, str);
         // ?????????????????????????????????? 
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SUBARRAY START net{} > addr[] /////////////////////////////////
+        // SUBARRAY START addr{} > ads[] /////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "\"" "addr" "\"" ":"         ); strcat(buf, str); ///  
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1305,15 +1221,284 @@ static void oar_json_quantized_append_net(char * buf)
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SUBARRAY END  net{} > addr[] /////////////
+        // SUBARRAY END  addr{} > ads[] /////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    #endif
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END addr{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends IPv6 ADDRESSES section to the json string ////////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START nsIP{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "nsIP" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    #if (NETSTACK_CONF_WITH_IPV6)
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
 
         // ??????????????????????????????????
         sprintf(str, ",");  strcat(buf, str);
         // ?????????????????????????????????? 
 
+        uip_ds6_nbr_t *nbr;
+        int oar_json_quantized_ip_neighbor_count = 0;
+
+        nbr = uip_ds6_nbr_head();
+
+        if(nbr == NULL)
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsIP{} > nbrs[] > /////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); ///////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsIP{} > ns[] //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+        }
+        else
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsIP{} > ns[] > ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                sprintf(str, "["); strcat(buf, str);
+            
+                while(nbr != NULL)
+                {
+                    oar_json_quantized_ip_neighbor_count++;
+                    
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                    sprintf(str, "{"); strcat(buf, str);
+                    
+                        oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_nbr_get_ipaddr(nbr));
+                        sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr                            ); strcat(buf, str);
+
+                    sprintf(str, "}"); strcat(buf, str);
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    
+                    nbr = uip_ds6_nbr_next(nbr);
+                }
+
+                for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsIP{} > ns[] //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        }
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+    #else
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ??????????????????????????????????
+
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START net{} > nbrs[] /////////////////////////////////
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); //////////////
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        
+            // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+            sprintf(str,"["); strcat(buf, str);
+
+            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+            {
+                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                    
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+            }
+
+            sprintf(str, "]"); strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SUBARRAY END  nsIP{} > ns[] //////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    #endif
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END nsIP{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ---------------------------------------------------------------------------
+// function that appends IPv6 NEIGBORS LL ADDRESSES section to the json string
+// ---------------------------------------------------------------------------
+
+static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START nsLL{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "nsLL" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    #if (NETSTACK_CONF_WITH_IPV6)
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ?????????????????????????????????? 
+
+        uip_ds6_nbr_t *nbr;
+        int oar_json_quantized_ip_neighbor_count = 0;
+
+        nbr = uip_ds6_nbr_head();
+
+        if(nbr == NULL)
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsLL{} > ns[] > ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ///////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsLL{} > ns[] //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+        }
+        else
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsLL{} > ns[] > ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                sprintf(str, "["); strcat(buf, str);
+            
+                while(nbr != NULL)
+                {
+                    oar_json_quantized_ip_neighbor_count++;
+                    
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                    sprintf(str, "{"); strcat(buf, str);
+                    
+                        oar_json_quantized_lladdr_to_str(oar_json_quantized_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr));
+                        sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_lladdr                            ); strcat(buf, str);
+
+                    sprintf(str, "}"); strcat(buf, str);
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    
+                    nbr = uip_ds6_nbr_next(nbr);
+                }
+
+                for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsLL{} > ns ////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        }
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+    #else
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ??????????????????????????????????
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SUBARRAY START nsLL > ns[] ////////////////////////////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
@@ -1333,7 +1518,7 @@ static void oar_json_quantized_append_net(char * buf)
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY END  net{} > nbrs[] /////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
     #endif
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
@@ -1341,7 +1526,155 @@ static void oar_json_quantized_append_net(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     sprintf(str, "}"); strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION END net{} ///////////////
+    // SECTION END nsLL{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends IPv6 NEIGHBOR STATES section to the json string //////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START nsSt{} /////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "nsSt" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    #if (NETSTACK_CONF_WITH_IPV6)
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ?????????????????????????????????? 
+
+        uip_ds6_nbr_t *nbr;
+        int oar_json_quantized_ip_neighbor_count = 0;
+
+        nbr = uip_ds6_nbr_head();
+
+        if(nbr == NULL)
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsSt{} > ns[] > ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsSt{} > ns[] //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+        }
+        else
+        {
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //  (nbr == NULL) ///////////////////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START nsSt{} > ns[] > ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                sprintf(str, "["); strcat(buf, str);
+            
+                while(nbr != NULL)
+                {
+                    oar_json_quantized_ip_neighbor_count++;
+                    
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                    sprintf(str, "{"); strcat(buf, str);
+                    
+                        sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); strcat(buf, str);    sprintf(str, ",");  strcat(buf, str);
+                        sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ds6_nbr_state_to_str(nbr->state)  ); strcat(buf, str);
+
+                    sprintf(str, "}"); strcat(buf, str);
+                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    
+                    nbr = uip_ds6_nbr_next(nbr);
+                }
+
+                for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END  nsSt{} > ns[] //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        }
+
+    // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+    #else
+
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ??????????????????????????????????
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SUBARRAY START nsSt{} > ns[] //////////////////////////////////
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); //////////////
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+        
+            // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+            sprintf(str,"["); strcat(buf, str);
+
+            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+            {
+                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                    
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+            }
+
+            sprintf(str, "]"); strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SUBARRAY END  nsSt{} > ns[] //////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+    #endif
+    // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END nbrs{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
@@ -1353,7 +1686,7 @@ static void oar_json_quantized_append_net(char * buf)
 // function that appends ROUTING section to the json string ///////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rt(char * buf)
+static void oar_json_quantized_append_routing(char * buf)
 {
     char str[128];
 
@@ -1367,7 +1700,7 @@ static void oar_json_quantized_append_rt(char * buf)
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "v6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
 
             // ??????????????????????????????????
             sprintf(str, ",");  strcat(buf, str);
@@ -1391,115 +1724,138 @@ static void oar_json_quantized_append_rt(char * buf)
 
             }
 
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+        #else
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            
+            sprintf(str, "\"" "df"  "\"" ":"    "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "lt"  "\"" ":"    "null"      ); strcat(buf, str);
+
+
+        #endif
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END net{} ///////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------------
+// function that appends ROUTING LINK SOURCES section to the json string ////////////
+// ----------------------------------------------------------------------------------
+
+static void oar_json_quantized_append_routing_link_sources(char * buf)
+{
+    char str[128];
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rtLS{} ///////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rtLS" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        #if (NETSTACK_CONF_WITH_IPV6)
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+
             // ??????????????????????????????????
             sprintf(str, ",");  strcat(buf, str);
-            // ??????????????????????????????????
+            // ?????????????????????????????????? 
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SUBSECTION START rt{} > rLs{} ///////////////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "rLs" "\"" ":"   ); strcat(buf, str); ////////
-            sprintf(str, "{"                   ); strcat(buf, str); ////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            
-                // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
-                #if (UIP_CONF_IPV6_RPL)
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
+            #if (UIP_CONF_IPV6_RPL)
 
-                    sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
 
-                    // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
-                    // ?????????????????????????????????? 
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
 
-                    int oar_json_quantized_uip_sr_links_count = 0;
+                int oar_json_quantized_uip_sr_links_count = 0;
 
-                    if (uip_sr_num_nodes() > 0)
-                    {
-                    
-                        uip_sr_node_t *link;
-                        link = uip_sr_node_head();
+                if (uip_sr_num_nodes() > 0)
+                {
+                
+                    uip_sr_node_t *link;
+                    link = uip_sr_node_head();
 
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        //  (uip_sr_num_nodes() > 0) ////////////////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBARRAY START net{} > rLs{} > ls[] //////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "\"" "ls" "\"" ":" ); strcat(buf, str); ////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_sr_num_nodes() > 0) //////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtLS{} > ls[] ////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                            // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                            sprintf(str,"["); strcat(buf, str);
-                            
-                            while(link != NULL) 
-                            {
-                                char goa_buf[100];
-                                oar_json_quantized_uip_sr_links_count++;
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
 
-                                uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
-                                
-                                sprintf(str,    "\""    "%s"    "\""    ,goa_buf ); strcat(buf, str);
-                                
-                                if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                        uip_ipaddr_t child_ipaddr;  // DODAG root to -->
+                        // uip_ipaddr_t parent_ipaddr; // <-- to
 
-                                link = uip_sr_node_next(link);
-                            }
-
-                            for (int j = oar_json_quantized_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
-                            {
-                                
-                                sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
-                                
-                                if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-                            }
-
-                            sprintf(str, "]"); strcat(buf, str);   
-                            // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBARRAY END net{} > rLs{} > ls[] ////////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    }
-                    else
-                    {
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // !(uip_sr_num_nodes() > 0) ////////////////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBARRAY START net{} > rLs{} > ls[] //////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                            // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                            sprintf(str,"["); strcat(buf, str);
-
-                            for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
-                            {
-                                
-                                sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
-                                
-                                if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-                            }
-                            
-                            sprintf(str, "]"); strcat(buf, str);   
-                            // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                        NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
+                        // NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, link->parent);
                         
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBARRAY END net{} > rLs{} > ls[] ////////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    }
+                        while(link != NULL) 
+                        {
+                            oar_json_quantized_uip_sr_links_count++;
 
-                // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
-                // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
-                #else
+                            // uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
+                            
+                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &child_ipaddr);
+                            sprintf(str,    "\""    "from"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
 
-                    sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
+                            if(link->parent == NULL)
+                            {
+                                sprintf(str, "\"" "root" "\"" ":" "true"); strcat(buf, str); 
+                            }
+                            else
+                            {
+                                sprintf(str, "\"" "root" "\"" ":" "false"); strcat(buf, str);
+                            }
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBARRAY START net{} > rLs{} > ls[] //////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    
+                            
+                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+
+                            link = uip_sr_node_next(link);
+                        }
+
+                        for (int j = oar_json_quantized_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+
+                        sprintf(str, "]"); strcat(buf, str);   
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY END rtLS{} > ls[]
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+                else
+                {
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_sr_num_nodes() > 0) //////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtLS{} > ls[] ////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
                         sprintf(str,"["); strcat(buf, str);
 
@@ -1510,38 +1866,344 @@ static void oar_json_quantized_append_rt(char * buf)
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
                         }
+                        
+                        sprintf(str, "]"); strcat(buf, str);   
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                    
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY END rtLS{} > ls[]
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
+            #else
+
+                sprintf(str, "\"" "rpl" "\"" ":" "false"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rtLS{} > ls[] /////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);
+
+                    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        
+                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    }
+                        
+                    sprintf(str, "]"); strcat(buf, str);   
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rtLS{} > ls[]
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            #endif
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########
+            
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+        #else
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ?????????????????????????????????? 
+
+            sprintf(str, "\"" "rpl" "\"" ":" "null"); strcat(buf, str);
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START rtLS{} > ls[] ////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+                // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                sprintf(str,"["); strcat(buf, str);
+
+                for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                {
+                    
+                    sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                    
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                }
+                    
+                sprintf(str, "]"); strcat(buf, str);   
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rtLS{} > ls[]
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        #endif
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rtLS{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------------
+// function that appends ROUTING LINK DESTINATIONS section to the json string ///////
+// ----------------------------------------------------------------------------------
+
+static void oar_json_quantized_append_routing_link_destinations(char * buf)
+{
+    char str[128];
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rtLD{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rtLD" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        #if (NETSTACK_CONF_WITH_IPV6)
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ?????????????????????????????????? 
+
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
+            #if (UIP_CONF_IPV6_RPL)
+
+                sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                int oar_json_quantized_uip_sr_links_count = 0;
+
+                if (uip_sr_num_nodes() > 0)
+                {
+                
+                    uip_sr_node_t *link;
+                    link = uip_sr_node_head();
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_sr_num_nodes() > 0) ///////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtLD{} > ls[] ////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
+
+                        // uip_ipaddr_t child_ipaddr;  // DODAG root to -->
+                        uip_ipaddr_t parent_ipaddr; // <-- to
+
+                        // NETSTACK_ROUTING.get_sr_node_ipaddr(&child_ipaddr, link);
+                        NETSTACK_ROUTING.get_sr_node_ipaddr(&parent_ipaddr, link->parent);
+                        
+                        while(link != NULL) 
+                        {
+                            oar_json_quantized_uip_sr_links_count++;
                             
+
+                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &parent_ipaddr);
+                            sprintf(str,    "\""    "to"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+                            if(link->lifetime != UIP_SR_INFINITE_LIFETIME)
+                            {
+                                sprintf(str, "\"" "lf" "\"" ":" "%lu"                   ,(unsigned long)link->lifetime  ); strcat(buf, str); 
+                            }
+                            else
+                            {
+                                sprintf(str, "\"" "lf" "\"" ":" "\"" "infinite" "\""                                    ); strcat(buf, str); 
+                            }
+
+                            
+                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+
+                            link = uip_sr_node_next(link);
+                        }
+
+                        for (int j = oar_json_quantized_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+
                         sprintf(str, "]"); strcat(buf, str);   
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBARRAY END net{} > rLs{} > ls[] ////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY END rtLD{} > ls[]
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+                else
+                {
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_sr_num_nodes() > 0) //////////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtLD{} > ls[] ///////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                #endif
-                // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
+
+                        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+                        
+                        sprintf(str, "]"); strcat(buf, str);   
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                    
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY END rtLD{} > ls[]
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
+            #else
+
+                sprintf(str, "\"" "rpl" "\"" ":" "false"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START net{} > rtLD{} > ls[] //////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);
+
+                    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        
+                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    }
+                        
+                    sprintf(str, "]"); strcat(buf, str);   
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rtLD{} > ls[]
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            #endif
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########
             
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+        #else
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ?????????????????????????????????? 
+
+            sprintf(str, "\"" "rpl" "\"" ":" "null"); strcat(buf, str);
+
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str); //////////////
+            // SUBARRAY START rtLD{} > ls[] ///////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SUBSECTION END rt{} > rLs{} ////////////////////
+            sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+                // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                sprintf(str,"["); strcat(buf, str);
+
+                for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                {
+                    
+                    sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                    
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                }
+                    
+                sprintf(str, "]"); strcat(buf, str);   
+                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rtLD{} > ls[]
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        #endif
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rtLs{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------------
+// function that appends ROUTING ENTRY ROUTES section to the json string ////////////
+// ----------------------------------------------------------------------------------
+
+static void oar_json_quantized_append_routing_entry_routes(char * buf)
+{
+    char str[128];
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rtEs{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rtERt" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        #if (NETSTACK_CONF_WITH_IPV6)
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
 
             // ??????????????????????????????????
             sprintf(str, ",");  strcat(buf, str);
             // ??????????????????????????????????
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SUBSECTION START rt{} > rEs /////////////////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "rE" "\"" ":"     ); strcat(buf, str); ///////
-            sprintf(str, "{"                    ); strcat(buf, str); ///////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
             #if (UIP_MAX_ROUTES != 0)
 
-                sprintf(str, "\"" "xRtsNZ" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); strcat(buf, str);
 
                 // ??????????????????????????????????
                 sprintf(str, ",");  strcat(buf, str);
@@ -1559,49 +2221,47 @@ static void oar_json_quantized_append_rt(char * buf)
                     route = uip_ds6_route_head();
                     int oar_json_quantized_ds6_route_count = 0;
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //  (uip_ds6_route_num_routes() > 0) ////////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBARRAY START rt{} > rEs > es[] /////////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str); /////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //  (uip_ds6_route_num_routes() > 0) //////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtEs{} > es[] ///////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
-                    
-                    while(route != NULL) 
-                    {
-                        oar_json_quantized_ds6_route_count++;
-
-                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{"); strcat(buf, str);
-
-                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &route->ipaddr);
-                            sprintf(str,    "\""    "rt"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-
-                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_route_nexthop(route));
-                            sprintf(str,    "\""    "via"       "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
-
-                            if ((unsigned long)route->state.lifetime != 0xFFFFFFFF) { sprintf(str,  "\""  "lf"    "\""    ":"         "%u"                ,(unsigned long)route->state.lifetime); strcat(buf, str); }
-                            else                                                    { sprintf(str,  "\""  "lf"    "\""    ":" "\""    "infinite"  "\""                                         ); strcat(buf, str); }
-
-                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "}"); strcat(buf, str);
-                    
-                        if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
-                    }
-
-                    for (int j = oar_json_quantized_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
-                    {
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
-                        
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
-                    }
+                        while(route != NULL) 
+                        {
+                            oar_json_quantized_ds6_route_count++;
 
-                    sprintf(str, "]"); strcat(buf, str);
-                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                            // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                            sprintf(str, "{"); strcat(buf, str);
+
+                                oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &route->ipaddr);
+                                sprintf(str,    "\""    "rt"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    
+
+                            // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                            sprintf(str, "}"); strcat(buf, str);
+                        
+                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                        }
+
+                        for (int j = oar_json_quantized_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+
+                        sprintf(str, "]"); strcat(buf, str);
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                    
+                    // --------------------------
+                    // SUBARRAY END rtEs{} > es[]
+                    // --------------------------
                 }
                 else
                 {
@@ -1611,13 +2271,13 @@ static void oar_json_quantized_append_rt(char * buf)
                     sprintf(str, ",");  strcat(buf, str);
                     // ?????????????????????????????????? 
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // !(uip_ds6_route_num_routes() > 0) ////////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBARRAY START net{} > routes{} > routingEntries{} > entries[]
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str); /////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_ds6_route_num_routes() > 0) //////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtEs{} > es[] ///////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
                         sprintf(str,"["); strcat(buf, str);
@@ -1632,13 +2292,66 @@ static void oar_json_quantized_append_rt(char * buf)
 
                         sprintf(str, "]"); strcat(buf, str);
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                    // --------------------------
+                    // SUBARRAY END rtEs{} > es[]
+                    // --------------------------
                 }
 
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
             #else
 
-                sprintf(str, "\"" "xRtsNZ" "\"" ":" "false"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????
+
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rtEs{} > es[] ///////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);
+
+                    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        
+                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                
+                // --------------------------
+                // SUBARRAY END rtEs{} > es[]
+                // --------------------------
+
+            #endif
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+        #else
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); strcat(buf, str);
 
                 // ??????????????????????????????????
                 sprintf(str, ",");  strcat(buf, str);
@@ -1669,65 +2382,239 @@ static void oar_json_quantized_append_rt(char * buf)
 
                     sprintf(str, "]"); strcat(buf, str);
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-
-            #endif
-            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
-
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str); //////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SUBSECTION END rt{} > rEs{} ////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
-        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
-        #else
-
-            sprintf(str, "\"" "v6" "\"" ":" "false"); strcat(buf, str);
-            
-            sprintf(str, "\"" "df"  "\"" ":"    "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "lt"  "\"" ":"    "null"      ); strcat(buf, str); 
-
-            // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
-            // ?????????????????????????????????? 
-
-            // ########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
-            #if (UIP_CONF_IPV6_RPL)
-
-                sprintf(str, "\"" "rpl" "\"" ":" "flase"); strcat(buf, str);
-
-
-
-
-            // ########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
-            // ########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
-            #else
-
-            #endif 
-            // ########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
-
-            // ########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########! 
-            #if (UIP_MAX_ROUTES != 0)
-
-            // ########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)########! 
-            // ########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########! 
-            #else
-
-            #endif 
-            // ########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########!(NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)########! 
-             
-
-
+        
         #endif
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     sprintf(str, "}"); strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION END net{} ///////////////
+    // SECTION END rtEs{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------------
+// function that appends ROUTING ENTRY VIAs section to the json string ////////////
+// ----------------------------------------------------------------------------------
+
+static void oar_json_quantized_append_routing_entry_vias(char * buf)
+{
+    char str[128];
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rtEs{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rtEVia" "\"" ":"   ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        #if (NETSTACK_CONF_WITH_IPV6)
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
+            #if (UIP_MAX_ROUTES != 0)
+
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????
+
+                if(uip_ds6_route_num_routes() > 0)
+                {
+                    uip_ds6_route_t *route;
+                    sprintf(str, "\"" "totEs" "\"" ":" "%u" ,uip_ds6_route_num_routes()); strcat(buf, str);
+
+                    // ??????????????????????????????????
+                    sprintf(str, ",");  strcat(buf, str);
+                    // ?????????????????????????????????? 
+
+                    route = uip_ds6_route_head();
+                    int oar_json_quantized_ds6_route_count = 0;
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //  (uip_ds6_route_num_routes() > 0) //////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtEs{} > es[] ///////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
+                        
+                        while(route != NULL) 
+                        {
+                            oar_json_quantized_ds6_route_count++;
+
+                            // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                            sprintf(str, "{"); strcat(buf, str);
+
+                                oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_route_nexthop(route));
+                                sprintf(str,    "\""    "via"       "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+
+                                if ((unsigned long)route->state.lifetime != 0xFFFFFFFF) { sprintf(str,  "\""  "lf"    "\""    ":"         "%u"                ,(unsigned long)route->state.lifetime); strcat(buf, str); }
+                                else                                                    { sprintf(str,  "\""  "lf"    "\""    ":" "\""    "infinite"  "\""                                         ); strcat(buf, str); }
+
+                            // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                            sprintf(str, "}"); strcat(buf, str);
+                        
+                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                        }
+
+                        for (int j = oar_json_quantized_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+
+                        sprintf(str, "]"); strcat(buf, str);
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                    
+                    // --------------------------
+                    // SUBARRAY END rtEs{} > es[]
+                    // --------------------------
+                }
+                else
+                {
+                    sprintf(str, "\"" "totEs" "\"" ":" "\"" "none" "\"" ); strcat(buf, str);    
+                        
+                    // ??????????????????????????????????
+                    sprintf(str, ",");  strcat(buf, str);
+                    // ?????????????????????????????????? 
+
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // !(uip_ds6_route_num_routes() > 0) //////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    // SUBARRAY START rtEs{} > es[] ///////////////////
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    
+                        // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                        sprintf(str,"["); strcat(buf, str);
+
+                        for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                        {
+                            
+                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        }
+
+                        sprintf(str, "]"); strcat(buf, str);
+                        // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                    // --------------------------
+                    // SUBARRAY END rtEs{} > es[]
+                    // --------------------------
+                }
+
+            // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
+            #else
+
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????
+
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rtEs{} > es[] ///////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);
+
+                    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        
+                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+                
+                // --------------------------
+                // SUBARRAY END rtEs{} > es[]
+                // --------------------------
+
+            #endif
+            // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
+
+        // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+        #else
+
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); strcat(buf, str);
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????
+
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ?????????????????????????????????? 
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START net{} > routes{} > routingEntries{} > entries[]
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str); /////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); strcat(buf, str);
+
+                    for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        
+                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+        
+        #endif
+        // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rtEs{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
 }
 
 // ####################################################################################################################
@@ -1760,49 +2647,7 @@ static void oar_json_quantized_append_rpl_status(char * buf)
 
             if(!curr_instance.used)             
                 { 
-                    sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // (!curr_instance.used) ///////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION START rSt{} > dag{} //////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "dag" "\"" ":"); strcat(buf, str);
-                    sprintf(str, "{"                ); strcat(buf, str);
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    
-                        sprintf(str, "\"" "dT"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dId"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dVer"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dPf"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "st"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "pP"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "rk"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "lRk"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBSECTION START rSt{} > dag{} > dao{} /////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "\"" "dao" "\"" ":"); strcat(buf, str); //////////
-                        sprintf(str, "{"                ); strcat(buf, str); //////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                            sprintf(str, "\"" "lS"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);
-
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUSECTION END rSt{} > dag{} > dao{} /////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "}"); strcat(buf, str); ///////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUSECTION END rSt{} > dag{} /////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "}"); strcat(buf, str); ///////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);
                     
                     // ??????????????????????????????????
                     sprintf(str, ",");  strcat(buf, str);
@@ -1812,91 +2657,12 @@ static void oar_json_quantized_append_rpl_status(char * buf)
                     sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
                     sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
                     sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dO"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION START rSt{} > tT{} ///////////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "tT" "\"" ":"   ); strcat(buf, str);
-                    sprintf(str, "{"                  ); strcat(buf, str);
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                        sprintf(str,    "\""    "cur"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                        sprintf(str,    "\""    "nim"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                        sprintf(str,    "\""    "max"   "\""    ":" "null"    );  strcat(buf, str);   sprintf(str,    "," );  strcat(buf, str);
-                        sprintf(str,    "\""    "red"   "\""    ":" "null"    );  strcat(buf, str);   
-
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION END rSt{} > tT{} //////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "}"); strcat(buf, str); ////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "dO"      "\"" ":" "null"); strcat(buf, str);
                 
                 } 
                 else                                
                 { 
-                    sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
-
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // !(!curr_instance.used) //////////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION START rSt{} > dag{} //////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "dag" "\"" ":"); strcat(buf, str);
-                    sprintf(str, "{"                ); strcat(buf, str);
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    
-                        // sprintf(str, "\"" "valid"          "\"" ":"         "true"                                                                  ); strcat(buf, str);    sprintf(str,  ","); strcat(buf, str);
-
-                        if(NETSTACK_ROUTING.node_is_root()) { sprintf(str, "\"" "dT" "\"" ":" "\"" "root" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
-                        else                                { sprintf(str, "\"" "dT" "\"" ":" "\"" "node" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
-                
-                        oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.dag_id);
-                        sprintf(str, "\"" "dId"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        
-                        sprintf(str, "\"" "dVer"    "\"" ":"        "%u"            ,curr_instance.dag.version                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-
-                        oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.prefix_info.prefix);
-                        sprintf(str, "\"" "dPf"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        
-                        sprintf(str, "\"" "dPfL"    "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "st"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_state_to_str(curr_instance.dag.state)     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-
-                        if (curr_instance.dag.preferred_parent) 
-                        {
-                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
-                            sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_quantized_ipaddr    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        }
-                        else
-                        {
-                            sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        }
-
-                        sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "mRkI"    "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUBSECTION START rplSt{} > dag{} > dao{} ///////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "\"" "dao" "\"" ":"); strcat(buf, str); //
-                        sprintf(str, "{"                        ); strcat(buf, str); //
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                            sprintf(str, "\"" "lS"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "lA"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); strcat(buf, str);   
-
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        // SUSECTION END rplSt{} > dag{} > dao{} ///////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                        sprintf(str, "}"); strcat(buf, str); ///////////////////////
-                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUSECTION END rSt{} > dag{} /////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "}"); strcat(buf, str); ///////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); strcat(buf, str);
 
                     // ??????????????????????????????????
                     sprintf(str, ",");  strcat(buf, str);
@@ -1904,28 +2670,9 @@ static void oar_json_quantized_append_rpl_status(char * buf)
 
                     sprintf(str, "\"" "mop"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_mop_to_str(curr_instance.mop)       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
                     sprintf(str, "\"" "of"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_ocp_to_str(curr_instance.of->ocp)   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "hRkI"    "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dLt"     "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)           ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dtsnO"   "\"" ":"        "%u"            ,curr_instance.dtsn_out                                 ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION START rSt{} > dag{} > tT{} ///////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "tT" "\"" ":"   ); strcat(buf, str); /////////
-                    sprintf(str, "{"                  ); strcat(buf, str); /////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                    
-                        sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "max" "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "red" "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); strcat(buf, str);    
-
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str); //////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBSECTION END rSt{} > dag{} > tT{} ////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    sprintf(str, "\"" "hRkI"    "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                    sprintf(str, "\"" "dLt"     "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                    sprintf(str, "\"" "dtsnO"   "\"" ":"        "%u"            ,curr_instance.dtsn_out                                     ); strcat(buf, str);    
             }
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
@@ -1938,77 +2685,17 @@ static void oar_json_quantized_append_rpl_status(char * buf)
             sprintf(str, ",");  strcat(buf, str);
             // ?????????????????????????????????? 
 
-            sprintf(str, "\"" "iId"  "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBSECTION START rSt{} > dag{} //////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "dag" "\"" ":"); strcat(buf, str);
-                sprintf(str, "{"                ); strcat(buf, str);
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                
-                    
-                    sprintf(str, "\"" "dT"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dVer"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dPf"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "st"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "pP"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "rk"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUBSECTION START rSt{} > dag{} > dao{} /////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); //////
-                    sprintf(str, "{"                    ); strcat(buf, str); //////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "iId"  "\"" ":" "null"); strcat(buf, str);  
 
-                        sprintf(str, "\"" "lS"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                        sprintf(str, "\"" "lA"  "\"" ":" "null"     ); strcat(buf, str);    
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ?????????????????????????????????? 
 
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    // SUSECTION END rSt{} > dag{} > dao{} /////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "}"); strcat(buf, str); ///////////////////////
-                    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUSECTION END rSt{} > dag{} /////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str); ///////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
-                // ?????????????????????????????????? 
-
-                sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dtsnO"   "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBSECTION START rSt{} > tT{} ///////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "tT" "\"" ":"   ); strcat(buf, str);
-                sprintf(str, "{"                            ); strcat(buf, str);
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                    
-                    sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
-
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str); //////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SUBSECTION END rSt{} > tT{} ////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "dtsnO"   "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
 
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
@@ -2025,15 +2712,258 @@ static void oar_json_quantized_append_rpl_status(char * buf)
 // ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that appends RPL NEIGBORS section to the json string //////////////
+// function that appends RPL STATUS section to the json string ////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_neighbors(char * buf)
+static void oar_json_quantized_append_rpl_status_dag(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION START rN{} //////////////////////////////////
+    // SECTION START rStDag{} //////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rStDag" "\"" ":" ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        #if (ROUTING_CONF_RPL_LITE)
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            if(!curr_instance.used)             
+            { 
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                sprintf(str, "\"" "dT"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "dId"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "dVer"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "dPf"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "st"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "pP"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "rk"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "lRk"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); strcat(buf, str);    
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????
+                    
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBSECTION START rStDag{} > dao{} ///////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
+                sprintf(str, "{"                    ); strcat(buf, str); 
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                    sprintf(str, "\"" "lS"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUSECTION END rStDag{} > dao{} //
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "}"); strcat(buf, str);
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+            else
+            {
+                sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+
+                if(NETSTACK_ROUTING.node_is_root()) { sprintf(str, "\"" "dT" "\"" ":" "\"" "root" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
+                else                                { sprintf(str, "\"" "dT" "\"" ":" "\"" "node" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
+        
+                oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.dag_id);
+                sprintf(str, "\"" "dId"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                sprintf(str, "\"" "dVer"    "\"" ":"        "%u"            ,curr_instance.dag.version                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+                oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.prefix_info.prefix);
+                sprintf(str, "\"" "dPf"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                sprintf(str, "\"" "dPfL"    "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "st"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_state_to_str(curr_instance.dag.state)     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+                if (curr_instance.dag.preferred_parent) 
+                {
+                    oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
+                    sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_quantized_ipaddr    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                }
+                else
+                {
+                    sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                }
+
+                sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "mRkI"    "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    
+
+                // ??????????????????????????????????
+                sprintf(str, ",");  strcat(buf, str);
+                // ??????????????????????????????????        
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBSECTION START rStDag{} > dao{} ///////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
+                sprintf(str, "{"                    ); strcat(buf, str); 
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                    sprintf(str, "\"" "lS"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                    sprintf(str, "\"" "lA"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); strcat(buf, str);   
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUSECTION END rStDag{} > dao{} //
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "}"); strcat(buf, str);
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+        #else
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+            
+            sprintf(str, "\"" "iId"  "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+            sprintf(str, "\"" "dT"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "dId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "dVer"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "dPf"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "st"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "pP"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "rk"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+            sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); strcat(buf, str);    
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBSECTION START rStDag{} > dao{} ///////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
+            sprintf(str, "{"                    ); strcat(buf, str); 
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                sprintf(str, "\"" "lS"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUSECTION END rStDag{} > dao{} //
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "}"); strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        #endif
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SUBSECTION END rStDag{} /////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL STATUS TRICKLE TIMER section to the json string //
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_rpl_status_trickle_timer(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rStTt{} ///////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rStTt" "\"" ":"  ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        #if (ROUTING_CONF_RPL_LITE)
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            if(!curr_instance.used)             
+            { 
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+                sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
+            }
+            else
+            {
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+                sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "max" "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "red" "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); strcat(buf, str);    
+            }
+            
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+        #else
+
+        sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str);
+
+        // ??????????????????????????????????
+        sprintf(str, ",");  strcat(buf, str);
+        // ??????????????????????????????????
+
+        sprintf(str, "\"" "iId" "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+        sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+        sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+        sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+        sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
+
+    #endif
+    // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SUBSECTION END rStTt{} //////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL NEIGBOR ADDR section to the json string /////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_rpl_neighbor(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rN{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     sprintf(str, "\"" "rN" "\"" ":"     ); strcat(buf, str);   
     sprintf(str, "{"                    ); strcat(buf, str);
@@ -2051,8 +2981,8 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
             if (!curr_instance.used || rpl_neighbor_count() == 0)
             {
                 
-                if (!curr_instance.used)    { sprintf(str, "\"" "i" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
-                else                        { sprintf(str, "\"" "i" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
             
                 sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                 
@@ -2075,6 +3005,10 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
 
                     sprintf(str, "]"); strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rN{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~
             }
             else
             {
@@ -2083,16 +3017,339 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
 
                 int oar_json_quantized_rpl_neighbor_count = 0;
 
-                sprintf(str, "\"" "i"   "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "c"   "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // !(!curr_instance.used || rpl_neighbor_count() == 0) //////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBARRAY START rN{} > ns /////////////////////////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNR{} > ns[] ///////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    while(nbr != NULL)
+                    {
+                        oar_json_quantized_rpl_neighbor_count++; 
+                        
+                        // rpl_nbr_t *oar_json_quantized_rpl_nbr_best = best_parent(0);
+                        // const struct link_stats *oar_json_quantized_rpl_nbr_stats = rpl_neighbor_get_link_stats(nbr);
+                        // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
+
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        sprintf(str, "{" ); strcat(buf, str);
+
+                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(nbr));
+                            sprintf(str, "\"" "ad"                              "\"" ":" "\""   "%s"    "\""       ,oar_json_quantized_ipaddr); strcat(buf, str);
+                            
+                        sprintf(str,    "}" ); strcat(buf, str);
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        nbr = nbr_table_next(rpl_neighbors, nbr);
+                    }
+                    
+                    for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str, "null"); strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rN{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~
+            }
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+        #else
+
+            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START rN{} > ns[] //////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rN{} > ns
+            // ~~~~~~~~~~~~~~~~~~~~~~
+        
+        #endif
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}"); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END rN{} ////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL NEIGBOR RANKS section to the json string /////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rNR{} /////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rNR" "\"" ":"    ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        #if (ROUTING_CONF_RPL_LITE)
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            if (!curr_instance.used || rpl_neighbor_count() == 0)
+            {
+                
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+            
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //  (!curr_instance.used || rpl_neighbor_count() == 0) ///////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNR{} > ns[] ///////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str,    "null"  );  strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNR{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+            }
+            else
+            {
+                
+                rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+
+                int oar_json_quantized_rpl_neighbor_count = 0;
+
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNR{} > ns[] ///////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    while(nbr != NULL)
+                    {
+                        oar_json_quantized_rpl_neighbor_count++; 
+                        
+                        // rpl_nbr_t *oar_json_quantized_rpl_nbr_best = best_parent(0);
+                        // const struct link_stats *oar_json_quantized_rpl_nbr_stats = rpl_neighbor_get_link_stats(nbr);
+                        // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
+
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        sprintf(str, "{" ); strcat(buf, str);
+                            
+                            sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); strcat(buf, str);    
+                            
+                        sprintf(str,    "}" ); strcat(buf, str);
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        nbr = nbr_table_next(rpl_neighbors, nbr);
+                    }
+                    
+                    for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str, "null"); strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNR{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+            }
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+        #else
+
+            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START rNR{} > ns[] //////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rNR{} > ns
+            // ~~~~~~~~~~~~~~~~~~~~~~~
+        
+        #endif
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}"); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END rNR{} ///////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL NEIGBOR VALUES section to the json string ////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rNV{} /////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rNV" "\"" ":"    ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        #if (ROUTING_CONF_RPL_LITE)
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            if (!curr_instance.used || rpl_neighbor_count() == 0)
+            {
+                
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+            
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //  (!curr_instance.used || rpl_neighbor_count() == 0) ///////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNV{} > ns[] ///////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str,    "null"  );  strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNV{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+            }
+            else
+            {
+                
+                rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+
+                int oar_json_quantized_rpl_neighbor_count = 0;
+
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNV{} > ns[] ///////////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
                 
                     // [][][][][][][][][][][][][][][][][]
                     sprintf(str, "["); strcat(buf, str);
@@ -2103,22 +3360,177 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
                         
                         rpl_nbr_t *oar_json_quantized_rpl_nbr_best = best_parent(0);
                         const struct link_stats *oar_json_quantized_rpl_nbr_stats = rpl_neighbor_get_link_stats(nbr);
-                        clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
+                        // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         sprintf(str, "{" ); strcat(buf, str);
 
-                            oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(nbr));
-                            sprintf(str, "\"" "ad"                              "\"" ":" "\""   "%s"    "\""       ,oar_json_quantized_ipaddr); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                            
-                            sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_quantized_rpl_nbr_stats != NULL ? oar_json_quantized_rpl_nbr_stats->freshness : 0                                  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_quantized_rpl_nbr_stats != NULL ? oar_json_quantized_rpl_nbr_stats->freshness : 0                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_quantized_rpl_nbr_best ? "true" : "false"                                                               ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_quantized_rpl_nbr_best ? "true" : "false"                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                             sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); strcat(buf, str);    
+
+                            
+                        sprintf(str,    "}" ); strcat(buf, str);
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        
+                        // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+                        
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        nbr = nbr_table_next(rpl_neighbors, nbr);
+                    }
+                    
+                    for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str, "null"); strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNV{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+            }
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+        #else
+
+            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            sprintf(str, "\"" "iId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "c"       "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY START rNV{} > ns[] ///////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+            
+                // [][][][][][][][][][][][][][][][][]
+                sprintf(str, "["); strcat(buf, str);
+
+                for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                {
+                    sprintf(str,    "null"  );  strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                }
+
+                sprintf(str, "]"); strcat(buf, str);
+                // [][][][][][][][][][][][][][][][][]
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~
+            // SUBARRAY END rNV{} > ns
+            // ~~~~~~~~~~~~~~~~~~~~~~~
+        
+        #endif
+        // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}"); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END rNv{} ///////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends RPL NEIGBORS () section to the json string //////////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START rNP{} /////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "rNP" "\"" ":"    ); strcat(buf, str);   
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
+        #if (ROUTING_CONF_RPL_LITE)
+
+            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+
+            // ??????????????????????????????????
+            sprintf(str, ",");  strcat(buf, str);
+            // ??????????????????????????????????
+
+            if (!curr_instance.used || rpl_neighbor_count() == 0)
+            {
+                
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+            
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //  (!curr_instance.used || rpl_neighbor_count() == 0) //
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNP{} > ns[] //////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
+                    {
+                        sprintf(str,    "null"  );  strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    }
+
+                    sprintf(str, "]"); strcat(buf, str);
+                    // [][][][][][][][][][][][][][][][][]
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNr{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+            }
+            else
+            {
+                
+                rpl_nbr_t *nbr = nbr_table_head(rpl_neighbors);
+
+                int oar_json_quantized_rpl_neighbor_count = 0;
+
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // !(!curr_instance.used || rpl_neighbor_count() == 0) //
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNP{} > ns[] //////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+                
+                    // [][][][][][][][][][][][][][][][][]
+                    sprintf(str, "["); strcat(buf, str);
+
+                    while(nbr != NULL)
+                    {
+                        oar_json_quantized_rpl_neighbor_count++; 
+                        
+                        // rpl_nbr_t *oar_json_quantized_rpl_nbr_best = best_parent(0);
+                        const struct link_stats *oar_json_quantized_rpl_nbr_stats = rpl_neighbor_get_link_stats(nbr);
+                        clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
+
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        sprintf(str, "{" ); strcat(buf, str);
 
                             if(oar_json_quantized_rpl_nbr_stats->last_tx_time > 0) 
                             {
@@ -2155,6 +3567,10 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
 
                     sprintf(str, "]"); strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
+                
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNP{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
             }
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
@@ -2170,11 +3586,11 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
             sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
                 sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // SUBARRAY START rpl{} > rplNbr{} > rplNeighbors[] //////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str);
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY START rNP{} > ns[] //////////////////////////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
                 
                     // [][][][][][][][][][][][][][][][][]
                     sprintf(str, "["); strcat(buf, str);
@@ -2187,6 +3603,10 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
 
                     sprintf(str, "]"); strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
+
+                // ~~~~~~~~~~~~~~~~~~~~~~~
+                // SUBARRAY END rNr{} > ns
+                // ~~~~~~~~~~~~~~~~~~~~~~~
         
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
@@ -2194,7 +3614,7 @@ static void oar_json_quantized_append_rpl_neighbors(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}"); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END rN{} ////////////////
+        // SECTION END rP{} ////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
 
@@ -2266,7 +3686,7 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_IP(buf);
+            oar_json_quantized_append_stats_ip(buf);
 
             oar_json_quantized_exit(buf);
             
@@ -2282,7 +3702,7 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_ICMP(buf);
+            oar_json_quantized_append_stats_icmp(buf);
 
             oar_json_quantized_exit(buf);
             
@@ -2298,7 +3718,7 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_transport(buf);
+            oar_json_quantized_append_stats_tcp_udp(buf);
 
             oar_json_quantized_exit(buf);
             
@@ -2330,7 +3750,7 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_net(buf);
+            oar_json_quantized_append_ipv6_addr(buf);
 
             oar_json_quantized_exit(buf);
             
@@ -2346,12 +3766,12 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rt(buf);
+            oar_json_quantized_append_ipv6_nbrs_ip(buf);
 
             oar_json_quantized_exit(buf);
             
             break;
-
+        
         case 9:
             oar_json_quantized_init(buf);
             oar_json_quantized_enter(buf);
@@ -2362,7 +3782,7 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_status(buf);
+            oar_json_quantized_append_ipv6_nbrs_ll(buf);
 
             oar_json_quantized_exit(buf);
             
@@ -2378,7 +3798,199 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
             oar_json_quantized_append_id(buf);
 
             oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_neighbors(buf);
+            oar_json_quantized_append_ipv6_nbrs_states(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 11:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_routing(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 12:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_routing_link_sources(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 13:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_routing_link_destinations(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 14:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_routing_entry_routes(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 15:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_routing_entry_vias(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 16:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_status(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 17:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_status_dag(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 18:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_status_trickle_timer(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 19:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_neighbor(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 20:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_neighbor_ranks(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 21:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_neighbor_values(buf);
+
+            oar_json_quantized_exit(buf);
+            
+            break;
+
+        case 22:
+            oar_json_quantized_init(buf);
+            oar_json_quantized_enter(buf);
+
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_id(buf);
+
+            oar_json_quantized_bridge(buf);
+            oar_json_quantized_append_rpl_neighbor_parens(buf);
 
             oar_json_quantized_exit(buf);
             

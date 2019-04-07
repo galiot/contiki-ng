@@ -9,6 +9,7 @@
   "author": "galiot",
   "dependencies": {
     "express": "latest",
-    "request": "latest"
+    "request": "latest",
+    "atob": "latest"
   }
 }

@@ -85,21 +85,21 @@
 //---------------------------------------------------------------------------
 
 // enable/disable debug functionality, across the board
-#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON/OFF)
+#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON:1||OFF: 0)
 
 // enable/disable moor functionality, across the board
-#define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON/OFF)
+#define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON:1||OFF: 0)
 
 // **************************************************************************
 // MOOR CONTSTANTS //////////////////////////////////////////////////////////
 // **************************************************************************
 
 // set the buffer size for staging the sending json
-#define OAR_CONF_MOOR_BUFFER_SIZE                                           512                 // BYTES *sizeof(char)
-                                                                                                // [< OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH]
+#define OAR_CONF_MOOR_BUFFER_SIZE                                           482                 // BYTES *sizeof(char)
+                                                                                                // [* 1,33 < (OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH]
 
 // set the maximum payload length for the packets send to unconstrained
-#define OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH                                    512                 // BYTES *sizeof(char) 
+#define OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH                                    640                 // BYTES *sizeof(char) 
                                                                                                 // [< 643 != ECONNRESET/ETIMEDOUT]
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -107,26 +107,26 @@
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // enable/disable console print for debug purposes
-#define OAR_CONF_DEBUG                                                      1                   // (ON/OFF)
+#define OAR_CONF_DEBUG                                                      1                   // (ON:1||OFF: 0)
 
 // set the frequency in seconds for printing to console 
-#define OAR_CONF_DEBUG_INTERVAL                                             3                   // SECONDS LOOP
+#define OAR_CONF_DEBUG_INTERVAL                                             3                   // CONSOLE PRINT INTERVAL (SECONDS)
 
 // enable/disable energest timings (printing energest values)
-#define OAR_CONF_DEBUG_ENERGY                                               0                   // (ON/OFF)
+#define OAR_CONF_DEBUG_ENERGY                                               0                   // (ON:1||OFF: 0)
 
 // enable/disable UIP statistics debugging (printing UIP values)
-#define OAR_CONF_DEBUG_STATISTICS                                           0                   // (ON/OFF)
+#define OAR_CONF_DEBUG_STATISTICS                                           0                   // (ON:1||OFF: 0)
 
 // enable/disable shell information (printing shell values)
-#define OAR_CONF_DEBUG_NETWORK                                              0                   // (ON/OFF)
+#define OAR_CONF_DEBUG_NETWORK                                              0                   // (ON:1||OFF: 0)
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // JSON CONSTANTS ///////////////////////////////////////////////////////////
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // enable/disable JSON creation
-#define OAR_CONF_JSON                                                       1                   // (ON/OFF)
+#define OAR_CONF_JSON                                                       1                   // (ON:1||OFF: 0)
 
 // set the JSON type
 #define OAR_CONF_JSON_TYPE                                                  0                   // 0: QUANTIZED: || 1: EXTENDED || 2: COMPACT || 3: MICRO || 4: TINY
@@ -135,7 +135,7 @@
 // OAR_CONF_JSON_TYPE: QUANTIZED ///////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    512                 // BYTES *sizeof(char) 
+#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    482                 // BYTES *sizeof(char) 
                                                                                                 // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
@@ -158,11 +158,11 @@
 
 #define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1800                // BYTES *sizeof(char) [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
-#define OAR_CONF_JSON_MICRO_ID                                              1                   // (ON/OFF)
-#define OAR_CONF_JSON_MICRO_NRG                                             1                   // (ON/OFF)
-#define OAR_CONF_JSON_MICRO_STATS                                           1                   // (ON/OFF)
-#define OAR_CONF_JSON_MICRO_NET                                             1                   // (ON/OFF)
-#define OAR_CONF_JSON_MICRO_RPL                                             1                   // (ON/OFF)
+#define OAR_CONF_JSON_MICRO_ID                                              1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_MICRO_NRG                                             1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_MICRO_STATS                                           1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_MICRO_NET                                             1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_MICRO_RPL                                             1                   // (ON:1||OFF: 0)
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 // OAR_CONF_JSON_TYPE: TINY ////////////////////
@@ -170,44 +170,54 @@
 
 #define OAR_CONF_JSON_TINY_BUF_SIZE                                         1800                // BYTES *sizeof(char)
 
-#define OAR_CONF_JSON_TINY_ID                                               1                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_NRG                                              1                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_NET                                              1                   // (ON/OFF)
-#define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON/OFF) 
+#define OAR_CONF_JSON_TINY_ID                                               1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_TINY_NRG                                              1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_TINY_NET                                              1                   // (ON:1||OFF: 0)
+#define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON:1||OFF: 0) 
                                                                                                 // [== 0 >< MOOR]
 
 // #define OAR_CONF_JSON_TINY_DISCRITIZATION                                0                   // (ON/OF
 
 // #define OAR_CONF_JSON_TINY_DISCRITIZATION_COUNT                          0                   // TOTAL DISCRETE PAR
 
-// #define OAR_CONF_JSON_TINY_DISCRETE_NRG                                  0                   // (ON/OFF)
-// #define OAR_CONF_JSON_TINY_DISCRETE_STATS                                0                   // (ON/OFF)
-// #define OAR_CONF_JSON_TINY_DISCRETE_NET                                  0                   // (ON/OFF)
-// #define OAR_CONF_JSON_TINY_DISCRETE_RPL                                  0                   // (ON/OFF)
+// #define OAR_CONF_JSON_TINY_DISCRETE_NRG                                  0                   // (ON:1||OFF: 0)
+// #define OAR_CONF_JSON_TINY_DISCRETE_STATS                                0                   // (ON:1||OFF: 0)
+// #define OAR_CONF_JSON_TINY_DISCRETE_NET                                  0                   // (ON:1||OFF: 0)
+// #define OAR_CONF_JSON_TINY_DISCRETE_RPL                                  0                   // (ON:1||OFF: 0)
 
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // ENCRYPTION / DECRYPTION CONSTANTS ////////////////////////////////////////
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      1                   // (ON/OFF) 
+#define OAR_CONF_CRYPT                                                      1                   // (ON:1||OFF: 0) 
 
 // set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          1800                // *sizeof(char)
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          482                // BYTES *sizeof(char) [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 // key[] = {'!', '@', '#', '$', '%', '^', '&', '*'} /////////////////////////////////////////// // hardcoded ./galiot/oar-crypt.c
 // </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 
 // enable/disable decryption
-#define OAR_CONF_CRYPT_DECRYPT                                              1                   // (ON/OFF)
+#define OAR_CONF_CRYPT_DECRYPT                                              1                   // (ON:1||OFF: 0)
+
+// CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+// BASE64 ENCODING //////////////////////////////////////////////////////////
+// CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+// enable/disable base64 encoding
+#define OAR_CONF_BASE64_ENCODING                                            1                   // (ON:1||OFF: 0)
+
+// enable/disable base64 encoding
+#define OAR_CONF_BASE64_ENCODING_BUF_SIZE                                   640                 // (ON:1||OFF: 0) [> OAR_CONF_MOOR_BUFFER_SIZE * 1.33]
 
 //---------------------------------------------------------------------------
 
 // enable/disable on-board device functionality
 // leds, buttons, sensors, etc.
-#define OAR_CONF_DEV                                                        1                   // (ON/OFF)
+#define OAR_CONF_DEV                                                        1                   // (ON:1||OFF: 0)
 
 
 

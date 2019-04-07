@@ -2,6 +2,7 @@ var express = require('express');
 var request = require('request');
 var app = express();
 var http = require('http').Server(app);
+var atob = require('atob');
 
 app.use(express.static('public'));
 
@@ -44,7 +45,12 @@ var dataPusher = setInterval(function () {
         console.log(body);
         console.log("");
 
-        var decrypted = oarCrypt(body.toString());
+        var decoded = atob(body.toString());
+        console.log("");
+        console.log(decoded);
+
+        // var decrypted = oarCrypt(body.toString());
+        var decrypted = oarCrypt(decoded);
         
         console.log("");
         console.log(decrypted);
@@ -67,4 +73,4 @@ var dataPusher = setInterval(function () {
     });
 
     
-}, 1000);
+}, 5000);

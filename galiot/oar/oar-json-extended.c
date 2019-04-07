@@ -1790,15 +1790,42 @@ static void oar_json_extended_append_net(char * buf)
                     
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
                         sprintf(str,"["); strcat(buf, str);
+
+                        uip_ipaddr_t child_ipaddr;  // DODAG root to -->
+                        uip_ipaddr_t parent_ipaddr; // <-- to
                         
                         while(link != NULL) 
                         {
-                            char goa_buf[100];
+                            // char goa_buf[100];
                             oar_json_extended_uip_sr_links_count++;
 
-                            uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
-                            
-                            sprintf(str,    "\""    "%s"    "\""    ,goa_buf ); strcat(buf, str);
+                            // uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
+                            // sprintf(str,    "\""    "%s"    "\""    ,goa_buf ); strcat(buf, str);
+
+                            oar_json_extended_ipaddr_to_str(oar_json_extended_ipaddr, &child_ipaddr);
+                            sprintf(str,    "\""    "from"    "\""    ":" "\""    "%s"    "\""    ,oar_json_extended_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+                            if(link->parent == NULL)
+                            {
+                                sprintf(str, "\"" "root" "\"" ":" "true"); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+                            }
+                            else
+                            {
+                                sprintf(str, "\"" "root" "\"" ":" "false"); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+                            }
+
+
+                            oar_json_extended_ipaddr_to_str(oar_json_extended_ipaddr, &parent_ipaddr);
+                            sprintf(str,    "\""    "to"    "\""    ":" "\""    "%s"    "\""    ,oar_json_extended_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+
+                            if(link->lifetime != UIP_SR_INFINITE_LIFETIME)
+                            {
+                                sprintf(str, "\"" "lf" "\"" ":" "%lu"                   ,(unsigned long)link->lifetime ); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+                            }
+                            else
+                            {
+                                sprintf(str, "\"" "lf" "\"" ":" "\"" "infinite" "\""                                    ); strcat(buf, str); sprintf(str, "," );  strcat(buf, str);
+                            }
                             
                             if (oar_json_extended_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
 
