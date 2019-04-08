@@ -135,7 +135,7 @@
 // OAR_CONF_JSON_TYPE: QUANTIZED ///////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_QUANTIZED_BUF_SIZE                                    482                 // BYTES *sizeof(char) 
+#define OAR_CONF_JSON_BUF_SIZE                                    482                 // BYTES *sizeof(char) 
                                                                                                 // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~

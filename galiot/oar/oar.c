@@ -84,7 +84,7 @@
 #include "oar-debug.h"
 
 #if (OAR_CONF_JSON_TYPE == 0)
-    #include "oar-json-quantized.h"
+    #include "oar-json.h"
 #endif
 
 #if (OAR_CONF_JSON_TYPE == 1)
@@ -171,7 +171,7 @@ PROCESS(oar_moor_process, "oar moor process");
     #if (OAR_CONF_JSON == 1) 
         #if (OAR_CONF_JSON_TYPE == 0)
 
-            int quantum_id = 0;
+            int json_index = 0;
         
         #endif    
     #endif
@@ -185,7 +185,7 @@ PROCESS(oar_moor_process, "oar moor process");
     #if (OAR_CONF_JSON == 1) 
         #if (OAR_CONF_JSON_TYPE == 0)
 
-            int quantum_id = 0;
+            int json_index = 0;
         
         #endif    
     #endif
@@ -363,40 +363,40 @@ PT_THREAD(generate_routes(struct httpd_state *s))
         printf("\n"); for (int i = 0; i < 80; i++) { printf("="); } printf("\n"); printf("\n");
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // QUANTIZED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]
                     
-            char *oar_json_quantized_buf = (char *)malloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_QUANTIZED_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_quantized_buf > char *oar_json_quantized_buf = (char *)heapmem_alloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+            char *oar_json_buf = (char *)malloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_buf > char *oar_json_buf = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
-            if (oar_json_quantized_buf == NULL) // if heap memory couldn't be allocated for oar_json_quantized_buf...
+            if (oar_json_buf == NULL) // if heap memory couldn't be allocated for oar_json_buf...
             {
                 printf("\n"); for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
 
-                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR QUANTIZED JSON\n", OAR_CONF_JSON_QUANTIZED_BUF_SIZE);
+                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR JSON\n", OAR_CONF_JSON_BUF_SIZE);
 
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 printf("STAGING ERROR JSON\n"); printf("\n"); //////////////////////////////////////////////////////////
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR QUANTIZED JSON ALLOCASTION \" }");
+                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR JSON ALLOCASTION \" }");
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
                 printf("\n"); for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
                 
-                free(oar_json_quantized_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                free(oar_json_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
             }
             else
             {
                 printf("\n");
 
                 for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
-                printf("QUANTIZED JSON:\n"); printf("\n");
+                printf("JSON:\n"); printf("\n");
                 
-                oar_json_quantized_construct(oar_json_quantized_buf, quantum_id % 23); // construct oar_json_quantized_buf (function found in ./oar_json_micro.h)
-                oar_json_quantized_print(oar_json_quantized_buf); // print oar_json_quantized_buf (function found in ./oar_json_micro.h)
+                oar_json_construct(oar_json_buf, json_index % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
                 
-                printf("\n"); printf("LENGTH OF QUANTIZED JSON: %d\n", strlen(oar_json_quantized_buf));
+                printf("\n"); printf("LENGTH OF JSON: %d\n", strlen(oar_json_buf));
                 
                 for (int i = 0; i < 80; i++) { printf("-"); }
 
@@ -428,16 +428,16 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                     }
                     else // // if heap memory could be allocated for decrypted_oar_json...
                     {
-                        oar_crypt(oar_json_quantized_buf, encrypted_oar_json); // encrypt oar_json_quantized_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                        oar_crypt(oar_json_buf, encrypted_oar_json); // encrypt oar_json_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
                         
                         for (int i = 0; i < 80; i++) { printf(">"); } printf("\n");
-                        printf("ENCRYPTED QUANTIZED JSON:\n"); printf("\n");
+                        printf("ENCRYPTED JSON:\n"); printf("\n");
                         
                         printf("%s\n", encrypted_oar_json); printf("\n");
-                        printf("LENGHT OF ENCRYPTED QUANTIZED JSON: %d\n", strlen(encrypted_oar_json));
+                        printf("LENGHT OF ENCRYPTED JSON: %d\n", strlen(encrypted_oar_json));
 
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        printf("STAGING ENCRYPTED QUANTIZED JSON, QUANTUM: %d\n", quantum_id); //////////////
+                        printf("STAGING ENCRYPTED JSON, QUANTUM: %d\n", json_index); //////////////
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                         strcpy(buff, encrypted_oar_json); ///////////////////////////////////////////////////
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -470,10 +470,10 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                                 oar_crypt(encrypted_oar_json, decrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
                                 
                                 for (int i = 0; i < 80; i++) { printf("<"); } printf("\n");
-                                printf("DECRYPTED QUANTIZED JSON\n"); printf("\n");
+                                printf("DECRYPTED JSON\n"); printf("\n");
 
                                 printf("%s\n", decrypted_oar_json); printf("\n"); 
-                                printf("LENGTH OF DECRYPTED QUANTIZED JSON: %d\n", strlen(decrypted_oar_json));
+                                printf("LENGTH OF DECRYPTED JSON: %d\n", strlen(decrypted_oar_json));
 
                                 for (int i = 0; i < 80; i++) { printf("<"); }
 
@@ -489,19 +489,19 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                     printf("\n"); for (int i = 0; i < 80; i++) { printf("&"); } printf("\n");
                     
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING UNENCRYPTED QUANTIZED JSON, QUANTUM: %d\n", quantum_id); printf("\n");
+                    printf("STAGING UNENCRYPTED JSON, QUANTUM: %d\n", json_index); printf("\n");
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buff, oar_json_quantized_buf); ////////////////////////////////////
+                    strcpy(buff, oar_json_buf); ////////////////////////////////////
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
                     printf("\n"); for (int i = 0; i < 80; i++) { printf("&"); } printf("\n");
 
                 #endif // (OAR_CONF_CRYPT)
 
-                free(oar_json_quantized_buf); // release the memory allocated for oar_json_quantized_buf > heapmem_free(oar_json_quantized_buf); (for platform specific os/lib/heapmem.h)
+                free(oar_json_buf); // release the memory allocated for oar_json_buf > heapmem_free(oar_json_buf); (for platform specific os/lib/heapmem.h)
                 
-                quantum_id++;
-                quantum_id %= 2399;
+                json_index++;
+                json_index %= 2399;
             }
                 
         #endif // (OAR_CONF_JSON_TYPE == 0)
@@ -611,7 +611,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                         printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
 
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        printf("STAGING ENCRYPTED QUANTIZED JSON, QUANTUM: %d\n", quantum_id);  printf("\n");
+                        printf("STAGING ENCRYPTED JSON, QUANTUM: %d\n", index);  printf("\n");
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                         strcpy(buff, encrypted_oar_json); ///////////////////////////////////////////////////
                         // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -678,7 +678,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
             #if (OAR_CONF_JSON_TYPE == 0)
 
-                char *oar_base64_encoded_json = (char *)malloc((OAR_CONF_BASE64_ENCODING_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_BASE64_ENCODING_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for encoding oar_json_quantized_buf > char *oar_base64_endcoded = (char *)heapmem_alloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+                char *oar_base64_encoded_json = (char *)malloc((OAR_CONF_BASE64_ENCODING_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_BASE64_ENCODING_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for encoding oar_json_buf > char *oar_base64_endcoded = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
                 printf("\n");
 
@@ -687,9 +687,9 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                     printf("\n"); for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
                     
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR BASE ^$ENCODING QUANTIZED JSON\n", OAR_CONF_BASE64_ENCODING_BUF_SIZE);
+                    printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR BASE ^$ENCODING JSON\n", OAR_CONF_BASE64_ENCODING_BUF_SIZE);
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING QUANTIZED JSON\" }");//////////////////////////////////////////////
+                    strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING JSON\" }");//////////////////////////////////////////////
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
                     printf("\n"); for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
@@ -697,7 +697,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                 }
                 else
                 {
-                    oar_base64_encode(buff, oar_base64_encoded_json, strlen(oar_json_quantized_buf));
+                    oar_base64_encode(buff, oar_base64_encoded_json, strlen(oar_json_buf));
 
                     for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
                     printf("BASE64 ENCODED JSON:\n"); printf("\n");
@@ -706,7 +706,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                     printf("LENGTH OF BASE64 ENCODED JSON: %d\n", strlen(oar_base64_encoded_json));
 
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING BASE64 ENCODED QUANTIZED JSON, QUANTUM: %d\n", quantum_id); //////////////
+                    printf("STAGING BASE64 ENCODED JSON, QUANTUM: %d\n", json_index); //////////////
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     strcpy(buff, oar_base64_encoded_json); ///////////////////////////////////////////////////
                     // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -723,7 +723,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 printf("JSON TYPE SIZE EXCEEDS SIZE FOR SUCCESSFUL ENCODING\n"); ////////////////////////////
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING QUANTIZED JSON\" }");
+                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING JSON\" }");
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
             #endif // (OAR_CONF_JSON_TYPE == 0)
@@ -755,7 +755,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
     {
         printf("\n"); 
         printf("ABORT SENDING JSON\n");
-        printf("PAYLOAD LENGHT %d > %d\n", strlen(oar_json_quantized_buf), OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH);
+        printf("PAYLOAD LENGHT %d > %d\n", strlen(oar_json_buf), OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH);
         printf("ECONNRESET/ETIMEDOUT ERRORS POSSIBLE\n");
         SEND_STRING(&s->sout, "{ \" error \" : \" MAXIMUM POSSIBLE PAYLOAD LEGTH EXCEEDED \" }"); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
     }
@@ -866,28 +866,28 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 #if (OAR_CONF_JSON)
 
                     // ------------------------------------------------------------------------------------------------------------------------
-                    // QUANTIZED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // ------------------------------------------------------------------------------------------------------------------------
 
                     #if (OAR_CONF_JSON_TYPE == 0) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
                         
-                        char *oar_json_quantized_buf = (char *)malloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_QUANTIZED_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_quantized_buf > char *oar_json_quantized_buf = (char *)heapmem_alloc((OAR_CONF_JSON_QUANTIZED_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+                        char *oar_json_buf = (char *)malloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_buf > char *oar_json_buf = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
-                        if (oar_json_quantized_buf == NULL) // if heap memory couldn't be allocated for oar_json_quantized_buf...
+                        if (oar_json_buf == NULL) // if heap memory couldn't be allocated for oar_json_buf...
                         {
-                            printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR QUANTIZED JSON\n", OAR_CONF_JSON_QUANTIZED_BUF_SIZE);
+                            printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR JSON\n", OAR_CONF_JSON_BUF_SIZE);
                             
-                            free(oar_json_quantized_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                            free(oar_json_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
                         }
                         else
                         {
-                            oar_json_quantized_construct(oar_json_quantized_buf, quantum_id % 23); // construct oar_json_quantized_buf (function found in ./oar_json_micro.h)
-                            oar_json_quantized_print(oar_json_quantized_buf); // print oar_json_quantized_buf (function found in ./oar_json_micro.h)
+                            oar_json_construct(oar_json_buf, json_index % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                            oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
                             
-                            printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_quantized_buf));
+                            printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_buf));
 
-                            quantum_id++;
-                            quantum_id %= 2399;
+                            json_index++;
+                            json_index %= 2399;
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
@@ -907,7 +907,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                                 }
                                 else // // if heap memory could be allocated for decrypted_oar_json...
                                 {
-                                    oar_crypt(oar_json_quantized_buf, encrypted_oar_json); // encrypt oar_json_quantized_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+                                    oar_crypt(oar_json_buf, encrypted_oar_json); // encrypt oar_json_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
                                     
                                     printf("%s\n", encrypted_oar_json); printf("\n");
                                     printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
@@ -946,7 +946,7 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                                 
                             #endif // (OAR_CONF_CRYPT)
 
-                            free(oar_json_quantized_buf); // release the memory allocated for oar_json_quantized_buf > heapmem_free(oar_json_quantized_buf); (for platform specific os/lib/heapmem.h)
+                            free(oar_json_buf); // release the memory allocated for oar_json_buf > heapmem_free(oar_json_buf); (for platform specific os/lib/heapmem.h)
                             
                         }
                         

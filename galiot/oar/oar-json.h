@@ -1,5 +1,5 @@
-#ifndef OAR_JSON_QUANTIZED_H_
-#define OAR_JSON_QUANTIZED_H_
+#ifndef OAR_JSON_H_
+#define OAR_JSON_H_
 
 #include "project-conf.h"
 
@@ -26,8 +26,8 @@
 
 // char oar_json_tiny_buf[OAR_CONF_JSON_TINY_BUF_SIZE];
 
-void oar_json_quantized_print(char * str);
-void oar_json_quantized_construct(char * buf, int quantum_id);
+void oar_json_print(char * str);
+void oar_json_construct(char * buf, int i);
 
 #endif // (OAR_JSON_QUANTIZED_H_)
 
