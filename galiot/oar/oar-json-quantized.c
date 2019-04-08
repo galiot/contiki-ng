@@ -281,7 +281,14 @@ static void oar_json_quantized_lladdr_to_str(char *output, const linkaddr_t *lla
     }
 
 #endif
-// ######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)######## (ENERGEST_CONF_ON)
+
+
+
+
+
+
+
+
 
 
 
@@ -330,6 +337,65 @@ static char oar_json_quantized_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
+// ====================================================================================================================
+// MEMORY OVERFLOW PROTECTION /////////////////////////////////////////////////////////////////////////////////////////
+// ====================================================================================================================
+
+// ----------------------------------------------------------------------------
+// function that initializes (empties) the json string ////////////////////////
+// and sends just the pckt section with error appended //////////////////////// 
+// ----------------------------------------------------------------------------
+
+static int seguard(char *buf, char *str)
+{   
+    if (strlen(buf) + strlen(str) > OAR_CONF_JSON_QUANTIZED_BUF_SIZE)
+    {
+        char str[128];
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION START pckt{} ////////////////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "{"                    ); strcpy(buf, str);    // carefull, there is a strcpy() here, resets json
+        sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str); 
+        sprintf(str, "{"                    ); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+            sprintf(str, "\"" "valid"  "\"" ":"         "false"                 ); strcat(buf, str); sprintf(str, ","); strcat(buf, str); 
+            sprintf(str, "\"" "error"  "\"" ":" "\""    "JSON SEGFAULT" "\""    ); strcat(buf, str);
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}" ); strcat(buf, str);
+        sprintf(str, "}" ); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END pckt{} ///////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> BELOW <<<<< ///////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -346,30 +412,36 @@ static void oar_json_quantized_init(char * buf)
 // ----------------------------------------------------------------------------
 // function that appends the entry '{' json character to the string ///////////
 // ----------------------------------------------------------------------------
-static void oar_json_quantized_enter(char * buf)
+static int oar_json_quantized_enter(char * buf)
 {
     char str[128];
-    sprintf(str,    "{" );  strcat(buf, str);
+    sprintf(str,    "{" );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
 // function that connects the sections og the json, appending and ',' char ////
 // ----------------------------------------------------------------------------
 
-void oar_json_quantized_bridge(char * buf)
+int oar_json_quantized_bridge(char * buf)
 {
     char str[128];
-    sprintf(str,    "," );  strcat(buf, str);
+    sprintf(str,    "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+    
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
 // function that appends the exit '}' json character to the string ////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_exit(char * buf)
+static int oar_json_quantized_exit(char * buf)
 {
     char str[128];
-    sprintf(str,    "}" );  strcat(buf, str);
+    sprintf(str,    "}" );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -380,31 +452,33 @@ static void oar_json_quantized_exit(char * buf)
 // function that appends ID section to the json string ////////////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_id(char * buf)
+static int oar_json_quantized_append_id(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START id{} //////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str);
-    sprintf(str, "{"                ); strcat(buf, str);
+    sprintf(str, "\"" "id" "\"" ":" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    sprintf(str, "{"                ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
         // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-        sprintf(str, "\"" "sT"  "\"" ":" "%lu" ,clock_seconds()); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+        sprintf(str, "\"" "sT"  "\"" ":" "%lu" ,clock_seconds()); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
 
         oar_json_quantized_lladdr_to_str(oar_json_quantized_lladdr, &linkaddr_node_addr);
-        sprintf(str,        "\""    "adr"   "\""    ":" "\""    "%s"                        "\""        ,oar_json_quantized_lladdr  );  strcat(buf, str);   // sprintf(str, ","); strcat(buf, str);
+        sprintf(str,        "\""    "adr"   "\""    ":" "\""    "%s"                        "\""        ,oar_json_quantized_lladdr  );  if(seguard(buf, str)){return 1;} strcat(buf, str);   // sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-        // sprintf(str,     "\""    "cd"    "\""    ":" "\""    OAR_CONF_MOTE_COLOR         "\""                                    );  strcat(buf, str);
+        // sprintf(str,     "\""    "cd"    "\""    ":" "\""    OAR_CONF_MOTE_COLOR         "\""                                    );  if(seguard(buf, str)){return 1;} strcat(buf, str);
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}" ); strcat(buf, str);
+    sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END id{} /////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -415,62 +489,62 @@ static void oar_json_quantized_append_id(char * buf)
 // function that appends SYS section to the json string ////////////////////////
 // -----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_sys(char * buf)
+static int oar_json_quantized_append_sys(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START sys{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "sys" "\"" ":"    ); strcat(buf, str);
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "sys" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        sprintf(str,        "\"" "cV"   "\"" ":" "\""   CONTIKI_VERSION_STRING  "\""                                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-        sprintf(str,        "\"" "rt"   "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_ROUTING.name                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-        sprintf(str,        "\"" "net"  "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_NETWORK.name                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-        sprintf(str,        "\"" "pId"  "\"" ":" "\""   "0x%04x"                "\""    ,IEEE802154_CONF_PANID                              ); strcat(buf, str);    // sprintf(str, ","); strcat(buf, str);
+        sprintf(str,        "\"" "cV"   "\"" ":" "\""   CONTIKI_VERSION_STRING  "\""                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\"" "rt"   "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_ROUTING.name                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\"" "net"  "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_NETWORK.name                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\"" "pId"  "\"" ":" "\""   "0x%04x"                "\""    ,IEEE802154_CONF_PANID                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    // sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
         
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBSECTION START sys{} > mac{} //////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "sys" "\"" ":"    ); strcat(buf, str);
-        sprintf(str, "{"                    ); strcat(buf, str);
+        sprintf(str, "\"" "sys" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
             // #########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########
             #if MAC_CONF_WITH_TSCH
             
-                sprintf(str,    "\"" "t"    "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_MAC.name                                  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str,    "\"" "tDhS" "\"" ":"        "%u"                            ,(unsigned)sizeof(TSCH_DEFAULT_HOPPING_SEQUENCE)    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str,    "\"" "dCh"  "\"" ":"        "null"                                                                              ); strcat(buf, str);    
+                sprintf(str,    "\"" "t"    "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_MAC.name                                  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str,    "\"" "tDhS" "\"" ":"        "%u"                            ,(unsigned)sizeof(TSCH_DEFAULT_HOPPING_SEQUENCE)    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str,    "\"" "dCh"  "\"" ":"        "null"                                                                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             
             // #########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########(MAC_CONF_WITH_TSCH)#########
             // ########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!
             #else
             
-                sprintf(str,    "\"" "t"    "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_MAC.name                                  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str,    "\"" "tDhS" "\"" ":"        "null"                                                                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str,    "\"" "dCh"  "\"" ":"        "%u"                            ,IEEE802154_DEFAULT_CHANNEL                         ); strcat(buf, str);    
+                sprintf(str,    "\"" "t"    "\"" ":" "\""   "%s"                    "\""    ,NETSTACK_MAC.name                                  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str,    "\"" "tDhS" "\"" ":"        "null"                                                                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str,    "\"" "dCh"  "\"" ":"        "%u"                            ,IEEE802154_DEFAULT_CHANNEL                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             
             #endif
             // ########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}" ); strcat(buf, str);
+        sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END id{} > mac{} /////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
         
-        sprintf(str,        "\"" "nId"   "\"" ":"        "%u"                            ,node_id                                            ); strcat(buf, str);   sprintf(str, ","); strcat(buf, str);
+        sprintf(str,        "\"" "nId"   "\"" ":"        "%u"                            ,node_id                                            ); if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                                                                                                                                                                                                     
         // #########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########
         #if (NETSTACK_CONF_WITH_IPV6)
@@ -481,22 +555,24 @@ static void oar_json_quantized_append_sys(char * buf)
             lladdr = uip_ds6_get_link_local(-1);
             
             oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, lladdr != NULL ? &lladdr->ipaddr : NULL);
-            sprintf(str,    "\"" "tIad" "\"" ":" "\""   "%s"                    "\""    ,oar_json_quantized_ipaddr                           ); strcat(buf, str);
+            sprintf(str,    "\"" "tIad" "\"" ":" "\""   "%s"                    "\""    ,oar_json_quantized_ipaddr                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         
         // #########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########(NETSTACK_CONF_WITH_IPV6)#########
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else  
         
-            sprintf(str,    "\"" "tIadr" "\"" ":"       "null"                                                                              ); strcat(buf, str);
+            sprintf(str,    "\"" "tIadr" "\"" ":"       "null"                                                                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         
         #endif
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}" ); strcat(buf, str);
+    sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END id{} /////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -507,7 +583,7 @@ static void oar_json_quantized_append_sys(char * buf)
 // function that appends ENERGY section to the json string ////////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_dev(char * buf)
+static int oar_json_quantized_append_dev(char * buf)
 {
     char str[128];
     
@@ -517,19 +593,21 @@ static void oar_json_quantized_append_dev(char * buf)
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START dev{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "dev" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "dev" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        sprintf(str, "\"" "tp"  "\"" ":" "%d"  ,temperature );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-        sprintf(str, "\"" "hd"  "\"" ":" "%d"  ,humidity    );  strcat(buf, str); 
+        sprintf(str, "\"" "tp"  "\"" ":" "%d"  ,temperature );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "\"" "hd"  "\"" ":" "%d"  ,humidity    );  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}" ); strcat(buf, str);
+    sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END dev{} ////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -540,7 +618,7 @@ static void oar_json_quantized_append_dev(char * buf)
 // function that appends ENERGY STATISTICS section to the json string /////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_nrg(char * buf)
+static int oar_json_quantized_append_nrg(char * buf)
 {
     char str[128];
 
@@ -552,22 +630,22 @@ static void oar_json_quantized_append_nrg(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START nrg{} /////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "nrg" "\"" ":"    ); strcat(buf, str);   
-        sprintf(str, "{"                    ); strcat(buf, str);
+        sprintf(str, "\"" "nrg" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+        sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "en"  "\"" ":" "true"                                                                                                                                                    );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
+            sprintf(str, "\"" "en"  "\"" ":" "true"                                                                                                                                                    );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-            sprintf(str, "\"" "cp"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "lp"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                              );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "dL"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "tT"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                          );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rL"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                           );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rT"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                         );  strcat(buf, str); sprintf(str,","); strcat(buf, str);
-            sprintf(str, "\"" "rO"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))  );  strcat(buf, str); 
+            sprintf(str, "\"" "cp"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_CPU))                                                                              );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "lp"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_LPM))                                                                              );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dL"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_DEEP_LPM))                                                                         );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "tT"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(ENERGEST_GET_TOTAL_TIME())                                                                                          );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rL"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_LISTEN))                                                                           );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rT"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(energest_type_time(ENERGEST_TYPE_TRANSMIT))                                                                         );  if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str,","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rO"  "\"" ":" "%lu"  ,oar_json_quantized_to_seconds(ENERGEST_GET_TOTAL_TIME() - energest_type_time(ENERGEST_TYPE_TRANSMIT) - energest_type_time(ENERGEST_TYPE_LISTEN))  );  if(seguard(buf, str)){return 1;} strcat(buf, str); 
             
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}" ); strcat(buf, str);
+        sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END mrg{} ////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -579,28 +657,30 @@ static void oar_json_quantized_append_nrg(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START mrg{} /////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "nrg" "\"" ":"    ); strcat(buf, str);   
-        sprintf(str, "{"                    ); strcat(buf, str);
+        sprintf(str, "\"" "nrg" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+        sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "en"  "\"" ":" "false"    ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "en"  "\"" ":" "false"    ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-            sprintf(str, "\"" "cp"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "lp"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "dL"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "tT"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rL"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rT"  "\"" ":" "null"     ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "rO"  "\"" ":" "null"     ); strcat(buf, str);
+            sprintf(str, "\"" "cp"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "lp"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dL"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "tT"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rL"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rT"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rO"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}" ); strcat(buf, str);
+        sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END mrg{} ////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     #endif
     // ########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!(ENERGEST_CONF_ON)########!
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -611,7 +691,7 @@ static void oar_json_quantized_append_nrg(char * buf)
 // function that appends IP STATS section to the json string //////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_ip(char * buf)
+static int oar_json_quantized_append_stats_ip(char * buf)
 {
     char str[128];
     
@@ -621,42 +701,42 @@ static void oar_json_quantized_append_stats_ip(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START ipSt{} //////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "ipSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "ipSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "true" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "true" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START ipSt{} > ip{} ///////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "ip"  "\""    ":"   ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "ip"  "\""    ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
                 
-                sprintf(str, "\"" "rx"  "\"" ":" "%lu" ,uip_stat.ip.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"  "\"" ":" "%lu" ,uip_stat.ip.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fw"  "\"" ":" "%lu" ,uip_stat.ip.forwarded ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"  "\"" ":" "%lu" ,uip_stat.ip.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "vE"  "\"" ":" "%lu" ,uip_stat.ip.vhlerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "hE"  "\"" ":" "%lu" ,uip_stat.ip.hblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lE"  "\"" ":" "%lu" ,uip_stat.ip.lblenerr  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fE"  "\"" ":" "%lu" ,uip_stat.ip.fragerr   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"  "\"" ":" "%lu" ,uip_stat.ip.chkerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "pE"  "\"" ":" "%lu" ,uip_stat.ip.protoerr  ); strcat(buf, str);
+                sprintf(str, "\"" "rx"  "\"" ":" "%lu" ,uip_stat.ip.recv      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "%lu" ,uip_stat.ip.sent      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "fw"  "\"" ":" "%lu" ,uip_stat.ip.forwarded ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "%lu" ,uip_stat.ip.drop      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "vE"  "\"" ":" "%lu" ,uip_stat.ip.vhlerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "hE"  "\"" ":" "%lu" ,uip_stat.ip.hblenerr  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lE"  "\"" ":" "%lu" ,uip_stat.ip.lblenerr  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "fE"  "\"" ":" "%lu" ,uip_stat.ip.fragerr   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "%lu" ,uip_stat.ip.chkerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "pE"  "\"" ":" "%lu" ,uip_stat.ip.protoerr  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END ipSt{} > ip{} ///////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                                                                                                                                                 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END ipSt{} //////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -668,48 +748,50 @@ static void oar_json_quantized_append_stats_ip(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START ipSt{} /////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "ipSt"  "\""    ":" ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "ipSt"  "\""    ":" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "false" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START ip{} > ipSt{} //////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "ip"  "\""    ":"   ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "ip"  "\""    ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       
                 
-                sprintf(str, "\"" "rx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fw"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "vE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "hE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "fE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "pE"  "\"" ":" "null"   ); strcat(buf, str);
+                sprintf(str, "\"" "rx"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "fw"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "vE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "hE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "fE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "pE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END ip{} > ipSt{} ////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END ipSt{} ///////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -720,7 +802,7 @@ static void oar_json_quantized_append_stats_ip(char * buf)
 // function that appends ICMP STATS section to the json string ////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_icmp(char * buf)
+static int oar_json_quantized_append_stats_icmp(char * buf)
 {
     char str[128];
     
@@ -730,37 +812,37 @@ static void oar_json_quantized_append_stats_icmp(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START icSt{} ////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "icSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "icSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "true" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "true" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START icSt{} > ic{} //////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "ic"  "\""    ":"   ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "ic"  "\""    ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "rx"  "\"" ":" "%lu" ,uip_stat.icmp.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"  "\"" ":" "%lu" ,uip_stat.icmp.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"  "\"" ":" "%lu" ,uip_stat.icmp.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tE"  "\"" ":" "%lu" ,uip_stat.icmp.typeerr   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"  "\"" ":" "%lu" ,uip_stat.icmp.chkerr    ); strcat(buf, str);               
+                sprintf(str, "\"" "rx"  "\"" ":" "%lu" ,uip_stat.icmp.recv      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "%lu" ,uip_stat.icmp.sent      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "%lu" ,uip_stat.icmp.drop      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tE"  "\"" ":" "%lu" ,uip_stat.icmp.typeerr   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "%lu" ,uip_stat.icmp.chkerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);               
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END icSt{} > icmp{} /////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END icSt{} //////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -772,43 +854,45 @@ static void oar_json_quantized_append_stats_icmp(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START icSt{} ////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "icSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "icSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "false" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START icSt{} > ic{} //////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "ic"  "\""    ":"   ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "ic"  "\""    ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "rx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "dr"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "cE"  "\"" ":" "null"   ); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "rx"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "null"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END icSt{} > ic{} ///////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END icSt{} //////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -819,7 +903,7 @@ static void oar_json_quantized_append_stats_icmp(char * buf)
 // function that appends TRANSPORT STATS section to the json string ///////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_tcp_udp(char * buf)
+static int oar_json_quantized_append_stats_tcp_udp(char * buf)
 {
     char str[128];
     
@@ -829,14 +913,14 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START tSt{} //////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "tSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "tSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "true" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "true" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
                 // ######## (UIP_CONF_STATISTICS)> (UIP_TCP)######## (UIP_CONF_STATISTICS)> (UIP_TCP)######## (UIP_CONF_STATISTICS)> (UIP_TCP)######## (UIP_CONF_STATISTICS)> (UIP_TCP)########
@@ -845,23 +929,23 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBSECTION START tSt{} > tcp{} //////////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "tcp" "\"" ":"    ); strcat(buf, str);
-                    sprintf(str, "{"                    ); strcat(buf, str);
+                    sprintf(str, "\"" "tcp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     
-                        sprintf(str, "\"" "use" "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "rx"  "\"" ":" "%lu"  ,uip_stat.tcp.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "tx"  "\"" ":" "%lu"  ,uip_stat.tcp.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "dr"  "\"" ":" "%lu"  ,uip_stat.tcp.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "cE"  "\"" ":" "%lu"  ,uip_stat.tcp.chkerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "aA"  "\"" ":" "%lu"  ,uip_stat.tcp.ackerr    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "rst" "\"" ":" "%lu"  ,uip_stat.tcp.rst       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "rM"  "\"" ":" "%lu"  ,uip_stat.tcp.rexmit    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "sD"  "\"" ":" "%lu"  ,uip_stat.tcp.syndrop   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str, "\"" "sR"  "\"" ":" "%lu"  ,uip_stat.tcp.synrst    ); strcat(buf, str);                                                                                                                                                                                         
+                        sprintf(str, "\"" "use" "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "rx"  "\"" ":" "%lu"  ,uip_stat.tcp.recv      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "tx"  "\"" ":" "%lu"  ,uip_stat.tcp.sent      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "dr"  "\"" ":" "%lu"  ,uip_stat.tcp.drop      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "cE"  "\"" ":" "%lu"  ,uip_stat.tcp.chkerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "aA"  "\"" ":" "%lu"  ,uip_stat.tcp.ackerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "rst" "\"" ":" "%lu"  ,uip_stat.tcp.rst       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "rM"  "\"" ":" "%lu"  ,uip_stat.tcp.rexmit    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "sD"  "\"" ":" "%lu"  ,uip_stat.tcp.syndrop   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "\"" "sR"  "\"" ":" "%lu"  ,uip_stat.tcp.synrst    ); if(seguard(buf, str)){return 1;} strcat(buf, str);                                                                                                                                                                                         
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "}"); strcat(buf, str);
+                    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBSECTION END tST{} > tcp{} ////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -873,23 +957,23 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START tSt{} > tcp{} //////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "tcp" "\"" ":"    ); strcat(buf, str);
-                sprintf(str, "{"                    ); strcat(buf, str);
+                sprintf(str, "\"" "tcp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
-                    sprintf(str, "\"" "use" "\"" ":" "false"    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "rx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "tx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dr"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "cE"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "aE"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "rst" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "rM"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "sD"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "sR"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); //strcat(buf, str);                                                                                                                                                                                      
+                    sprintf(str, "\"" "use" "\"" ":" "false"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "tx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dr"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "cE"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "aE"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rst" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rM"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "sD"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "sR"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); //if(seguard(buf, str)){return 1;} strcat(buf, str);                                                                                                                                                                                      
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION END tSt{} > tcp{} ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -898,7 +982,7 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
             // ######## (UIP_CONF_STATISTICS)>!(UIP_TCP)######## (UIP_CONF_STATISTICS)>!(UIP_TCP)######## (UIP_CONF_STATISTICS)>!(UIP_TCP)######## (UIP_CONF_STATISTICS)>!(UIP_TCP)########
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ######## (UIP_CONF_STATISTICS)> (UIP_UDP)######## (UIP_CONF_STATISTICS)> (UIP_UDP)######## (UIP_CONF_STATISTICS)> (UIP_UDP)######## (UIP_CONF_STATISTICS)> (UIP_UDP)########
@@ -907,18 +991,18 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START tSt{} > udp{} //////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "udp" "\"" ":"    ); strcat(buf, str);
-                sprintf(str, "{"                    ); strcat(buf, str);
+                sprintf(str, "\"" "udp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
-                    sprintf(str, "\"" "use" "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dr"  "\"" ":" "%lu"  ,uip_stat.udp.drop      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "rx"  "\"" ":" "%lu"  ,uip_stat.udp.recv      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "tx"  "\"" ":" "%lu"  ,uip_stat.udp.sent      ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "cE"  "\"" ":" "%lu"  ,uip_stat.udp.chkerr    ); strcat(buf, str);                                                    
+                    sprintf(str, "\"" "use" "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dr"  "\"" ":" "%lu"  ,uip_stat.udp.drop      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rx"  "\"" ":" "%lu"  ,uip_stat.udp.recv      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "tx"  "\"" ":" "%lu"  ,uip_stat.udp.sent      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "cE"  "\"" ":" "%lu"  ,uip_stat.udp.chkerr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);                                                    
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION END tST{} > udp{} ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -930,18 +1014,18 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START tSt{} > udp{} //////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "udp" "\"" ":"    ); strcat(buf, str);
-                sprintf(str, "{"                    ); strcat(buf, str);
+                sprintf(str, "\"" "udp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
-                    sprintf(str, "\"" "use" "\"" ":" "false"    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dr"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "rx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "tx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "cE"  "\"" ":" "null"     ); strcat(buf, str);                                                    
+                    sprintf(str, "\"" "use" "\"" ":" "false"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dr"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "tx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "cE"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);                                                    
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION END tST{} > udp{} ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
@@ -950,7 +1034,7 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
             // ######## (UIP_CONF_STATISTICS)>!(UIP_UDP)######## (UIP_CONF_STATISTICS)>!(UIP_UDP)######## (UIP_CONF_STATISTICS)>!(UIP_UDP)######## (UIP_CONF_STATISTICS)>!(UIP_UDP)########
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END nSt{} ///////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -962,71 +1046,73 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START tSt{} //////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "tSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "tSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "false" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START stats{} > tcp{} ////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "tcp" "\"" ":"    ); strcat(buf, str);
-            sprintf(str, "{"                    ); strcat(buf, str);
+            sprintf(str, "\"" "tcp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
-                sprintf(str, "\"" "use" "\"" ":" "null"    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "rx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "tx"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "dr"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "cE"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "aE"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "rst" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "rM"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "sD"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "sR"  "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); //strcat(buf, str);                                                                                                                                                                                      
+                sprintf(str, "\"" "use" "\"" ":" "null"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dr"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "cE"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "aE"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rst" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rM"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "sD"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "sR"  "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); //if(seguard(buf, str)){return 1;} strcat(buf, str);                                                                                                                                                                                      
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION END stats{} > tcp{}
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START tSt{} > udp{} //////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "udp" "\"" ":"    ); strcat(buf, str);
-                sprintf(str, "{"                    ); strcat(buf, str);
+                sprintf(str, "\"" "udp" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
-                    sprintf(str, "\"" "use" "\"" ":" "null" ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dr"  "\"" ":" "null" ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "rx"  "\"" ":" "null" ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "tx"  "\"" ":" "null" ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "cE"  "\"" ":" "null" ); strcat(buf, str);                                                    
+                    sprintf(str, "\"" "use" "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dr"  "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "rx"  "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "tx"  "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "cE"  "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);                                                    
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION END tST{} > udp{} ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END tSt{} ///////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1037,7 +1123,7 @@ static void oar_json_quantized_append_stats_tcp_udp(char * buf)
 // function that appends NETWORK DISCOVERY STATS section to the json string ///
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_stats_nd6(char * buf)
+static int oar_json_quantized_append_stats_nd6(char * buf)
 {
     char str[128];
     
@@ -1047,35 +1133,35 @@ static void oar_json_quantized_append_stats_nd6(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START dSt{} /////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "dSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "dSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "true" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "true" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START dSt{} > nd6{} //////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "nd6"  "\""    ":"  ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "nd6"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        
                 
-                sprintf(str, "\"" "dr" "\"" ":" "%lu" ,uip_stat.nd6.drop); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "rx" "\"" ":" "%lu" ,uip_stat.nd6.recv); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx" "\"" ":" "%lu" ,uip_stat.nd6.sent); strcat(buf, str);
+                sprintf(str, "\"" "dr" "\"" ":" "%lu" ,uip_stat.nd6.drop); if(seguard(buf, str)){return 1;} strcat(buf, str);  sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rx" "\"" ":" "%lu" ,uip_stat.nd6.recv); if(seguard(buf, str)){return 1;} strcat(buf, str);  sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx" "\"" ":" "%lu" ,uip_stat.nd6.sent); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END nSt{} > nd6{} ///////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END tSt{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1087,41 +1173,43 @@ static void oar_json_quantized_append_stats_nd6(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION START dSt{} /////////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\""   "dSt"  "\""    ":"  ); strcat(buf, str);
-        sprintf(str, "{"                        ); strcat(buf, str);
+        sprintf(str, "\""   "dSt"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            sprintf(str, "\"" "uS"  "\"" ":" "false" ); strcat(buf, str);
+            sprintf(str, "\"" "uS"  "\"" ":" "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START dSt{} > nd6{} //////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\""   "nd6"  "\""    ":"  ); strcat(buf, str);
-            sprintf(str, "{"                        ); strcat(buf, str);
+            sprintf(str, "\""   "nd6"  "\""    ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "{"                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
 
-                sprintf(str, "\"" "dr" "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "rx" "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "tx" "\"" ":" "null"); strcat(buf, str);
+                sprintf(str, "\"" "dr" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rx" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "tx" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SECTION END nSt{} > nd6{} ///////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
+        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END tSt{} ///////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
 
     #endif
     // ########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!(UIP_CONF_STATISTICS)########!
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1132,24 +1220,24 @@ static void oar_json_quantized_append_stats_nd6(char * buf)
 // function that appends IPv6 ADDRESSES section to the json string ////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_ipv6_addr(char * buf)
+static int oar_json_quantized_append_ipv6_addr(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START addr{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "addr" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "addr" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     #if (NETSTACK_CONF_WITH_IPV6)
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ?????????????????????????????????? 
 
         uint8_t state;
@@ -1157,11 +1245,11 @@ static void oar_json_quantized_append_ipv6_addr(char * buf)
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START net{} > ad[] ///////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "ad" "\"" ":"         ); strcat(buf, str); ///// 
+        sprintf(str, "\"" "ad" "\"" ":"         ); if(seguard(buf, str)){return 1;} strcat(buf, str); ///// 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-            sprintf(str, "["); strcat(buf, str);
+            sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
@@ -1170,19 +1258,19 @@ static void oar_json_quantized_append_ipv6_addr(char * buf)
                 if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
                 {   
                     oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &uip_ds6_if.addr_list[i].ipaddr);
-                    sprintf(str, "\"" "%s"      "\"" ,oar_json_quantized_ipaddr   ); strcat(buf, str);
+                    sprintf(str, "\"" "%s"      "\"" ,oar_json_quantized_ipaddr   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                    if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                    if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                 }
                 else
                 {
 
-                    sprintf(str, "\""  "null"   "\""                    ); strcat(buf, str);
-                    if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, ","  );  strcat(buf, str); } 
+                    sprintf(str, "\""  "null"   "\""                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, ","  );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
             }
 
-            sprintf(str, "]"); strcat(buf, str);
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1195,29 +1283,29 @@ static void oar_json_quantized_append_ipv6_addr(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     #else
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ?????????????????????????????????? 
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START addr{} > ads[] /////////////////////////////////
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "addr" "\"" ":"         ); strcat(buf, str); ///  
+        sprintf(str, "\"" "addr" "\"" ":"         ); if(seguard(buf, str)){return 1;} strcat(buf, str); ///  
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-            sprintf(str,"["); strcat(buf, str);
+            sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
 
-            sprintf(str, "]"); strcat(buf, str);
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1228,10 +1316,12 @@ static void oar_json_quantized_append_ipv6_addr(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END addr{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1242,24 +1332,24 @@ static void oar_json_quantized_append_ipv6_addr(char * buf)
 // function that appends IPv6 ADDRESSES section to the json string ////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
+static int oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START nsIP{} ////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "nsIP" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "nsIP" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     #if (NETSTACK_CONF_WITH_IPV6)
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ?????????????????????????????????? 
 
         uip_ds6_nbr_t *nbr;
@@ -1274,19 +1364,19 @@ static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsIP{} > nbrs[] > /////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); ///////////
+            sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); ///////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1300,38 +1390,38 @@ static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsIP{} > ns[] > ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
                 while(nbr != NULL)
                 {
                     oar_json_quantized_ip_neighbor_count++;
                     
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                    sprintf(str, "{"); strcat(buf, str);
+                    sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                         oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_nbr_get_ipaddr(nbr));
-                        sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr                            ); strcat(buf, str);
+                        sprintf(str,    "\""    "ipAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr                            ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                    sprintf(str, "}"); strcat(buf, str);
+                    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
 
-                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     
                     nbr = uip_ds6_nbr_next(nbr);
                 }
 
                 for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1343,29 +1433,29 @@ static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     #else
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START net{} > nbrs[] /////////////////////////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); //////////////
+        sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
         
             // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-            sprintf(str,"["); strcat(buf, str);
+            sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
 
-            sprintf(str, "]"); strcat(buf, str);
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1376,10 +1466,12 @@ static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END nsIP{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1390,24 +1482,24 @@ static void oar_json_quantized_append_ipv6_nbrs_ip(char * buf)
 // function that appends IPv6 NEIGBORS LL ADDRESSES section to the json string
 // ---------------------------------------------------------------------------
 
-static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
+static int oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START nsLL{} ////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "nsLL" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "nsLL" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     #if (NETSTACK_CONF_WITH_IPV6)
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ?????????????????????????????????? 
 
         uip_ds6_nbr_t *nbr;
@@ -1422,19 +1514,19 @@ static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsLL{} > ns[] > ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ///////////
+            sprintf(str, "\"" "nbrs" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); ///////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1448,38 +1540,38 @@ static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsLL{} > ns[] > ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
                 while(nbr != NULL)
                 {
                     oar_json_quantized_ip_neighbor_count++;
                     
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                    sprintf(str, "{"); strcat(buf, str);
+                    sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                         oar_json_quantized_lladdr_to_str(oar_json_quantized_lladdr, (linkaddr_t *)uip_ds6_nbr_get_ll(nbr));
-                        sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_lladdr                            ); strcat(buf, str);
+                        sprintf(str,    "\""    "llAddr"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_lladdr                            ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                    sprintf(str, "}"); strcat(buf, str);
+                    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
 
-                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     
                     nbr = uip_ds6_nbr_next(nbr);
                 }
 
                 for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1491,29 +1583,29 @@ static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     #else
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START nsLL > ns[] ////////////////////////////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "nbrs" "\"" ":"); strcat(buf, str); ////////////
+        sprintf(str, "\"" "nbrs" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); ////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
         
             // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-            sprintf(str,"["); strcat(buf, str);
+            sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
 
-            sprintf(str, "]"); strcat(buf, str);
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1524,10 +1616,12 @@ static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END nsLL{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1538,24 +1632,24 @@ static void oar_json_quantized_append_ipv6_nbrs_ll(char * buf)
 // function that appends IPv6 NEIGHBOR STATES section to the json string //////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
+static int oar_json_quantized_append_ipv6_nbrs_states(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START nsSt{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "nsSt" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "nsSt" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     #if (NETSTACK_CONF_WITH_IPV6)
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ?????????????????????????????????? 
 
         uip_ds6_nbr_t *nbr;
@@ -1570,19 +1664,19 @@ static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsSt{} > ns[] > ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1596,38 +1690,38 @@ static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START nsSt{} > ns[] > ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); /////////////
+            sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
                 while(nbr != NULL)
                 {
                     oar_json_quantized_ip_neighbor_count++;
                     
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                    sprintf(str, "{"); strcat(buf, str);
+                    sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                        sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); strcat(buf, str);    sprintf(str, ",");  strcat(buf, str);
-                        sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ds6_nbr_state_to_str(nbr->state)  ); strcat(buf, str);
+                        sprintf(str,    "\""    "router"    "\""    ":"         "%u"            ,nbr->isrouter                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str,    "\""    "state"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ds6_nbr_state_to_str(nbr->state)  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                    sprintf(str, "}"); strcat(buf, str);
+                    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
 
-                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  strcat(buf, str); }
+                    if (oar_json_quantized_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     
                     nbr = uip_ds6_nbr_next(nbr);
                 }
 
                 for (int j = oar_json_quantized_ip_neighbor_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1639,29 +1733,29 @@ static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
     #else
 
-        sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+        sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SUBARRAY START nsSt{} > ns[] //////////////////////////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "ns" "\"" ":"); strcat(buf, str); //////////////
+        sprintf(str, "\"" "ns" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////////////
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
         
             // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-            sprintf(str,"["); strcat(buf, str);
+            sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); strcat(buf, str);
+                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
 
-            sprintf(str, "]"); strcat(buf, str);
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1672,10 +1766,12 @@ static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
     // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END nbrs{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1686,24 +1782,24 @@ static void oar_json_quantized_append_ipv6_nbrs_states(char * buf)
 // function that appends ROUTING section to the json string ///////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_routing(char * buf)
+static int oar_json_quantized_append_routing(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rt{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rt" "\"" ":"     ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rt" "\"" ":"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
             uip_ds6_defrt_t *default_route;
@@ -1712,15 +1808,15 @@ static void oar_json_quantized_append_routing(char * buf)
             if(default_route != NULL)
             {
                 oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &default_route->ipaddr);
-                sprintf(str,    "\""    "df"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+                sprintf(str,    "\""    "df"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str); }
-                else                                        { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "infinite" "\""                                                          );  strcat(buf, str); }   // sprintf(str, "," );  strcat(buf, str);  
+                if (default_route->lifetime.interval != 0)  { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "%lu"      "\""    ,(unsigned long)default_route->lifetime.interval      );  if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                else                                        { sprintf(str,   "\""    "lt"   "\""    ":" "\""    "infinite" "\""                                                          );  if(seguard(buf, str)){return 1;} strcat(buf, str); }   // sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);  
             }
             else
             {
-                sprintf(str,    "\""    "df"    "\""    ":" "\""    "none"  "\""                            );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
-                sprintf(str,    "\""    "lt"    "\""    ":"         "null"                                  );  strcat(buf, str);   
+                sprintf(str,    "\""    "df"    "\""    ":" "\""    "none"  "\""                            );  if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str,    "\""    "lt"    "\""    ":"         "null"                                  );  if(seguard(buf, str)){return 1;} strcat(buf, str);   
 
             }
 
@@ -1729,20 +1825,22 @@ static void oar_json_quantized_append_routing(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
-            sprintf(str, "\"" "df"  "\"" ":"    "null"      ); strcat(buf, str);   sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "lt"  "\"" ":"    "null"      ); strcat(buf, str);
+            sprintf(str, "\"" "df"  "\"" ":"    "null"      ); if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "lt"  "\"" ":"    "null"      ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
 
         #endif
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END net{} ///////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1753,33 +1851,33 @@ static void oar_json_quantized_append_routing(char * buf)
 // function that appends ROUTING LINK SOURCES section to the json string ////////////
 // ----------------------------------------------------------------------------------
 
-static void oar_json_quantized_append_routing_link_sources(char * buf)
+static int oar_json_quantized_append_routing_link_sources(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rtLS{} ///////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rtLS" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rtLS" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
             #if (UIP_CONF_IPV6_RPL)
 
-                sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "rpl" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 int oar_json_quantized_uip_sr_links_count = 0;
@@ -1795,11 +1893,11 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtLS{} > ls[] ////////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         uip_ipaddr_t child_ipaddr;  // DODAG root to -->
                         // uip_ipaddr_t parent_ipaddr; // <-- to
@@ -1814,19 +1912,19 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
                             // uip_sr_link_snprint(goa_buf, sizeof(goa_buf), link);
                             
                             oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &child_ipaddr);
-                            sprintf(str,    "\""    "from"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+                            sprintf(str,    "\""    "from"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                             if(link->parent == NULL)
                             {
-                                sprintf(str, "\"" "root" "\"" ":" "true"); strcat(buf, str); 
+                                sprintf(str, "\"" "root" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str); 
                             }
                             else
                             {
-                                sprintf(str, "\"" "root" "\"" ":" "false"); strcat(buf, str);
+                                sprintf(str, "\"" "root" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             }
 
                             
-                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
 
                             link = uip_sr_node_next(link);
                         }
@@ -1834,12 +1932,12 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
                         for (int j = oar_json_quantized_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);   
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1853,21 +1951,21 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtLS{} > ls[] ////////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
                         
-                        sprintf(str, "]"); strcat(buf, str);   
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                     
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1879,30 +1977,30 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
             #else
 
-                sprintf(str, "\"" "rpl" "\"" ":" "false"); strcat(buf, str);
+                sprintf(str, "\"" "rpl" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rtLS{} > ls[] /////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
+                sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
                         
-                    sprintf(str, "]"); strcat(buf, str);   
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1917,32 +2015,32 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
-            sprintf(str, "\"" "rpl" "\"" ":" "null"); strcat(buf, str);
+            sprintf(str, "\"" "rpl" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START rtLS{} > ls[] ////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+            sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
                 // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                sprintf(str,"["); strcat(buf, str);
+                sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
                     
-                    sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                    sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                 }
                     
-                sprintf(str, "]"); strcat(buf, str);   
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1953,10 +2051,12 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END rtLS{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -1967,33 +2067,33 @@ static void oar_json_quantized_append_routing_link_sources(char * buf)
 // function that appends ROUTING LINK DESTINATIONS section to the json string ///////
 // ----------------------------------------------------------------------------------
 
-static void oar_json_quantized_append_routing_link_destinations(char * buf)
+static int oar_json_quantized_append_routing_link_destinations(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rtLD{} ////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rtLD" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rtLD" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
             #if (UIP_CONF_IPV6_RPL)
 
-                sprintf(str, "\"" "rpl" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "rpl" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 int oar_json_quantized_uip_sr_links_count = 0;
@@ -2009,11 +2109,11 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtLD{} > ls[] ////////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         // uip_ipaddr_t child_ipaddr;  // DODAG root to -->
                         uip_ipaddr_t parent_ipaddr; // <-- to
@@ -2027,19 +2127,19 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
                             
 
                             oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &parent_ipaddr);
-                            sprintf(str,    "\""    "to"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  strcat(buf, str);   sprintf(str, "," );  strcat(buf, str);
+                            sprintf(str,    "\""    "to"    "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr   );  if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                             if(link->lifetime != UIP_SR_INFINITE_LIFETIME)
                             {
-                                sprintf(str, "\"" "lf" "\"" ":" "%lu"                   ,(unsigned long)link->lifetime  ); strcat(buf, str); 
+                                sprintf(str, "\"" "lf" "\"" ":" "%lu"                   ,(unsigned long)link->lifetime  ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
                             }
                             else
                             {
-                                sprintf(str, "\"" "lf" "\"" ":" "\"" "infinite" "\""                                    ); strcat(buf, str); 
+                                sprintf(str, "\"" "lf" "\"" ":" "\"" "infinite" "\""                                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
                             }
 
                             
-                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                            if (oar_json_quantized_uip_sr_links_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
 
                             link = uip_sr_node_next(link);
                         }
@@ -2047,12 +2147,12 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
                         for (int j = oar_json_quantized_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);   
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2066,21 +2166,21 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtLD{} > ls[] ///////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
                         
-                        sprintf(str, "]"); strcat(buf, str);   
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                     
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2092,30 +2192,30 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
             #else
 
-                sprintf(str, "\"" "rpl" "\"" ":" "false"); strcat(buf, str);
+                sprintf(str, "\"" "rpl" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START net{} > rtLD{} > ls[] //////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str); /////////
+                sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
                         
-                    sprintf(str, "]"); strcat(buf, str);   
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2130,32 +2230,32 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
-            sprintf(str, "\"" "rpl" "\"" ":" "null"); strcat(buf, str);
+            sprintf(str, "\"" "rpl" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START rtLD{} > ls[] ///////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ls" "\"" ":"); strcat(buf, str);
+            sprintf(str, "\"" "ls" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
                 // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                sprintf(str,"["); strcat(buf, str);
+                sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
                     
-                    sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                    sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                 }
                     
-                sprintf(str, "]"); strcat(buf, str);   
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                 // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2166,10 +2266,12 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END rtLs{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2180,42 +2282,42 @@ static void oar_json_quantized_append_routing_link_destinations(char * buf)
 // function that appends ROUTING ENTRY ROUTES section to the json string ////////////
 // ----------------------------------------------------------------------------------
 
-static void oar_json_quantized_append_routing_entry_routes(char * buf)
+static int oar_json_quantized_append_routing_entry_routes(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rtEs{} ////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rtERt" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rtERt" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
             #if (UIP_MAX_ROUTES != 0)
 
-                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
                 if(uip_ds6_route_num_routes() > 0)
                 {
                     uip_ds6_route_t *route;
-                    sprintf(str, "\"" "totEs" "\"" ":" "%u" ,uip_ds6_route_num_routes()); strcat(buf, str);
+                    sprintf(str, "\"" "totEs" "\"" ":" "%u" ,uip_ds6_route_num_routes()); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
                     route = uip_ds6_route_head();
@@ -2226,37 +2328,37 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtEs{} > es[] ///////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         while(route != NULL) 
                         {
                             oar_json_quantized_ds6_route_count++;
 
                             // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                            sprintf(str, "{"); strcat(buf, str);
+                            sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                                 oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &route->ipaddr);
-                                sprintf(str,    "\""    "rt"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    
+                                sprintf(str,    "\""    "rt"     "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
                             // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                            sprintf(str, "}"); strcat(buf, str);
+                            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         }
 
                         for (int j = oar_json_quantized_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                     
                     // --------------------------
@@ -2265,10 +2367,10 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
                 }
                 else
                 {
-                    sprintf(str, "\"" "totEs" "\"" ":" "\"" "none" "\"" ); strcat(buf, str);    
+                    sprintf(str, "\"" "totEs" "\"" ":" "\"" "none" "\"" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
                         
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2276,21 +2378,21 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtEs{} > es[] ///////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                     // --------------------------
@@ -2302,36 +2404,36 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
             #else
 
-                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
-                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rtEs{} > es[] ///////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                 
                 // --------------------------
@@ -2345,52 +2447,54 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); strcat(buf, str);
+            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
-                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START net{} > routes{} > routingEntries{} > entries[]
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str); /////////////
+                sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
         
         #endif
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END rtEs{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2401,42 +2505,42 @@ static void oar_json_quantized_append_routing_entry_routes(char * buf)
 // function that appends ROUTING ENTRY VIAs section to the json string ////////////
 // ----------------------------------------------------------------------------------
 
-static void oar_json_quantized_append_routing_entry_vias(char * buf)
+static int oar_json_quantized_append_routing_entry_vias(char * buf)
 {
     char str[128];
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rtEs{} ////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rtEVia" "\"" ":"   ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rtEVia" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
         #if (NETSTACK_CONF_WITH_IPV6)
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "true"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_MAX_ROUTES != 0)######## 
             #if (UIP_MAX_ROUTES != 0)
 
-                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
                 if(uip_ds6_route_num_routes() > 0)
                 {
                     uip_ds6_route_t *route;
-                    sprintf(str, "\"" "totEs" "\"" ":" "%u" ,uip_ds6_route_num_routes()); strcat(buf, str);
+                    sprintf(str, "\"" "totEs" "\"" ":" "%u" ,uip_ds6_route_num_routes()); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
                     route = uip_ds6_route_head();
@@ -2447,40 +2551,40 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtEs{} > es[] ///////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         while(route != NULL) 
                         {
                             oar_json_quantized_ds6_route_count++;
 
                             // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                            sprintf(str, "{"); strcat(buf, str);
+                            sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                                 oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, uip_ds6_route_nexthop(route));
-                                sprintf(str,    "\""    "via"       "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); strcat(buf, str);    sprintf(str, "," );  strcat(buf, str);
+                                sprintf(str,    "\""    "via"       "\""    ":" "\""    "%s"    "\""    ,oar_json_quantized_ipaddr); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                                if ((unsigned long)route->state.lifetime != 0xFFFFFFFF) { sprintf(str,  "\""  "lf"    "\""    ":"         "%u"                ,(unsigned long)route->state.lifetime); strcat(buf, str); }
-                                else                                                    { sprintf(str,  "\""  "lf"    "\""    ":" "\""    "infinite"  "\""                                         ); strcat(buf, str); }
+                                if ((unsigned long)route->state.lifetime != 0xFFFFFFFF) { sprintf(str,  "\""  "lf"    "\""    ":"         "%u"                ,(unsigned long)route->state.lifetime); if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                                else                                                    { sprintf(str,  "\""  "lf"    "\""    ":" "\""    "infinite"  "\""                                         ); if(seguard(buf, str)){return 1;} strcat(buf, str); }
 
                             // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                            sprintf(str, "}"); strcat(buf, str);
+                            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  strcat(buf, str); }
+                            if (oar_json_quantized_ds6_route_count != NBR_TABLE_CONF_MAX_NEIGHBORS)    { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         }
 
                         for (int j = oar_json_quantized_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                     
                     // --------------------------
@@ -2489,10 +2593,10 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
                 }
                 else
                 {
-                    sprintf(str, "\"" "totEs" "\"" ":" "\"" "none" "\"" ); strcat(buf, str);    
+                    sprintf(str, "\"" "totEs" "\"" ":" "\"" "none" "\"" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
                         
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2500,21 +2604,21 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     // SUBARRAY START rtEs{} > es[] ///////////////////
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                    sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     
                         // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                        sprintf(str,"["); strcat(buf, str);
+                        sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                            if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
 
-                        sprintf(str, "]"); strcat(buf, str);
+                        sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
 
                     // --------------------------
@@ -2526,36 +2630,36 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_MAX_ROUTES != 0)######## 
             #else
 
-                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); strcat(buf, str);
+                sprintf(str, "\"" "maxRtsN0" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
-                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rtEs{} > es[] ///////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str);
+                sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
                 
                 // --------------------------
@@ -2569,52 +2673,54 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
         #else
 
-            sprintf(str, "\"" "IPv6" "\"" ":" "false"); strcat(buf, str);
+            sprintf(str, "\"" "IPv6" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); strcat(buf, str);
+            sprintf(str, "\"" "maxRtsN0" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
 
-                sprintf(str, "\"" "totEs" "\"" ":" "null" ); strcat(buf, str); 
+                sprintf(str, "\"" "totEs" "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ?????????????????????????????????? 
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START net{} > routes{} > routingEntries{} > entries[]
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "es" "\"" ":"); strcat(buf, str); /////////////
+                sprintf(str, "\"" "es" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
-                    sprintf(str,"["); strcat(buf, str);
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); strcat(buf, str);
+                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); };
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
         
         #endif
         // ########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!(NETSTACK_CONF_WITH_IPV6)########!
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION END rtEs{} //////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2625,86 +2731,88 @@ static void oar_json_quantized_append_routing_entry_vias(char * buf)
 // function that appends RPL STATUS section to the json string ////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_status(char * buf)
+static int oar_json_quantized_append_rpl_status(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rSt{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rSt" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rSt" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
             if(!curr_instance.used)             
                 { 
-                    sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);
+                    sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
-                    sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "dO"      "\"" ":" "null"); strcat(buf, str);
+                    sprintf(str, "\"" "mop"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "of"      "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "hRkI"    "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dLt"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dO"      "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
                 } 
                 else                                
                 { 
-                    sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); strcat(buf, str);
+                    sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     // ??????????????????????????????????
-                    sprintf(str, ",");  strcat(buf, str);
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // ?????????????????????????????????? 
 
-                    sprintf(str, "\"" "mop"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_mop_to_str(curr_instance.mop)       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "of"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_ocp_to_str(curr_instance.of->ocp)   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "hRkI"    "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dLt"     "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                    sprintf(str, "\"" "dtsnO"   "\"" ":"        "%u"            ,curr_instance.dtsn_out                                     ); strcat(buf, str);    
+                    sprintf(str, "\"" "mop"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_mop_to_str(curr_instance.mop)       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "of"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_ocp_to_str(curr_instance.of->ocp)   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "hRkI"    "\"" ":"        "%u"            ,curr_instance.min_hoprankinc                               ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dLt"     "\"" ":"        "%lu"           ,RPL_LIFETIME(curr_instance.default_lifetime)               ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "dtsnO"   "\"" ":"        "%u"            ,curr_instance.dtsn_out                                     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             }
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+            sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
-            sprintf(str, "\"" "iId"  "\"" ":" "null"); strcat(buf, str);  
+            sprintf(str, "\"" "iId"  "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);  
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ?????????????????????????????????? 
 
-            sprintf(str, "\"" "mop"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "of"      "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "hRkI"    "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "dLt"     "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "dtsnO"   "\"" ":" "null"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "mop"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "of"      "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "hRkI"    "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dLt"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dtsnO"   "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SUBSECTION END rSt{} ////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2715,111 +2823,111 @@ static void oar_json_quantized_append_rpl_status(char * buf)
 // function that appends RPL STATUS section to the json string ////////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_status_dag(char * buf)
+static int oar_json_quantized_append_rpl_status_dag(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rStDag{} //////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rStDag" "\"" ":" ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rStDag" "\"" ":" ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if(!curr_instance.used)             
             { 
-                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
-                sprintf(str, "\"" "dT"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "dId"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "dVer"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "dPf"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "st"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "pP"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "rk"      "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "lRk"     "\"" ":" "null" ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); strcat(buf, str);    
+                sprintf(str, "\"" "dT"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dId"     "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dVer"    "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dPf"     "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "st"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "pP"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rk"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lRk"     "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????
                     
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START rStDag{} > dao{} ///////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
-                sprintf(str, "{"                    ); strcat(buf, str); 
+                sprintf(str, "\"" "dao" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    sprintf(str, "\"" "lS"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);
+                    sprintf(str, "\"" "lS"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "lA"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUSECTION END rStDag{} > dao{} //
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
             else
             {
-                sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); strcat(buf, str); sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":" "%u" ,curr_instance.instance_id); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                if(NETSTACK_ROUTING.node_is_root()) { sprintf(str, "\"" "dT" "\"" ":" "\"" "root" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
-                else                                { sprintf(str, "\"" "dT" "\"" ":" "\"" "node" "\""); strcat(buf, str); sprintf(str, ","); strcat(buf, str); } 
+                if(NETSTACK_ROUTING.node_is_root()) { sprintf(str, "\"" "dT" "\"" ":" "\"" "root" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); } 
+                else                                { sprintf(str, "\"" "dT" "\"" ":" "\"" "node" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); } 
         
                 oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.dag_id);
-                sprintf(str, "\"" "dId"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dId"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
-                sprintf(str, "\"" "dVer"    "\"" ":"        "%u"            ,curr_instance.dag.version                              ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dVer"    "\"" ":"        "%u"            ,curr_instance.dag.version                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, &curr_instance.dag.prefix_info.prefix);
-                sprintf(str, "\"" "dPf"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dPf"     "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_ipaddr                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
-                sprintf(str, "\"" "dPfL"    "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "st"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_state_to_str(curr_instance.dag.state)     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "dPfL"    "\"" ":"        "%u"            ,curr_instance.dag.prefix_info.length                   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "st"      "\"" ":" "\""   "%s"    "\""    ,oar_json_quantized_rpl_state_to_str(curr_instance.dag.state)     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 if (curr_instance.dag.preferred_parent) 
                 {
                     oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
-                    sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_quantized_ipaddr    ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                    sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_quantized_ipaddr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 }
                 else
                 {
-                    sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                    sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 }
 
-                sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "mRkI"    "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); strcat(buf, str);    
+                sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lRk"     "\"" ":"          "%u"          ,curr_instance.dag.lowest_rank                          ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "mRkI"    "\"" ":"          "%u"          ,curr_instance.max_rankinc                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
                 // ??????????????????????????????????
-                sprintf(str, ",");  strcat(buf, str);
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ??????????????????????????????????        
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBSECTION START rStDag{} > dao{} ///////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
-                sprintf(str, "{"                    ); strcat(buf, str); 
+                sprintf(str, "\"" "dao" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
+                sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    sprintf(str, "\"" "lS"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str, "\"" "lA"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); strcat(buf, str);   
+                    sprintf(str, "\"" "lS"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_seqno       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "lA"  "\"" ":" "%u"   ,curr_instance.dag.dao_last_acked_seqno ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUSECTION END rStDag{} > dao{} //
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "}"); strcat(buf, str);
+                sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
 
@@ -2827,53 +2935,55 @@ static void oar_json_quantized_append_rpl_status_dag(char * buf)
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
             
-            sprintf(str, "\"" "iId"  "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "iId"  "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-            sprintf(str, "\"" "dT"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "dId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "dVer"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "dPf"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "st"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "pP"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "rk"      "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-            sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); strcat(buf, str);    
+            sprintf(str, "\"" "dT"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dId"     "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dVer"    "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dPf"     "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "st"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "pP"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rk"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBSECTION START rStDag{} > dao{} ///////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "dao" "\"" ":"    ); strcat(buf, str); 
-            sprintf(str, "{"                    ); strcat(buf, str); 
+            sprintf(str, "\"" "dao" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
+            sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                sprintf(str, "\"" "lS"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "lA"   "\"" ":" "null"     ); strcat(buf, str);
+                sprintf(str, "\"" "lS"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lA"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUSECTION END rStDag{} > dao{} //
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
+            sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SUBSECTION END rStDag{} /////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2884,70 +2994,72 @@ static void oar_json_quantized_append_rpl_status_dag(char * buf)
 // function that appends RPL STATUS TRICKLE TIMER section to the json string //
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_status_trickle_timer(char * buf)
+static int oar_json_quantized_append_rpl_status_trickle_timer(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rStTt{} ///////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rStTt" "\"" ":"  ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rStTt" "\"" ":"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if(!curr_instance.used)             
             { 
-                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
+                sprintf(str, "\"" "cur" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "nim" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "max" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "red" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             }
             else
             {
-                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "max" "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "red" "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); strcat(buf, str);    
+                sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "max" "\"" ":" "%u"    ,curr_instance.dio_intmin + curr_instance.dio_intdoubl  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "red" "\"" ":" "%u"    ,curr_instance.dio_redundancy                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             }
             
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-        sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str);
+        sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
         // ??????????????????????????????????
-        sprintf(str, ",");  strcat(buf, str);
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
         // ??????????????????????????????????
 
-        sprintf(str, "\"" "iId" "\"" ":" "null"); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+        sprintf(str, "\"" "iId" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-        sprintf(str, "\"" "cur" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-        sprintf(str, "\"" "nim" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-        sprintf(str, "\"" "max" "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-        sprintf(str, "\"" "red" "\"" ":" "null"     ); strcat(buf, str);    
+        sprintf(str, "\"" "cur" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "\"" "nim" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "\"" "max" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str, "\"" "red" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
     #endif
     // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str);
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SUBSECTION END rStTt{} //////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
 }
 
 // ####################################################################################################################
@@ -2958,52 +3070,52 @@ static void oar_json_quantized_append_rpl_status_trickle_timer(char * buf)
 // function that appends RPL NEIGBOR ADDR section to the json string /////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_neighbor(char * buf)
+static int oar_json_quantized_append_rpl_neighbor(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rN{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rN" "\"" ":"     ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rN" "\"" ":"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if (!curr_instance.used || rpl_neighbor_count() == 0)
             {
                 
-                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
-                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
             
-                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 //  (!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rN{} > ns[] ////////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~
@@ -3017,19 +3129,19 @@ static void oar_json_quantized_append_rpl_neighbor(char * buf)
 
                 int oar_json_quantized_rpl_neighbor_count = 0;
 
-                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNR{} > ns[] ///////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     while(nbr != NULL)
                     {
@@ -3040,25 +3152,25 @@ static void oar_json_quantized_append_rpl_neighbor(char * buf)
                         // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{" ); strcat(buf, str);
+                        sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                             oar_json_quantized_ipaddr_to_str(oar_json_quantized_ipaddr, rpl_neighbor_get_ipaddr(nbr));
-                            sprintf(str, "\"" "ad"                              "\"" ":" "\""   "%s"    "\""       ,oar_json_quantized_ipaddr); strcat(buf, str);
+                            sprintf(str, "\"" "ad"                              "\"" ":" "\""   "%s"    "\""       ,oar_json_quantized_ipaddr); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                        sprintf(str,    "}" ); strcat(buf, str);
+                        sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         
-                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         nbr = nbr_table_next(rpl_neighbors, nbr);
                     }
                     
                     for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str, "null"); strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~
@@ -3070,31 +3182,31 @@ static void oar_json_quantized_append_rpl_neighbor(char * buf)
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+            sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "i"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "c"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START rN{} > ns[] //////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str);
+            sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~
@@ -3104,12 +3216,14 @@ static void oar_json_quantized_append_rpl_neighbor(char * buf)
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END rN{} ////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rN{} ////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
+}
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -3119,52 +3233,52 @@ static void oar_json_quantized_append_rpl_neighbor(char * buf)
 // function that appends RPL NEIGBOR RANKS section to the json string /////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
+static int oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rNR{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rNR" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rNR" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if (!curr_instance.used || rpl_neighbor_count() == 0)
             {
                 
-                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
-                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
             
-                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 //  (!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNR{} > ns[] ///////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3178,19 +3292,19 @@ static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
 
                 int oar_json_quantized_rpl_neighbor_count = 0;
 
-                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNR{} > ns[] ///////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     while(nbr != NULL)
                     {
@@ -3201,26 +3315,26 @@ static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
                         // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{" ); strcat(buf, str);
+                        sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); strcat(buf, str);    
+                            sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
                             
-                        sprintf(str,    "}" ); strcat(buf, str);
+                        sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         
-                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         nbr = nbr_table_next(rpl_neighbors, nbr);
                     }
                     
                     for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str, "null"); strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3232,31 +3346,31 @@ static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+            sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "i"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "c"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START rNR{} > ns[] //////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str);
+            sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3266,12 +3380,14 @@ static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END rNR{} ///////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rNR{} ///////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
+}
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -3281,52 +3397,52 @@ static void oar_json_quantized_append_rpl_neighbor_ranks(char * buf)
 // function that appends RPL NEIGBOR VALUES section to the json string ////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
+static int oar_json_quantized_append_rpl_neighbor_values(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rNV{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rNV" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rNV" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if (!curr_instance.used || rpl_neighbor_count() == 0)
             {
                 
-                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
-                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
             
-                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 //  (!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNV{} > ns[] ///////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3340,19 +3456,19 @@ static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
 
                 int oar_json_quantized_rpl_neighbor_count = 0;
 
-                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // !(!curr_instance.used || rpl_neighbor_count() == 0) ///////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNV{} > ns[] ///////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     while(nbr != NULL)
                     {
@@ -3363,31 +3479,31 @@ static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
                         // clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{" ); strcat(buf, str);
+                        sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                            sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_quantized_rpl_nbr_stats != NULL ? oar_json_quantized_rpl_nbr_stats->freshness : 0                          ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_quantized_rpl_nbr_best ? "true" : "false"                                                           ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); strcat(buf, str);    
+                            sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_quantized_rpl_nbr_stats != NULL ? oar_json_quantized_rpl_nbr_stats->freshness : 0                          ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_quantized_rpl_nbr_best ? "true" : "false"                                                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
                             
-                        sprintf(str,    "}" ); strcat(buf, str);
+                        sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         
-                        // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+                        // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         nbr = nbr_table_next(rpl_neighbors, nbr);
                     }
                     
                     for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str, "null"); strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3399,31 +3515,31 @@ static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+            sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "iId"     "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-            sprintf(str, "\"" "c"       "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "iId"     "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "c"       "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             // SUBARRAY START rNV{} > ns[] ///////////////////////////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); /////////
+            sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); /////////
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
             
                 // [][][][][][][][][][][][][][][][][]
-                sprintf(str, "["); strcat(buf, str);
+                sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                 {
-                    sprintf(str,    "null"  );  strcat(buf, str);
-                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
 
-                sprintf(str, "]"); strcat(buf, str);
+                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 // [][][][][][][][][][][][][][][][][]
             
             // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3433,12 +3549,14 @@ static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END rNv{} ///////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rNv{} ///////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
+}
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -3448,52 +3566,52 @@ static void oar_json_quantized_append_rpl_neighbor_values(char * buf)
 // function that appends RPL NEIGBORS () section to the json string //////////////
 // ----------------------------------------------------------------------------
 
-static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
+static int oar_json_quantized_append_rpl_neighbor_parens(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // SECTION START rNP{} /////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "rNP" "\"" ":"    ); strcat(buf, str);   
-    sprintf(str, "{"                    ); strcat(buf, str);
+    sprintf(str, "\"" "rNP" "\"" ":"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // ######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)######## (ROUTING_CONF_RPL_LITE)########
         #if (ROUTING_CONF_RPL_LITE)
 
-            sprintf(str, "\"" "rL" "\"" ":" "true");  strcat(buf, str);
+            sprintf(str, "\"" "rL" "\"" ":" "true");  if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
             if (!curr_instance.used || rpl_neighbor_count() == 0)
             {
                 
-                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
-                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str); }
+                if (!curr_instance.used)    { sprintf(str, "\"" "iId" "\"" ":" "false"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                else                        { sprintf(str, "\"" "iId" "\"" ":" "true"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
             
-                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str, "\"" "c" "\"" ":" "%u" ,rpl_neighbor_count()); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 //  (!curr_instance.used || rpl_neighbor_count() == 0) //
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNP{} > ns[] //////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3507,19 +3625,19 @@ static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
 
                 int oar_json_quantized_rpl_neighbor_count = 0;
 
-                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
-                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); strcat(buf, str);    sprintf(str, "," ); strcat(buf, str);
+                sprintf(str, "\"" "iId"     "\"" ":" "true"                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "c"       "\"" ":" "%u"   ,rpl_neighbor_count()   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // !(!curr_instance.used || rpl_neighbor_count() == 0) //
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNP{} > ns[] //////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     while(nbr != NULL)
                     {
@@ -3530,42 +3648,42 @@ static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
                         clock_time_t oar_json_quantized_rpl_nbr_clock_now = clock_time();
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-                        sprintf(str, "{" ); strcat(buf, str);
+                        sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                             if(oar_json_quantized_rpl_nbr_stats->last_tx_time > 0) 
                             {
-                                sprintf(str, "\"" "lTx"  "\"" ":"    "%u"    ,(unsigned)((oar_json_quantized_rpl_nbr_clock_now - oar_json_quantized_rpl_nbr_stats->last_tx_time) / (60 * CLOCK_SECOND))  ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                sprintf(str, "\"" "lTx"  "\"" ":"    "%u"    ,(unsigned)((oar_json_quantized_rpl_nbr_clock_now - oar_json_quantized_rpl_nbr_stats->last_tx_time) / (60 * CLOCK_SECOND))  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             }
                             else
                             {
-                                sprintf(str, "\"" "lTx"  "\"" ":"    "null"                                                                                                                       ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                                sprintf(str, "\"" "lTx"  "\"" ":"    "null"                                                                                                                       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             }
 
                             if(nbr->better_parent_since > 0) 
                             {
-                                sprintf(str, "\"" "bS"  "\"" ":"    "%u"    ,(unsigned)((oar_json_quantized_rpl_nbr_clock_now - nbr->better_parent_since) / (60 * CLOCK_SECOND))                      ); strcat(buf, str);   
+                                sprintf(str, "\"" "bS"  "\"" ":"    "%u"    ,(unsigned)((oar_json_quantized_rpl_nbr_clock_now - nbr->better_parent_since) / (60 * CLOCK_SECOND))                      ); if(seguard(buf, str)){return 1;} strcat(buf, str);   
                             }
                             else
                             {
-                                sprintf(str, "\"" "bS"  "\"" ":"    "null"                                                                                                                        ); strcat(buf, str);  
+                                sprintf(str, "\"" "bS"  "\"" ":"    "null"                                                                                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);  
                             }
                             
-                        sprintf(str,    "}" ); strcat(buf, str);
+                        sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         
-                        // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  strcat(buf, str);
+                        // rpl_neighbor_snprint(temp_str, sizeof(temp_str), nbr);  // sprintf(str,    "\""    "%s"    "\""    ,temp_str   );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); strcat(buf, str); }
+                        if (oar_json_quantized_rpl_neighbor_count < NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str); }
                         nbr = nbr_table_next(rpl_neighbors, nbr);
                     }
                     
                     for (int i = oar_json_quantized_rpl_neighbor_count; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str, "null"); strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); }
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
                 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3577,31 +3695,31 @@ static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
         #else
 
-            sprintf(str, "\"" "rL" "\"" ":" "false");  strcat(buf, str); 
+            sprintf(str, "\"" "rL" "\"" ":" "false");  if(seguard(buf, str)){return 1;} strcat(buf, str); 
 
             // ??????????????????????????????????
-            sprintf(str, ",");  strcat(buf, str);
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????
 
-            sprintf(str, "\"" "i"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                sprintf(str, "\"" "c"   "\"" ":" "null"     ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+            sprintf(str, "\"" "i"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "c"   "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // SUBARRAY START rNP{} > ns[] //////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                sprintf(str, "\"" "ns" "\"" ":");  strcat(buf, str); ////
+                sprintf(str, "\"" "ns" "\"" ":");  if(seguard(buf, str)){return 1;} strcat(buf, str); ////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
                 
                     // [][][][][][][][][][][][][][][][][]
-                    sprintf(str, "["); strcat(buf, str);
+                    sprintf(str, "["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     for (int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++)
                     {
-                        sprintf(str,    "null"  );  strcat(buf, str);
-                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  strcat(buf, str); } 
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                     }
 
-                    sprintf(str, "]"); strcat(buf, str);
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     // [][][][][][][][][][][][][][][][][]
 
                 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -3611,16 +3729,43 @@ static void oar_json_quantized_append_rpl_neighbor_parens(char * buf)
         #endif
         // ########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!(ROUTING_CONF_RPL_LITE)########!
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END rP{} ////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END rP{} ////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
+}
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> ABOVE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################        
+
+static void oar_json_quantized_append_pckt(char * buf, int valid, char *error)
+{
+    char str[128];
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START pckt{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+        sprintf(str, "\"" "valid"  "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
+        
+        if(valid)   {sprintf(str, "\"" "error"  "\"" ":"        "null"              ); strcat(buf, str);}
+        else        {sprintf(str, "\"" "error"  "\"" ":" "\""   "%s" "\"" , error   ); strcat(buf, str);}
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END pckt{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void oar_json_quantized_construct(char * buf, int quantum_id)
 {   
@@ -3630,379 +3775,451 @@ void oar_json_quantized_construct(char * buf, int quantum_id)
         
         case 0:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_sys(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_sys(buf))                                      {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 1:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_dev(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_dev(buf))                                      {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
         
         case 2:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_nrg(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_nrg(buf))                                      {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 3:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_ip(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_stats_ip(buf))                                 {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 4:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_icmp(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_stats_icmp(buf))                               {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 5:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
+            
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_tcp_udp(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_stats_tcp_udp(buf))                            {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 6:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_stats_nd6(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_stats_nd6(buf))                                {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 7:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_ipv6_addr(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_ipv6_addr(buf))                                {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 8:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_ipv6_nbrs_ip(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_ipv6_nbrs_ip(buf))                             {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
         
         case 9:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_ipv6_nbrs_ll(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_ipv6_nbrs_ll(buf))                             {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 10:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_ipv6_nbrs_states(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_ipv6_nbrs_states(buf))                         {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 11:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_routing(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_routing(buf))                                  {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 12:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_routing_link_sources(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_routing_link_sources(buf))                     {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 13:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_routing_link_destinations(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_routing_link_destinations(buf))                {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 14:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_routing_entry_routes(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_routing_entry_routes(buf))                     {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 15:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_routing_entry_vias(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_routing_entry_vias(buf))                       {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 16:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_status(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_status(buf))                               {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 17:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_status_dag(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_status_dag(buf))                           {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 18:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_status_trickle_timer(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_status_trickle_timer(buf))                 {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 19:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_neighbor(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_neighbor(buf))                             {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 20:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_neighbor_ranks(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_neighbor_ranks(buf))                       {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 21:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_neighbor_values(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_neighbor_values(buf))                      {return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
 
         case 22:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_id(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
 
-            oar_json_quantized_bridge(buf);
-            oar_json_quantized_append_rpl_neighbor_parens(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_id(buf))                                       {return;}
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            if(oar_json_quantized_append_rpl_neighbor_parens(buf)){return;}
+
+            if(oar_json_quantized_exit(buf))                                            {return;}
             
             break;
         
         default:
             oar_json_quantized_init(buf);
-            oar_json_quantized_enter(buf);
+            if(oar_json_quantized_enter(buf))                                           {return;}
 
-            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); strcat(buf, str);
+            oar_json_quantized_append_pckt(buf, 1, NULL);
 
-            oar_json_quantized_exit(buf);
+            if(oar_json_quantized_bridge(buf))                                          {return;}
+            sprintf(str, "\"" "qId" "\"" ":" "%d", quantum_id); if(seguard(buf, str))   {return;} strcat(buf, str);
+
+            if(oar_json_quantized_exit(buf)){return;}
 
             break;
     }
