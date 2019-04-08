@@ -164,7 +164,7 @@
 PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
 PROCESS(oar_dev_process, "oar dev process");                        // process for testing dev I/O
 PROCESS(webserver_process, "webserver process");
-PROCESS(oar_moor_process, "oar moor process");
+PROCESS(oar_buoy_process, "oar buoy process");
 
 #if (OAR_CONF_DEBUG_FUNCTIONALITY)
 
@@ -180,7 +180,7 @@ PROCESS(oar_moor_process, "oar moor process");
 
 #endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
 
-#if (OAR_CONF_MOOR_FUNCTIONALITY)
+#if (OAR_CONF_BUOY_FUNCTIONALITY)
 
     #if (OAR_CONF_JSON == 1) 
         #if (OAR_CONF_JSON_TYPE == 0)
@@ -190,9 +190,9 @@ PROCESS(oar_moor_process, "oar moor process");
         #endif    
     #endif
 
-    AUTOSTART_PROCESSES(&oar_moor_process);
+    AUTOSTART_PROCESSES(&oar_buoy_process);
 
-#endif // (OAR_CONF_MOOR_FUNCTIONALITY)
+#endif // (OAR_CONF_BUOY_FUNCTIONALITY)
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -338,7 +338,7 @@ PROCESS(oar_moor_process, "oar moor process");
 //static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
-    char buff[OAR_CONF_MOOR_BUFFER_SIZE];
+    char buff[OAR_CONF_BUOY_BUFFER_SIZE];
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
     leds_single_on(LEDS_LED1);
@@ -751,11 +751,11 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 
     #endif // (OAR_CONF_JSON)
     
-    if (strlen(buff) > OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH)
+    if (strlen(buff) > OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH)
     {
         printf("\n"); 
         printf("ABORT SENDING JSON\n");
-        printf("PAYLOAD LENGHT %d > %d\n", strlen(oar_json_buf), OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH);
+        printf("PAYLOAD LENGHT %d > %d\n", strlen(oar_json_buf), OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH);
         printf("ECONNRESET/ETIMEDOUT ERRORS POSSIBLE\n");
         SEND_STRING(&s->sout, "{ \" error \" : \" MAXIMUM POSSIBLE PAYLOAD LEGTH EXCEEDED \" }"); // PSOCK_SEND(&s->sout, (uint8_t *)buff, strlen(buff)) > Send data.
     }
@@ -799,7 +799,7 @@ httpd_simple_script_t httpd_simple_get_script(const char *name)
 
 /*---------------------------------------------------------------------------*/
 
-PROCESS_THREAD(oar_moor_process, ev, data)
+PROCESS_THREAD(oar_buoy_process, ev, data)
 {
     PROCESS_BEGIN();
 
@@ -807,7 +807,7 @@ PROCESS_THREAD(oar_moor_process, ev, data)
         process_start(&webserver_process, NULL);
 
         leds_single_on(LEDS_LED2);
-        printf("MOOR PROCESS STARTED\n");
+        printf("BUOY PROCESS STARTED\n");
 
     PROCESS_END();
 }

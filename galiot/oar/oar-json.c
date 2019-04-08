@@ -21,6 +21,11 @@
 
 
 
+
+
+
+
+
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // STATIC FUNCTIONS (which needed to be copied)  >>>>> BELOW <<<<< ////////////////////////////////////////////////////
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -218,6 +223,12 @@
 
 
 
+
+
+
+
+
+
 // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
 // HELPER FUNCTIONS  >>>>> BELOW <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()
@@ -297,9 +308,6 @@ static void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 
 
 
-
-
-
 // ====================================================================================================================
 // DECLARATIONS ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // ====================================================================================================================
@@ -334,9 +342,6 @@ static char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
-
-
-
 // ====================================================================================================================
 // MEMORY OVERFLOW PROTECTION /////////////////////////////////////////////////////////////////////////////////////////
 // ====================================================================================================================
@@ -346,29 +351,86 @@ static char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 // and sends just the pckt section with error appended //////////////////////// 
 // ----------------------------------------------------------------------------
 
+// {
+// 	"pckt": {
+// 		"valid": false,
+// 		"error": {
+// 			"text": "JSON SEGFUALT",
+// 			"code": 604
+// 		}
+// 	}
+// }
+
 static int seguard(char *buf, char *str)
 {   
     if (strlen(buf) + strlen(str) > OAR_CONF_JSON_BUF_SIZE)
     {
         char str[128];
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION START pckt{} /////////////////////////////////////////////////////////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "{"                    ); strcpy(buf, str); ////////////////////////////////////   // carefull, there is a strcpy() here, resets json
-        sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str); ////////////////////////////////////
-        sprintf(str, "{"                    ); strcat(buf, str); ////////////////////////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        
-            sprintf(str, "\"" "valid"  "\"" ":"         "false"                 ); strcat(buf, str); sprintf(str, ","); strcat(buf, str); 
-            sprintf(str, "\"" "error"  "\"" ":" "\""    "JSON SEGFAULT" "\""    ); strcat(buf, str);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // SECTION START pckt{} ////////////////////////////////
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sprintf(str, "{"                    ); strcpy(buf, str);   // carefull, there is a strcpy() here, resets json
+        sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+        sprintf(str, "{"                    ); strcat(buf, str);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str,        "\"" "vld"    "\"" ":"        "false"                                                         ); strcat(buf, str);
+
+            // ?????????????????????????????????
+            sprintf(str, ","); strcat(buf, str);
+            // ?????????????????????????????????
+        
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+            // SUBSECTION START pckt{} > error{} ///////////////////
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+            sprintf(str, "\"" "err" "\"" ":"  ); strcat(buf, str);
+            sprintf(str, "{"                    ); strcat(buf, str);
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+
+                sprintf(str,    "\"" "txt"     "\"" ":" "\""   "JSON SEGFUALT" "\""    ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str,    "\"" "cd"      "\"" ":"        "604"                                                           ); strcat(buf, str);    
+
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+            sprintf(str, "}"); strcat(buf, str); //
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+            // SUBSECTION END pckt{} > error{} ////
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+
+            
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         sprintf(str, "}" ); strcat(buf, str);
-        sprintf(str, "}" ); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // SECTION END pckt{} ///////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION START id{} //////////////////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
+        sprintf(str, "{"                ); strcat(buf, str); ///
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+            sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+            oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+            
+            sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+            sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
+        
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}" ); strcat(buf, str); //
+        sprintf(str, "}" ); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END id{} ////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         return 1;
     }
@@ -377,9 +439,6 @@ static int seguard(char *buf, char *str)
         return 0;
     }
 }
-
-
-
 
 
 
@@ -444,6 +503,21 @@ static int oar_json_exit(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -480,6 +554,21 @@ static int oar_json_append_id(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -613,6 +702,21 @@ static int oar_json_append_sys(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -664,6 +768,21 @@ static int oar_json_append_dev(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -702,7 +821,6 @@ static int oar_json_append_dev(char * buf)
 // ENERGEST_TYPE_TRANSMIT	The radio is transmitting.          RADIO TRANSMIT
 //                                                              RADIO OFF
    
-
 static int oar_json_append_nrg(char * buf)
 {
     char str[128];
@@ -767,6 +885,21 @@ static int oar_json_append_nrg(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -919,6 +1052,21 @@ static int oar_json_append_stats_ip(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -1049,6 +1197,21 @@ static int oar_json_append_stats_icmp(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -1321,6 +1484,21 @@ static int oar_json_append_stats_tcp_udp(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -1444,6 +1622,21 @@ static int oar_json_append_stats_nd6(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -1509,14 +1702,15 @@ static int oar_json_append_ipv6_addr(char * buf)
                 if(uip_ds6_if.addr_list[i].isused && (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) 
                 {   
                     oar_json_ipaddr_to_str(oar_json_ipaddr, &uip_ds6_if.addr_list[i].ipaddr);
-                    sprintf(str, "\"" "%s"      "\"" ,oar_json_ipaddr   ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\""   "%s"      "\"" ,oar_json_ipaddr ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                     if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
                 }
                 else
                 {
 
-                    sprintf(str, "\""  "null"   "\""                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str,        "null"                          ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    
                     if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, ","  );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
                 }
             }
@@ -1551,7 +1745,7 @@ static int oar_json_append_ipv6_addr(char * buf)
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                 if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
@@ -1574,6 +1768,21 @@ static int oar_json_append_ipv6_addr(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -1751,6 +1960,21 @@ static int oar_json_append_ipv6_nbrs_ip(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -1926,6 +2150,21 @@ static int oar_json_append_ipv6_nbrs_ll(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -2106,6 +2345,21 @@ static int oar_json_append_ipv6_nbrs_states(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -2193,6 +2447,21 @@ static int oar_json_append_routing(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -2458,6 +2727,21 @@ static int oar_json_append_routing_link_sources(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -2693,7 +2977,7 @@ static int oar_json_append_routing_link_destinations(char * buf)
                 for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
                     
-                    sprintf(str,"null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                     if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                 }
@@ -2716,6 +3000,21 @@ static int oar_json_append_routing_link_destinations(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -2964,6 +3263,21 @@ static int oar_json_append_routing_entry_routes(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -3210,6 +3524,21 @@ static int oar_json_append_routing_entry_vias(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -3325,6 +3654,21 @@ static int oar_json_append_rpl_status(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -3530,6 +3874,21 @@ static int oar_json_append_rpl_status_dag(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -3628,6 +3987,21 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -3820,6 +4194,21 @@ static int oar_json_append_rpl_neighbor(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -4018,6 +4407,21 @@ static int oar_json_append_rpl_neighbor_ranks(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
@@ -4230,6 +4634,21 @@ static int oar_json_append_rpl_neighbor_values(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
@@ -4441,34 +4860,95 @@ static int oar_json_append_rpl_neighbor_parens(char * buf)
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> ABOVE <<<<< ////////////////////////////////////////////////////////////////////////////////
-// ####################################################################################################################        
+// ####################################################################################################################
 
-static void oar_json_append_pckt(char * buf, int valid, char *error)
+// ----------------------------------------------------------------------------
+// function that appends RPL NEIGBORS () section to the json string ///////////
+// ----------------------------------------------------------------------------
+
+static void oar_json_append_pckt(char * buf, int valid, char *error_text, int error_code)
 {
     char str[128];
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION START pckt{} /////////////////////////////////////////////////////////////////////
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str); ////////////////////////////////////
-    sprintf(str, "{"                    ); strcat(buf, str); ////////////////////////////////////
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START pckt{} ////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-        sprintf(str, "\"" "valid"  "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str); sprintf(str, ","); strcat(buf, str);
-        
-        if(valid)   {sprintf(str, "\"" "error"  "\"" ":"        "null"              ); strcat(buf, str);}
-        else        {sprintf(str, "\"" "error"  "\"" ":" "\""   "%s" "\"" , error   ); strcat(buf, str);}
+        sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "}"); strcat(buf, str); ////////////////////////////////////
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION END pckt{} ///////////////////////////////////////////////////
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        if (valid)
+        {
+            sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
+        }
+        else
+        {
+            // ><><><><><><><><><><><><><><><><><><><><><><><><><><>
+            // SUBSECTION START pckt{} > error{} ///////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
+            sprintf(str, "{"                    ); strcat(buf, str);
+            // ><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+                sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+            // <><><><><><><><><><><><><><><><><>
+            sprintf(str, "}"); strcat(buf, str);
+            // <><><><><><><><><><><><><><><><><>
+            // SUBSECTION END pckt{} > error{} //
+            // <><><><><><><><><><><><><><><><><>
+        }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END pckt{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// JSON CONTRUCTOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 void oar_json_construct(char * buf, int i)
 {   
@@ -4480,7 +4960,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4499,7 +4979,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4518,7 +4998,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4537,7 +5017,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4556,7 +5036,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4575,7 +5055,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4594,7 +5074,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4613,7 +5093,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4632,7 +5112,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4651,7 +5131,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4670,7 +5150,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4689,7 +5169,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4708,7 +5188,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4727,7 +5207,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4746,7 +5226,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4765,7 +5245,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4784,7 +5264,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4803,7 +5283,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4822,7 +5302,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4841,7 +5321,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4860,7 +5340,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4879,7 +5359,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4898,7 +5378,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -4917,7 +5397,7 @@ void oar_json_construct(char * buf, int i)
             oar_json_init(buf);
             if(oar_json_enter(buf))                                             {return;}
 
-            oar_json_append_pckt(buf, 1, NULL);
+            oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                            {return;}
             sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);

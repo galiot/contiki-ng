@@ -87,19 +87,19 @@
 // enable/disable debug functionality, across the board
 #define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON:1||OFF: 0)
 
-// enable/disable moor functionality, across the board
-#define OAR_CONF_MOOR_FUNCTIONALITY                                         1                   // (ON:1||OFF: 0)
+// enable/disable buoy functionality, across the board
+#define OAR_CONF_BUOY_FUNCTIONALITY                                         1                   // (ON:1||OFF: 0)
 
 // **************************************************************************
-// MOOR CONTSTANTS //////////////////////////////////////////////////////////
+// BUOY CONTSTANTS //////////////////////////////////////////////////////////
 // **************************************************************************
 
 // set the buffer size for staging the sending json
-#define OAR_CONF_MOOR_BUFFER_SIZE                                           482                 // BYTES *sizeof(char)
-                                                                                                // [* 1,33 < (OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH]
+#define OAR_CONF_BUOY_BUFFER_SIZE                                           482                 // BYTES *sizeof(char)
+                                                                                                // [* 1,33 < (OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH]
 
 // set the maximum payload length for the packets send to unconstrained
-#define OAR_CONF_MOOR_MAX_PAYLOAD_LENGTH                                    640                 // BYTES *sizeof(char) 
+#define OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH                                    640                 // BYTES *sizeof(char) 
                                                                                                 // [< 643 != ECONNRESET/ETIMEDOUT]
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -135,28 +135,28 @@
 // OAR_CONF_JSON_TYPE: QUANTIZED ///////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_BUF_SIZE                                    482                 // BYTES *sizeof(char) 
-                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
+#define OAR_CONF_JSON_BUF_SIZE                                              482                 // BYTES *sizeof(char) 
+                                                                                                // [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 // OAR_CONF_JSON_TYPE: EXTENDED ////////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
 #define OAR_CONF_JSON_EXTENDED_BUF_SIZE                                     5000                // BYTES *sizeof(char) 
-                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
+                                                                                                // [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 // OAR_CONF_JSON_TYPE: COMPACT /////////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
 #define OAR_CONF_JSON_COMPACT_BUF_SIZE                                      2200                // BYTES *sizeof(char) 
-                                                                                                // [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
+                                                                                                // [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 // OAR_CONF_JSON_TYPE: MICRO ///////////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1800                // BYTES *sizeof(char) [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
+#define OAR_CONF_JSON_MICRO_BUF_SIZE                                        1800                // BYTES *sizeof(char) [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 #define OAR_CONF_JSON_MICRO_ID                                              1                   // (ON:1||OFF: 0)
 #define OAR_CONF_JSON_MICRO_NRG                                             1                   // (ON:1||OFF: 0)
@@ -175,7 +175,7 @@
 #define OAR_CONF_JSON_TINY_STATS                                            1                   // (ON:1||OFF: 0)
 #define OAR_CONF_JSON_TINY_NET                                              1                   // (ON:1||OFF: 0)
 #define OAR_CONF_JSON_TINY_RPL                                              1                   // (ON:1||OFF: 0) 
-                                                                                                // [== 0 >< MOOR]
+                                                                                                // [== 0 >< BUOY]
 
 // #define OAR_CONF_JSON_TINY_DISCRITIZATION                                0                   // (ON/OF
 
@@ -194,7 +194,7 @@
 #define OAR_CONF_CRYPT                                                      1                   // (ON:1||OFF: 0) 
 
 // set the encryption string size
-#define OAR_CONF_CRYPT_BUFFER_SIZE                                          482                // BYTES *sizeof(char) [== OAR_CONF_MOOR_BUFFER_SIZE -> decryption @ unconstrained backend]
+#define OAR_CONF_CRYPT_BUFFER_SIZE                                          482                // BYTES *sizeof(char) [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 // key[] = {'!', '@', '#', '$', '%', '^', '&', '*'} /////////////////////////////////////////// // hardcoded ./galiot/oar-crypt.c
@@ -211,7 +211,7 @@
 #define OAR_CONF_BASE64_ENCODING                                            1                   // (ON:1||OFF: 0)
 
 // enable/disable base64 encoding
-#define OAR_CONF_BASE64_ENCODING_BUF_SIZE                                   640                 // (ON:1||OFF: 0) [> OAR_CONF_MOOR_BUFFER_SIZE * 1.33]
+#define OAR_CONF_BASE64_ENCODING_BUF_SIZE                                   640                 // (ON:1||OFF: 0) [> OAR_CONF_BUOY_BUFFER_SIZE * 1.33]
 
 //---------------------------------------------------------------------------
 
