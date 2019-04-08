@@ -1468,6 +1468,9 @@ static int oar_json_append_stats_nd6(char * buf)
 // 	}
 // }
 
+// Node IPv6 addresses: fd00::212:4b00:f83:b601
+// Node IPv6 addresses: fe80::212:4b00:f83:b601
+
 static int oar_json_append_ipv6_addr(char * buf)
 {
     char str[128];
@@ -1601,6 +1604,10 @@ static int oar_json_append_ipv6_addr(char * buf)
 // 		}, null, null]
 // 	}
 // }
+
+// Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
+// Node IPv6 neighbor 2: fe80::212:4b00:f82:a600 <-> 0012.4b00.0f82.a600, router 0, state Reachable 
+// Node IPv6 neighbor 3: fe80::212:4b00:f82:da03 <-> 0012.4b00.0f82.da03, router 0, state Reachable 
 
 static int oar_json_append_ipv6_nbrs_ip(char * buf)
 {
@@ -1773,6 +1780,10 @@ static int oar_json_append_ipv6_nbrs_ip(char * buf)
 // 		}, null, null]
 // 	}
 // }
+
+// Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
+// Node IPv6 neighbor 2: fe80::212:4b00:f82:a600 <-> 0012.4b00.0f82.a600, router 0, state Reachable 
+// Node IPv6 neighbor 3: fe80::212:4b00:f82:da03 <-> 0012.4b00.0f82.da03, router 0, state Reachable 
 
 static int oar_json_append_ipv6_nbrs_ll(char * buf)
 {
@@ -1949,6 +1960,10 @@ static int oar_json_append_ipv6_nbrs_ll(char * buf)
 // 	}
 // }
 
+// Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
+// Node IPv6 neighbor 2: fe80::212:4b00:f82:a600 <-> 0012.4b00.0f82.a600, router 0, state Reachable 
+// Node IPv6 neighbor 3: fe80::212:4b00:f82:da03 <-> 0012.4b00.0f82.da03, router 0, state Reachable 
+
 static int oar_json_append_ipv6_nbrs_states(char * buf)
 {
     char str[128];
@@ -2116,6 +2131,8 @@ static int oar_json_append_ipv6_nbrs_states(char * buf)
 // 	}
 // }
 
+// Default route: fe80::212:4b00:f24:8385 (lifetime: infinite)
+
 static int oar_json_append_routing(char * buf)
 {
     char str[128];
@@ -2198,9 +2215,12 @@ static int oar_json_append_routing(char * buf)
 // 	"rtLS": {
 // 		"IPv6": true,
 // 		"rpl": true,
+//      "totLs" : 0,
 // 		"ls": ["null", "null", "null", "null", "null"]
 // 	}
 // }
+
+// |---> Routing links (%u in total): ["&child_ipaddr ""/(DODAG root) <---| to &parent_ipaddr (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"]
 
 static int oar_json_append_routing_link_sources(char * buf)
 {
@@ -2225,7 +2245,7 @@ static int oar_json_append_routing_link_sources(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)> (UIP_CONF_IPV6_RPL)######## 
             #if (UIP_CONF_IPV6_RPL)
 
-                sprintf(str, "\"" "rpl" "\"" ":" "true"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rpl"     "\"" ":" "true"                     ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ???????????????????????????????????????????????????????????????????
                 sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -2238,6 +2258,12 @@ static int oar_json_append_routing_link_sources(char * buf)
                 
                     uip_sr_node_t *link;
                     link = uip_sr_node_head();
+
+                    sprintf(str, "\"" "totLs"   "\"" ":" "%u"   ,uip_sr_num_nodes()); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    // ???????????????????????????????????????????????????????????????????
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // ???????????????????????????????????????????????????????????????????
 
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                     // !(uip_sr_num_nodes() > 0) ////////////////////////////////////////////////////////////////
@@ -2283,7 +2309,7 @@ static int oar_json_append_routing_link_sources(char * buf)
                         for (int j = oar_json_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2297,6 +2323,12 @@ static int oar_json_append_routing_link_sources(char * buf)
                 }
                 else
                 {
+                    sprintf(str, "\"" "totLs"   "\"" ":" "%u"   ,0); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    // ???????????????????????????????????????????????????????????????????
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // ???????????????????????????????????????????????????????????????????
+                    
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                     // !(uip_sr_num_nodes() > 0) ////////////////////////////////////////////////////////////////
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -2311,7 +2343,7 @@ static int oar_json_append_routing_link_sources(char * buf)
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2328,11 +2360,17 @@ static int oar_json_append_routing_link_sources(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
             #else
 
-                sprintf(str, "\"" "rpl" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rpl"     "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ???????????????????????????????????????????????????????????????????
                 sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
-                // ??????????????????????????????????????????????????????????????????? 
+                // ???????????????????????????????????????????????????????????????????
+
+                sprintf(str, "\"" "totLs"   "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                // ???????????????????????????????????????????????????????????????????
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                // ???????????????????????????????????????????????????????????????????
 
                 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                 // SUBARRAY START rtLS{} > ls[] /////////////////////////////////////////////////////////////
@@ -2346,7 +2384,7 @@ static int oar_json_append_routing_link_sources(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -2372,7 +2410,17 @@ static int oar_json_append_routing_link_sources(char * buf)
             sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????????????????????????????????????? 
 
-            sprintf(str, "\"" "rpl" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rpl"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+            // ???????????????????????????????????????????????????????????????????
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+            // ???????????????????????????????????????????????????????????????????
+
+            sprintf(str, "\"" "totLs"   "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+            // ???????????????????????????????????????????????????????????????????
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+            // ???????????????????????????????????????????????????????????????????
 
             // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             // SUBARRAY START rtLS{} > ls[] /////////////////////////////////////////////////////////////
@@ -2386,7 +2434,7 @@ static int oar_json_append_routing_link_sources(char * buf)
                 for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
                     
-                    sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                     if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                 }
@@ -2431,9 +2479,12 @@ static int oar_json_append_routing_link_sources(char * buf)
 // 	"rtLD": {
 // 		"IPv6": true,
 // 		"rpl": true,
+//      "totLs" : 0,
 // 		"ls": ["null", "null", "null", "null", "null"]
 // 	}
 // }
+
+// Routing links (%u in total): ["&child_ipaddr ""/(DODAG root) |---> to &parent_ipaddr (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"] <---|
 
 static int oar_json_append_routing_link_destinations(char * buf)
 {
@@ -2471,6 +2522,12 @@ static int oar_json_append_routing_link_destinations(char * buf)
                 
                     uip_sr_node_t *link;
                     link = uip_sr_node_head();
+
+                    sprintf(str, "\"" "totLs"   "\"" ":" "%u"   ,uip_sr_num_nodes()); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    // ???????????????????????????????????????????????????????????????????
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // ???????????????????????????????????????????????????????????????????
 
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                     // !(uip_sr_num_nodes() > 0) ////////////////////////////////////////////////////////////////
@@ -2515,7 +2572,7 @@ static int oar_json_append_routing_link_destinations(char * buf)
                         for (int j = oar_json_uip_sr_links_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2529,6 +2586,12 @@ static int oar_json_append_routing_link_destinations(char * buf)
                 }
                 else
                 {
+                    sprintf(str, "\"" "totLs"   "\"" ":" "%u"   ,0); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    // ???????????????????????????????????????????????????????????????????
+                    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // ???????????????????????????????????????????????????????????????????
+                    
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                     // !(uip_sr_num_nodes() > 0) ////////////////////////////////////////////////////////////////
                     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -2543,7 +2606,7 @@ static int oar_json_append_routing_link_destinations(char * buf)
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2560,7 +2623,13 @@ static int oar_json_append_routing_link_destinations(char * buf)
             // ######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## (NETSTACK_CONF_WITH_IPV6)>!(UIP_CONF_IPV6_RPL)######## 
             #else
 
-                sprintf(str, "\"" "rpl" "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "rpl"     "\"" ":" "false"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                // ???????????????????????????????????????????????????????????????????
+                sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                // ???????????????????????????????????????????????????????????????????
+
+                sprintf(str, "\"" "totLs"   "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 // ???????????????????????????????????????????????????????????????????
                 sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -2578,7 +2647,7 @@ static int oar_json_append_routing_link_destinations(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -2604,7 +2673,13 @@ static int oar_json_append_routing_link_destinations(char * buf)
             sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
             // ??????????????????????????????????????????????????????????????????? 
 
-            sprintf(str, "\"" "rpl" "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "rpl"     "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+            // ???????????????????????????????????????????????????????????????????
+            sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+            // ???????????????????????????????????????????????????????????????????
+
+            sprintf(str, "\"" "totLs"   "\"" ":" "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
             // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             // SUBARRAY START rtLD{} > ls[] /////////////////////////////////////////////////////////////
@@ -2618,7 +2693,7 @@ static int oar_json_append_routing_link_destinations(char * buf)
                 for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                 {
                     
-                    sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str,"null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                     if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                 }
@@ -2667,6 +2742,8 @@ static int oar_json_append_routing_link_destinations(char * buf)
 // 		"es": ["null", "null", "null", "null", "null"]
 // 	}
 // }
+
+// |---> Routing entries (%u in total): ["-- &route->ipaddr <---| via uip_ds6_route_nexthop(route) (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"]
 
 static int oar_json_append_routing_entry_routes(char * buf)
 {
@@ -2739,7 +2816,7 @@ static int oar_json_append_routing_entry_routes(char * buf)
                         for (int j = oar_json_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2773,7 +2850,7 @@ static int oar_json_append_routing_entry_routes(char * buf)
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -2814,7 +2891,7 @@ static int oar_json_append_routing_entry_routes(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -2863,7 +2940,7 @@ static int oar_json_append_routing_entry_routes(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -2912,6 +2989,8 @@ static int oar_json_append_routing_entry_routes(char * buf)
 // 		"es": ["null", "null", "null", "null", "null"]
 // 	}
 // }
+
+// Routing entries (%u in total): ["&route->ipaddr |---> via uip_ds6_route_nexthop(route) (lifetime: infinite/%lu seconds) <---| ", "null", "null", "null", "null"]
 
 static int oar_json_append_routing_entry_vias(char * buf)
 {
@@ -2987,7 +3066,7 @@ static int oar_json_append_routing_entry_vias(char * buf)
                         for (int j = oar_json_ds6_route_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -3021,7 +3100,7 @@ static int oar_json_append_routing_entry_vias(char * buf)
                         for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                         {
                             
-                            sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
                             if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                         }
@@ -3062,7 +3141,7 @@ static int oar_json_append_routing_entry_vias(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -3111,7 +3190,7 @@ static int oar_json_append_routing_entry_vias(char * buf)
                     for (int j = 0; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         
-                        sprintf(str,    "\""    "null"    "\""  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
                         if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); };
                     }
@@ -3159,6 +3238,9 @@ static int oar_json_append_routing_entry_vias(char * buf)
 // 		"dtsnO": 240
 // 	}
 // }
+
+// RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP  %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:  %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
+//                                  iId                                                                        mop         of                          hRkI                    dLt                                                                                                                                 dO
 
 static int oar_json_append_rpl_status(char * buf)
 {
@@ -3281,6 +3363,9 @@ static int oar_json_append_rpl_status(char * buf)
 // 		}
 // 	}
 // }
+
+// RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP    %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:    %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
+//                                  iId         dT                  dId           dVer          dPf dPfL                                                                                                 st                         pP                                     rk                  lRk     mRkI                                                lS              lA
 
 static int oar_json_append_rpl_status_dag(char * buf)
 {
@@ -3473,6 +3558,9 @@ static int oar_json_append_rpl_status_dag(char * buf)
 // 	}
 // }
 
+// RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP    %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:    %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
+//                                  iId                                                                                                                                                                                                                                                                                                                                                                    cur         min         max             red
+
 static int oar_json_append_rpl_status_trickle_timer(char * buf)
 {
     char str[128];
@@ -3498,7 +3586,7 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
                 sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 sprintf(str, "\"" "cur" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                sprintf(str, "\"" "nim" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "min" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "max" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "red" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
             }
@@ -3572,6 +3660,11 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
 // 		}, null, null]
 // 	}
 // }
+
+// RPL neighbor 1/3: |---> fe80::212:4b00:f24:8385 <---|  128,   128 =>   256 --  7 rbafp (last tx 0 min ago)
+// RPL neighbor 2/3: |---> fe80::212:4b00:f82:a600 <---|  384,   128 =>   512 --  2   a   (last tx 0 min ago)
+// RPL neighbor 3/3: |---> fe80::212:4b00:f82:da03 <---|  546,   128 =>   674 --  0   a   (no tx)
+
 
 static int oar_json_append_rpl_neighbor(char * buf)
 {
@@ -3765,6 +3858,10 @@ static int oar_json_append_rpl_neighbor(char * buf)
 // 		}, null, null]
 // 	}
 // }
+
+// RPL neighbor 1/3: fe80::212:4b00:f24:8385 |--->  128,   128 =>   256 <---| --  7 rbafp (last tx 0 min ago)
+// RPL neighbor 2/3: fe80::212:4b00:f82:a600 |--->  384,   128 =>   512 <---| --  2   a   (last tx 0 min ago)
+// RPL neighbor 3/3: fe80::212:4b00:f82:da03 |--->  546,   128 =>   674 <---| --  0   a   (no tx)
 
 static int oar_json_append_rpl_neighbor_ranks(char * buf)
 {
@@ -3966,6 +4063,10 @@ static int oar_json_append_rpl_neighbor_ranks(char * buf)
 // 	}
 // }
 
+// RPL neighbor 1/3: fe80::212:4b00:f24:8385  128,   128 =>   256 |---> --  7 rbafp <---| (last tx 0 min ago)
+// RPL neighbor 2/3: fe80::212:4b00:f82:a600  384,   128 =>   512 |---> --  2   a   <---| (last tx 0 min ago)
+// RPL neighbor 3/3: fe80::212:4b00:f82:da03  546,   128 =>   674 |---> --  0   a   <---| (no tx)
+
 static int oar_json_append_rpl_neighbor_values(char * buf)
 {
     char str[128];
@@ -4050,11 +4151,13 @@ static int oar_json_append_rpl_neighbor_values(char * buf)
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                            sprintf(str, "\"" "f"   "\"" ":"    "%2u"   ,oar_json_rpl_nbr_stats != NULL ? oar_json_rpl_nbr_stats->freshness : 0                          ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                            sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_rpl_nbr_best ? "true" : "false"                                                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                            sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
+                            sprintf(str, "\"" "fr"  "\"" ":"    "%2u"   ,oar_json_rpl_nbr_stats != NULL ? oar_json_rpl_nbr_stats->freshness : 0                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                            sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_rpl_nbr_best ? "true" : "false"                                                                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "a"   "\"" ":"    "%s"    ,((acceptable_rank(rpl_neighbor_rank_via_nbr(nbr)) && rpl_neighbor_is_acceptable_parent(nbr))) ? "true" : "false"   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "f"   "\"" ":"    "%s"    ,link_stats_is_fresh(oar_json_rpl_nbr_stats) ? "true" : "false"                                                     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "p"   "\"" ":"    "%s"    ,nbr == curr_instance.dag.preferred_parent ? "true" : "false"                                                       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
 
                             
                         sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -4161,6 +4264,10 @@ static int oar_json_append_rpl_neighbor_values(char * buf)
 // 		}, null, null]
 // 	}
 // }
+
+// RPL neighbor 1/3: fe80::212:4b00:f24:8385  128,   128 =>   256 --  7 rbafp |---> (last tx 0 min ago) <---|
+// RPL neighbor 2/3: fe80::212:4b00:f82:a600  384,   128 =>   512 --  2   a   |---> (last tx 0 min ago) <---|
+// RPL neighbor 3/3: fe80::212:4b00:f82:da03  546,   128 =>   674 --  0   a   |---> (no tx)             <---|
 
 static int oar_json_append_rpl_neighbor_parens(char * buf)
 {
@@ -4820,122 +4927,3 @@ void oar_json_construct(char * buf, int i)
             break;
     }
 }
-
-
-
-
-
-
-
-
-//  {
-//      "id": {
-//          "t": 51,
-//          "mac": "0012.4b00.0f83.b601"
-//      },
-//      "nrg": {
-//          "e": true,
-//          "c": 7,
-//          "l": 43,
-//          "dL": 0,
-//          "tT": 51,
-//          "rL": 51,
-//          "rT": 0,
-//          "rO": 0
-//      },
-//      "st": {
-//          "uS": true,
-//          "rx": 7,
-//          "tx": 7,
-//          "fw": 0,
-//          "dr": 0,
-//          "vE": 0,
-//          "hE": 0,
-//          "lE": 0,
-//          "fE": 0,
-//          "cE": 0,
-//          "pE": 0
-//      },
-//      "net": {
-//          "v6": true,
-//          "addr": ["null", "fd00::212:4b00:f83:b601", "fe80::212:4b00:f83:b601"],
-//          "rt": {
-//              "df": "fe80::212:4b00:f24:8385",
-//              "lt": "infinite"
-//          }
-//      },
-//      "rpl": {
-//          "rL": true,
-//          "nbr": {
-//              "i": true,
-//              "c": 3,
-//              "ns": [{
-//                  "ad": "fe80::212:4b00:f82:a600",
-//                  "rk": 274,
-//                  "lM": 128,
-//                  "rkN": 402,
-//                  "f": 0,
-//                  "r": false,
-//                  "b": false,
-//                  "a": true,
-//                  "p": false,
-//                  "lTx": null,
-//                  "bS": null
-//              }, {
-//                  "ad": "fe80::212:4b00:f24:8385",
-//                  "rk": 128,
-//                  "lM": 128,
-//                  "rkN": 256,
-//                  "f": 5,
-//                  "r": true,
-//                  "b": true,
-//                  "a": true,
-//                  "p": true,
-//                  "lTx": 0,
-//                  "bS": null
-//              }, {
-//                  "ad": "fe80::212:4b00:f82:da03",
-//                  "rk": 256,
-//                  "lM": 128,
-//                  "rkN": 384,
-//                  "f": 0,
-//                  "r": false,
-//                  "b": false,
-//                  "a": true,
-//                  "p": false,
-//                  "lTx": null,
-//                  "bS": null
-//              }, null, null]
-//          },
-//          "st": {
-//              "iId": 0,
-//              "dag": {
-//                  "dT": "node",
-//                  "dId": "fd00::212:4b00:f24:8385",
-//                  "dVer": 240,
-//                  "dPf": "fd00::",
-//                  "dPfL": 64,
-//                  "st": "Reachable",
-//                  "pP": "fe80::212:4b00:f24:8385",
-//                  "rk": 256,
-//                  "lRk": 256,
-//                  "mRkI": 1024,
-//                  "dao": {
-//                      "lS": 241,
-//                      "lA": 241
-//                  }
-//              },
-//              "mop": "Non-storing",
-//              "of": "MRHOF",
-//              "hRkI": 128,
-//              "dLt": 1800,
-//              "dtsnO": 240,
-//              "tT": {
-//                  "cur": 13,
-//                  "min": 12,
-//                  "max": 20,
-//                  "red": 0
-//              }
-//          }
-//      }
-//  }
