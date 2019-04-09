@@ -15,7 +15,7 @@
  * modified for C by galiot (2018/2019).                                                                                                                  *
  * **********************************************************************************************************************************************************/
 
-void oar_crypt(char *input, char *output) 
+void oar_crypt(char *output, char *input) 
 {                           
     char key[] = {'!', '@', '#', '$', '%', '^', '&', '*'}; // any char: j q y z ! @ # $ % ^ & * ( ) + = _ ; ' | \ < > / ? ~ ` G J K L Q U W X Y Z, any combination, any array size (theoretically best encryption occures for keys the size of the input string to be encrypted)
     

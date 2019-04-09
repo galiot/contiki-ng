@@ -4,5 +4,5 @@
 #include <stdio.h>
 #include <string.h>
 
-void oar_crypt(char *input, char *output);
+void oar_crypt(char *output, char *input);
 #endif  // OAR_CRYPT_H_

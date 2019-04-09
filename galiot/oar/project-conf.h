@@ -211,7 +211,7 @@
 #define OAR_CONF_BASE64_ENCODING                                            1                   // (ON:1||OFF: 0)
 
 // enable/disable base64 encoding
-#define OAR_CONF_BASE64_ENCODING_BUF_SIZE                                   640                 // (ON:1||OFF: 0) [> OAR_CONF_BUOY_BUFFER_SIZE * 1.33]
+#define OAR_CONF_BASE64_ENCODING_BUFFER_SIZE                                640                 // (ON:1||OFF: 0) [> OAR_CONF_BUOY_BUFFER_SIZE * 1.33]
 
 //---------------------------------------------------------------------------
 
