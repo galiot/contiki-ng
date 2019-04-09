@@ -129,112 +129,123 @@ PROCESS(oar_buoy_process, "oar buoy process");
 #if (OAR_CONF_BUOY_FUNCTIONALITY)
 
     #if (OAR_CONF_JSON == 1) 
-        
         #if (OAR_CONF_JSON_TYPE == 0)
 
             int json_index = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
         
         #endif
+     #endif
 
-        char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
+    char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
+    
+    // ----------------------------------------------------------------------------
+    // function that initializes (empties) the json string ////////////////////////
+    // and sends just the pckt section with error appended //////////////////////// 
+    // ----------------------------------------------------------------------------
+
+    // {
+    // 	"pckt": {
+    // 		"valid": false,
+    // 		"error": {
+    // 			"text": "JSON SEGFUALT",
+    // 			"code": 604
+    // 		}
+    //  },
+    // 	"id": {
+    // 		"sT": 77,
+    // 		"adr": "0012.4b00.0f83.b601",
+    //      "cd": "RED"
+    // 	}
+    // }
+    
+    void oar_json_error_construct(char *buf, int valid, char *error_text, int error_code)
+    {
         
-        // ----------------------------------------------------------------------------
-        // function that initializes (empties) the json string ////////////////////////
-        // and sends just the pckt section with error appended //////////////////////// 
-        // ----------------------------------------------------------------------------
+        char str[256];
 
-        // {
-        // 	"pckt": {
-        // 		"valid": false,
-        // 		"error": {
-        // 			"text": "JSON SEGFUALT",
-        // 			"code": 604
-        // 		}
-        //  },
-        // 	"id": {
-        // 		"sT": 77,
-        // 		"adr": "0012.4b00.0f83.b601",
-        //      "cd": "RED"
-        // 	}
-        // }
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // SECTION START pckt{} ////////////////////////////////
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        sprintf(str, "{"                    ); strcpy(buf, str);
+        sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+        sprintf(str, "{"                    ); strcat(buf, str);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
-        void create_error_json(char *buf, int valid, char *error_text, int error_code)
-        {
-            
-            char str[128];
-
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // SECTION START pckt{} ////////////////////////////////
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            sprintf(str, "{"                    ); strcpy(buf, str);
-            sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
-            sprintf(str, "{"                    ); strcat(buf, str);
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            
-                sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
-
-                // ?????????????????????????????????
-                sprintf(str, ","); strcat(buf, str);
-                // ?????????????????????????????????
-
-                if (valid)
-                {
-                    sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
-                }
-                else
-                {
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-                    // SUBSECTION START pckt{} > error{} ///////////////////
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-                    sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
-                    sprintf(str, "{"                    ); strcat(buf, str);
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-
-                        sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                        sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-                    sprintf(str, "}"); strcat(buf, str); //
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-                    // SUBSECTION END pckt{} > error{} ////
-                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-                }
-
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}"); strcat(buf, str);
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SECTION END pckt{} //////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
 
             // ?????????????????????????????????
             sprintf(str, ","); strcat(buf, str);
             // ?????????????????????????????????
 
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SECTION START id{} //////////////////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
-            sprintf(str, "{"                ); strcat(buf, str); ///
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            
-                // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-                // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+            if (valid)
+            {
+                sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
+            }
+            else
+            {
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+                // SUBSECTION START pckt{} > error{} ///////////////////
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+                sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
+                sprintf(str, "{"                    ); strcat(buf, str);
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
 
-                oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-                
-                sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-                sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
+                    sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                    sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    
+
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                sprintf(str, "}"); strcat(buf, str); //
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                // SUBSECTION END pckt{} > error{} ////
+                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+            }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}"); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END pckt{} //////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION START id{} //////////////////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
+        sprintf(str, "{"                ); strcat(buf, str); ///
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+            sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+            oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
             
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            sprintf(str, "}" ); strcat(buf, str); //
-            sprintf(str, "}" ); strcat(buf, str);
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // SECTION END id{} ////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+            sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
+        
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}" ); strcat(buf, str); //
+        sprintf(str, "}" ); strcat(buf, str);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SECTION END id{} ////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+
+    // ----------------------------------------------------------------------------
+    // function that sequentially prints a char set times /////////////////////////
+    // ----------------------------------------------------------------------------
+    void console_seq_print(char symbol, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            printf("%c", symbol);
         }
 
-    #endif
+        printf("\n");
+    }
 
     AUTOSTART_PROCESSES(&oar_buoy_process);
 
@@ -358,9 +369,16 @@ PROCESS(oar_buoy_process, "oar buoy process");
 static PT_THREAD(generate_routes(struct httpd_state *s))
 {
     char buff[OAR_CONF_BUOY_BUFFER_SIZE];
+    char allocation_error_json[255];
+    char encrypted_allocation_error_json[255];
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
-    leds_single_on(LEDS_LED1);
+    
+    #if (OAR_CONF_DEV)
+
+        leds_single_on(LEDS_LED1);
+    
+    #endif // (OAR_CONF_DEV)
 
     // JJJJJJJJJJ
     // JJJJJJJJJJ
@@ -379,29 +397,61 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
             
     #if (OAR_CONF_JSON)
 
-        printf("\n"); for (int i = 0; i < 80; i++) { printf("="); } printf("\n"); printf("\n");
-
         // ------------------------------------------------------------------------------------------------------------------------
         // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]
+
+            printf("[OAR] > "); console_seq_print('=', 72);
+            printf("[OAR] > ITERATION: %d", json_index); console_seq_print('/', 59);
+            printf("[OAR] > "); console_seq_print('=', 72);
                     
             char *oar_json_buf = (char *)malloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_buf > char *oar_json_buf = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
             if (oar_json_buf == NULL) // if heap memory couldn't be allocated for oar_json_buf...
             {
-                printf("\n"); for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
+                
+                printf("\n");
 
-                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR JSON\n", OAR_CONF_JSON_BUF_SIZE);
+                printf("[OAR] > "); console_seq_print(':', 70);
+                printf("[OAR] > HEAP MEMORY EXHAUSTED > NO ALLOCATION OF (%u + 1) CHARACTERS FOR JSON\n", OAR_CONF_JSON_BUF_SIZE);
+                printf("[OAR] > "); console_seq_print(':', 70);
 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("STAGING ERROR JSON\n"); printf("\n"); //////////////////////////////////////////////////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buff, "{ \" error \" : \" OUT OF HEAP MEMORY FOR JSON ALLOCASTION \" }");
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("\n");
 
-                printf("\n"); for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
+                
+                
+
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("[OAR] > "); console_seq_print('$', 29); ////////////////////////////////////////////
+                printf("[OAR] > STAGING ALLOCATION ERROR JSON\n"); /////////////////////////////////////////
+                printf("[OAR] > "); console_seq_print('$', 29); ////////////////////////////////////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                oar_json_error_construct(allocation_error_json, 0, "EXHAUSTED HEAP MEMORY > NO JSON BUFFER ALLOCATION", 604);
+                // strcpy(allocation_error_json, "{ \" test \": \" TEST \" }");
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+                printf("allocation_error_json: %s\n", allocation_error_json);
+                printf("allocation_error_json length: %d\n", strlen(allocation_error_json));
+
+                if (OAR_CONF_CRYPT)
+                {
+                    
+
+                    oar_crypt(allocation_error_json, encrypted_allocation_error_json);
+
+                    printf("allocation_error_json: %s\n", encrypted_allocation_error_json);
+                    printf("allocation_error_json length: %d\n", strlen(encrypted_allocation_error_json));
+
+
+                    strcpy(buff, encrypted_allocation_error_json);
+                }
+                else
+                {
+                    strcpy(buff, allocation_error_json);
+                }
+                
                 
                 free(oar_json_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
             }
@@ -409,16 +459,21 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
             {
                 printf("\n");
 
-                for (int i = 0; i < 80; i++) { printf("-"); } printf("\n");
-                printf("JSON:\n"); printf("\n");
+                printf("[OAR] > "); console_seq_print(':', 5);
+                printf("[OAR] > JSON:\n");
+                printf("[OAR] > "); console_seq_print(':', 5);
+
+                printf("\n");
                 
                 oar_json_construct(oar_json_buf, json_index % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
                 oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
-                
-                printf("\n"); printf("LENGTH OF JSON: %d\n", strlen(oar_json_buf));
-                
-                for (int i = 0; i < 80; i++) { printf("-"); }
 
+                printf("\n");
+                
+                printf("[OAR] > "); console_seq_print(':', 16);
+                printf("[OAR] > JSON LENGTH: %d\n", strlen(oar_json_buf));
+                printf("[OAR] > "); console_seq_print(':', 16);
+                
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
                 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -716,7 +771,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
                 }
                 else
                 {
-                    oar_base64_encode(buff, oar_base64_encoded_json, strlen(oar_json_buf));
+                    oar_base64_encode(buff, oar_base64_encoded_json, strlen(buff));
 
                     for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
                     printf("BASE64 ENCODED JSON:\n"); printf("\n");
@@ -826,7 +881,12 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
         process_start(&webserver_process, NULL);
 
         leds_single_on(LEDS_LED2);
-        printf("BUOY PROCESS STARTED\n");
+
+        printf("\n");
+        
+        printf("[OAR] > "); console_seq_print('-', 20);
+        printf("[OAR] > BUOY PROCESS STARTED\n");
+        printf("[OAR] > "); console_seq_print('-', 20);
 
     PROCESS_END();
 }
