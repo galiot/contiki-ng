@@ -1,46 +1,8 @@
-/*
- * Copyleft (!c) 2019, Hellenic Open University - http://www.eap.gr
- * No rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the Institute nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * 
- * This file is NOT part of the Contiki operating system.
- */
-
-/*---------------------------------------------------------------------------*/
-
-/**
- * \file
- *          A simple restful backend, just for acquiring, 
- *          printing and sending a couple of mote statistics.
- * 
- * \author
- *          Nikos "galiot" Saridakis <galiot@runbox.com>
- */
-
-/*---------------------------------------------------------------------------*/
+///////////////////////////////////////////////////////////////////////////////
+// contiki-ng restful mote monitoring backend /////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// Coded by: galiot (2018/2019) ///////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////// 
 
 
 
@@ -59,65 +21,22 @@
 
 #include "contiki.h"                // main include file for OS-specific modules
 
-#include "net/ipv6/uip.h"
-#include "net/ipv6/uiplib.h"
-#include "net/ipv6/uip-icmp6.h"
-#include "net/ipv6/uip-ds6.h"
+// #include "net/ipv6/uiplib.h"
+// #include "net/ipv6/uip-icmp6.h"
+// #include "net/ipv6/uip-ds6.h"
 
-#if ROUTING_CONF_RPL_LITE
-    #include "net/routing/rpl-lite/rpl.h"
-#elif ROUTING_CONF_RPL_CLASSIC
-    #include "net/routing/rpl-classic/rpl.h"
-#endif
+// #if ROUTING_CONF_RPL_LITE
+//     #include "net/routing/rpl-lite/rpl.h"
+// #elif ROUTING_CONF_RPL_CLASSIC
+//     #include "net/routing/rpl-classic/rpl.h"
+// #endif
 
-#include "net/routing/routing.h"    // for NETSTACK_ROUTING
-
-// #include "os/lib/heapmem.h"
-#include "httpd-simple.h"
-
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-
-#include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
-#include "oar-debug.h"
-
-#if (OAR_CONF_JSON_TYPE == 0)
-    #include "oar-json.h"
-#endif
-
-#if (OAR_CONF_JSON_TYPE == 1)
-    #include "oar-json-extended.h"
-#endif
-
-#if (OAR_CONF_JSON_TYPE == 2)
-    #include "oar-json-compact.h"
-#endif
-
-#if (OAR_CONF_JSON_TYPE == 3)
-    #include "oar-json-micro.h"
-#endif
-
-#if (OAR_CONF_JSON_TYPE == 4)
-    #include "oar-json-tiny.h"
-#endif
-
-#include "oar-crypt.h"
-#include "oar-base64.h"
+// #include "net/routing/routing.h"    // for NETSTACK_ROUTING
 
 
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-#include <stdio.h>                  // for prinntf()
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-#include "sys/energest.h"
-#include "net/ipv6/uip.h"
+#include "sys/energest.h"           // for lightweight, software-based energy estimation for resource-constrained IoT devices
+#include "net/ipv6/uip.h"           // for structure holding the TCP/IP statistics (that are gathered if UIP_STATISTICS is set to 1)
+#include "lib/heapmem.h"            // heap memory module that has been used on a variety of hardware platforms and with different applications
 
 // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
@@ -126,12 +45,40 @@
 #include "dev/leds.h"               // leds     (2):    LEDS_LED1, LEDS_LED2 (access both: LEDS_ALL)
 #include "dev/button-hal.h"         // buttons  (2):    button_hal_get_by_index(0), button_hal_get_by_index(1)    
 
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
-// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+// ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
 
+#include "project-conf.h"           // for vscode intellisense (make recipe includes it either way)
 
+#include "oar-debug.h"              // for debugging energest, uip statistics and routing values. Prints periodicaly on UART, serial console.
+#include "httpd-simple.h"           // modified rpl-border-router simple http server, modified to serve headers with application/json content type
+
+#if (OAR_CONF_JSON_TYPE == 0)
+    #include "oar-json.h"           // for quantized JSON construction, abbreviated and fine-tuned for sending through tcp/ip stack, encrypted and base64 encoding, memory guarded
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 1)
+    #include "oar-json-extended.h"  // 1st attemp in JSON construction, verbose, non-discretizable and too large for encryption, encoding and/or sending through tcp/ip stack (debugging only)
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 2)
+    #include "oar-json-compact.h"   // 2nd attemp in JSON construction fewer sections but still non-discretizable and too large for encryption, encoding and/or sending through tcp/ip stack (debugging only)
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 3)
+    #include "oar-json-micro.h"     // 3nd attemp in JSON construction, now abbreviated but still non-discretizable and too large for encryption, encoding and/or sending through tcp/ip stack (debugging only)
+#endif
+
+#if (OAR_CONF_JSON_TYPE == 4)
+    #include "oar-json-tiny.h"      // 4th attemp in JSON construction, fewer sections and abbreviated, dicretizable and in part cabable for encryption and sending some parts of it through tcp/ip stack. Still, too large the base64 33% overhead encoding (debugging only)
+#endif
+
+#include "oar-crypt.h"              // for modified XOR encryption
+#include "oar-base64.h"             // for modified base64 encoding
+
+// ---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>-
+
+#include <stdio.h>                  // for prinntf(), sprintf(), snprintf() etc. 
+#include <stdlib.h>                 // for heap memory managment, by malloc(), realloc() and free()
 
 
 
@@ -149,14 +96,13 @@
 
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// GLOBAL DECLARATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // (doc) A process is first declared at the top of a source file.
 // (doc) The PROCESS() macro takes two arguments:   
-// (doc)    one is the variable with which we identify the process, 
-// (doc)    and the other is the name of the process. 
+// (doc) // one is the variable with which we identify the process, 
+// (doc) // and the other is the name of the process. 
 // (doc) On the second line, we tell Contiki-NG that this process should be automatically started directly after the system has booted up. 
 // (doc) Multiple processes can be specified here by separating them with commas. 
 
@@ -171,7 +117,7 @@ PROCESS(oar_buoy_process, "oar buoy process");
     #if (OAR_CONF_JSON == 1) 
         #if (OAR_CONF_JSON_TYPE == 0)
 
-            int json_index = 0;
+            int json_index = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
         
         #endif    
     #endif
@@ -183,23 +129,116 @@ PROCESS(oar_buoy_process, "oar buoy process");
 #if (OAR_CONF_BUOY_FUNCTIONALITY)
 
     #if (OAR_CONF_JSON == 1) 
+        
         #if (OAR_CONF_JSON_TYPE == 0)
 
-            int json_index = 0;
+            int json_index = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
         
-        #endif    
+        #endif
+
+        char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
+        
+        // ----------------------------------------------------------------------------
+        // function that initializes (empties) the json string ////////////////////////
+        // and sends just the pckt section with error appended //////////////////////// 
+        // ----------------------------------------------------------------------------
+
+        // {
+        // 	"pckt": {
+        // 		"valid": false,
+        // 		"error": {
+        // 			"text": "JSON SEGFUALT",
+        // 			"code": 604
+        // 		}
+        //  },
+        // 	"id": {
+        // 		"sT": 77,
+        // 		"adr": "0012.4b00.0f83.b601",
+        //      "cd": "RED"
+        // 	}
+        // }
+        
+        void create_error_json(char *buf, int valid, char *error_text, int error_code)
+        {
+            
+            char str[128];
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // SECTION START pckt{} ////////////////////////////////
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            sprintf(str, "{"                    ); strcpy(buf, str);
+            sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+            sprintf(str, "{"                    ); strcat(buf, str);
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
+                sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
+
+                // ?????????????????????????????????
+                sprintf(str, ","); strcat(buf, str);
+                // ?????????????????????????????????
+
+                if (valid)
+                {
+                    sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
+                }
+                else
+                {
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+                    // SUBSECTION START pckt{} > error{} ///////////////////
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+                    sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
+                    sprintf(str, "{"                    ); strcat(buf, str);
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+
+                        sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                        sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                    sprintf(str, "}"); strcat(buf, str); //
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                    // SUBSECTION END pckt{} > error{} ////
+                    // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                }
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "}"); strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SECTION END pckt{} //////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            // ?????????????????????????????????
+            sprintf(str, ","); strcat(buf, str);
+            // ?????????????????????????????????
+
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SECTION START id{} //////////////////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
+            sprintf(str, "{"                ); strcat(buf, str); ///
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            
+                // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+                // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+                oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+                
+                sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+                sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
+            
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            sprintf(str, "}" ); strcat(buf, str); //
+            sprintf(str, "}" ); strcat(buf, str);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // SECTION END id{} ////////////////////
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+
     #endif
 
     AUTOSTART_PROCESSES(&oar_buoy_process);
 
 #endif // (OAR_CONF_BUOY_FUNCTIONALITY)
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
 
 
 
@@ -277,10 +316,6 @@ PROCESS(oar_buoy_process, "oar buoy process");
 // 
 // #define PSOCK_END(psock) PT_END(&((psock)->pt)) // psock (struct psock *): A pointer to the protosocket.
 
-
-
-
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ./httpd-simple.h MACROS //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -298,9 +333,8 @@ PROCESS(oar_buoy_process, "oar buoy process");
 //     char state;
 // };
 
-// typedef char (*httpd_simple_script_t)        struct httpd_state (*s);
-//                                          --> 
-// now the string httpd_simple_script_t[]   -->  struct httpd_state s[]                            
+// typedef char (*httpd_simple_script_t)        struct httpd_state (*s); 
+// now the string httpd_simple_script_t[]   --> struct httpd_state s[]                            
 
 
 
@@ -317,26 +351,11 @@ PROCESS(oar_buoy_process, "oar buoy process");
 
 
 
+// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#
+// BUOY ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#
 
-
-
-
-
-
-
-
-
-
-// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
-// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
-// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
-// #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
-
-/*---------------------------------------------------------------------------*/
-// 
-
-//static
-PT_THREAD(generate_routes(struct httpd_state *s))
+static PT_THREAD(generate_routes(struct httpd_state *s))
 {
     char buff[OAR_CONF_BUOY_BUFFER_SIZE];
 
@@ -363,7 +382,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
         printf("\n"); for (int i = 0; i < 80; i++) { printf("="); } printf("\n"); printf("\n");
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]

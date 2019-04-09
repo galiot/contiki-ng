@@ -73,4 +73,4 @@ var dataPusher = setInterval(function () {
     });
 
     
-}, 3000);
+}, 5000);

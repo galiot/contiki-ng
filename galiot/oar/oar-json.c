@@ -258,7 +258,7 @@
 // LLADDR ---> STR ////////////////
 ///////////////////////////////////
 
-static void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+void oar_json_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
 {
     char buf[5];    // temporary string, local scope
     memset(output, 0, sizeof(output));  // initialization of outpout string (else concatenates)
@@ -325,7 +325,7 @@ void oar_json_print(char * buf)
 #endif //(NETSTACK_CONF_WITH_IPV6)
 // ######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)######## (NETSTACK_CONF_WITH_IPV6)########
     
-static char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
+char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 
 
 
@@ -358,6 +358,11 @@ static char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN];
 // 			"text": "JSON SEGFUALT",
 // 			"code": 604
 // 		}
+//  },
+// 	"id": {
+// 		"sT": 77,
+// 		"adr": "0012.4b00.0f83.b601",
+//      "cd": "RED"
 // 	}
 // }
 
@@ -384,7 +389,7 @@ static int seguard(char *buf, char *str)
             // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
             // SUBSECTION START pckt{} > error{} ///////////////////
             // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-            sprintf(str, "\"" "err" "\"" ":"  ); strcat(buf, str);
+            sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
             sprintf(str, "{"                    ); strcat(buf, str);
             // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
 
