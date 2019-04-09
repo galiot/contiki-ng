@@ -267,7 +267,7 @@
 // LLADDR ---> STR ////////////////
 ///////////////////////////////////
 
-static void oar_json_micro_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
+void oar_json_micro_lladdr_to_str(char *output, const linkaddr_t *lladdr) 
 {
     char buf[5];    // temporary string, local scope
     memset(output, 0, sizeof(output));  // initialization of outpout string (else concatenates)

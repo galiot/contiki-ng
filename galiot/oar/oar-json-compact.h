@@ -24,7 +24,8 @@
 #include "sys/energest.h"
 #include "net/ipv6/uip.h"
 
-// char oar_json_compact_buf[OAR_CONF_JSON_COMPACT_BUF_SIZE];
+void oar_json_compact_lladdr_to_str(char *output, const linkaddr_t *lladdr);
+
 void oar_json_compact_print(char * str);
 void oar_json_compact_construct(char * buf);
 

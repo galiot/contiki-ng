@@ -21,17 +21,17 @@
 
 #include "contiki.h"                // main include file for OS-specific modules
 
-// #include "net/ipv6/uiplib.h"
-// #include "net/ipv6/uip-icmp6.h"
-// #include "net/ipv6/uip-ds6.h"
+#include "net/ipv6/uiplib.h"
+#include "net/ipv6/uip-icmp6.h"
+#include "net/ipv6/uip-ds6.h"
 
-// #if ROUTING_CONF_RPL_LITE
-//     #include "net/routing/rpl-lite/rpl.h"
-// #elif ROUTING_CONF_RPL_CLASSIC
-//     #include "net/routing/rpl-classic/rpl.h"
-// #endif
+#if ROUTING_CONF_RPL_LITE
+    #include "net/routing/rpl-lite/rpl.h"
+#elif ROUTING_CONF_RPL_CLASSIC
+    #include "net/routing/rpl-classic/rpl.h"
+#endif
 
-// #include "net/routing/routing.h"    // for NETSTACK_ROUTING
+#include "net/routing/routing.h"    // for NETSTACK_ROUTING
 
 
 #include "sys/energest.h"           // for lightweight, software-based energy estimation for resource-constrained IoT devices
@@ -83,61 +83,22 @@
 
 
 
+char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
 
 
+// ----------------------------------------------------------------------------
+    // function that sequentially prints a char set times /////////////////////////
+    // ----------------------------------------------------------------------------
+    void console_seq_print(char symbol, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            printf("%c", symbol);
+        }
 
+        printf("\n");
+    }
 
-
-
-
-
-
-
-
-
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// GLOBAL DECLARATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// (doc) A process is first declared at the top of a source file.
-// (doc) The PROCESS() macro takes two arguments:   
-// (doc) // one is the variable with which we identify the process, 
-// (doc) // and the other is the name of the process. 
-// (doc) On the second line, we tell Contiki-NG that this process should be automatically started directly after the system has booted up. 
-// (doc) Multiple processes can be specified here by separating them with commas. 
-
-
-PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
-PROCESS(oar_dev_process, "oar dev process");                        // process for testing dev I/O
-PROCESS(webserver_process, "webserver process");
-PROCESS(oar_buoy_process, "oar buoy process");
-
-#if (OAR_CONF_DEBUG_FUNCTIONALITY)
-
-    #if (OAR_CONF_JSON == 1) 
-        #if (OAR_CONF_JSON_TYPE == 0)
-
-            int json_index = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
-        
-        #endif    
-    #endif
-
-    AUTOSTART_PROCESSES(&oar_debug_process, &oar_dev_process);
-
-#endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
-
-#if (OAR_CONF_BUOY_FUNCTIONALITY)
-
-    #if (OAR_CONF_JSON == 1) 
-        #if (OAR_CONF_JSON_TYPE == 0)
-
-            int json_index = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
-        
-        #endif
-     #endif
-
-    char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
-    
     // ----------------------------------------------------------------------------
     // function that initializes (empties) the json string ////////////////////////
     // and sends just the pckt section with error appended //////////////////////// 
@@ -221,7 +182,31 @@ PROCESS(oar_buoy_process, "oar buoy process");
             sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
             // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
 
-            oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+            #if (OAR_CONF_JSON_TYPE == 0)
+
+                oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+            #endif // (OAR_CONF_JSON_TYPE == 0)
+            #if (OAR_CONF_JSON_TYPE == 1)
+
+                oar_json_extended_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+            #endif // (OAR_CONF_JSON_TYPE == 1)
+            #if (OAR_CONF_JSON_TYPE == 2)
+
+                oar_json_compact_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+            #endif // (OAR_CONF_JSON_TYPE == 2)
+            #if (OAR_CONF_JSON_TYPE == 3)
+
+                oar_json_micro_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+            #endif // (OAR_CONF_JSON_TYPE == 3)
+            #if (OAR_CONF_JSON_TYPE == 4)
+
+                oar_json_tiny_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+            #endif // (OAR_CONF_JSON_TYPE == 4)
             
             sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
             sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
@@ -234,18 +219,52 @@ PROCESS(oar_buoy_process, "oar buoy process");
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
 
-    // ----------------------------------------------------------------------------
-    // function that sequentially prints a char set times /////////////////////////
-    // ----------------------------------------------------------------------------
-    void console_seq_print(char symbol, int times)
-    {
-        for (int i = 0; i < times; i++)
-        {
-            printf("%c", symbol);
-        }
+    
 
-        printf("\n");
-    }
+
+
+
+
+
+
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// GLOBAL DECLARATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+// (doc) A process is first declared at the top of a source file.
+// (doc) The PROCESS() macro takes two arguments:   
+// (doc) // one is the variable with which we identify the process, 
+// (doc) // and the other is the name of the process. 
+// (doc) On the second line, we tell Contiki-NG that this process should be automatically started directly after the system has booted up. 
+// (doc) Multiple processes can be specified here by separating them with commas. 
+
+
+PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
+PROCESS(webserver_process, "webserver process");
+PROCESS(oar_buoy_process, "oar buoy process");
+
+#if (OAR_CONF_DEBUG_FUNCTIONALITY)
+
+    #if (OAR_CONF_JSON == 1) 
+
+
+            int counter = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
+        
+  
+    #endif
+
+    AUTOSTART_PROCESSES(&oar_debug_process);
+
+#endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
+
+#if (OAR_CONF_BUOY_FUNCTIONALITY)
+
+    int counter = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
+
+    
+    
+    
 
     AUTOSTART_PROCESSES(&oar_buoy_process);
 
@@ -369,8 +388,7 @@ PROCESS(oar_buoy_process, "oar buoy process");
 static PT_THREAD(generate_routes(struct httpd_state *s))
 {
     char buffer[OAR_CONF_BUOY_BUFFER_SIZE];
-    char allocation_error_json[255];
-    // char encrypted_allocation_error_json[255];
+    char error_json[255];
 
     PSOCK_BEGIN(&s->sout); // Start the protosocket protothread in a function.
     
@@ -391,6 +409,12 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
     // JJJJJJJJJJ
     // JJJJJJJJJJ
 
+    printf("\n");
+
+    printf("[OAR] > "); console_seq_print('=', 72);
+    printf("[OAR] > ITERATION: %d ", counter); console_seq_print('/', 58);
+    printf("[OAR] > "); console_seq_print('=', 72);
+
     // ================================================================================================================================================================
     // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ================================================================================================================================================================
@@ -402,200 +426,112 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]
-
-            printf("[OAR] > "); console_seq_print('=', 72);
-            printf("[OAR] > ITERATION: %d", json_index); console_seq_print('/', 59);
-            printf("[OAR] > "); console_seq_print('=', 72);
                     
             char *oar_json_buf = (char *)malloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_buf > char *oar_json_buf = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
             if (oar_json_buf == NULL) // if heap memory couldn't be allocated for oar_json_buf...
             {
-                
                 printf("\n");
 
-                printf("[OAR] > "); console_seq_print(':', 70);
-                printf("[OAR] > HEAP MEMORY EXHAUSTED > NO ALLOCATION OF (%u + 1) CHARACTERS FOR JSON\n", OAR_CONF_JSON_BUF_SIZE);
-                printf("[OAR] > "); console_seq_print(':', 70);
+                // printf("[OAR] > "); console_seq_print('-', 70);
+                printf("[OAR] > HEAP MEMORY EXHAUSTED > JSON BUFFER ALLOCATION OF (%u + 1) CHARACTERS NOT POSSIBLE\n", OAR_CONF_JSON_BUF_SIZE);
+                // printf("[OAR] > "); console_seq_print('-', 70);
 
                 printf("\n");
 
-                oar_json_error_construct(allocation_error_json, 0, "EXHAUSTED HEAP MEMORY: JSON BUFFER ALLOCATION NOT POSSIBLE", 604);
+                oar_json_error_construct(error_json, 0, "EXHAUSTED HEAP MEMORY: JSON BUFFER ALLOCATION NOT POSSIBLE", 900);
                 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("[OAR] > "); console_seq_print('$', 29); //
-                printf("[OAR] > STAGING ALLOCATION ERROR JSON\n");
-                printf("[OAR] > "); console_seq_print('$', 29); //
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buffer, allocation_error_json); ///////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                
-                free(oar_json_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("[OAR] > "); console_seq_print(':', 29); ////
+                printf("[OAR] > STAGING > ALLOCATION ERROR JSON\n");
+                printf("[OAR] > "); console_seq_print(':', 29); ////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buffer, error_json); ////////////////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             }
             else
             {
                 printf("\n");
 
-                printf("[OAR] > "); console_seq_print(':', 5);
+                // printf("[OAR] > "); console_seq_print('-', 5);
                 printf("[OAR] > JSON:\n");
-                printf("[OAR] > "); console_seq_print(':', 5);
+                // printf("[OAR] > "); console_seq_print('-', 5);
 
                 printf("\n");
                 
-                oar_json_construct(oar_json_buf, json_index % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                oar_json_construct(oar_json_buf, counter % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
                 oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
 
                 printf("\n");
                 
-                printf("[OAR] > "); console_seq_print(':', 16);
+                // printf("[OAR] > "); console_seq_print('-', 16);
                 printf("[OAR] > JSON LENGTH: %d\n", strlen(oar_json_buf));
-                printf("[OAR] > "); console_seq_print(':', 16);
-
-                free(oar_json_buf); // release the memory allocated for oar_json_buf > heapmem_free(oar_json_buf); (for platform specific os/lib/heapmem.h)
-
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("[OAR] > "); console_seq_print('$', 12); //
-                printf("[OAR] > STAGING JSON\n"); ////////////////
-                printf("[OAR] > "); console_seq_print('$', 12); //
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buffer, oar_json_buf); ////////////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            }
-
-            json_index++;
-            json_index %= 2399;
-                
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-            #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
-
-                char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+                // printf("[OAR] > "); console_seq_print('-', 16);
 
                 printf("\n");
-                
-                if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
-                {
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf(">"); } printf("\n");
-                    
-                    printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
 
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING ERROR JSON\n"); printf("\n"); ////////////////////////////////////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, "{ \" error \" : \" OUT OF HEAP MEMORY FOR ENCRYPTED JSON ALLOCASTION \" }");
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                printf("[OAR] > "); console_seq_print('+', 26); ////////////
+                printf("[OAR] > STAGING > JSON, QUANTUM %2d\n", counter);
+                printf("[OAR] > "); console_seq_print('+', 26); ////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                strcpy(buffer, oar_json_buf); //////////////////////////////
+                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            }
 
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf(">"); } printf("\n");
-                
-                    free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                }
-                else // // if heap memory could be allocated for decrypted_oar_json...
-                {
-                    oar_crypt(encrypted_oar_json, buffer); // encrypt oar_json_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
-                    
-                    for (int i = 0; i < 80; i++) { printf(">"); } printf("\n");
-                    printf("ENCRYPTED JSON:\n"); printf("\n");
-                    
-                    printf("%s\n", encrypted_oar_json); printf("\n");
-                    printf("LENGHT OF ENCRYPTED JSON: %d\n", strlen(encrypted_oar_json));
-
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING ENCRYPTED JSON, QUANTUM: %d\n", json_index); //////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, encrypted_oar_json); ///////////////////////////////////////////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                    for (int i = 0; i < 80; i++) { printf(">"); } printf("\n");
-
-                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
-                    // DECRYPTION ///////////////////////////////////////
-                    // ::::::::::::::::::::::::::::::::::::::::::::::::::
-                    
-                    #if (OAR_CONF_CRYPT_DECRYPT)
-
-                        char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
-
-                        printf("\n");
-                        
-                        if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
-                        {
-                            printf("\n"); for (int i = 0; i < 80; i++) { printf("<"); } printf("\n");
-                            
-                            printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-
-                            printf("\n"); for (int i = 0; i < 80; i++) { printf("<"); } printf("\n");
-
-                            free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                            free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
-                        }
-                        else // if heap memory could be allocated for decrypted_oar_json...
-                        {
-                            oar_crypt(decrypted_oar_json, encrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
-                            
-                            for (int i = 0; i < 80; i++) { printf("<"); } printf("\n");
-                            printf("DECRYPTED JSON\n"); printf("\n");
-
-                            printf("%s\n", decrypted_oar_json); printf("\n"); 
-                            printf("LENGTH OF DECRYPTED JSON: %d\n", strlen(decrypted_oar_json));
-
-                            for (int i = 0; i < 80; i++) { printf("<"); }
-
-                            free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                            free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                        }
-
-                    #endif // (OAR_CONF_CRYPT_DECRYPT)
-                }
-                
-            #else // (OAR_CONF_CRYPT)
-
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf("&"); } printf("\n");
-                    
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING UNENCRYPTED JSON, QUANTUM: %d\n", json_index); printf("\n");
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, oar_json_buf); ////////////////////////////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf("&"); } printf("\n");
-
-                #endif // (OAR_CONF_CRYPT)
-
-                
-                
+            free(oar_json_buf); // release the memory allocated for oar_json_buf > heapmem_free(oar_json_buf); (for platform specific os/lib/heapmem.h)
+        
         #endif // (OAR_CONF_JSON_TYPE == 0)
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // EXTENDED JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // EXTENDED JSON //////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 1) // use the extended json (./oar-json-extended.h) [project-conf.h]
 
-            printf("EXTENDED JSON TOO LARGE FOR SENDING - PLEASE CHOOSE OTHER TYPE IN project-conf.h\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-            
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            printf("STAGING ERROR JSON\n"); printf("\n"); ////////
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            strcpy(buffer, "{ \" error \" : \" EXTENDED JSON \" }");
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("\n");
 
+            // printf("[OAR] > "); console_seq_print('-', 43);
+            printf("[OAR] > EXTENDED JSON NOT SUITABLE FOR TCP/IP STACK\n");
+            // printf("[OAR] > "); console_seq_print('-', 43);
+
+            oar_json_error_construct(error_json, 0, "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: EXTENDED", 111);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 40); //
+            printf("[OAR] > STAGING > EXTENDED JSON ERROR\n");
+            printf("[OAR] > "); console_seq_print(':', 40); //
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); //////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            
         #endif // (OAR_CONF_JSON_TYPE == 1)
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // COMPACT JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // COMPACT JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 2) // use the compact json (./oar-json-compact.h) [project-conf.h]
 
-            printf("COMPACT JSON TOO LARGE FOR SENDING - PLEASE CHOOSE OTHER TYPE IN project-conf.h\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-            
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            printf("STAGING ERROR JSON\n"); printf("\n"); ///////
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            strcpy(buffer, "{ \" error \" : \" COMPACT JSON \" }");
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('-', 42);
+            printf("[OAR] > COMPACT JSON NOT SUITABLE FOR TCP/IP STACK\n");
+            // printf("[OAR] > "); console_seq_print('-', 42);
+
+            oar_json_error_construct(error_json, 0, "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: COMPACT", 222);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 28); ////
+            printf("[OAR] > STAGING > COMPACT JSON ERROR\n"); //
+            printf("[OAR] > "); console_seq_print(':', 28); ////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); ////////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
         #endif // (OAR_CONF_JSON_TYPE == 2)
 
@@ -605,125 +541,210 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
         #if (OAR_CONF_JSON_TYPE == 3) // use the compact json (./oar-json-compact.h) [project-conf.h]
 
-            printf("MICRO JSON TOO LARGE FOR SENDING - PLEASE CHOOSE OTHER TYPE IN project-conf.h\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-            
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            printf("STAGING ERROR JSON\n"); printf("\n"); ///////
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            strcpy(buffer, "{ \" error \" : \" MICRO JSON \" }");
-            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('-', 40);
+            printf("[OAR] > MICRO JSON NOT SUITABLE FOR TCP/IP STACK\n");
+            // printf("[OAR] > "); console_seq_print('-', 40);
+
+            oar_json_error_construct(error_json, 0, "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: MICRO", 333);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 26);
+            printf("[OAR] > STAGING > MICRO JSON ERROR\n");
+            printf("[OAR] > "); console_seq_print(':', 26);
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); ///////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
         #endif // (OAR_CONF_JSON_TYPE == 3)
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // TINY JSON /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TINY JSON //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // ------------------------------------------------------------------------------------------------------------------------
     
         #if (OAR_CONF_JSON_TYPE == 4) // use the tiny json (./oar-json-tiny.h) [project-conf.h]
                     
-            char *oar_json_tiny_buf = (char *)malloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_TINY_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_tiny_buf > char *oar_json_tiny_buf = (char *)heapmem_alloc((OAR_CONF_JSON_TINY_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+            printf("\n");
 
-            if (oar_json_tiny_buf == NULL) // if heap memory couldn't be allocated for oar_json_tiny_buf...
-            {
-                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR EXTENDED JSON\n", OAR_CONF_JSON_TINY_BUF_SIZE);
+            // printf("[OAR] > "); console_seq_print('-', 42);
+            printf("[OAR] > TINY JSON NOT RECOMMENDED FOR TCP/IP STACK\n");
+            // printf("[OAR] > "); console_seq_print('-', 42);
 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("STAGING ERROR JSON\n"); printf("\n"); ///////////////////////////////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buffer, "{ \" error \" : \" OUT OF HEAP MEMORY FOR TINY JSON ALLOCASTION \" }");
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                
-                free(oar_json_tiny_buf);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-            }
-            else
-            {
-                oar_json_tiny_construct(oar_json_tiny_buf); // construct oar_json_tiny_buf (function found in ./oar_json_micro.h)
-                oar_json_tiny_print(oar_json_tiny_buf); // print oar_json_tiny_buf (function found in ./oar_json_micro.h)
-                
-                printf("\n"); printf("length of tiny json: %d\n", strlen(oar_json_tiny_buf));
+            oar_json_error_construct(error_json, 0, "JSON TYPE NOT RECOMMENDED FOR TCP/IP STACK: TINY", 444);
 
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
-                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            printf("\n");
 
-                #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
-
-                    char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
-
-                    printf("\n");
-                    
-                    if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
-                    {
-                        printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR ENCRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        printf("STAGING ERROR JSON\n"); printf("\n"); ////////////////////////////////////////////
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        strcpy(buffer, "{ \" error \" : \" OUT OF HEAP MEMORY FOR ENCRYPTED JSON ALLOCASTION \" }");
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    
-                        free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                    }
-                    else // // if heap memory could be allocated for decrypted_oar_json...
-                    {
-                        oar_crypt(encrypted_oar_json, oar_json_tiny_buf); // encrypt oar_json_tiny_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
-                        
-                        printf("%s\n", encrypted_oar_json); printf("\n");
-                        printf("length of encrypted: %d\n", strlen(encrypted_oar_json)); printf("\n");
-
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        printf("STAGING ENCRYPTED JSON, QUANTUM: %d\n", index);  printf("\n");
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                        strcpy(buffer, encrypted_oar_json); ///////////////////////////////////////////////////
-                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
-                        // DECRYPTION ///////////////////////////////////////
-                        // ::::::::::::::::::::::::::::::::::::::::::::::::::
-                        
-                        #if (OAR_CONF_CRYPT_DECRYPT)
-
-                            char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
-
-                            printf("\n");
-                            
-                            if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
-                            {
-                                printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR DECRYPTION\n", OAR_CONF_CRYPT_BUFFER_SIZE);
-
-                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
-                            }
-                            else // if heap memory could be allocated for decrypted_oar_json...
-                            {
-                                oar_crypt(decrypted_oar_json, encrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
-
-                                printf("%s\n", decrypted_oar_json); printf("\n"); 
-                                printf("length of decrypted: %d\n", strlen(decrypted_oar_json));
-
-                                free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h)
-                            }
-
-                        #endif // (OAR_CONF_CRYPT_DECRYPT)
-
-                    }
-                    
-                    #else // (OAR_CONF_CRYPT)
-
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING TINY JSON"); printf("\n");
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, oar_json_tiny_buf); /////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                #endif // (OAR_CONF_CRYPT)
-
-                free(oar_json_tiny_buf); // release the memory allocated for oar_json_tiny_buf > heapmem_free(oar_json_tiny_buf); (for platform specific os/lib/heapmem.h)
-            }
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 25); //
+            printf("[OAR] > STAGING > TINY JSON ERROR\n"); ///
+            printf("[OAR] > "); console_seq_print(':', 25); //
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); //////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             
         #endif // (OAR_CONF_JSON_TYPE == 4)
 
+    #else // (OAR_CONF_JSON)
+
+        printf("\n");
+
+        // printf("[OAR] > "); console_seq_print('-', 30);
+        printf("[OAR] > JSON FUNCTIONALITY NOT ENABLED\n");
+        // printf("[OAR] > "); console_seq_print('-', 30);
+
+        oar_json_error_construct(error_json, 0, "JSON FUNCTIONALITY NOT ENABLED", 999);
+
+        printf("\n");
+        
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        printf("[OAR] > "); console_seq_print(':', 29); ///////
+        printf("[OAR] > STAGING > JSON FUNCTIONALITY ERROR\n");
+        printf("[OAR] > "); console_seq_print(':', 29); ///////
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        strcpy(buffer, error_json); ///////////////////////////
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+    #endif // (OAR_CONF_JSON)
+  
+
+
+
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+
+
+
+
+    printf("\n");
+
+    printf("[OAR] > "); console_seq_print('-', 72);
+
+    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+    // XOR ENCRYPTION / DECRYPTION ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><
+
+    #if (OAR_CONF_CRYPT) // if encryption functionality is enabled... [project-conf.h]
+
+        char *encrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *encrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+        
+        if (encrypted_oar_json == NULL) // if heap memory couldn't be allocated for encrypted_oar_json...
+        {
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('~', 83);
+            printf("[OAR] > HEAP MEMORY EXHAUSTED > ENCRYPTION BUFFER ALLOCATION OF (%u + 1) CHARACTERS NOT POSSIBLE\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+            // printf("[OAR] > "); console_seq_print('~', 83);
+
+            oar_json_error_construct(error_json, 0, "EXHAUSTED HEAP MEMORY: ENCRYPTION BUFFER ALLOCATION NOT POSSIBLE", 901);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 40); ///////////////
+            printf("[OAR] > STAGING > ENCRYPTION ALLOCATION ERROR JSON\n");
+            printf("[OAR] > "); console_seq_print(':', 40); ///////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); ///////////////////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        }
+        else // if heap memory could be allocated for decrypted_oar_json...
+        {
+            oar_crypt(encrypted_oar_json, buffer); // encrypt oar_json_buf and store it in encrypted_oar_json (function found in oar-crypt.h)
+            
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('~', 15);
+            printf("[OAR] > ENCRYPTED JSON:\n");
+            // printf("[OAR] > "); console_seq_print('~', 15);
+
+            printf("\n");
+            
+            printf("%s\n", encrypted_oar_json); 
+            
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('~', 29);
+            printf("[OAR] > LENGTH OF ENCRYPTED JSON: %d\n", strlen(encrypted_oar_json));
+            // printf("[OAR] > "); console_seq_print('~', 29);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print('+', 24); //
+            printf("[OAR] > STAGING > ENCRYPTED JSON\n"); ////
+            printf("[OAR] > "); console_seq_print('+', 24); //
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, encrypted_oar_json); //////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+            // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+            // DECRYPTION //////////////////////////////////////////////////////////////////////////////////////////////
+            // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+            
+            #if (OAR_CONF_CRYPT_DECRYPT)
+
+                char *decrypted_oar_json = (char *)malloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_CRYPT_BUFFER_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing decrypted_oar_json > char *decrypted_oar_json = (char *)heapmem_alloc((OAR_CONF_CRYPT_BUFFER_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+                
+                if (decrypted_oar_json == NULL) // if heap memory couldn't be allocated for decrypted_oar_json...
+                {
+                    printf("\n");
+
+                    // printf("[OAR] > "); console_seq_print('~', 83);
+                    printf("[OAR] > HEAP MEMORY EXHAUSTED > DECRYPTION BUFFER ALLOCATION OF (%u + 1) CHARACTERS NOT POSSIBLE\n", OAR_CONF_CRYPT_BUFFER_SIZE);
+                    // printf("[OAR] > "); console_seq_print('~', 83);
+                }
+                else // if heap memory could be allocated for decrypted_oar_json...
+                {
+                    oar_crypt(decrypted_oar_json, encrypted_oar_json); // decrypt encrypted_oar_json and store it in decrypted_oar_json (function found in oar-crypt.h)
+                    
+                    printf("\n");
+
+                    // printf("[OAR] > "); console_seq_print('~', 15);
+                    printf("[OAR] > DECRYPTED JSON:\n");
+                    // printf("[OAR] > "); console_seq_print('~', 15);
+
+                    printf("\n");
+                    
+                    printf("%s\n", decrypted_oar_json); 
+                    
+                    printf("\n");
+
+                    // printf("[OAR] > "); console_seq_print('~', 29);
+                    printf("[OAR] > LENGTH OF DECRYPTED JSON: %d\n", strlen(decrypted_oar_json));
+                    // printf("[OAR] > "); console_seq_print('~', 29);
+                }
+
+                free(decrypted_oar_json);   // release the memory allocated for decrypted_oar_json > heapmem_free(decrypted_oar_json); (for platform specific os/lib/heapmem.h) 
+
+            #endif // (OAR_CONF_CRYPT_DECRYPT)
+
+            free(encrypted_oar_json);   // release the memory allocated for encrypted_oar_json > heapmem_free(encrypted_oar_json); (for platform specific os/lib/heapmem.h)
+        }
+        
+    #else // (OAR_CONF_CRYPT)
+
+        printf("\n");
+
+        // printf("[OAR] > "); console_seq_print('~', 37);
+        printf("[OAR] > ENCRYPTION FUNCTIONALITY NOT ENABLED:\n");
+        // printf("[OAR] > "); console_seq_print('~', 37);    
+
+    #endif // (OAR_CONF_CRYPT)
+
+
+
+
         // JJJJJJJJJJ
         // JJJJJJJJJJ
         // JJJJJJJJJJ
@@ -733,104 +754,173 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
         // JJJJJJJJJJ
         // JJJJJJJJJJ
         // JJJJJJJJJJ
-        // JJJJJJJJJJ
+        
+
+
+
+    printf("\n");
+    
+    printf("[OAR] > "); console_seq_print('-', 72);
+    
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // BASE64 ENCODING ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    #if (OAR_CONF_BASE64_ENCODING)
+
+        char *oar_base64_encoded_json = (char *)malloc((OAR_CONF_BASE64_ENCODING_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_BASE64_ENCODING_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for encoding oar_json_buf > char *oar_base64_endcoded = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
+
+        if (oar_base64_encoded_json == NULL)
+        {
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('~', 83);
+            printf("[OAR] > HEAP MEMORY EXHAUSTED > BASE64 ENCODING BUFFER ALLOCATION OF (%u + 1) CHARACTERS NOT POSSIBLE\n", OAR_CONF_BASE64_ENCODING_BUFFER_SIZE);
+            // printf("[OAR] > "); console_seq_print('~', 83);
+
+            oar_json_error_construct(error_json, 0, "EXHAUSTED HEAP MEMORY: BASE64 ENCODING BUFFER ALLOCATION NOT POSSIBLE", 902);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 40); ////////////////////
+            printf("[OAR] > STAGING > BASE64 ENCODING ALLOCATION ERROR JSON\n");
+            printf("[OAR] > "); console_seq_print(':', 40); ////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); ////////////////////////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        
+        }
+        else
+        {
+            oar_base64_encode(buffer, oar_base64_encoded_json, strlen(buffer));
+            
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('~', 20);
+            printf("[OAR] > BASE64 ENCODED JSON:\n");
+            // printf("[OAR] > "); console_seq_print('~', 20);
+
+            printf("\n");
+            
+            printf("%s\n", oar_base64_encoded_json); 
+            
+            printf("\n");
+
+            // printf("[OAR] > "); console_seq_print('*', 34);
+            printf("[OAR] > LENGTH OF BASE64 ENCODED JSON: %d\n", strlen(oar_base64_encoded_json));
+            // printf("[OAR] > "); console_seq_print('*', 34);
+
+            printf("\n");
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print('+', 30); //
+            printf("[OAR] > STAGING > BASE64 ENCODING JSON\n");
+            printf("[OAR] > "); console_seq_print('+', 30); //
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, oar_base64_encoded_json); /////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        }
+
+        free(oar_base64_encoded_json);
+
+    #else // (OAR_CONF_BASE64_ENCODING)
+
+        printf("\n");
+
+        // printf("[OAR] > "); console_seq_print('~', 42);
+        printf("[OAR] > BASE64 ENCODING FUNCTIONALITY NOT ENABLED:\n");
+        // printf("[OAR] > "); console_seq_print('~', 42);  
+
+    #endif // (OAR_CONF_BASE64_ENCODING)
+
+
+
+
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+    // JJJJJJJJJJ
+
+    
+    
+
+    if (strlen(buffer) > OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH)
+    {
+        printf("\n");
+
+        console_seq_print('|', 81);
+        printf("ABORT SENDING JSON: PAYLOAD LENGHT %d > %d > ECONNRESET/ETIMEDOUT ERRORS POSSIBLE\n", strlen(buffer), OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH);
+
+        oar_json_error_construct(error_json, 0, "JSON PAYLOAD EXCEEDS TCP/IP STABILITY", 999);
+
+        printf("\n");
+
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        printf("[OAR] > "); console_seq_print(':', 47); //////
+        printf("[OAR] > STAGING > PAYLOAD SIZE ERROR JSON\n");
+        printf("[OAR] > "); console_seq_print(':', 47); //////
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+        strcpy(buffer, error_json); //////////////////////////
+        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+        #if (OAR_CONF_CRYPT)
+
+            strcpy(error_json, buffer);
+            oar_crypt(buffer, error_json);
+
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 47); ////////////////
+            printf("[OAR] > STAGING > PAYLOAD SIZE ERROR ENCRYPTED JSON\n"); 
+            printf("[OAR] > "); console_seq_print(':', 47); ////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); ////////////////////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+        #endif // (OAR_CONF_CRYPT)
 
         #if (OAR_CONF_BASE64_ENCODING)
 
-            #if (OAR_CONF_JSON_TYPE == 0)
+            strcpy(error_json, buffer);
+            oar_base64_encode(error_json, buffer, strlen(error_json));
 
-                char *oar_base64_encoded_json = (char *)malloc((OAR_CONF_BASE64_ENCODING_BUFFER_SIZE+1)*sizeof(char)); // allocate OAR_CONF_BASE64_ENCODING_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for encoding oar_json_buf > char *oar_base64_endcoded = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
-
-                printf("\n");
-
-                if (oar_base64_encoded_json == NULL)
-                {
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
-                    
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("OUT OF HEAP MEMORY > CANNOT ALLOCATE (%u + 1) CHARACTERS FOR BASE ^$ENCODING JSON\n", OAR_CONF_BASE64_ENCODING_BUFFER_SIZE);
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING JSON\" }");//////////////////////////////////////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                    printf("\n"); for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
-                
-                }
-                else
-                {
-                    oar_base64_encode(buffer, oar_base64_encoded_json, strlen(buffer));
-
-                    for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
-                    printf("BASE64 ENCODED JSON:\n"); printf("\n");
-                    
-                    printf("%s\n", oar_base64_encoded_json); printf("\n");
-                    printf("LENGTH OF BASE64 ENCODED JSON: %d\n", strlen(oar_base64_encoded_json));
-
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    printf("STAGING BASE64 ENCODED JSON, QUANTUM: %d\n", json_index); //////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                    strcpy(buffer, oar_base64_encoded_json); ///////////////////////////////////////////////////
-                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-                    for (int i = 0; i < 80; i++) { printf("#"); } printf("\n");
-                }
-
-                free(oar_base64_encoded_json);
-            
-            #endif // (OAR_CONF_JSON_TYPE == 0)
-            
-            #if (OAR_CONF_JSON_TYPE == 1) || (OAR_CONF_JSON_TYPE == 2) || (OAR_CONF_JSON_TYPE == 3) || (OAR_CONF_JSON_TYPE == 4)
-
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("JSON TYPE SIZE EXCEEDS SIZE FOR SUCCESSFUL ENCODING\n"); ////////////////////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buffer, "{ \" error \" : \" OUT OF HEAP MEMORY FOR BASE64 ENCODING JSON\" }");
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-            #endif // (OAR_CONF_JSON_TYPE == 0)
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            printf("[OAR] > "); console_seq_print(':', 47); /////////////////////
+            printf("[OAR] > STAGING > PAYLOAD SIZE ERROR BASE64 ENCODED JSON\n");
+            printf("[OAR] > "); console_seq_print(':', 47); /////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            strcpy(buffer, error_json); /////////////////////////////////////////
+            // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
         #endif // (OAR_CONF_BASE64_ENCODING)
 
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-    // JJJJJJJJJJ
-
-    #else // (OAR_CONF_JSON)
-
-        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-        printf("STAGING NULL JSON\n"); printf("\n"); ////
-        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-        strcpy(buffer, "\" JSON \" : null "); /////////////
-        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-    #endif // (OAR_CONF_JSON)
-    
-    if (strlen(buffer) > OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH)
-    {
-        printf("\n"); 
-        printf("ABORT SENDING JSON\n");
-        printf("PAYLOAD LENGHT %d > %d\n", strlen(oar_json_buf), OAR_CONF_BUOY_MAX_PAYLOAD_LENGTH);
-        printf("ECONNRESET/ETIMEDOUT ERRORS POSSIBLE\n");
-        SEND_STRING(&s->sout, "{ \" error \" : \" MAXIMUM POSSIBLE PAYLOAD LEGTH EXCEEDED \" }"); // PSOCK_SEND(&s->sout, (uint8_t *)buffer, strlen(buffer)) > Send data.
+        SEND_STRING(&s->sout, buffer); // PSOCK_SEND(&s->sout, (uint8_t *)buffer, strlen(buffer)) > Send data.
     }
     else
     {
-        printf("\n"); printf("SENDING JSON\n");
+        printf("\n"); 
+        
+        printf("[OAR] > "); console_seq_print('|', 12);
+        printf("[OAR] > SENDING JSON\n");
+        printf("[OAR] > "); console_seq_print('|', 12);
+
         SEND_STRING(&s->sout, buffer); // PSOCK_SEND(&s->sout, (uint8_t *)buffer, strlen(buffer)) > Send data.
     }
-    
-    for (int i = 0; i < 80; i++) { printf("="); } printf("\n");
-    for (int i = 0; i < 80; i++) { printf("="); }
-    for (int i = 0; i < 80; i++) { printf("="); } printf("\n");
 
-    leds_single_off(LEDS_LED1);
+    counter++; counter %= 2399; // icrease the counter, reset if == 2399
+
+    #if (OAR_CONF_DEV)
+
+        leds_single_off(LEDS_LED1);
+
+    #endif // (OAR_CONF_DEV)
+    
     PSOCK_END(&s->sout); // Declare the end of a protosocket's protothread.
 }
 
@@ -867,13 +957,23 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
         PROCESS_NAME(webserver_process);
         process_start(&webserver_process, NULL);
 
-        leds_single_on(LEDS_LED2);
+        #if (OAR_CONF_DEV)
+
+            leds_single_on(LEDS_LED2);
+        
+        #endif // (OAR_CONF_DEV)
 
         printf("\n");
         
         printf("[OAR] > "); console_seq_print('-', 20);
         printf("[OAR] > BUOY PROCESS STARTED\n");
         printf("[OAR] > "); console_seq_print('-', 20);
+
+        // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
+                // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
+                // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                
+                process_poll(&oar_debug_process);
 
     PROCESS_END();
 }
@@ -912,18 +1012,33 @@ PROCESS_THREAD(oar_debug_process, ev, data)
         PROCESS_EXIT();
 
     #else // !(OAR_CONF_DEBUG_FUNCTIONALITY)
-
-        static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
+        
+            static struct etimer debug_timer;                       // An event-timer variable. Note that this variable must be static in order to preserve the value across yielding.
         
         PROCESS_BEGIN();
 
             // char *encrypted_oar_json;
             // char *decrypted_oar_json;
-            
-            etimer_set(&debug_timer, CLOCK_SECOND * OAR_CONF_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
+                
+                etimer_set(&debug_timer, CLOCK_SECOND * OAR_CONF_DEBUG_INTERVAL);        // Setup a periodic timer that expires after OAR_DEBUG_INTERVAL seconds (trigger this timer after these OAR_DEBUG_INTERVAL seconds have passed).
 
             while(1) 
             {
+                
+                #if (OAR_CONF_BUOY_FUNCTIONALITY)
+                
+                    // (doc) PROCESS_YIELD() will yield control back to the scheduler without expecting to be scheduled again shortly thereafter. 
+                    // (doc) Instead, it will wait for an incoming event, similar to PROCESS_WAIT_EVENT_UNTIL(), but without a required condition argument. 
+                    // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
+                    // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);. 
+                    // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+                    
+                    // PROCESS_YIELD();
+                
+                 #endif // (OAR_CONF_BUOY_FUNCTIONALITY)
+
+                
+                
                 
                 // ================================================================================================================================================================
                 // JSON ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -947,13 +1062,13 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         }
                         else
                         {
-                            oar_json_construct(oar_json_buf, json_index % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                            oar_json_construct(oar_json_buf, counter % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
                             oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
                             
                             printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_buf));
 
-                            json_index++;
-                            json_index %= 2399;
+                            counter++;
+                            counter %= 2399;
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////
@@ -1454,9 +1569,9 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                 // (doc) A condition is given as an argument to PROCESS_WAIT_EVENT_UNTIL(), 
                 // (doc) and this condition must be fulfilled for the processes to continue execution after the call to PROCESS_WAIT_EVENT_UNTIL(). 
                 // (doc) If the condition is not fulfilled, the process yields control back to the OS until a new event is delivered.
-                
-                PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));         // Wait for the periodic timer to expire and then restart the timer.
-                etimer_reset(&debug_timer);
+                            
+                    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&debug_timer));         // Wait for the periodic timer to expire and then restart the timer.
+                    etimer_reset(&debug_timer);
 
                 // (doc) To voluntarily release control the scheduler, one can call PROCESS_PAUSE(). 
                 // (doc) The scheduler will then deliver any queued events, and then immediately schedule the paused process.
@@ -1482,196 +1597,5 @@ PROCESS_THREAD(oar_debug_process, ev, data)
 
         // #endif // (OAR_CONF_JSON == 1) && (OAR_CONF_CRYPT == 1)
     
-    #endif // (OAR_CONF_DEBUG_FUNCTIONALITY)
-
-    
+    #endif // (OAR_CONF_DEBUG_FUNCTIONALITY) 
 }
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-PROCESS_THREAD(oar_dev_process, ev, data)
-{
-    
-    #if !(OAR_DEV)
-
-        // (doc) A process can be stopped in three ways:
-        // (doc)    The process implicitly exits by allowing the PROCESS_END() statement to be reached and executed.
-        // (doc)    The process explicitly exits by calling PROCESS_EXIT() in the PROCESS_THREAD body.
-        // (doc)    Another process kills the process by calling process_exit().
-        // (doc) After stopping a process, it can be restarted from the beginning by calling process_start().
-
-        PROCESS_EXIT();
-
-    #else   /* OAR_DEV */
-        
-        
-        
-
-        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-        
-        button_hal_button_t *dev_btn;
-        unsigned long int dev_system_time = clock_seconds();
-
-        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-  
-  
-
-        PROCESS_BEGIN();
-
-            printf("[%8lu] DEV \t > \t device button count: %u.\n", dev_system_time, button_hal_button_count);
-
-            for (int i = 0; i < button_hal_button_count; i++)
-            {
-                dev_btn = button_hal_get_by_index(i);
-
-                if(dev_btn) 
-                {
-                    printf("[%8lu] DEV \t > \t %s on pin %u with ID=%d, Logic=%s, Pull=%s\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn), dev_btn->pin, i, dev_btn->negative_logic ? "Negative" : "Positive", dev_btn->pull == GPIO_HAL_PIN_CFG_PULL_UP ? "Pull Up" : "Pull Down");
-                }
-            }
-
-            while(1) {
-
-                // (doc) PROCESS_YIELD() will yield control back to the scheduler without expecting to be scheduled again shortly thereafter. 
-                // (doc) Instead, it will wait for an incoming event, similar to PROCESS_WAIT_EVENT_UNTIL(), but without a required condition argument. 
-                // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
-                // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);. 
-                // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
-                
-                PROCESS_YIELD();
-
-                // ---------------------------------------------------------------------------------------------------------------------
-
-                // leds_set(LEDS_ALL);
-                // leds_off(LEDS_ALL);
-                // leds_toggle(LEDS_ALL);
-                // leds_on(LEDS_ALL);
-
-                // leds_single_on(LEDS_LED1);
-                // leds_single_off(LEDS_LED1);
-                // leds_single_toggle(LEDS_LED1);
-
-                // leds_single_on(LEDS_LED2);
-                // leds_single_off(LEDS_LED2);
-                // leds_single_toggle(LEDS_LED2);
-
-
-                if (dev_system_time % 2 == 0)       // every even second, as long as oar_dev_process has control  
-                {
-                    leds_single_on(LEDS_LED1);
-                    leds_single_off(LEDS_LED2);
-                }
-                else                                // every odd second, , as long as oar_dev_process has control
-                {
-                    leds_single_off(LEDS_LED1);
-                    leds_single_on(LEDS_LED2);
-                }
-
-                // ---------------------------------------------------------------------------------------------------------------------
-
-                // press button
-                
-                if(ev == button_hal_press_event) 
-                {
-                    dev_btn = (button_hal_button_t *)data;
-                    printf("[%8lu] DEV \t > \t Press event (%s)\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 0 (press event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 1 (press event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-                }
-                
-                // release button
-
-                else if(ev == button_hal_release_event) 
-                {
-                    dev_btn = (button_hal_button_t *)data;
-                    printf("[%8lu] DEV \t > \t Release event (%s)\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 0 (release event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 1 (release event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-                }
-                
-                // keep button
-
-                else if(ev == button_hal_periodic_event) 
-                {
-                    dev_btn = (button_hal_button_t *)data;
-                    printf("[%8lu] DEV \t > \t Periodic event, %u seconds (%s)\n", dev_system_time, dev_btn->press_duration_seconds, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ZERO)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 0 (periodic event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-
-                    if(dev_btn == button_hal_get_by_id(BUTTON_HAL_ID_BUTTON_ONE)) 
-                    {
-                        printf("[%8lu] DEV \t > \t This was button 1 (periodic event), on pin %u\n", dev_system_time, dev_btn->pin);
-                    }
-
-                    if(dev_btn->press_duration_seconds > 5) 
-                    {
-                        printf("[%8lu] DEV \t > \t %s pressed for more than 5 secs. Do custom action\n", dev_system_time, BUTTON_HAL_GET_DESCRIPTION(dev_btn));
-                    }
-
-                }
-                
-                // ---------------------------------------------------------------------------------------------------------------------
-
-            }
-
-        PROCESS_END();
-
-        #endif  /* OAR_DEV */
-    }
-    
-    

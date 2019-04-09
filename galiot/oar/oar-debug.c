@@ -290,7 +290,7 @@ static void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // DEBUG > RPL-LITE NEIGHBORS ///////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    void oar_debug_cmd_rpl_nbr(unsigned long int system_time)
+    void oar_debug_net_rpl_nbr(unsigned long int system_time)
     {
         if(!curr_instance.used || rpl_neighbor_count() == 0) 
         {
@@ -317,7 +317,7 @@ static void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
     // DEBUG > RPL-LITE STATUS //////////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    void oar_debug_cmd_rpl_status(unsigned long int system_time)
+    void oar_debug_net_rpl_status(unsigned long int system_time)
     {
         if(!curr_instance.used) 
         {
@@ -378,7 +378,7 @@ static void oar_debug_lladdr_to_str(char *output, const linkaddr_t *lladdr)
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-void oar_debug_cmd_macaddr(unsigned long int system_time)
+void oar_debug_net_macaddr(unsigned long int system_time)
 {
     printf("[%8lu] DEBUG >   INFO >      (cmd_macaddr) >                                            Node MAC address: ", system_time);
         oar_debug_lladdr_to_str(oar_debug_lladdr, &linkaddr_node_addr); printf("%s", oar_debug_lladdr);
@@ -392,7 +392,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
     // DEBUG > IPv6 ADDRESS /////////////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    void oar_debug_cmd_ipaddr(unsigned long int system_time)
+    void oar_debug_net_ipaddr(unsigned long int system_time)
     {
         uint8_t state;
 
@@ -412,7 +412,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
     // DEBUG > IPv6 NEIGHBORS ///////////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    void oar_debug_cmd_ip_neighbors(unsigned long int system_time)
+    void oar_debug_net_ip_neighbors(unsigned long int system_time)
     {
         uip_ds6_nbr_t *nbr;
         int oar_debug_ip_neighbor_count = 0;
@@ -449,7 +449,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
     // DEBUG > TSCH STATUS //////////////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    void oar_debug_cmd_tsch_status(unsigned long int system_time)
+    void oar_debug_net_tsch_status(unsigned long int system_time)
     {
         printf("[%8lu] DEBUG >   INFO >  (cmd_tsch_status) >                                              Is coordinator: %u\n", system_time, tsch_is_coordinator);
         printf("[%8lu] DEBUG >   INFO >  (cmd_tsch_status) >                                               Is associated: %u\n", system_time, tsch_is_associated);
@@ -488,7 +488,7 @@ void oar_debug_cmd_macaddr(unsigned long int system_time)
     // DEBUG > IPv6 ROUTES //////////////////////////////////////////////////
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    void oar_debug_cmd_routes(unsigned long int system_time)
+    void oar_debug_net_routes(unsigned long int system_time)
     {
         uip_ds6_defrt_t *default_route;
 

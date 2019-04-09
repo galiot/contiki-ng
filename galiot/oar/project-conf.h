@@ -85,10 +85,10 @@
 //---------------------------------------------------------------------------
 
 // enable/disable debug functionality, across the board
-#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON:1||OFF: 0)
+#define OAR_CONF_DEBUG_FUNCTIONALITY                                        0                   // (ON:1||OFF: 0) ---> DISABLE IF (OAR_CONF_BUOY_FUNCTIONALITY)
 
 // enable/disable buoy functionality, across the board
-#define OAR_CONF_BUOY_FUNCTIONALITY                                         1                   // (ON:1||OFF: 0)
+#define OAR_CONF_BUOY_FUNCTIONALITY                                         1                   // (ON:1||OFF: 0) ---> DISABLE IF (OAR_CONF_DEBUG_FUNCTIONALITY)
 
 // **************************************************************************
 // BUOY CONTSTANTS //////////////////////////////////////////////////////////
@@ -113,13 +113,13 @@
 #define OAR_CONF_DEBUG_INTERVAL                                             3                   // CONSOLE PRINT INTERVAL (SECONDS)
 
 // enable/disable energest timings (printing energest values)
-#define OAR_CONF_DEBUG_ENERGY                                               0                   // (ON:1||OFF: 0)
+#define OAR_CONF_DEBUG_ENERGY                                               1                   // (ON:1||OFF: 0)
 
 // enable/disable UIP statistics debugging (printing UIP values)
-#define OAR_CONF_DEBUG_STATISTICS                                           0                   // (ON:1||OFF: 0)
+#define OAR_CONF_DEBUG_STATISTICS                                           1                   // (ON:1||OFF: 0)
 
 // enable/disable shell information (printing shell values)
-#define OAR_CONF_DEBUG_NETWORK                                              0                   // (ON:1||OFF: 0)
+#define OAR_CONF_DEBUG_NETWORK                                              1                   // (ON:1||OFF: 0)
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // JSON CONSTANTS ///////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@
 // OAR_CONF_JSON_TYPE: QUANTIZED ///////////////
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
 
-#define OAR_CONF_JSON_BUF_SIZE                                              20000                 // BYTES *sizeof(char) 
+#define OAR_CONF_JSON_BUF_SIZE                                              512                 // BYTES *sizeof(char) 
                                                                                                 // [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
 
 // ~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~|~
@@ -191,7 +191,7 @@
 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 // enable/disable JSON encryption
-#define OAR_CONF_CRYPT                                                      1                   // (ON:1||OFF: 0) 
+#define OAR_CONF_CRYPT                                                      1                  // (ON:1||OFF: 0) ---> DISABLE IF (OAR_CONF_DEBUG_FUNCTIONALITY) && (OAR_JSON_CONF_TYPE == 1 || 2 || 3)
 
 // set the encryption string size
 #define OAR_CONF_CRYPT_BUFFER_SIZE                                          482                // BYTES *sizeof(char) [== OAR_CONF_BUOY_BUFFER_SIZE -> decryption @ unconstrained backend]
