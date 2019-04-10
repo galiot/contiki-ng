@@ -1,3 +1,7 @@
+////////////////////////
+// galiot (2018/2019) //
+////////////////////////
+
 /*
  * Copyright (c) 2010, Swedish Institute of Computer Science.
  * All rights reserved.

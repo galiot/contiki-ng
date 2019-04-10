@@ -1,3 +1,7 @@
+////////////////////////
+// galiot (2018/2019) //
+////////////////////////
+
 #include "oar-json-compact.h"
 
 #include "contiki.h"

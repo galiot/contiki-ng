@@ -1,23 +1,6 @@
-///////////////////////////////////////////////////////////////////////////////
-// contiki-ng restful mote monitoring backend /////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// Coded by: galiot (2018/2019) ///////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////// 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////////////
+// galiot (2018/2019) //
+////////////////////////
 
 #include "contiki.h"                // main include file for OS-specific modules
 
@@ -84,153 +67,162 @@
 
 
 
+
+
+
+
+
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// GLOBAL DECLARATIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, created by: oar_json_lladdr_to_str() [oar_json.h]
 
+// ----------------------------------------------------------------------------
+// function that sequentially prints a char set times /////////////////////////
+// for debugging purposes, making UART output more readable ///////////////////
+// ----------------------------------------------------------------------------
+void console_seq_print(char symbol, int times)
+{
+    for (int i = 0; i < times; i++)
+    {
+        printf("%c", symbol);
+    }
+
+    printf("\n");
+}
 
 // ----------------------------------------------------------------------------
-    // function that sequentially prints a char set times /////////////////////////
-    // ----------------------------------------------------------------------------
-    void console_seq_print(char symbol, int times)
-    {
-        for (int i = 0; i < times; i++)
+// function that initializes (empties) the json string ////////////////////////
+// and sends just the pckt section with error appended //////////////////////// 
+// ----------------------------------------------------------------------------
+
+// {
+//     "pckt": {
+//         "vld": false,
+//         "err": {
+//             "cd": 111,
+//             "txt": "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: EXTENDED"
+//         }
+//     },
+//     "id": {
+//         "sT": 23,
+//         "adr": "0012.4b00.0f83.b601",
+//         "cd": "RED"
+//     },
+//     "hash": "2350848843"
+// }
+
+void oar_json_error_construct(char *buf, int valid, char *error_text, int error_code)
+{
+    char str[256];
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // SECTION START pckt{} ////////////////////////////////
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    sprintf(str, "{"                    ); strcpy(buf, str);
+    sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
+    sprintf(str, "{"                    ); strcat(buf, str);
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
+        sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
+
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        if (valid)
         {
-            printf("%c", symbol);
+            sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
+        }
+        else
+        {
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+            // SUBSECTION START pckt{} > error{} ///////////////////
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+            sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
+            sprintf(str, "{"                    ); strcat(buf, str);
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+
+                sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
+                sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    
+
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+            sprintf(str, "}"); strcat(buf, str); //
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+            // SUBSECTION END pckt{} > error{} ////
+            // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
         }
 
-        printf("\n");
-    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); strcat(buf, str);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END pckt{} //////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // ----------------------------------------------------------------------------
-    // function that initializes (empties) the json string ////////////////////////
-    // and sends just the pckt section with error appended //////////////////////// 
-    // ----------------------------------------------------------------------------
+    // ?????????????????????????????????
+    sprintf(str, ","); strcat(buf, str);
+    // ?????????????????????????????????
 
-    // {
-    //     "pckt": {
-    //         "vld": false,
-    //         "err": {
-    //             "cd": 111,
-    //             "txt": "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: EXTENDED"
-    //         }
-    //     },
-    //     "id": {
-    //         "sT": 23,
-    //         "adr": "0012.4b00.0f83.b601",
-    //         "cd": "RED"
-    //     },
-    //     "hash": "2350848843"
-    // }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START id{} //////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
+    sprintf(str, "{"                ); strcat(buf, str); ///
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    void oar_json_error_construct(char *buf, int valid, char *error_text, int error_code)
-    {
+        // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+        sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+        // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+
+        #if (OAR_CONF_JSON_TYPE == 0)
+
+            oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+        #endif // (OAR_CONF_JSON_TYPE == 0)
+        #if (OAR_CONF_JSON_TYPE == 1)
+
+            oar_json_extended_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+        #endif // (OAR_CONF_JSON_TYPE == 1)
+        #if (OAR_CONF_JSON_TYPE == 2)
+
+            oar_json_compact_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+        #endif // (OAR_CONF_JSON_TYPE == 2)
+        #if (OAR_CONF_JSON_TYPE == 3)
+
+            oar_json_micro_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+        #endif // (OAR_CONF_JSON_TYPE == 3)
+        #if (OAR_CONF_JSON_TYPE == 4)
+
+            oar_json_tiny_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
+
+        #endif // (OAR_CONF_JSON_TYPE == 4)
         
-        char str[256];
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // SECTION START pckt{} ////////////////////////////////
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        sprintf(str, "{"                    ); strcpy(buf, str);
-        sprintf(str, "\"" "pckt" "\"" ":"   ); strcat(buf, str);
-        sprintf(str, "{"                    ); strcat(buf, str);
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-            sprintf(str, "\"" "vld" "\"" ":" "%s" ,valid ? "true" : "false"); strcat(buf, str);
-
-            // ?????????????????????????????????
-            sprintf(str, ","); strcat(buf, str);
-            // ?????????????????????????????????
-
-            if (valid)
-            {
-                sprintf(str,        "\"" "err"  "\"" ":"        "null"                  ); strcat(buf, str);
-            }
-            else
-            {
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-                // SUBSECTION START pckt{} > error{} ///////////////////
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-                sprintf(str, "\"" "err" "\"" ":"    ); strcat(buf, str);
-                sprintf(str, "{"                    ); strcat(buf, str);
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
-
-                    sprintf(str,    "\"" "cd"   "\"" ":"        "%d"        ,error_code ); strcat(buf, str);    sprintf(str, ","); strcat(buf, str);
-                    sprintf(str,    "\"" "txt"  "\"" ":" "\""   "%s" "\""   ,error_text ); strcat(buf, str);    
-
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-                sprintf(str, "}"); strcat(buf, str); //
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-                // SUBSECTION END pckt{} > error{} ////
-                // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-            }
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}"); strcat(buf, str);
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END pckt{} //////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        // ?????????????????????????????????
-        sprintf(str, ","); strcat(buf, str);
-        // ?????????????????????????????????
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION START id{} //////////////////////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "\"" "id" "\"" ":" ); strcat(buf, str); ///
-        sprintf(str, "{"                ); strcat(buf, str); ///
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        
-            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-            sprintf(str,    "\"" "sT"       "\"" ":"            "%lu"                       ,clock_seconds()  ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-            // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-
-            #if (OAR_CONF_JSON_TYPE == 0)
-
-                oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-
-            #endif // (OAR_CONF_JSON_TYPE == 0)
-            #if (OAR_CONF_JSON_TYPE == 1)
-
-                oar_json_extended_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-
-            #endif // (OAR_CONF_JSON_TYPE == 1)
-            #if (OAR_CONF_JSON_TYPE == 2)
-
-                oar_json_compact_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-
-            #endif // (OAR_CONF_JSON_TYPE == 2)
-            #if (OAR_CONF_JSON_TYPE == 3)
-
-                oar_json_micro_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-
-            #endif // (OAR_CONF_JSON_TYPE == 3)
-            #if (OAR_CONF_JSON_TYPE == 4)
-
-                oar_json_tiny_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-
-            #endif // (OAR_CONF_JSON_TYPE == 4)
-            
-            sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
-            sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
-        
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}" ); strcat(buf, str); //
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // SECTION END id{} ////////////////////
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        // ?????????????????????????????????
-        sprintf(str, ","); strcat(buf, str);
-        // ?????????????????????????????????
-
-        sprintf(str,        "\"" "hash"     "\"" ":" "\""    "%u"                   "\""    ,oar_sdbm(buf)    ); strcat(buf, str);
-        
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sprintf(str, "}" ); strcat(buf, str); //
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-
+        sprintf(str,    "\"" "adr"      "\"" ":" "\""    "%s"                   "\""    ,oar_json_lladdr    ); strcat(buf, str);  sprintf(str, ","); strcat(buf, str);
+        sprintf(str,    "\"" "cd"       "\"" ":" "\""    OAR_CONF_MOTE_COLOR    "\""                        ); strcat(buf, str);
     
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}" ); strcat(buf, str); //
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END id{} ////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ?????????????????????????????????
+    sprintf(str, ","); strcat(buf, str);
+    // ?????????????????????????????????
+
+    sprintf(str,        "\"" "hash"     "\"" ":" "\""    "%u"                   "\""    ,oar_sdbm(buf)    ); strcat(buf, str);
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}" ); strcat(buf, str); //
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+}
+
+
 
 
 
@@ -255,13 +247,11 @@ PROCESS(oar_debug_process, "oar debug process");                    // process f
 PROCESS(webserver_process, "webserver process");
 PROCESS(oar_buoy_process, "oar buoy process");
 
-#if (OAR_CONF_DEBUG_FUNCTIONALITY)
+#if (OAR_CONF_DEBUG_FUNCTIONALITY) // TODO: this condition should be mutually exclusive with (OAR_CONF_BUOY_FUNCTIONALITY)
 
     #if (OAR_CONF_JSON == 1) 
 
-
             int counter = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
-        
   
     #endif
 
@@ -271,11 +261,7 @@ PROCESS(oar_buoy_process, "oar buoy process");
 
 #if (OAR_CONF_BUOY_FUNCTIONALITY)
 
-    int counter = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
-
-    
-    
-    
+    int counter = 0; // counts the tcp call events to oar_buoy_process: type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
 
     AUTOSTART_PROCESSES(&oar_buoy_process);
 

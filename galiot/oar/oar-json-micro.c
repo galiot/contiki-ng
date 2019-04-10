@@ -1,3 +1,7 @@
+////////////////////////
+// galiot (2018/2019) //
+////////////////////////
+
 #include "oar-json-micro.h"
 #include "project-conf.h"
 

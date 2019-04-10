@@ -1,3 +1,7 @@
+////////////////////////
+// galiot (2018/2019) //
+////////////////////////
+
 #ifndef OAR_JSON_MICRO_H_
 #define OAR_JSON_MICRO_H_
 
