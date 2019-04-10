@@ -251,7 +251,8 @@ PROCESS(oar_buoy_process, "oar buoy process");
 
     #if (OAR_CONF_JSON == 1) 
 
-            int counter = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
+            int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 22 parts, indexed by index (see declaration below).
+            int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 22 inclusive.
   
     #endif
 
@@ -261,7 +262,10 @@ PROCESS(oar_buoy_process, "oar buoy process");
 
 #if (OAR_CONF_BUOY_FUNCTIONALITY)
 
-    int counter = 0; // counts the tcp call events to oar_buoy_process: type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the piece index.
+    int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 22 parts, indexed by index (see declaration below).
+    int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 22 inclusive.
+    
+    int tcpip_event_counter = 0; // counts the number of TCP/IP events listened by the process (prints as "iteration"). record and index values are calculated by this variable.
 
     AUTOSTART_PROCESSES(&oar_buoy_process);
 
@@ -409,7 +413,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
     printf("\n");
 
     printf("[OAR] > "); console_seq_print('=', 72);
-    printf("[OAR] > ITERATION: %d ", counter); console_seq_print('/', 58);
+    printf("[OAR] > ITERATION: %d ", tcpip_event_counter); console_seq_print('/', 58);
     printf("[OAR] > "); console_seq_print('=', 72);
 
     // ================================================================================================================================================================
@@ -456,7 +460,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
                 printf("\n");
                 
-                oar_json_construct(oar_json_buf, counter % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                oar_json_construct(oar_json_buf, rcrd, ndx); // construct oar_json_buf (function found in ./oar_json_micro.h)
                 oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
 
                 printf("\n");
@@ -469,7 +473,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 printf("[OAR] > "); console_seq_print('+', 26); ////////////
-                printf("[OAR] > STAGING > JSON, QUANTUM %2d\n", counter);
+                printf("[OAR] > STAGING > JSON, QUANTUM %2d\n", ndx); ////
                 printf("[OAR] > "); console_seq_print('+', 26); ////////////
                 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                 strcpy(buffer, oar_json_buf); //////////////////////////////
@@ -910,7 +914,11 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
         SEND_STRING(&s->sout, buffer); // PSOCK_SEND(&s->sout, (uint8_t *)buffer, strlen(buffer)) > Send data.
     }
 
-    counter++; counter %= 2399; // icrease the counter, reset if == 2399
+    tcpip_event_counter++; // icrease the tcpip_event_counter by one, as there must have been a TCP/IP arrived for generate_routes() to run
+    tcpip_event_counter %= 22999; // reset the counter, protect from overflow, 1000 records of 22 indexed seem enough for monitoring
+
+    if (tcpip_event_counter % 23 == 0) { rcrd++; } // every 22 TCP/IP events, increase the record by one (22 parts, the complete json, must have been sent)
+    ndx = tcpip_event_counter % 23; // reset index every 22 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
 
     #if (OAR_CONF_DEV)
 
@@ -1059,13 +1067,17 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                         }
                         else
                         {
-                            oar_json_construct(oar_json_buf, counter % 23); // construct oar_json_buf (function found in ./oar_json_micro.h)
+                            oar_json_construct(oar_json_buf, rcrd, nds); // construct oar_json_buf (function found in ./oar_json_micro.h)
                             oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
                             
                             printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_buf));
 
-                            counter++;
-                            counter %= 2399;
+                            tcpip_event_counter++; // icrease the tcpip_event_counter by one, as there must have been a TCP/IP arrived for generate_routes() to run
+                            tcpip_event_counter %= 22999; // reset the counter, protect from overflow, 1000 records of 22 indexed seem enough for monitoring
+
+                            if (tcpip_event_counter % 23 == 0) { rcrd++; } // every 22 TCP/IP events, increase the record by one (22 parts, the complete json, must have been sent)
+                            ndx = tcpip_event_counter % 23; // reset index every 22 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
+
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             // ENCRYPTION / DECRYPTION ////////////////////////////////////////////////////////

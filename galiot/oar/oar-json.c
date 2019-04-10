@@ -4990,10 +4990,10 @@ static void oar_json_append_pckt(char * buf, int valid, char *error_text, int er
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-void oar_json_construct(char * buf, int i)
+void oar_json_construct(char * buf, int rcrd, int ndx)
 {   
     char str[32];
-    switch (i)
+    switch (ndx)
     {
         
         case 0:
@@ -5003,7 +5003,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5025,7 +5028,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5047,7 +5053,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5069,7 +5078,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5091,7 +5103,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5113,7 +5128,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
             
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5135,7 +5153,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5157,7 +5178,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5179,7 +5203,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5201,7 +5228,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5223,7 +5253,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5245,7 +5278,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5267,7 +5303,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5289,7 +5328,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5311,7 +5353,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5333,7 +5378,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5355,7 +5403,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5377,7 +5428,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5399,7 +5453,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5421,7 +5478,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5443,7 +5503,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5465,7 +5528,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5487,7 +5553,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             if(oar_json_append_id(buf))                                                             {return;}
@@ -5509,7 +5578,10 @@ void oar_json_construct(char * buf, int i)
             oar_json_append_pckt(buf, 1, NULL, 0);
 
             if(oar_json_bridge(buf))                                                                {return;}
-            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
