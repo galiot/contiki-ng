@@ -560,9 +560,9 @@ static int oar_json_append_id(char * buf)
         // ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
 
         oar_json_lladdr_to_str(oar_json_lladdr, &linkaddr_node_addr);
-        sprintf(str,        "\""    "adr"   "\""    ":" "\""    "%s"                        "\""        ,oar_json_lladdr  );  if(seguard(buf, str)){return 1;} strcat(buf, str);   // sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-
-        // sprintf(str,     "\""    "cd"    "\""    ":" "\""    OAR_CONF_MOTE_COLOR         "\""                                    );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+        
+        sprintf(str,        "\""    "adr"   "\""    ":" "\""    "%s"                        "\""        ,oar_json_lladdr    );  if(seguard(buf, str)){return 1;} strcat(buf, str);  sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\""    "cd"    "\""    ":" "\""    OAR_CONF_MOTE_COLOR         "\""                            );  if(seguard(buf, str)){return 1;} strcat(buf, str);
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     sprintf(str, "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str); //
