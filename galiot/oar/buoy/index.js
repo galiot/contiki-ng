@@ -3,6 +3,7 @@ var request = require('request');
 var app = express();
 var http = require('http').Server(app);
 var atob = require('atob');
+const sdbm = require('sdbm');
 
 app.use(express.static('public'));
 
@@ -12,6 +13,9 @@ app.get('/', function(req, res){
 
 http.listen(3000, function(){
     console.log('MOOR MIDDLEWARE > PORT 3000');
+    console.log(sdbm('hello world'));
+
+
 });
 
 function oarCrypt(input) {
@@ -59,12 +63,39 @@ var dataPusher = setInterval(function () {
             try {
                 var obj = JSON.parse(decrypted);
                 console.log("");
-                console.log("VALID JSON");
+                console.log("JSON: VALID");
                 console.log("");
                 console.log(obj);
+                
+                // how to check the hash:
+                // get the hash value from JSON
+                // remove the "hash" keypair from JSON
+                // stringify the JSON
+                // remove last character '}'
+                // concatenate a comma ','
+                // calculate the hash of the string
+                // check with original hash value
+                let hash = obj.hash;
+                // console.log("");
+                // console.log(hash);
+                // console.log("");
+                let goa = obj;
+                // console.log(goa);
+                // console.log("");
+                delete goa.hash;
+                // console.log(goa);
+                // console.log("");
+                goa = JSON.stringify(goa);
+                // console.log(goa);
+                // console.log("");
+                // console.log(goa.length);
+                // console.log("");
+                // console.log(sdbm (goa.substr(0, goa.length -1) + "," ));
+                console.log("");
+                console.log( (sdbm(goa.substr(0, goa.length -1) + "," )) == hash ? "HASH CHECK: SUCCESS" : "HASH CHECK: FAIL" );
             } catch(e) {
                 console.log("");
-                console.error("INVALID JSON");
+                console.error("JSON: INVALID");
                 console.log("");
                 console.error(e); // error in the above string (in this case, yes)!
                 console.log("");

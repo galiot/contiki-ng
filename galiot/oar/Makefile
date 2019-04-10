@@ -11,6 +11,8 @@ PROJECT_SOURCEFILES += oar-json-tiny.c
 
 PROJECT_SOURCEFILES += oar-crypt.c
 PROJECT_SOURCEFILES += oar-base64.c
+PROJECT_SOURCEFILES += oar-hash.c
+
 
 PROJECT_SOURCEFILES += httpd-simple.c
 

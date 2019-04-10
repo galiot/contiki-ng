@@ -11,6 +11,8 @@
 
 #include "net/link-stats.h"
 
+#include "oar-hash.h"
+
 
 
 
@@ -402,8 +404,6 @@ static int seguard(char *buf, char *str)
             // SUBSECTION END pckt{} > error{} ////
             // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
 
-            
-
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         sprintf(str, "}" ); strcat(buf, str);
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -432,9 +432,18 @@ static int seguard(char *buf, char *str)
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}" ); strcat(buf, str); //
-        sprintf(str, "}" ); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END id{} ////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        sprintf(str,    "\"" "hash"         "\"" ":" "\""    "%u"                   "\""    ,oar_sdbm(buf)    ); strcat(buf, str);
+        
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}" ); strcat(buf, str); //
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         return 1;
@@ -585,16 +594,16 @@ static int oar_json_append_id(char * buf)
 
 // {
 // 	"pckt": {
-// 		"valid": true,
-// 		"error": null
+// 		"vld": true,
+// 		"err": null
 // 	},
 // 	"qId": 0,
 // 	"id": {
-// 		"sT": 77,
+// 		"sT": 133,
 // 		"adr": "0012.4b00.0f83.b601"
 // 	},
 // 	"sys": {
-// 		"cV": "Contiki-NG-release/v4.2-298-gbd265d5b0-dirty",
+// 		"cV": "Contiki-NG-release/v4.2-305-g256e7c776-dirty",
 // 		"rt": "RPL Lite",
 // 		"net": "sicslowpan",
 // 		"pId": "0xabcd",
@@ -605,7 +614,8 @@ static int oar_json_append_id(char * buf)
 // 		},
 // 		"nId": 46593,
 // 		"tIad": "fe80::212:4b00:f83:b601"
-// 	}
+// 	},
+// 	"hash": 1623731441
 // }
 
 /* **************************************************************************************************************************************************
@@ -732,18 +742,19 @@ static int oar_json_append_sys(char * buf)
 
 // {
 // 	"pckt": {
-// 		"valid": true,
-// 		"error": null
+// 		"vld": true,
+// 		"err": null
 // 	},
 // 	"qId": 1,
 // 	"id": {
-// 		"sT": 18,
+// 		"sT": 137,
 // 		"adr": "0012.4b00.0f83.b601"
 // 	},
 // 	"dev": {
-// 		"tp": 38,
-// 		"hd": 90
-// 	}
+// 		"tp": 17,
+// 		"hd": 91
+// 	},
+// 	"hash": 3790190472
 // }
 
 static int oar_json_append_dev(char * buf)
@@ -815,7 +826,8 @@ static int oar_json_append_dev(char * buf)
 // 		"rL": 19,
 // 		"rT": 0,
 // 		"rO": 0
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // ENERGEST_TYPE_CPU	    The CPU is active.                  CPU
@@ -938,7 +950,8 @@ static int oar_json_append_nrg(char * buf)
 // 			"cE": 0,
 // 			"pE": 0
 // 		}
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 /* **********************************************************************************
@@ -1099,7 +1112,8 @@ static int oar_json_append_stats_ip(char * buf)
 // 			"tE": 0,
 // 			"cE": 0
 // 		}
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 /* **********************************************************************************
@@ -1257,7 +1271,8 @@ static int oar_json_append_stats_icmp(char * buf)
 // 			"tx": 0,
 // 			"cE": 0
 // 		}
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 /* **********************************************************************************
@@ -1529,7 +1544,8 @@ static int oar_json_append_stats_tcp_udp(char * buf)
 // 			"rx": 0,
 // 			"tx": 0
 // 		}
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 /* **********************************************************************************
@@ -1816,7 +1832,8 @@ static int oar_json_append_ipv6_addr(char * buf)
 // 		}, {
 // 			"ipAddr": "fe80::212:4b00:f82:a600"
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
@@ -2007,7 +2024,8 @@ static int oar_json_append_ipv6_nbrs_ip(char * buf)
 // 		}, {
 // 			"llAddr": "0012.4b00.0f82.a600"
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
@@ -2201,7 +2219,8 @@ static int oar_json_append_ipv6_nbrs_ll(char * buf)
 // 			"router": 0,
 // 			"state": "Reachable"
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Node IPv6 neighbor 1: fe80::212:4b00:f24:8385 <-> 0012.4b00.0f24.8385, router 0, state Reachable 
@@ -2387,7 +2406,8 @@ static int oar_json_append_ipv6_nbrs_states(char * buf)
 // 		"IPv6": true,
 // 		"df": "fe80::212:4b00:f24:8385",
 // 		"lt": "infinite"
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Default route: fe80::212:4b00:f24:8385 (lifetime: infinite)
@@ -2491,7 +2511,8 @@ static int oar_json_append_routing(char * buf)
 // 		"rpl": true,
 //      "totLs" : 0,
 // 		"ls": ["null", "null", "null", "null", "null"]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // |---> Routing links (%u in total): ["&child_ipaddr ""/(DODAG root) <---| to &parent_ipaddr (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"]
@@ -2770,7 +2791,8 @@ static int oar_json_append_routing_link_sources(char * buf)
 // 		"rpl": true,
 //      "totLs" : 0,
 // 		"ls": ["null", "null", "null", "null", "null"]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Routing links (%u in total): ["&child_ipaddr ""/(DODAG root) |---> to &parent_ipaddr (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"] <---|
@@ -3044,7 +3066,8 @@ static int oar_json_append_routing_link_destinations(char * buf)
 // 		"maxRtsN0": false,
 // 		"totEs": null,
 // 		"es": ["null", "null", "null", "null", "null"]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // |---> Routing entries (%u in total): ["-- &route->ipaddr <---| via uip_ds6_route_nexthop(route) (lifetime: infinite/%lu seconds)", "null", "null", "null", "null"]
@@ -3306,7 +3329,8 @@ static int oar_json_append_routing_entry_routes(char * buf)
 // 		"maxRtsN0": false,
 // 		"totEs": null,
 // 		"es": ["null", "null", "null", "null", "null"]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // Routing entries (%u in total): ["&route->ipaddr |---> via uip_ds6_route_nexthop(route) (lifetime: infinite/%lu seconds) <---| ", "null", "null", "null", "null"]
@@ -3570,7 +3594,8 @@ static int oar_json_append_routing_entry_vias(char * buf)
 // 		"hRkI": 128,
 // 		"dLt": 1800,
 // 		"dtsnO": 240
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP  %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:  %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
@@ -3710,7 +3735,8 @@ static int oar_json_append_rpl_status(char * buf)
 // 			"lS": 241,
 // 			"lA": 241
 // 		}
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP    %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:    %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
@@ -3919,7 +3945,8 @@ static int oar_json_append_rpl_status_dag(char * buf)
 // 		"min": 12,
 // 		"max": 20,
 // 		"red": 0
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL status: -- Instance: None/   %u -- DAG   root/node -- DAG:   %s, version   %u -- Prefix: %s/ %u -- MOP    %s -- OF:   %s -- Hop rank increment:   %u -- Default lifetime: %lu seconds -- State:   %s -- Preferred parent:    %s  (last DTSN:    %u)/None -- Rank:   %u -- Lowest rank:  %u (    %u) -- DTSN out:    %u -- DAO sequence: last sent   %u, last acked  %u -- Trickle timer: current    %u, min     %u, max     %u, redundancy  %u
@@ -4037,7 +4064,8 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
 // 		}, {
 // 			"ad": "fe80::212:4b00:f82:a600"
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL neighbor 1/3: |---> fe80::212:4b00:f24:8385 <---|  128,   128 =>   256 --  7 rbafp (last tx 0 min ago)
@@ -4250,7 +4278,8 @@ static int oar_json_append_rpl_neighbor(char * buf)
 // 			"lM": 128,
 // 			"rkN": 384
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL neighbor 1/3: fe80::212:4b00:f24:8385 |--->  128,   128 =>   256 <---| --  7 rbafp (last tx 0 min ago)
@@ -4341,8 +4370,8 @@ static int oar_json_append_rpl_neighbor_ranks(char * buf)
                         // {{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
                         sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             
-                            sprintf(str, "\"" "rk"  "\"" ":"    "%5u"   ,nbr->rank                                                                                                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
-                            sprintf(str, "\"" "lM"  "\"" ":"    "%5u"   ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "rk"  "\"" ":"    "%u"    ,nbr->rank                                                                                                           ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "lM"  "\"" ":"    "%u"    ,rpl_neighbor_get_link_metric(nbr)                                                                                   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             sprintf(str, "\"" "rkN" "\"" ":"    "%u"    ,rpl_neighbor_rank_via_nbr(nbr)                                                                                      ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
                             
                         sprintf(str,    "}" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -4469,7 +4498,8 @@ static int oar_json_append_rpl_neighbor_ranks(char * buf)
 // 			"a": true,
 // 			"p": false
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL neighbor 1/3: fe80::212:4b00:f24:8385  128,   128 =>   256 |---> --  7 rbafp <---| (last tx 0 min ago)
@@ -4560,7 +4590,7 @@ static int oar_json_append_rpl_neighbor_values(char * buf)
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         sprintf(str, "{" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-                            sprintf(str, "\"" "fr"  "\"" ":"    "%2u"   ,oar_json_rpl_nbr_stats != NULL ? oar_json_rpl_nbr_stats->freshness : 0                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str, "\"" "fr"  "\"" ":"    "%u"    ,oar_json_rpl_nbr_stats != NULL ? oar_json_rpl_nbr_stats->freshness : 0                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                             sprintf(str, "\"" "r"   "\"" ":"    "%s"    ,(nbr->rank == ROOT_RANK) ? "true" : "false"                                                                        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
                             sprintf(str, "\"" "b"   "\"" ":"    "%s"    ,nbr == oar_json_rpl_nbr_best ? "true" : "false"                                                                    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -4686,7 +4716,8 @@ static int oar_json_append_rpl_neighbor_values(char * buf)
 // 			"lTx": null,
 // 			"bS": null
 // 		}, null, null]
-// 	}
+// 	},
+// 	"hash": 3790190472
 // }
 
 // RPL neighbor 1/3: fe80::212:4b00:f24:8385  128,   128 =>   256 --  7 rbafp |---> (last tx 0 min ago) <---|
@@ -4963,451 +4994,523 @@ void oar_json_construct(char * buf, int i)
         
         case 0:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_sys(buf))                                        {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_sys(buf))                                                            {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 1:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_dev(buf))                                        {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_dev(buf))                                                            {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
         
         case 2:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_nrg(buf))                                        {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_nrg(buf))                                                            {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 3:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_stats_ip(buf))                                   {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_stats_ip(buf))                                                       {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 4:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_stats_icmp(buf))                                 {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_stats_icmp(buf))                                                     {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 5:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
             
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_stats_tcp_udp(buf))                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_stats_tcp_udp(buf))                                                  {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 6:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_stats_nd6(buf))                                  {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_stats_nd6(buf))                                                      {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 7:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_ipv6_addr(buf))                                  {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_ipv6_addr(buf))                                                      {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 8:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_ipv6_nbrs_ip(buf))                               {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_ipv6_nbrs_ip(buf))                                                   {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
         
         case 9:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_ipv6_nbrs_ll(buf))                               {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_ipv6_nbrs_ll(buf))                                                   {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 10:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_ipv6_nbrs_states(buf))                           {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_ipv6_nbrs_states(buf))                                               {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 11:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_routing(buf))                                    {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_routing(buf))                                                        {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 12:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_routing_link_sources(buf))                       {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_routing_link_sources(buf))                                           {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 13:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_routing_link_destinations(buf))                  {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_routing_link_destinations(buf))                                      {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 14:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_routing_entry_routes(buf))                       {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_routing_entry_routes(buf))                                           {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 15:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_routing_entry_vias(buf))                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_routing_entry_vias(buf))                                             {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 16:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_status(buf))                                 {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_status(buf))                                                     {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 17:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_status_dag(buf))                             {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_status_dag(buf))                                                 {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 18:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_status_trickle_timer(buf))                   {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_status_trickle_timer(buf))                                       {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 19:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_neighbor(buf))                               {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_neighbor(buf))                                                   {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 20:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_neighbor_ranks(buf))                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_neighbor_ranks(buf))                                             {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 21:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_neighbor_values(buf))                        {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_neighbor_values(buf))                                            {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
 
         case 22:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_id(buf))                                         {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
 
-            if(oar_json_bridge(buf))                                            {return;}
-            if(oar_json_append_rpl_neighbor_parens(buf)){return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_neighbor_parens(buf))                                            {return;}
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
             
             break;
         
         default:
             oar_json_init(buf);
-            if(oar_json_enter(buf))                                             {return;}
+            if(oar_json_enter(buf))                                                                 {return;}
 
             oar_json_append_pckt(buf, 1, NULL, 0);
 
-            if(oar_json_bridge(buf))                                            {return;}
-            sprintf(str, "\"" "qId" "\"" ":" "%d", i); if(seguard(buf, str))    {return;} strcat(buf, str);
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "qId"     "\"" ":" "%d", i                ); if(seguard(buf, str))    {return;} strcat(buf, str);
 
-            if(oar_json_exit(buf))                                              {return;}
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
 
             break;
     }

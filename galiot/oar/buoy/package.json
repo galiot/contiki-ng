@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "latest",
     "request": "latest",
-    "atob": "latest"
+    "atob": "latest",
+    "sdbm": "latest"
   }
 }

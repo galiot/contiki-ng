@@ -74,6 +74,7 @@
 
 #include "oar-crypt.h"              // for modified XOR encryption
 #include "oar-base64.h"             // for modified base64 encoding
+#include "oar-hash.h"               // for modified sdbm hashing
 
 // ---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>---<|>-
 
@@ -105,18 +106,19 @@ char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, crea
     // ----------------------------------------------------------------------------
 
     // {
-    // 	"pckt": {
-    // 		"valid": false,
-    // 		"error": {
-    // 			"text": "JSON SEGFUALT",
-    // 			"code": 604
-    // 		}
-    //  },
-    // 	"id": {
-    // 		"sT": 77,
-    // 		"adr": "0012.4b00.0f83.b601",
-    //      "cd": "RED"
-    // 	}
+    //     "pckt": {
+    //         "vld": false,
+    //         "err": {
+    //             "cd": 111,
+    //             "txt": "JSON TYPE NOT SUITABLE FOR TCP/IP STACK: EXTENDED"
+    //         }
+    //     },
+    //     "id": {
+    //         "sT": 23,
+    //         "adr": "0012.4b00.0f83.b601",
+    //         "cd": "RED"
+    //     },
+    //     "hash": "2350848843"
     // }
     
     void oar_json_error_construct(char *buf, int valid, char *error_text, int error_code)
@@ -213,9 +215,18 @@ char oar_json_lladdr[UIPLIB_IPV6_MAX_STR_LEN]; // holds link local address, crea
         
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         sprintf(str, "}" ); strcat(buf, str); //
-        sprintf(str, "}" ); strcat(buf, str);
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // SECTION END id{} ////////////////////
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // ?????????????????????????????????
+        sprintf(str, ","); strcat(buf, str);
+        // ?????????????????????????????????
+
+        sprintf(str,        "\"" "hash"     "\"" ":" "\""    "%u"                   "\""    ,oar_sdbm(buf)    ); strcat(buf, str);
+        
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sprintf(str, "}" ); strcat(buf, str); //
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
 
