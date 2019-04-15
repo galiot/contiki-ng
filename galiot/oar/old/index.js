@@ -1,9 +1,15 @@
-////////////////////////
-// galiot (2018/2019) //
-////////////////////////
+//////////////////////////////
+// galiot       (2018/2019) //
+//////////////////////////////
+// galiot/jib   (2018) ///////
+// galiot/oar   (2019) ///////
+// galiot/buoy  (2018/2019) //
+// galiot/cargo (2019) ///////
+// galiot/rope  (2019) /////// 
+//////////////////////////////
 
-var express = require('express');
-var request = require('request');
+const express = require('express');
+const request = require('request');
 var app = express();
 var http = require('http').Server(app);
 var atob = require('atob');
@@ -12,11 +18,11 @@ const sdbm = require('sdbm');
 app.use(express.static('public'));
 
 app.get('/', function(req, res){
-    res.send('WebSense DB');
+    res.send('BUOY');
 });
 
 http.listen(3000, function(){
-    console.log('MOOR MIDDLEWARE > PORT 3000');
+    console.log('BUOY MIDDLEWARE > PORT 3000');
     console.log(sdbm('hello world'));
 
 
