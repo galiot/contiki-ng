@@ -1,0 +1,21 @@
+{
+  "name": "buoy",
+  "version": "1.0.0",
+  "description": "buoy",
+  "author": "galiot",
+  "main": "buoy.js",
+  "license": "MIT",
+  "privete": "false",
+  "dependencies": {
+    "atob": "^2.1.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "helmet": "^3.16.0",
+    "mongoose": "^5.5.1",
+    "mongoose-paginate": "^5.0.3",
+    "morgan": "^1.9.1",
+    "request": "^2.88.0",
+    "sdbm": "^1.2.0"
+  }
+}

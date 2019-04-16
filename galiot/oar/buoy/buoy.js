@@ -1,18 +1,17 @@
-//////////////////////////////
-// galiot       (2018/2019) //
-//////////////////////////////
-// galiot/jib   (2018) ///////
-// galiot/oar   (2019) ///////
-// galiot/buoy  (2018/2019) //
-// galiot/cargo (2019) ///////
-// galiot/rope  (2019) /////// 
-//////////////////////////////
+/////////////////////////////////////////////
+// galiot   (2018/2019) /////////////////////
+/////////////////////////////////////////////
+// jib      (2018) /////// backend (light) //
+// oar      (2019) /////// backend (heavy) //
+// -------------------- // --------------- //
+// buoy     (2018/2019) // middleware ///////
+// bridge   (2019) /////// frontend /////////
+// cargo    (2019) /////// database /////////
+/////////////////////////////////////////////
 
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// require() //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const atob = require('atob');
 const bodyParser = require("body-parser");
@@ -25,11 +24,12 @@ const mongoosePaginate = require('mongoose-paginate');
 const morgan = require("morgan");
 const sdbm = require('sdbm');
 
+// create app using express
+const app = express();
 
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MONGODB CREDENTIALS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // configuration (logic config for development or production)
 if(process.env.NODE_ENV === 'production') {
@@ -48,25 +48,14 @@ if(process.env.NODE_ENV === 'production') {
 
   }
 
-
-// create app using express
-const app = express();
-
-
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MONGOOSE SCHEMAS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // With Mongoose, everything is derived from a Schema. 
 // Let's get a reference to it and define our system.
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var systemSchema = new mongoose.Schema({
     packet: {
@@ -100,6 +89,8 @@ var systemSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var deviceSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -122,6 +113,8 @@ var deviceSchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var energySchema = new mongoose.Schema({
     packet: {
@@ -151,6 +144,8 @@ var energySchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var networkIpSchema = new mongoose.Schema({
     packet: {
@@ -186,6 +181,8 @@ var networkIpSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var networkIcmpSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -214,6 +211,8 @@ var networkIcmpSchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var transportSchema = new mongoose.Schema({
     packet: {
@@ -256,6 +255,8 @@ var transportSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var discoverySchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -282,6 +283,8 @@ var discoverySchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var nodeIPv6ddressSchema = new mongoose.Schema({
     nodeIPv6address: String
@@ -310,9 +313,13 @@ var ipAddrSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var nodeIPv6neighborIpAddressSchema = new mongoose.Schema({
     nodeIPv6neighborIpAddress: String
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var ipNeighborsIpAddrSchema = new mongoose.Schema({
     packet: {
@@ -337,9 +344,13 @@ var ipNeighborsIpAddrSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var nodeIPv6neighborLlAddressSchema = new mongoose.Schema({
     nodeIPv6neighborLlAddress: String
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var ipNeighborsLlAddrSchema = new mongoose.Schema({
     packet: {
@@ -364,10 +375,14 @@ var ipNeighborsLlAddrSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var nodeIPv6neighborInfoSchema = new mongoose.Schema({
     nodeIPv6neighborRouter: Number,
     nodeIPv6neighborState: String
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var ipNeighborsInfoSchema = new mongoose.Schema({
     packet: {
@@ -391,6 +406,8 @@ var ipNeighborsInfoSchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var routeSchema = new mongoose.Schema({
     packet: {
@@ -416,10 +433,14 @@ var routeSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var linkSourceSchema = new mongoose.Schema({
     linkSourceAddr: String,
     dodagRoot: Boolean
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var routingLinksSourcesSchema = new mongoose.Schema({
     packet: {
@@ -446,10 +467,14 @@ var routingLinksSourcesSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var linkDestinationSchema = new mongoose.Schema({
     linkDestinationAddr: String,
     lifetime: mongoose.Schema.Types.Mixed
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var routingLinksDestinationsSchema = new mongoose.Schema({
     packet: {
@@ -476,9 +501,13 @@ var routingLinksDestinationsSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var entryRouteSchema = new mongoose.Schema({
     entryRouteAddr: String
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var routingEntriesRoutesSchema = new mongoose.Schema({
     packet: {
@@ -505,10 +534,14 @@ var routingEntriesRoutesSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var entryViaSchema = new mongoose.Schema({
     entryViaAddr: String,
     lifetime: mongoose.Schema.Types.Mixed
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var routingEntriesViasSchema = new mongoose.Schema({
     packet: {
@@ -534,6 +567,8 @@ var routingEntriesViasSchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplStatusSchema = new mongoose.Schema({
     packet: {
@@ -562,6 +597,8 @@ var rplStatusSchema = new mongoose.Schema({
     },
     update: { type: Date, default: Date.now }
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplStatusDagSchema = new mongoose.Schema({
     packet: {
@@ -599,6 +636,8 @@ var rplStatusDagSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var rplStatusTrickleTimerSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -626,9 +665,13 @@ var rplStatusTrickleTimerSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var rplAddressSchema = new mongoose.Schema({
     rplAddress: String
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplNeighborAddrSchema = new mongoose.Schema({
     packet: {
@@ -655,11 +698,15 @@ var rplNeighborAddrSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var rplRanksSchema = new mongoose.Schema({
     rplNeighborRank: Number,
     rplNeighborLinkMetric: Number,
     rplNeighborRankViaNeighbor: Number
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplNeighborRanksSchema = new mongoose.Schema({
     packet: {
@@ -686,6 +733,8 @@ var rplNeighborRanksSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var rplValuesSchema = new mongoose.Schema({
     rplNeighborStatsFreshness: Number,
     rplNeighborRootRank: Boolean,
@@ -694,6 +743,8 @@ var rplValuesSchema = new mongoose.Schema({
     rplNeighborLinkStatsFresh: Boolean,
     rplNeighborDagPreferredParent: Boolean,
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplNeighborValuesSchema = new mongoose.Schema({
     packet: {
@@ -720,10 +771,14 @@ var rplNeighborValuesSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var rplParensSchema = new mongoose.Schema({
     rplNeighborLastTXtimeSeconds: Number,
     rplNeighborBetterParentSinceSeconds: Number
 });
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 var rplNeighborParensSchema = new mongoose.Schema({
     packet: {
@@ -750,6 +805,8 @@ var rplNeighborParensSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var errorPacketSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -770,8 +827,9 @@ var errorPacketSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MONGOOSE MODELS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // next step is compiling our schema into a Model.
 
@@ -827,29 +885,21 @@ var RplNeighborParens           = mongoose.model('RplNeighborParens',           
 
 var ErrorPacket                = mongoose.model('ErrorPacket',                  errorPacketSchema);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MONGOOSE CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // The first thing we need to do is include mongoose in our project 
 // and open a connection to the test database on our locally running instance of MongoDB.
 
 // Connect to the MongoDB
 mongoose.connect(MONGO_URI, {user: MONGO_USER, pass: MONGO_PASSWORD, useNewUrlParser: true}).then(
-    () => console.log('connected to Cargo'),
+    () => {
+        console.log("");
+        console.log('+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-');
+        console.log('connected to cargo (mongodb://localhost:27017/cargo)');
+        console.log('+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-');
+    },
     (err) => console.log(err)
 )
 
@@ -860,7 +910,6 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-    
     // we're connected!
 });
 
@@ -900,7 +949,7 @@ app.use(morgan("dev"));
 
 
 
-const request = require('request');
+
 var http = require('http').Server(app);
 
 
@@ -909,14 +958,19 @@ app.get('/', function(req, res){
 });
 
 app.listen(PORT, function() {
+    console.log("");
+    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
     console.log('buoy (listening on port: ' + PORT + ')');
+    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
 })
 
 
 
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ENCRYTION/DECRYPTION ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function oarCrypt(input) {
 	var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
@@ -929,84 +983,127 @@ function oarCrypt(input) {
 	return output.join("");
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// moor() FUNCTION: PROCESS JSON FROM OAR ---> SAVE TO CARGO //////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
+const request = require('request');
 
 // yellow:  fd00::212:4b00:f24:8385
 // red:     fd00::212:4b00:f83:b601
 // green:   fd00::212:4b00:f82:a600
 // blue:    fd00::212:4b00:f82:da03
 
-var dataPusher = setInterval(function () {
-
+function moor() {
     request.get('http://[fd00::212:4b00:f83:b601]/',function(err, res, body ){ 
         
-    if(err) {
-            console.log(err);
-            return;
-        } 
+        if(err) {
+                console.log(err);
+                return;
+            } 
+            
         
+        console.log("");
+        console.log('<--- <--- <--- <--- <--- <--- <--- <--- <--- <--- <---');
+        console.log('get JSON  <--- oar (http://[fd00::212:4b00:f83:b601]/)');
+        console.log('<--- <--- <--- <--- <--- <--- <--- <--- <--- <--- <---');
+        
+        // ----------------------------------------------------------------------------------------
+        // RECEIVE JSON ///////////////////////////////////////////////////////////////////////////
+        // ----------------------------------------------------------------------------------------
+
+        // print the current time and date 
+        // to console for debugging purposes
+
         console.log("");
         var d = new Date(); // for now
         console.log(d);
+        
+        // print the base64 encoded json received 
+        // to console for debugging purposes
+
         console.log("");
         console.log(body);
-        console.log("");
 
+        // ----------------------------------------------------------------------------------------
+        // BASE64 DECODE JSON /////////////////////////////////////////////////////////////////////
+        // ----------------------------------------------------------------------------------------
+        
         var decoded = atob(body.toString());
+
+        // print the base64 decoded json 
+        // to console for debugging purposes
+
         console.log("");
         console.log(decoded);
 
+        // ----------------------------------------------------------------------------------------
+        // XOR DECRYPT JSON ///////////////////////////////////////////////////////////////////////
+        // ----------------------------------------------------------------------------------------
+        
         // var decrypted = oarCrypt(body.toString());
         var decrypted = oarCrypt(decoded);
         
+        // print the base64 decoded json 
+        // to console for debugging purposes
+        
         console.log("");
         console.log(decrypted);
-        
+            
         if(body){
             try {
                 
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                // JSON PARSE: OK /////////////////////////////////////////////////////////////////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                
                 var obj = JSON.parse(decrypted);
+                
+                // print that json parsed successfully 
+                // to console for debugging purposes
+
                 console.log("");
                 console.log("JSON: VALID");
+
+                // print the object that created parsing 
+                // to console for debugging purposes
+                
                 console.log("");
                 console.log(obj);
                 
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                // CHECKSUM CHECK /////////////////////////////////////////////////////////////////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                 
-                // how to check the hash:
-                // get the hash value from JSON
-                // remove the "hash" keypair from JSON
-                // stringify the JSON
-                // remove last character '}'
-                // concatenate a comma ','
-                // calculate the hash of the string
-                // check with original hash value
+                /////////////////////////////////////////
+                // how to recalculate the checksum:    //
+                // ----------------------------------- //
+                // get the hash value from JSON        //
+                // remove the "hash" keypair from JSON //
+                // stringify the JSON                  //
+                // remove last character '}'           //
+                // concatenate a comma ','             //
+                // calculate the hash of the string    //
+                // check with original hash value      //
+                /////////////////////////////////////////
+
                 let payloadHash = obj.hash;
-                // console.log("");
-                // console.log(hash);
-                // console.log("");
                 let goa = obj;
-                // console.log(goa);
-                // console.log("");
                 delete goa.hash;
-                // console.log(goa);
-                // console.log("");
                 goa = JSON.stringify(goa);
-                // console.log(goa);
-                // console.log("");
-                // console.log(goa.length);
-                // console.log("");
-                // console.log(sdbm (goa.substr(0, goa.length -1) + "," ));
+                
+                // print if checksum matches the inlcuded one 
+                // to console for debugging purposes
+
                 console.log("");
                 console.log( (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? "CHECKSUM: VALID" : "CHECKSUM: INVALID" );
                 console.log('PAYLOAD HASH: ' + payloadHash);
 
-
                 if (obj.pckt.vld == true) {
+
+                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+                    // VALID PACKET TO CARGO /////////////////////////////////
+                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
 
                     switch(obj.ndx) {
 
@@ -1058,6 +1155,8 @@ var dataPusher = setInterval(function () {
 
                             break;
                         
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                        
                         case 1:
                             var device = new Device({
                                 packet: {
@@ -1095,6 +1194,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 2:
                             var energy = new Energy({
@@ -1139,6 +1240,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+                        
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 3:
                             var networkIp = new NetworkIp({
@@ -1188,6 +1291,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 4:
                             var networkIcmp = new NetworkIcmp({
@@ -1232,6 +1337,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 5:
                             var transport = new Transport({
@@ -1289,6 +1396,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 6:
                             var discovery = new Discovery({
                                 packet: {
@@ -1331,6 +1440,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 7:
                             var ipAddr = new IpAddr({
                                 packet: {
@@ -1370,6 +1481,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 8:
                             var ipNeighborsIpAddr = new IpNeighborsIpAddr({
@@ -1417,6 +1530,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 9:
                             var ipNeighborsLlAddr = new IpNeighborsLlAddr({
                                 packet: {
@@ -1462,6 +1577,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 10:
                             var ipNeighborsInfo = new IpNeighborsInfo({
@@ -1509,6 +1626,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 11:
                             var route = new Route({
                                 packet: {
@@ -1547,6 +1666,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 12:
                             var routingLinksSources = new RoutingLinksSources({
@@ -1596,6 +1717,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 13:
                             var routingLinksDestinations = new RoutingLinksDestinations({
                                 packet: {
@@ -1643,6 +1766,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 14:
                             var routingEntriesRoutes = new RoutingEntriesRoutes({
@@ -1692,6 +1817,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 15:
                             var routingEntriesVias = new RoutingEntriesVias({
                                 packet: {
@@ -1740,6 +1867,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 16:
                             var rplStatus = new RplStatus({
                                 packet: {
@@ -1782,6 +1911,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 17:
                             var rplStatusDag = new RplStatusDag({
@@ -1834,6 +1965,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 18:
                             var rplStatusTrickleTimer = new RplStatusTrickleTimer({
                                 packet: {
@@ -1875,6 +2008,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 19:
                             var rplNeighborAddr = new RplNeighborAddr({
@@ -1924,6 +2059,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 20:
                             var rplNeighborRanks = new RplNeighborRanks({
                                 packet: {
@@ -1971,6 +2108,8 @@ var dataPusher = setInterval(function () {
                             });
 
                             break;
+
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 21:
                             var rplNeighborValues = new RplNeighborValues({
@@ -2020,6 +2159,8 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         case 22:
                             var rplNeighborParens = new RplNeighborParens({
                                 packet: {
@@ -2068,11 +2209,18 @@ var dataPusher = setInterval(function () {
 
                             break;
 
+                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
                         default: 
                             console.log("");
                             console.log("ERROR: INDEX OUT OF RANGE");
                     }
                 } else {
+
+                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+                    // ERROR PACKET TO CARGO /////////////////////////////////
+                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+
                     console.log("");
                     console.log('ERROR RECIEVED FROM OAR');
 
@@ -2109,12 +2257,29 @@ var dataPusher = setInterval(function () {
                     });
                 }
             } catch(e) {
+
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                // JSON PARSE: FAIL ///////////////////////////////////////////////////////////////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+                // print that json failed to parse 
+                // to console for debugging purposes
+
                 console.log("");
                 console.error("JSON: INVALID");
-                console.log("");
+
+                // print the error that caused parse to fail 
+                // to console for debugging purposes
+
                 console.error(e); // error in the above string (in this case, yes)!
                 console.log("");
             }
         }
-    }); 
-}, 5000);
+    });
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// moor() EVERY 5000 ms ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+setInterval(moor, 5000);
