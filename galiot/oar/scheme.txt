@@ -873,10 +873,9 @@ id   >
 ROUTING ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ============================================================================================================
 dSt  >
-     > IPv6          ipv6                bool        
-     > ic    >
-             > df    defaultRoute        %lu     uip_ds6_defrt_lookup(uip_ds6_defrt_choose()
-             > lt    lifetime            %s      (unsigned long)default_route->lifetime.interval          
+     > IPv6     ipv6                bool        
+     > df       defaultRoute        %lu     uip_ds6_defrt_lookup(uip_ds6_defrt_choose()
+     > lt       lifetime            %s      (unsigned long)default_route->lifetime.interval          
 
 </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 
@@ -1081,7 +1080,7 @@ rtLs >
      > IPv6          ipv6                                                    bool
      > maxRtsN0      maxRoutesNon0                                           bool
      > totEs         totalRoutingEntries                                     %u      uip_ds6_route_num_routes())
-     > ls            routingEntries    [
+     > es            routingEntries    [
                                          > rt        routingEntryIPaddr      %s      &route->ipaddr
                  
                                          null                                null
@@ -1226,7 +1225,7 @@ rSt  >
 
      > mop       modeOfOperation     %s     oar_json_rpl_mop_to_str(curr_instance.mop
      > of        objectiveCodePoint  %s     oar_json_rpl_ocp_to_str(curr_instance.of->ocp
-     > hRkI      hopRankIncrement    %s     curr_instance.min_hoprankinc   ICMP packets with a wrong type
+     > hRkI      hopRankIncrement    %u     curr_instance.min_hoprankinc   ICMP packets with a wrong type
      > dLt       defaultLifetime     %s     RPL_LIFETIME(curr_instance.default_lifetime) 
      > dtsnO     dtsnOut             %lu    curr_instance.dtsn_out
 
@@ -1317,7 +1316,7 @@ rStDag   >
          > lRk           dagLowestRank           %u      curr_instance.dag.lowest_rank  
          > mRkI          maxRankIncrement        %u      curr_instance.max_rankinc 
          > dao   >
-                 > ls    daoSequenceLastSent     %u      curr_instance.dag.dao_last_seqno 
+                 > lS    daoSequenceLastSent     %u      curr_instance.dag.dao_last_seqno 
                  > lA    daoSequenceLastAcked    %u      curr_instance.dag.dao_last_acked_seqno 
 
 </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
@@ -1386,10 +1385,10 @@ rSttt    >
          > rL        rplLite                     bool        
          > iId       instance                    %s      curr_instance.instance_id      
 
-         > cur       trickleTimerCurrent         %s      curr_instance.dag.dio_intcurrent
-         > min       trickleTimerMin             %s      curr_instance.dio_intmin 
+         > cur       trickleTimerCurrent         %u      curr_instance.dag.dio_intcurrent
+         > min       trickleTimerMin             %u      curr_instance.dio_intmin 
          > max       trickleTimerMax             %u      curr_instance.dio_intmin + curr_instance.dio_intdoubl   
-         > red       trickleTimerRedundancy      %s      curr_instance.dio_redundancy  
+         > red       trickleTimerRedundancy      %u      curr_instance.dio_redundancy  
 
 </></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></></>
 
