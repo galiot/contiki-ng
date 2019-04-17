@@ -189,8 +189,28 @@
 //---------------------------------------------------------------------------
 
 // enable/disable on-board device functionality
-// leds, buttons, sensors, etc.
+// leds, buttons, sensors: LED1 for BUOY, LED2 for webserver
 #define OAR_CONF_DEV                                                        1                   // (ON:1||OFF: 0)
+
+// time in seconds for pressing button 1 to enable BUOY process
+#define OAR_CONF_DEV_TIME                                                   5                   // SECONDS
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+// {*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*
+// NUKE FUNCRTIONALITY //////////////////////////////////////////////////////
+// {*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*}^{*
+
+// hack into httpd-simple.c and check the GET requests
+// find the requested URI component and set BUOY to send
+// the only corresponding json resource --> adjast API!
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// THIS DISABLES THE INCREMENTING COUNTER THAT CYCLES THROUG THE JSON PARTS
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// enbale/disable nuke functionality, across the board
+#define OAR_CONF_NUKE                                                       1                   // (ON:1||OFF: 0) ---> DISABLE IF (OAR_CONF_DEBUG_FUNCTIONALITY)
 
 
 

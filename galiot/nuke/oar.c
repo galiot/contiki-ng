@@ -429,6 +429,13 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
         // ------------------------------------------------------------------------------------------------------------------------
 
         #if (OAR_CONF_JSON_TYPE == 0) // use the quantized json (./oar-json-quantized.h) [project-conf.h]
+
+            #if (OAR_CONF_NUKE)
+
+                printf("\n");
+                printf("[OAR] > [NUKE] > NUKE ENABLED! \n");
+
+            #endif // (OAR_CONF_NUKE)
                     
             char *oar_json_buf = (char *)malloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); // allocate OAR_CONF_JSON_BUF_SIZE + 1 character size (*+1 for '\0' character) in heap memory for storing oar_json_buf > char *oar_json_buf = (char *)heapmem_alloc((OAR_CONF_JSON_BUF_SIZE+1)*sizeof(char)); (for platform specific os/lib/heapmem.h)
 
@@ -461,9 +468,19 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
                 // printf("[OAR] > "); console_seq_print('-', 5);
 
                 printf("\n");
+
+                #if (OAR_CONF_NUKE)
+                    
+                    oar_json_construct(oar_json_buf, rcrd, uri); // construct oar_json_buf (function found in ./oar_json.h) >>>!>>> uri is created in httpd-simple.c
+
+                #else // (OAR_CONF_NUKE)
+
+                    oar_json_construct(oar_json_buf, rcrd, ndx); // construct oar_json_buf (function found in ./oar_json.h)
+
+                #endif // (OAR_CONF_NUKE)
                 
-                oar_json_construct(oar_json_buf, rcrd, ndx); // construct oar_json_buf (function found in ./oar_json_micro.h)
-                oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json_micro.h)
+                
+                oar_json_print(oar_json_buf); // print oar_json_buf (function found in ./oar_json.h)
 
                 printf("\n");
                 
@@ -473,13 +490,44 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
                 printf("\n");
 
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                printf("[OAR] > "); console_seq_print('+', 26); ////////////
-                printf("[OAR] > STAGING > JSON, QUANTUM %2d\n", ndx); ////
-                printf("[OAR] > "); console_seq_print('+', 26); ////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                strcpy(buffer, oar_json_buf); //////////////////////////////
-                // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                #if (OAR_CONF_NUKE)
+
+                    if (uri < 0 || uri > 22)
+                    {
+                        oar_json_error_construct(error_json, 0, "NUKE RESOURCE NOT AVAILABLE", 900);
+
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        printf("[OAR] > [NUKE] > "); console_seq_print(':', 34); ///////
+                        printf("[OAR] > [NUKE] > STAGING UNAIVALABLE RESOURCE ERROR\n");
+                        printf("[OAR] > [NUKE] > "); console_seq_print(':', 34); ///////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        strcpy(buffer, error_json); ////////////////////////////////////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    }
+                    else
+                    {
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        printf("[OAR] > [NUKE] > "); console_seq_print('+', 26); ////////////
+                        printf("[OAR] > [NUKE] > STAGING > JSON, QUANTUM %2d\n", uri); //////
+                        printf("[OAR] > [NUKE] > "); console_seq_print('+', 26); ////////////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                        strcpy(buffer, oar_json_buf); ///////////////////////////////////////
+                        // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    }
+
+                #else // (OAR_CONF_NUKE)
+
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    printf("[OAR] > "); console_seq_print('+', 26); ////////////
+                    printf("[OAR] > STAGING > JSON, QUANTUM %2d\n", ndx); ////
+                    printf("[OAR] > "); console_seq_print('+', 26); ////////////
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    strcpy(buffer, oar_json_buf); //////////////////////////////
+                    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                
+                #endif // (OAR_CONF_NUKE)
+
+                
             }
 
             free(oar_json_buf); // release the memory allocated for oar_json_buf > heapmem_free(oar_json_buf); (for platform specific os/lib/heapmem.h)

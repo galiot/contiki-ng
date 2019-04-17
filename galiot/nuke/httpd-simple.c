@@ -308,19 +308,18 @@ static PT_THREAD(handle_input(struct httpd_state *s))
     #else /* URLCONV */
 
         printf("\n");
-        printf("[OAR] > GET %s <\n", s->inputbuf);
+        printf("[OAR] > [NUKE] > </></></></></></></></></></></></></></></></></></></></></>< \n");
+        printf("[OAR] > [NUKE] > GET %.3s ::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n", s->inputbuf);
+        printf("[OAR] > [NUKE] > </></></></></></></></></></></></></></></></></></></></></>< \n");
+        printf("[OAR] > [NUKE] > URI[0]: %c ::::::::::::::::::::::::::::::::::::::::::::::::::::::\n", s->inputbuf[0]);
+        printf("[OAR] > [NUKE] > URI[1]: %c ::::::::::::::::::::::::::::::::::::::::::::::::::::::\n", s->inputbuf[1]);
+        printf("[OAR] > [NUKE] > URI[2]: %c ::::::::::::::::::::::::::::::::::::::::::::::::::::::\n", s->inputbuf[2]);
+        printf("[OAR] > [NUKE] > </></></></></></></></></></></></></></></></></></></></></>< \n");
 
-        printf("\n");
-        printf("[OAR] > URI[0]: %c <\n", s->inputbuf[0]);
-        printf("[OAR] > URI[1]: %c <\n", s->inputbuf[1]);
-        printf("[OAR] > URI[2]: %c <\n", s->inputbuf[2]);
+        if (s->inputbuf[1] != ISO_space) { uri = 0; uri += ( (int) s->inputbuf[1] - '0'); }
+        if (s->inputbuf[2] != ISO_space) { uri = 0; uri += (((int) s->inputbuf[1] - '0') * 10) + ((int) s->inputbuf[2] - '0'); }
 
-        printf("\n");
-        if (s->inputbuf[0] == '/') { printf(">>>>> char0: /\n"); }
-        if (s->inputbuf[1] == '1') { printf(">>>>> char1: 1\n"); }
-        if (s->inputbuf[2] == '3') { printf(">>>>> char2: 3\n"); }
-
-        uri = 342334;
+        if (uri < 0) { uri = 0; } // in case client sends 'GET /' then ((int) (' ' - '0') == -124)
 
         // if (strncmp(s->inputbuf, http_endpoint_01, (sizeof(http_endpoint_01) - 1) == 0)) { printf("[OAR] > JSON %u", 1 ); }
         // if (strncmp(s->inputbuf, http_endpoint_02, (sizeof(http_endpoint_02) - 1) == 0)) { printf("[OAR] > JSON %u", 2 ); }
