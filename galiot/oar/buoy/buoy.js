@@ -24,14 +24,13 @@ const mongoosePaginate = require('mongoose-paginate');
 const morgan = require("morgan");
 const sdbm = require('sdbm');
 
-// create app using express
-const app = express();
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGODB CREDENTIALS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// configuration (logic config for development or production)
+// mongodb configuration logic : 
+// config for production or development
+
 if(process.env.NODE_ENV === 'production') {
 
     // var PORT = null;
@@ -116,7 +115,7 @@ var deviceSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var energySchema = new mongoose.Schema({
+var energestSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -128,7 +127,7 @@ var energySchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    energy: {
+    energest: {
         energest: Boolean,
         cpu: Number,
         lpm: Number,
@@ -147,7 +146,7 @@ var energySchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var networkIpSchema = new mongoose.Schema({
+var stats_network_ipSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -159,7 +158,7 @@ var networkIpSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    networkIp: {
+    stats_network_ip: {
         uipStatistics: Boolean,
         ip: {
             ipRecv: Number,
@@ -183,7 +182,7 @@ var networkIpSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var networkIcmpSchema = new mongoose.Schema({
+var stats_network_icmpSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -195,7 +194,7 @@ var networkIcmpSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    networkIcmp: {
+    stats_network_icmp: {
         uipStatistics: Boolean,
         icmp: {
             ipRecv: Number,    
@@ -214,7 +213,7 @@ var networkIcmpSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var transportSchema = new mongoose.Schema({
+var stats_transportSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -226,7 +225,7 @@ var transportSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    transport: {
+    stats_transport: {
         uipStatistics: Boolean,
         tcp: {
             tcp: Boolean,        
@@ -257,7 +256,7 @@ var transportSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var discoverySchema = new mongoose.Schema({
+var stats_discoverySchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -269,7 +268,7 @@ var discoverySchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    discovery: {
+    stats_discovery: {
         uipStatistics: Boolean,
         nd6: {
             nd6drop: Number,
@@ -290,7 +289,7 @@ var nodeIPv6ddressSchema = new mongoose.Schema({
     nodeIPv6address: String
 });
 
-var ipAddrSchema = new mongoose.Schema({
+var cmd_ipAddrSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -302,7 +301,7 @@ var ipAddrSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    ipAddr: {
+    cmd_ipAddr: {
         ipv6: Boolean,
         nodeIPv6addresses: [nodeIPv6ddressSchema]
     },
@@ -321,7 +320,7 @@ var nodeIPv6neighborIpAddressSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var ipNeighborsIpAddrSchema = new mongoose.Schema({
+var cmd_IpNeighbors_ipAddrSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -333,7 +332,7 @@ var ipNeighborsIpAddrSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    ipNeighborsIpAddr: {
+    cmd_IpNeighbors_ipAddr: {
         ipv6: Boolean,
         nodeIPv6neighborIpAddresses: [nodeIPv6neighborIpAddressSchema]
     },
@@ -352,7 +351,7 @@ var nodeIPv6neighborLlAddressSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var ipNeighborsLlAddrSchema = new mongoose.Schema({
+var cmd_ipNeighbors_llAddrSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -364,7 +363,7 @@ var ipNeighborsLlAddrSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    ipNeighborsLlAddr: {
+    cmd_ipNeighbors_llAddr: {
         ipv6: Boolean,
         nodeIPv6neighborLlAddresses: [nodeIPv6neighborLlAddressSchema]
     },
@@ -384,7 +383,7 @@ var nodeIPv6neighborInfoSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var ipNeighborsInfoSchema = new mongoose.Schema({
+var cmd_ipNeighbors_infoSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -396,7 +395,7 @@ var ipNeighborsInfoSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    ipNeighborsInfo: {
+    cmd_ipNeighbors_info: {
         ipv6: Boolean,
         nodeIPv6neighborInfo: [nodeIPv6neighborInfoSchema]
     },
@@ -409,7 +408,7 @@ var ipNeighborsInfoSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var routeSchema = new mongoose.Schema({
+var cmd_routesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -421,7 +420,7 @@ var routeSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    route: {
+    cmd_routes: {
         ipv6: Boolean,
         defaultRoute: String,
         lifetime: mongoose.Schema.Types.Mixed
@@ -442,7 +441,7 @@ var linkSourceSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var routingLinksSourcesSchema = new mongoose.Schema({
+var cmd_routes_routingLinks_sourcesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -454,7 +453,7 @@ var routingLinksSourcesSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    routingLinksSources: {
+    cmd_routes_routingLinks_sources: {
         ipv6: Boolean,
         rpl: Boolean,
         totalRoutingLinks: Number,
@@ -476,7 +475,7 @@ var linkDestinationSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var routingLinksDestinationsSchema = new mongoose.Schema({
+var cmd_routes_routingLinks_destinationsSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -488,7 +487,7 @@ var routingLinksDestinationsSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    routingLinksDestinations: {
+    cmd_routes_routingLinks_destinations: {
         ipv6: Boolean,
         rpl: Boolean,
         totalRoutingLinks: Number,
@@ -509,7 +508,7 @@ var entryRouteSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var routingEntriesRoutesSchema = new mongoose.Schema({
+var cmd_routes_routingEntries_routesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -521,7 +520,7 @@ var routingEntriesRoutesSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    routingEntriesRoutes: {
+    cmd_routes_routingEntries_routes: {
         ipv6: Boolean,
         maxRoutesNon0: Boolean,
         totalRoutingEntries: Number,
@@ -543,7 +542,7 @@ var entryViaSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var routingEntriesViasSchema = new mongoose.Schema({
+var cmd_routes_routingEntries_viasSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -555,7 +554,7 @@ var routingEntriesViasSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    routingEntriesVias: {
+    cmd_routes_routingEntries_vias: {
         ipv6: Boolean,
         maxRoutesNon0: Boolean,
         totalRoutingEntries: Number,
@@ -570,7 +569,7 @@ var routingEntriesViasSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplStatusSchema = new mongoose.Schema({
+var cmd_rplStatusSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -582,7 +581,7 @@ var rplStatusSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplStatus: {
+    cmd_rplStatus: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         modeOfOperation: String,
@@ -600,7 +599,7 @@ var rplStatusSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplStatusDagSchema = new mongoose.Schema({
+var cmd_rplStatus_dagSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -612,7 +611,7 @@ var rplStatusDagSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplStatusDag: {
+    cmd_rplStatus_dag: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         dagRole: String,
@@ -638,7 +637,7 @@ var rplStatusDagSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplStatusTrickleTimerSchema = new mongoose.Schema({
+var cmd_rplStatus_trickleTimerSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -650,7 +649,7 @@ var rplStatusTrickleTimerSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplStatusTrickleTimer: {
+    cmd_rplStatus_trickleTimer: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         current: Number,
@@ -673,7 +672,7 @@ var rplAddressSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplNeighborAddrSchema = new mongoose.Schema({
+var cmd_rplNbr_addrSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -685,7 +684,7 @@ var rplNeighborAddrSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplNeighborAddr: {
+    cmd_rplNbr_addr: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         rplNeighborCount: Number,
@@ -708,7 +707,7 @@ var rplRanksSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplNeighborRanksSchema = new mongoose.Schema({
+var cmd_rplNbr_ranksSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -720,7 +719,7 @@ var rplNeighborRanksSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplNeighborRanks: {
+    cmd_rplNbr_ranks: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         rplNeighborCount: Number,
@@ -746,7 +745,7 @@ var rplValuesSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplNeighborValuesSchema = new mongoose.Schema({
+var cmd_rplNbr_valuesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -758,7 +757,7 @@ var rplNeighborValuesSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplNeighborValues: {
+    cmd_rplNbr_values: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         rplNeighborCount: Number,
@@ -780,7 +779,7 @@ var rplParensSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var rplNeighborParensSchema = new mongoose.Schema({
+var cmd_rplNbr_parensSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: String
@@ -792,7 +791,7 @@ var rplNeighborParensSchema = new mongoose.Schema({
         linkLayerAddress: String,
         moteCode: String
     },
-    rplNeighborParens: {
+    cmd_rplNbr_parens: {
         rplLite: Boolean,
         instance: mongoose.Schema.Types.Mixed,
         rplNeighborCount: Number,
@@ -807,7 +806,7 @@ var rplNeighborParensSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-var errorPacketSchema = new mongoose.Schema({
+var errorReportSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
         error: {
@@ -833,57 +832,57 @@ var errorPacketSchema = new mongoose.Schema({
 
 // next step is compiling our schema into a Model.
 
-var System                      = mongoose.model('System',                      systemSchema);
-var Device                      = mongoose.model('Device',                      deviceSchema);
-var Energy                      = mongoose.model('Energy',                      energySchema);
-var NetworkIp                   = mongoose.model('NetworkIp',                   networkIpSchema);
-var NetworkIcmp                 = mongoose.model('NetworkIcmp',                 networkIcmpSchema);
-var Transport                   = mongoose.model('Transport',                   transportSchema);
-var Discovery                   = mongoose.model('Discovery',                   discoverySchema);
+var System                                  = mongoose.model('System',                                  systemSchema);
+var Device                                  = mongoose.model('Device',                                  deviceSchema);
+var Energest                                = mongoose.model('Energest',                                energestSchema);
+var Stats_network_ip                        = mongoose.model('Stats_network_ip',                        stats_network_ipSchema);
+var Stats_network_icmp                      = mongoose.model('Stats_network_icmp',                      stats_network_icmpSchema);
+var Stats_transport                         = mongoose.model('Stats_transport',                         stats_transportSchema);
+var Stats_discovery                         = mongoose.model('Stats_discovery',                         stats_discoverySchema);
 
-var NodeIPv6address             = mongoose.model('NodeIPv6addres',              nodeIPv6ddressSchema);
-var IpAddr                      = mongoose.model('IpAddr',                      ipAddrSchema);
+var NodeIPv6address                         = mongoose.model('NodeIPv6addres',                          nodeIPv6ddressSchema);
+var Cmd_ipAddr                              = mongoose.model('Cmd_ipAddr',                              cmd_ipAddrSchema);
 
-var NodeIPv6neighborIpAddress   = mongoose.model('NodeIPv6neighborIpAddress',   nodeIPv6neighborIpAddressSchema);
-var IpNeighborsIpAddr           = mongoose.model('IpNeighborsIpAddr',           ipNeighborsIpAddrSchema);
+var NodeIPv6neighborIpAddress               = mongoose.model('NodeIPv6neighborIpAddress',               nodeIPv6neighborIpAddressSchema);
+var Cmd_IpNeighbors_ipAddr                  = mongoose.model('Cmd_IpNeighbors_ipAddr',                  cmd_IpNeighbors_ipAddrSchema);
 
-var NodeIPv6neighborLlAddress   = mongoose.model('NodeIPv6neighborLlAddress',   nodeIPv6neighborLlAddressSchema);
-var IpNeighborsLlAddr           = mongoose.model('IpNeighborsLlAddr',           ipNeighborsLlAddrSchema);
+var NodeIPv6neighborLlAddress               = mongoose.model('NodeIPv6neighborLlAddress',               nodeIPv6neighborLlAddressSchema);
+var Cmd_ipNeighbors_llAddr                  = mongoose.model('Cmd_ipNeighbors_llAddr',                  cmd_ipNeighbors_llAddrSchema);
 
-var NodeIPv6neighborInfo        = mongoose.model('NodeIPv6neighborInfo',        nodeIPv6neighborInfoSchema);
-var IpNeighborsInfo             = mongoose.model('IpNeighborsInfo',             ipNeighborsInfoSchema);
+var NodeIPv6neighborInfo                    = mongoose.model('NodeIPv6neighborInfo',                    nodeIPv6neighborInfoSchema);
+var Cmd_ipNeighbors_info                    = mongoose.model('Cmd_ipNeighbors_info',                    cmd_ipNeighbors_infoSchema);
 
-var Route                       = mongoose.model('Route',                       routeSchema);
+var Cmd_routes                              = mongoose.model('Cmd_routes',                              cmd_routesSchema);
 
-var LinkSource                  = mongoose.model('LinkSource',                  linkSourceSchema);
-var RoutingLinksSources         = mongoose.model('RoutingLinksSources',         routingLinksSourcesSchema);
+var LinkSource                              = mongoose.model('LinkSource',                              linkSourceSchema);
+var Cmd_routes_routingLinks_sources         = mongoose.model('Cmd_routes_routingLinks_sources',         cmd_routes_routingLinks_sourcesSchema);
 
-var LinkDestination             = mongoose.model('LinkDestination',             linkDestinationSchema);
-var RoutingLinksDestinations    = mongoose.model('RoutingLinksDestinations',    routingLinksDestinationsSchema);
+var LinkDestination                         = mongoose.model('LinkDestination',                         linkDestinationSchema);
+var Cmd_routes_routingLinks_destinations    = mongoose.model('Cmd_routes_routingLinks_destinations',    cmd_routes_routingLinks_destinationsSchema);
 
-var EntryRoute                  = mongoose.model('EntryRoute',                  entryRouteSchema);
-var RoutingEntriesRoutes        = mongoose.model('RoutingEntriesRoutes',        routingEntriesRoutesSchema);
+var EntryRoute                              = mongoose.model('EntryRoute',                              entryRouteSchema);
+var Cmd_routes_routingEntries_routes        = mongoose.model('Cmd_routes_routingEntries_routes',        cmd_routes_routingEntries_routesSchema);
 
-var EntryVia                    = mongoose.model('EntryVia',                    entryViaSchema);
-var RoutingEntriesVias          = mongoose.model('RoutingEntriesVias',          routingEntriesViasSchema);
+var EntryVia                                = mongoose.model('EntryVia',                                entryViaSchema);
+var Cmd_routes_routingEntries_vias          = mongoose.model('Cmd_routes_routingEntries_vias',          cmd_routes_routingEntries_viasSchema);
 
-var RplStatus                   = mongoose.model('RplStatus',                   rplStatusSchema);
-var RplStatusDag                = mongoose.model('RplStatusDag',                rplStatusDagSchema);
-var RplStatusTrickleTimer       = mongoose.model('RplStatusTrickleTimer',       rplStatusTrickleTimerSchema);
+var Cmd_rplStatus                           = mongoose.model('Cmd_rplStatus',                           cmd_rplStatusSchema);
+var Cmd_rplStatus_dag                       = mongoose.model('Cmd_rplStatus_dag',                       cmd_rplStatus_dagSchema);
+var Cmd_rplStatus_trickleTimer              = mongoose.model('Cmd_rplStatus_trickleTimer',              cmd_rplStatus_trickleTimerSchema);
 
-var RplAddress                  = mongoose.model('RplAddress',                  rplAddressSchema);
-var RplNeighborAddr             = mongoose.model('RplNeighborAddr',             rplNeighborAddrSchema);
+var RplAddress                              = mongoose.model('RplAddress',                              rplAddressSchema);
+var Cmd_rplNbr_addr                         = mongoose.model('Cmd_rplNbr_addr',                         cmd_rplNbr_addrSchema);
 
-var RplRanks                    = mongoose.model('RplRanks',                    rplRanksSchema);
-var RplNeighborRanks            = mongoose.model('RplNeighborRanks',            rplNeighborRanksSchema);
+var RplRanks                                = mongoose.model('RplRanks',                                rplRanksSchema);
+var Cmd_rplNbr_ranks                        = mongoose.model('Cmd_rplNbr_ranks',                        cmd_rplNbr_ranksSchema);
 
-var RplValues                   = mongoose.model('RplValues',                   rplValuesSchema);
-var RplNeighborValues           = mongoose.model('RplNeighborValues',           rplNeighborValuesSchema);
+var RplValues                               = mongoose.model('RplValues',                               rplValuesSchema);
+var Cmd_rplNbr_values                       = mongoose.model('Cmd_rplNbr_values',                       cmd_rplNbr_valuesSchema);
 
-var RplParens                   = mongoose.model('RplParens',                   rplParensSchema);
-var RplNeighborParens           = mongoose.model('RplNeighborParens',           rplNeighborParensSchema);
+var RplParens                               = mongoose.model('RplParens',                               rplParensSchema);
+var Cmd_rplNbr_parens                       = mongoose.model('Cmd_rplNbr_parens',                       cmd_rplNbr_parensSchema);
 
-var ErrorPacket                = mongoose.model('ErrorPacket',                  errorPacketSchema);
+var ErrorReport                             = mongoose.model('ErrorReport',                             errorReportSchema);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGOOSE CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -913,32 +912,779 @@ db.once('open', function() {
     // we're connected!
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CONTROLLER SETUP ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var tug = {
+    system: {
+        index: function (req, res) {
+            System.find(function (err, system) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: system                
+                    })
+                }
+            })
+        }
+    },
+    device: {
+        index: function (req, res) {
+            Device.find(function (err, device) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: device                
+                    })
+                }
+            })
+        }
+    },
+    energest: {
+        index: function (req, res) {
+            Energest.find(function (err, energest) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: energest                
+                    })
+                }
+            })
+        }
+    },
+    stats_network_ip: {
+        index: function (req, res) {
+            Stats_network_ip.find(function (err, stats_network_ip) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_network_ip      
+                    })
+                }
+            })
+        }
+    },
+    stats_network_icmp: {
+        index: function (req, res) {
+            Stats_network_icmp.find(function (err, stats_network_icmp) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_network_icmp    
+                    })
+                }
+            })
+        }
+    },
+    stats_transport: {
+        index: function (req, res) {
+            Stats_transport.find(function (err, stats_transport) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_transport       
+                    })
+                }
+            })
+        }
+    },
+    stats_discovery: {
+        index: function (req, res) {
+            Stats_discovery.find(function (err, stats_discovery) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_discovery       
+                    })
+                }
+            })
+        }
+    },
+    cmd_ipAddr: {
+        index: function (req, res) {
+            Cmd_ipAddr.find(function (err, cmd_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_ipAddr       
+                    })
+                }
+            })
+        }
+    },
+    cmd_IpNeighbors_ipAddr: {
+        index: function (req, res) {
+            Cmd_IpNeighbors_ipAddr.find(function (err, cmd_IpNeighbors_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_ipAddr       
+                    })
+                }
+            })
+        }
+    },
+    cmd_IpNeighbors_llAddr: {
+        index: function (req, res) {
+            Cmd_IpNeighbors_llAddr.find(function (err, cmd_IpNeighbors_llAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_llAddr       
+                    })
+                }
+            })
+        }
+    },
+    cmd_IpNeighbors_info: {
+        index: function (req, res) {
+            Cmd_IpNeighbors_info.find(function (err, cmd_IpNeighbors_info) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_info       
+                    })
+                }
+            })
+        }
+    },
+    cmd_routes: {
+        index: function (req, res) {
+            Cmd_routes.find(function (err, cmd_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: ['/routinglinks', '/routingentries'], 
+                        data: cmd_routes       
+                    })
+                }
+            })
+        }
+    },
+    cmd_routes_routingLinks_sources: {
+        index: function (req, res) {
+            Cmd_routes_routingLinks_sources.find(function (err, cmd_routes_routingLinks_sources) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingLinks_sources       
+                    })
+                }
+            })
+        }
+    },
+    cmd_routes_routingLinks_destinations: {
+        index: function (req, res) {
+            Cmd_routes_routingLinks_destinations.find(function (err, cmd_routes_routingLinks_destinations) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingLinks_destinations       
+                    })
+                }
+            })
+        }
+    },
+    cmd_routes_routingEntries_routes: {
+        index: function (req, res) {
+            Cmd_routes_routingEntries_routes.find(function (err, cmd_routes_routingEntries_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingEntries_routes       
+                    })
+                }
+            })
+        }
+    },
+    cmd_routes_routingEntries_vias: {
+        index: function (req, res) {
+            Cmd_routes_routingEntries_vias.find(function (err, cmd_routes_routingEntries_vias) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingEntries_vias       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplStatus: {
+        index: function (req, res) {
+            Cmd_rplStatus.find(function (err, cmd_rplStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: ['/dag', '/trickletimer'], 
+                        data: cmd_rplStatus       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplStatus_dag: {
+        index: function (req, res) {
+            Cmd_rplStatus_dag.find(function (err, cmd_rplStatus_dag) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplStatus_dag       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplStatus_trickleTimer: {
+        index: function (req, res) {
+            Cmd_rplStatus_trickleTimer.find(function (err, cmd_rplStatus_trickleTimer) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplStatus_trickleTimer       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplNbr_addr: {
+        index: function (req, res) {
+            Cmd_rplNbr_addr.find(function (err, cmd_rplNbr_addr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_addr       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplNbr_ranks: {
+        index: function (req, res) {
+            Cmd_rplNbr_ranks.find(function (err, cmd_rplNbr_ranks) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_ranks       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplNbr_values: {
+        index: function (req, res) {
+            Cmd_rplNbr_values.find(function (err, cmd_rplNbr_values) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_values       
+                    })
+                }
+            })
+        }
+    },
+    cmd_rplNbr_parens: {
+        index: function (req, res) {
+            Cmd_rplNbr_parens.find(function (err, cmd_rplNbr_parens) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_parens       
+                    })
+                }
+            })
+        }
+    },
+    errorReport: {
+        index: function (req, res) {
+            ErrorReport.find(function (err, errorReport) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: errorReport       
+                    })
+                }
+            })
+        }
+    }
+}
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// WEB SERVER SETUP ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// create app using express
+// and initialize the app
 
+const app = express();
 
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+// Initialize express router
+let router = require('express').Router();
 
+// Set default API response
+// for given api routes
 
+router.get('/', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/system', '/device', '/stats', '/cmd'],
+        data: null
+    });
+});
 
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/
 
+router.get('/stats', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/network', '/transport', '/discovery'],
+        data: null
+    });
+});
 
+router.get('/stats/network', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/ip', '/icmp'], 
+        data: null
+    });
+});
 
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/
 
-// secure express apps: protect the express app with various HTTP Header Protection)
-app.use(helmet());
+router.get('/cmd', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/ipaddr', '/ipneighbors', '/routes', '/rplstatus', '/rplnbr'], 
+        data: null
+    });
+});
 
-// filter and setting the allowed origin that can access the server
-const corsOptions = {origin: true, credentials: true};
-app.use(cors(corsOptions));
+router.get('/cmd/ipneighbors', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/ipaddr', '/lladdr', '/info'], 
+        data: null
+    });
+});
 
+router.get('/cmd/routes/routinglinks', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/sources', '/destinations'], 
+        data: null
+    });
+});
+
+router.get('/cmd/routes/routingentries', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/routes', '/vias'], 
+        data: null
+    });
+});
+
+router.get('/cmd/rplnbr', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/addr', '/ranks', '/values', '/parens'],
+        data: null
+    });
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+// routes for API accordingly
+// each send rest jsons
+
+router.route('/system')
+    .get(tug.system.index);
+
+router.route('/device')
+    .get(tug.device.index);
+
+router.route('/energest')
+    .get(tug.energest.index);
+
+// <><><><><><><><><><><><><><><><><><><><><><><>
+
+router.route('/stats/network/ip')
+    .get(tug.stats_network_ip.index);
+
+router.route('/stats/network/icmp')
+    .get(tug.stats_network_icmp.index);
+
+router.route('/stats/transport')
+    .get(tug.stats_transport.index);
+
+router.route('/stats/discovery')
+    .get(tug.stats_discovery.index);
+
+// <><><><><><><><><><><><><><><><><><><><><><><>
+
+router.route('/cmd/ipaddr')
+    .get(tug.cmd_ipAddr.index);
+
+router.route('/cmd/ipneighbors/ipaddr')
+    .get(tug.cmd_IpNeighbors_ipAddr.index);
+
+router.route('/cmd/ipneighbors/ipaddr')
+    .get(tug.cmd_IpNeighbors_llAddr.index);
+
+router.route('/cmd/ipneighbors/info')
+    .get(tug.cmd_IpNeighbors_info.index);
+
+router.route('/cmd/routes')
+    .get(tug.cmd_routes.index);
+
+router.route('/cmd/routinglinks/sources')
+    .get(tug.cmd_routes_routingLinks_sources.index);
+
+router.route('/cmd/routinglinks/destinations')
+    .get(tug.cmd_routes_routingLinks_destinations.index);
+
+router.route('/cmd/routingentries/routes')
+    .get(tug.cmd_routes_routingEntries_routes.index);
+
+router.route('/cmd/routingentries/vias')
+    .get(tug.cmd_routes_routingEntries_vias.index);
+
+router.route('/cmd/rplstatus')
+    .get(tug.cmd_rplStatus.index);
+
+router.route('/cmd/rplstatus/dag')
+    .get(tug.cmd_rplStatus_dag.index);
+
+router.route('/cmd/rplstatus/tricletimer')
+    .get(tug.cmd_rplStatus_trickleTimer.index);
+
+router.route('/cmd/rplnbr/addr')
+    .get(tug.cmd_rplNbr_addr.index);
+
+router.route('/cmd/rplnbr/ranks')
+    .get(tug.cmd_rplNbr_ranks.index);
+
+router.route('/cmd/rplnbr/values')
+    .get(tug.cmd_rplNbr_values.index);
+
+router.route('/cmd/rplnbr/parens')
+    .get(tug.cmd_rplNbr_parens.index);
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+// Body-parser enables your app to parse data 
+// from incoming request like form data via urlencode. 
+// We need to import this to our app and use them.
+
+// Configure bodyparser to handle post requests
+app.use(bodyParser.urlencoded({
+    extended: true
+ }));
+ 
 // parsing body request to json
 app.use(bodyParser.json());
 
-// HTTP request logger with Morgan
-app.use(morgan("dev"));
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+// Send message for default URL:
+// http://localhost:8080
+
+app.get('/', function(req, res){
+    res.send('BUOY');
+});
+
+// Use Api routes in the App:
+// http://localhost:8080/api
+
+app.use('/api', router)
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+// express configuration logic : 
+// config for production or development
+
+if(process.env.NODE_ENV === 'production') {
+
+    // var PORT = null;
+
+} else {
+
+    var PORT = process.env.PORT || 8080;
+
+}
+
+// Launch app to listen to:
+// http://localhost:8080
+
+app.listen(PORT, function() {
+    console.log("");
+    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
+    console.log('buoy (listening on port: ' + PORT + ')');
+    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // secure express apps: protect the express app with various HTTP Header Protection)
+// app.use(helmet());
+
+// // filter and setting the allowed origin that can access the server
+// const corsOptions = {origin: true, credentials: true};
+// app.use(cors(corsOptions));
+
+// // parsing body request to json
+// // Body-parser enables your app to parse data from incoming request like form data via urlencode. 
+// // We need to import this to our app and use them.
+// app.use(bodyParser.json());
+
+// // HTTP request logger with Morgan
+// app.use(morgan("dev"));
 
 
 
@@ -953,16 +1699,9 @@ app.use(morgan("dev"));
 var http = require('http').Server(app);
 
 
-app.get('/', function(req, res){
-    res.send('BUOY');
-});
 
-app.listen(PORT, function() {
-    console.log("");
-    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
-    console.log('buoy (listening on port: ' + PORT + ')');
-    console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
-})
+
+
 
 
 
@@ -1198,7 +1937,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 2:
-                            var energy = new Energy({
+                            var energest = new Energest({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1210,7 +1949,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                energy: {
+                                energest: {
                                     energest: obj.nrg.en,
                                     cpu: obj.nrg.cp,
                                     lpm: obj.nrg.lp,
@@ -1228,15 +1967,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(energy);
+                            console.log(energest);
 
-                            energy.save(function (err) {
+                            energest.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- energy COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1244,7 +1983,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 3:
-                            var networkIp = new NetworkIp({
+                            var stats_network_ip = new Stats_network_ip({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1256,7 +1995,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                networkIp: {
+                                stats_network_ip: {
                                     uipStatistics: obj.ipSt.uS,
                                     ip: {
                                         ipRecv: obj.ipSt.ip.rx,
@@ -1279,15 +2018,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(networkIp);
+                            console.log(stats_network_ip);
 
-                            networkIp.save(function (err) {
+                            stats_network_ip.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- networkIp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1295,7 +2034,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 4:
-                            var networkIcmp = new NetworkIcmp({
+                            var stats_network_icmp = new Stats_network_icmp({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1307,7 +2046,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                networkIcmp: {
+                                stats_network_icmp: {
                                     uipStatistics: obj.icSt.uS,
                                     icmp: {
                                         ipRecv: obj.icSt.ic.rx,    
@@ -1325,15 +2064,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(networkIcmp);
+                            console.log(stats_network_icmp);
 
-                            networkIcmp.save(function (err) {
+                            stats_network_icmp.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- networkIcmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1341,7 +2080,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                         
                         case 5:
-                            var transport = new Transport({
+                            var stats_transport = new Stats_transport({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1353,7 +2092,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                transport: {
+                                stats_transport: {
                                     uipStatistics: obj.tSt.uS,
                                     tcp: {
                                         tcp: obj.tSt.tcp.use,        
@@ -1383,15 +2122,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(transport);
+                            console.log(stats_transport);
 
-                            transport.save(function (err) {
+                            stats_transport.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1399,7 +2138,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 6:
-                            var discovery = new Discovery({
+                            var stats_discovery = new Stats_discovery({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1411,7 +2150,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                discovery: {
+                                stats_discovery: {
                                     uipStatistics: obj.dSt.uS,
                                     nd6: {
                                         nd6drop: obj.dSt.nd6.dr,
@@ -1427,15 +2166,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(discovery);
+                            console.log(stats_discovery);
 
-                            discovery.save(function (err) {
+                            stats_discovery.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1443,7 +2182,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 7:
-                            var ipAddr = new IpAddr({
+                            var cmd_ipAddr = new Cmd_ipAddr({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1455,7 +2194,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                ipAddr: {
+                                cmd_ipAddr: {
                                     ipv6: obj.addr.IPv6,
                                     nodeIPv6addresses: [null]
                                 },
@@ -1466,18 +2205,18 @@ function moor() {
                                 update: new Date
                             });
 
-                            obj.addr.ad.forEach((address, index) => ipAddr.ipAddr.nodeIPv6addresses[index] = new NodeIPv6address({nodeIPv6address: address}));
+                            obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = new NodeIPv6address({nodeIPv6address: address}));
                             
                             console.log("");
-                            console.log(ipAddr);
+                            console.log(cmd_ipAddr);
 
-                            ipAddr.save(function (err) {
+                            cmd_ipAddr.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1485,7 +2224,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 8:
-                            var ipNeighborsIpAddr = new IpNeighborsIpAddr({
+                            var cmd_IpNeighbors_ipAddr = new Cmd_IpNeighbors_ipAddr({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1497,7 +2236,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                ipNeighborsIpAddr: {
+                                cmd_IpNeighbors_ipAddr: {
                                     ipv6: obj.nsIP.IPv6,
                                     nodeIPv6neighborIpAddresses: [null]
                                 },
@@ -1510,22 +2249,22 @@ function moor() {
 
                             obj.nsIP.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    ipNeighborsIpAddr.ipNeighborsIpAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.ipAddr})
+                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr})
                                 } else {
-                                    ipNeighborsIpAddr.ipNeighborsIpAddr.nodeIPv6neighborIpAddresses[index] = null
+                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
                                 }
                             })
 
                             console.log("");
-                            console.log(ipNeighborsIpAddr);
+                            console.log(cmd_IpNeighbors_ipAddr);
                             
-                            ipNeighborsIpAddr.save(function (err) {
+                            cmd_IpNeighbors_ipAddr.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- ipNeighborsIpAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1533,7 +2272,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 9:
-                            var ipNeighborsLlAddr = new IpNeighborsLlAddr({
+                            var cmd_ipNeighbors_llAddr = new Cmd_ipNeighbors_llAddr({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1545,7 +2284,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                ipNeighborsLlAddr: {
+                                cmd_ipNeighbors_llAddr: {
                                     ipv6: obj.nsLL.IPv6,
                                     nodeIPv6neighborLlAddresses: [null]
                                 },
@@ -1558,22 +2297,22 @@ function moor() {
 
                             obj.nsLL.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    ipNeighborsLlAddr.ipNeighborsLlAddr.nodeIPv6neighborLlAddresses[index] = new NodeIPv6neighborLlAddress({nodeIPv6neighborLlAddress: neighbor.llAddr})
+                                    cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = new NodeIPv6neighborLlAddress({nodeIPv6neighborLlAddress: neighbor.llAddr})
                                 } else {
-                                    ipNeighborsLlAddr.ipNeighborsLlAddr.nodeIPv6neighborLlAddresses[index] = null
+                                    cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(ipNeighborsLlAddr);
+                            console.log(cmd_ipNeighbors_llAddr);
                             
-                            ipNeighborsLlAddr.save(function (err) {
+                            cmd_ipNeighbors_llAddr.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- ipNeighborsLlAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1581,7 +2320,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 10:
-                            var ipNeighborsInfo = new IpNeighborsInfo({
+                            var cmd_ipNeighbors_info = new Cmd_ipNeighbors_info({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1593,7 +2332,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                ipNeighborsInfo: {
+                                cmd_ipNeighbors_info: {
                                     ipv6: obj.nsSt.IPv6,
                                     nodeIPv6neighborInfo: [null]
                                 },
@@ -1606,22 +2345,22 @@ function moor() {
 
                             obj.nsSt.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    ipNeighborsInfo.ipNeighborsInfo.nodeIPv6neighborInfo[index] = new NodeIPv6neighborInfo({nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state})
+                                    cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = new NodeIPv6neighborInfo({nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state})
                                 } else {
-                                    ipNeighborsInfo.ipNeighborsInfo.nodeIPv6neighborInfo[index] = null
+                                    cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(ipNeighborsInfo);
+                            console.log(cmd_ipNeighbors_info);
                             
-                            ipNeighborsInfo.save(function (err) {
+                            cmd_ipNeighbors_info.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- ipNeighborsInfo COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1629,7 +2368,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 11:
-                            var route = new Route({
+                            var cmd_routes = new Cmd_routes({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1641,7 +2380,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                route: {
+                                cmd_routes: {
                                     ipv6: obj.rt.IPv6,
                                     defaultRoute: obj.rt.df,
                                     lifetime: obj.rt.lt
@@ -1654,15 +2393,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(route);
+                            console.log(cmd_routes);
                             
-                            route.save(function (err) {
+                            cmd_routes.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- route COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1670,7 +2409,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 12:
-                            var routingLinksSources = new RoutingLinksSources({
+                            var cmd_routes_routingLinks_sources = new Cmd_routes_routingLinks_sources({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1682,7 +2421,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                routingLinksSources: {
+                                cmd_routes_routingLinks_sources: {
                                     ipv6: obj.rtLS.IPv6,
                                     rpl: obj.rtLS.rpl,
                                     totalRoutingLinks: obj.rtLS.totLs,
@@ -1697,22 +2436,22 @@ function moor() {
 
                             obj.rtLS.ls.forEach(function(link, index) {
                                 if (link != null) {
-                                    routingLinksSources.routingLinksSources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
+                                    cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
                                 } else {
-                                    routingLinksSources.routingLinksSources.routeSources[index] = null
+                                    cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(routingLinksSources);
+                            console.log(cmd_routes_routingLinks_sources);
                             
-                            routingLinksSources.save(function (err) {
+                            cmd_routes_routingLinks_sources.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- routingLinksSources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1720,7 +2459,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 13:
-                            var routingLinksDestinations = new RoutingLinksDestinations({
+                            var cmd_routes_routingLinks_destinations = new Cmd_routes_routingLinks_destinations({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1732,7 +2471,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                routingLinksDestinations: {
+                                cmd_routes_routingLinks_destinations: {
                                     ipv6: obj.rtLD.IPv6,
                                     rpl: obj.rtLD.rpl,
                                     totalRoutingLinks: obj.rtLD.totLs,
@@ -1747,22 +2486,22 @@ function moor() {
 
                             obj.rtLD.ls.forEach(function(link, index) {
                                 if (link != null) {
-                                    routingLinksDestinations.routingLinksDestinations.routeDestinations[index] = new LinkDestination({linkDestinationAddr: link.to, lifetime: link.lf})
+                                    cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = new LinkDestination({linkDestinationAddr: link.to, lifetime: link.lf})
                                 } else {
-                                    routingLinksDestinations.routingLinksDestinations.routeDestinations[index] = null
+                                    cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(routingLinksDestinations);
+                            console.log(cmd_routes_routingLinks_destinations);
                             
-                            routingLinksDestinations.save(function (err) {
+                            cmd_routes_routingLinks_destinations.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- routingLinksDestinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1770,7 +2509,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 14:
-                            var routingEntriesRoutes = new RoutingEntriesRoutes({
+                            var cmd_routes_routingEntries_routes = new Cmd_routes_routingEntries_routes({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1782,7 +2521,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                routingEntriesRoutes: {
+                                cmd_routes_routingEntries_routes: {
                                     ipv6: obj.rtERt.IPv6,
                                     maxRoutesNon0: obj.rtERt.maxRtsN0,
                                     totalRoutingEntries: obj.rtERt.totEs,
@@ -1797,22 +2536,22 @@ function moor() {
 
                             obj.rtERt.es.forEach(function(entry, index) {
                                 if (entry != null) {
-                                    routingEntriesRoutes.routingEntriesRoutes.routes[index] = new EntryRoute({entryRouteAddr: entry.rt})
+                                    cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = new EntryRoute({entryRouteAddr: entry.rt})
                                 } else {
-                                    routingEntriesRoutes.routingEntriesRoutes.routes[index] = null
+                                    cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(routingEntriesRoutes);
+                            console.log(cmd_routes_routingEntries_routes);
                             
-                            routingEntriesRoutes.save(function (err) {
+                            cmd_routes_routingEntries_routes.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- routingEntriesRoutes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1820,7 +2559,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 15:
-                            var routingEntriesVias = new RoutingEntriesVias({
+                            var cmd_routes_routingEntries_vias = new Cmd_routes_routingEntries_vias({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1832,7 +2571,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                routingEntriesVias: {
+                                cmd_routes_routingEntries_vias: {
                                     ipv6: obj.rtEVia.IPv6,
                                     maxRoutesNon0: obj.rtEVia.maxRtsN0,
                                     totalRoutingEntries: obj.rtEVia.totEs,
@@ -1847,22 +2586,22 @@ function moor() {
 
                             obj.rtEVia.es.forEach(function(entry, index) {
                                 if (entry != null) {
-                                    routingEntriesVias.routingEntriesVias.vias[index] = new EntryVia({entryViaAddr: entry.via, lifetime: entry.lf})
+                                    cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = new EntryVia({entryViaAddr: entry.via, lifetime: entry.lf})
                                 } else {
-                                    routingEntriesVias.routingEntriesVias.vias[index] = null
+                                    cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(routingEntriesVias);
+                            console.log(cmd_routes_routingEntries_vias);
                             
-                            routingEntriesVias.save(function (err) {
+                            cmd_routes_routingEntries_vias.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- routingEntriesVias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1870,7 +2609,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 16:
-                            var rplStatus = new RplStatus({
+                            var cmd_rplStatus = new Cmd_rplStatus({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1882,7 +2621,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplStatus: {
+                                cmd_rplStatus: {
                                     rplLite: obj.rSt.rL,
                                     instance: obj.rSt.iId,
                                     modeOfOperation: obj.rSt.mop,
@@ -1899,15 +2638,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(rplStatus);
+                            console.log(cmd_rplStatus);
                             
-                            rplStatus.save(function (err) {
+                            cmd_rplStatus.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1915,7 +2654,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 17:
-                            var rplStatusDag = new RplStatusDag({
+                            var cmd_rplStatus_dag = new Cmd_rplStatus_dag({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1927,7 +2666,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplStatusDag: {
+                                cmd_rplStatus_dag: {
                                     rplLite: obj.rStDag.rL,
                                     instance: obj.rStDag.iId,
                                     dagRole: obj.rStDag.dT,
@@ -1952,15 +2691,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(rplStatusDag);
+                            console.log(cmd_rplStatus_dag);
                             
-                            rplStatusDag.save(function (err) {
+                            cmd_rplStatus_dag.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplStatusDag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -1968,7 +2707,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 18:
-                            var rplStatusTrickleTimer = new RplStatusTrickleTimer({
+                            var cmd_rplStatus_trickleTimer = new Cmd_rplStatus_trickleTimer({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -1980,7 +2719,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplStatusTrickleTimer: {
+                                cmd_rplStatus_trickleTimer: {
                                     rplLite: obj.rStTt.rL,
                                     instance: obj.rStTt.iId,
                                     current: obj.rStTt.cur,
@@ -1996,15 +2735,15 @@ function moor() {
                             });
 
                             console.log("");
-                            console.log(rplStatusTrickleTimer);
+                            console.log(cmd_rplStatus_trickleTimer);
                             
-                            rplStatusTrickleTimer.save(function (err) {
+                            cmd_rplStatus_trickleTimer.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplStatusTrickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -2012,7 +2751,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 19:
-                            var rplNeighborAddr = new RplNeighborAddr({
+                            var cmd_rplNbr_addr = new Cmd_rplNbr_addr({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -2024,7 +2763,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplNeighborAddr: {
+                                cmd_rplNbr_addr: {
                                     rplLite: obj.rN.rL,
                                     instance: obj.rN.iId,
                                     rplNeighborCount: obj.rN.c,
@@ -2039,22 +2778,22 @@ function moor() {
 
                             obj.rN.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    rplNeighborAddr.rplNeighborAddr.addresses[index] = new RplAddress({rplAddress: neighbor.ad})
+                                    cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = new RplAddress({rplAddress: neighbor.ad})
                                 } else {
-                                    rplNeighborAddr.rplNeighborAddr.addresses[index] = null
+                                    cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(rplNeighborAddr);
+                            console.log(cmd_rplNbr_addr);
                             
-                            rplNeighborAddr.save(function (err) {
+                            cmd_rplNbr_addr.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplNeighborAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -2062,7 +2801,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 20:
-                            var rplNeighborRanks = new RplNeighborRanks({
+                            var cmd_rplNbr_ranks = new Cmd_rplNbr_ranks({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -2074,7 +2813,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplNeighborRanks: {
+                                cmd_rplNbr_ranks: {
                                     rplLite: obj.rNR.rL,
                                     instance: obj.rNR.iId,
                                     rplNeighborCount: obj.rNR.c,
@@ -2089,22 +2828,22 @@ function moor() {
 
                             obj.rNR.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    rplNeighborRanks.rplNeighborRanks.ranks[index] = new RplRanks({rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN})
+                                    cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = new RplRanks({rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN})
                                 } else {
-                                    rplNeighborRanks.rplNeighborRanks.ranks[index] = null
+                                    cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(rplNeighborRanks);
+                            console.log(cmd_rplNbr_ranks);
                             
-                            rplNeighborRanks.save(function (err) {
+                            cmd_rplNbr_ranks.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplNeighborRanks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -2112,7 +2851,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 21:
-                            var rplNeighborValues = new RplNeighborValues({
+                            var cmd_rplNbr_values = new Cmd_rplNbr_values({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -2124,7 +2863,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplNeighborValues: {
+                                cmd_rplNbr_values: {
                                     rplLite: obj.rNV.rL,
                                     instance: obj.rNV.iId,
                                     rplNeighborCount: obj.rNV.c,
@@ -2139,22 +2878,22 @@ function moor() {
 
                             obj.rNV.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    rplNeighborValues.rplNeighborValues.values[index] = new RplValues({rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p})
+                                    cmd_rplNbr_values.cmd_rplNbr_values.values[index] = new RplValues({rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p})
                                 } else {
-                                    rplNeighborValues.rplNeighborValues.values[index] = null
+                                    cmd_rplNbr_values.cmd_rplNbr_values.values[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(rplNeighborValues);
+                            console.log(cmd_rplNbr_values);
                             
-                            rplNeighborValues.save(function (err) {
+                            cmd_rplNbr_values.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplNeighborValues COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -2162,7 +2901,7 @@ function moor() {
                         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
                         case 22:
-                            var rplNeighborParens = new RplNeighborParens({
+                            var cmd_rplNbr_parens = new Cmd_rplNbr_parens({
                                 packet: {
                                     valid: obj.pckt.vld,
                                     error: null
@@ -2174,7 +2913,7 @@ function moor() {
                                     linkLayerAddress: obj.id.adr,
                                     moteCode: obj.id.cd
                                 },
-                                rplNeighborParens: {
+                                cmd_rplNbr_parens: {
                                     rplLite: obj.rNP.rL,
                                     instance: obj.rNP.iId,
                                     rplNeighborCount: obj.rNP.c,
@@ -2189,22 +2928,22 @@ function moor() {
 
                             obj.rNP.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    rplNeighborParens.rplNeighborParens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bs})
+                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bs})
                                 } else {
-                                    rplNeighborParens.rplNeighborParens.parens[index] = null
+                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = null
                                 }
                             });
 
                             console.log("");
-                            console.log(rplNeighborParens);
+                            console.log(cmd_rplNbr_parens);
                             
-                            rplNeighborParens.save(function (err) {
+                            cmd_rplNbr_parens.save(function (err) {
                                 if (err) console.log(err);
                                 
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- rplNeighborParens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                             });
 
                             break;
@@ -2224,7 +2963,7 @@ function moor() {
                     console.log("");
                     console.log('ERROR RECIEVED FROM OAR');
 
-                    var errorPacket = new ErrorPacket({
+                    var errorReport = new ErrorReport({
                         packet: {
                             valid: obj.pckt.vld,
                             error: {
@@ -2247,13 +2986,13 @@ function moor() {
                     console.log("");
                     console.log(route);
                     
-                    errorPacket.save(function (err) {
+                    errorReport.save(function (err) {
                         if (err) console.log(err);
                         
                         // saved!
                         
                         console.log("");
-                        console.log(`cargo DATABASE <--- errorPacket COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                        console.log(`cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
                     });
                 }
             } catch(e) {
