@@ -90,6 +90,8 @@ MEMB(conns, struct httpd_state, CONNS);
 #define ISO_period  0x2e
 #define ISO_slash   0x2f
 
+int uri = 0;
+
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 static const char *NOT_FOUND = "<html><body bgcolor=\"white\"><center><h1>404 - file not found</h1></center></body></html>";
@@ -253,6 +255,33 @@ const char http_get[] = "GET ";
 
 const char http_index_html[] = "/"; // our backend will send GETs to /
 
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+// ENDPOINTS ////////////////////////////////////////////////////////////////////////////////////////
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+// const char http_endpoint_01[] = "/1" ;
+// const char http_endpoint_02[] = "/2" ;
+// const char http_endpoint_03[] = "/3" ;
+// const char http_endpoint_04[] = "/4" ;
+// const char http_endpoint_05[] = "/5" ;
+// const char http_endpoint_06[] = "/6" ;
+// const char http_endpoint_07[] = "/7" ;
+// const char http_endpoint_08[] = "/8" ;
+// const char http_endpoint_09[] = "/9" ;
+// const char http_endpoint_10[] = "/10";
+// const char http_endpoint_11[] = "/11";
+// const char http_endpoint_12[] = "/12";
+// const char http_endpoint_13[] = "/13";
+// const char http_endpoint_14[] = "/14";
+// const char http_endpoint_15[] = "/15";
+// const char http_endpoint_16[] = "/16";
+// const char http_endpoint_17[] = "/17";
+// const char http_endpoint_18[] = "/18";
+// const char http_endpoint_19[] = "/19";
+// const char http_endpoint_20[] = "/20";
+// const char http_endpoint_21[] = "/21";
+// const char http_endpoint_22[] = "/22";
+
 static PT_THREAD(handle_input(struct httpd_state *s))
 {
     PSOCK_BEGIN(&s->sin); // Start the protosocket protothread in a function.
@@ -277,7 +306,45 @@ static PT_THREAD(handle_input(struct httpd_state *s))
         urlconv_tofilename(s->filename, s->inputbuf, sizeof(s->filename));
 
     #else /* URLCONV */
-    
+
+        printf("\n");
+        printf("[OAR] > GET %s <\n", s->inputbuf);
+
+        printf("\n");
+        printf("[OAR] > URI[0]: %c <\n", s->inputbuf[0]);
+        printf("[OAR] > URI[1]: %c <\n", s->inputbuf[1]);
+        printf("[OAR] > URI[2]: %c <\n", s->inputbuf[2]);
+
+        printf("\n");
+        if (s->inputbuf[0] == '/') { printf(">>>>> char0: /\n"); }
+        if (s->inputbuf[1] == '1') { printf(">>>>> char1: 1\n"); }
+        if (s->inputbuf[2] == '3') { printf(">>>>> char2: 3\n"); }
+
+        uri = 342334;
+
+        // if (strncmp(s->inputbuf, http_endpoint_01, (sizeof(http_endpoint_01) - 1) == 0)) { printf("[OAR] > JSON %u", 1 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_02, (sizeof(http_endpoint_02) - 1) == 0)) { printf("[OAR] > JSON %u", 2 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_03, (sizeof(http_endpoint_03) - 1) == 0)) { printf("[OAR] > JSON %u", 3 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_04, (sizeof(http_endpoint_04) - 1) == 0)) { printf("[OAR] > JSON %u", 4 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_05, (sizeof(http_endpoint_05) - 1) == 0)) { printf("[OAR] > JSON %u", 5 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_06, (sizeof(http_endpoint_06) - 1) == 0)) { printf("[OAR] > JSON %u", 6 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_07, (sizeof(http_endpoint_07) - 1) == 0)) { printf("[OAR] > JSON %u", 7 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_08, (sizeof(http_endpoint_08) - 1) == 0)) { printf("[OAR] > JSON %u", 8 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_09, (sizeof(http_endpoint_09) - 1) == 0)) { printf("[OAR] > JSON %u", 9 ); }
+        // if (strncmp(s->inputbuf, http_endpoint_10, (sizeof(http_endpoint_10) - 1) == 0)) { printf("[OAR] > JSON %u", 10); }
+        // if (strncmp(s->inputbuf, http_endpoint_11, (sizeof(http_endpoint_11) - 1) == 0)) { printf("[OAR] > JSON %u", 11); }
+        // if (strncmp(s->inputbuf, http_endpoint_12, (sizeof(http_endpoint_12) - 1) == 0)) { printf("[OAR] > JSON %u", 12); }
+        // if (strncmp(s->inputbuf, http_endpoint_13, (sizeof(http_endpoint_13) - 1) == 0)) { printf("[OAR] > JSON %u", 13); }
+        // if (strncmp(s->inputbuf, http_endpoint_14, (sizeof(http_endpoint_14) - 1) == 0)) { printf("[OAR] > JSON %u", 14); }
+        // if (strncmp(s->inputbuf, http_endpoint_15, (sizeof(http_endpoint_15) - 1) == 0)) { printf("[OAR] > JSON %u", 15); }
+        // if (strncmp(s->inputbuf, http_endpoint_16, (sizeof(http_endpoint_16) - 1) == 0)) { printf("[OAR] > JSON %u", 16); }
+        // if (strncmp(s->inputbuf, http_endpoint_17, (sizeof(http_endpoint_17) - 1) == 0)) { printf("[OAR] > JSON %u", 17); }
+        // if (strncmp(s->inputbuf, http_endpoint_18, (sizeof(http_endpoint_18) - 1) == 0)) { printf("[OAR] > JSON %u", 18); }
+        // if (strncmp(s->inputbuf, http_endpoint_19, (sizeof(http_endpoint_19) - 1) == 0)) { printf("[OAR] > JSON %u", 19); }
+        // if (strncmp(s->inputbuf, http_endpoint_20, (sizeof(http_endpoint_20) - 1) == 0)) { printf("[OAR] > JSON %u", 20); }
+        // if (strncmp(s->inputbuf, http_endpoint_20, (sizeof(http_endpoint_21) - 1) == 0)) { printf("[OAR] > JSON %u", 21); }
+        // if (strncmp(s->inputbuf, http_endpoint_20, (sizeof(http_endpoint_22) - 1) == 0)) { printf("[OAR] > JSON %u", 22); }
+        
         if(s->inputbuf[1] == ISO_space) // if the second character after the second ISO_space is ISO_space (so the data received is "GET / ...")
         {
             strncpy(s->filename, http_index_html, sizeof(s->filename)); // copy "/" to *s.filename
@@ -308,6 +375,8 @@ static PT_THREAD(handle_input(struct httpd_state *s))
         
         #endif
     }
+
+    
 
     PSOCK_END(&s->sin); // Start the protosocket protothread in a function.
 }

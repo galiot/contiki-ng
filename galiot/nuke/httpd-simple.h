@@ -80,6 +80,8 @@ void httpd_appcall(void *state);
 
 httpd_simple_script_t httpd_simple_get_script(const char *name);
 
+extern int uri;
+
 #define SEND_STRING(s, str) PSOCK_SEND(s, (uint8_t *)str, strlen(str))
 
 #endif /* HTTPD_SIMPLE_H_ */
