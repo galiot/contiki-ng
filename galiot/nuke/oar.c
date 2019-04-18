@@ -243,9 +243,10 @@ void oar_json_error_construct(char *buf, int valid, char *error_text, int error_
 // (doc) Multiple processes can be specified here by separating them with commas. 
 
 
-PROCESS(oar_debug_process, "oar debug process");                    // process for printing on console
-PROCESS(webserver_process, "webserver process");
-PROCESS(oar_buoy_process, "oar buoy process");
+PROCESS(oar_debug_process,  "oar debug process" );                    // process for printing on console
+PROCESS(oar_buoy_process,   "oar buoy process"  );
+PROCESS(oar_dev_process,    "oar dev process"   );
+PROCESS(webserver_process,  "webserver process" );
 
 #if (OAR_CONF_DEBUG_FUNCTIONALITY) // TODO: this condition should be mutually exclusive with (OAR_CONF_BUOY_FUNCTIONALITY)
 
@@ -267,7 +268,15 @@ PROCESS(oar_buoy_process, "oar buoy process");
     
     int tcpip_event_counter = 0; // counts the number of TCP/IP events listened by the process (prints as "iteration"). record and index values are calculated by this variable.
 
-    AUTOSTART_PROCESSES(&oar_buoy_process);
+    #if (OAR_CONF_DEV_OVERRIDE)
+
+        AUTOSTART_PROCESSES(&oar_dev_process);
+    
+    #else // (OAR_CONF_DEV_OVERRIDE)
+    
+        AUTOSTART_PROCESSES(&oar_buoy_process);
+
+    #endif // (OAR_CONF_DEV_OVERRIDE)
 
 #endif // (OAR_CONF_BUOY_FUNCTIONALITY)
 
@@ -1010,6 +1019,10 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
     PROCESS_BEGIN();
 
         PROCESS_NAME(webserver_process);
+        
+        // (doc) If the AUTOSTART_PROCESSES() line does not include an existing process, 
+        // (doc) then that process has to be started manually by using the process_start() function.
+        
         process_start(&webserver_process, NULL);
 
         #if (OAR_CONF_DEV)
@@ -1025,10 +1038,10 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
         printf("[OAR] > "); console_seq_print('-', 20);
 
         // (doc) A process that has yielded can be polled by an external process or module by calling process_poll(). 
-                // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
-                // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
-                
-                process_poll(&oar_debug_process);
+        // (doc) To poll a process declared with the variable test_proc, one can call process_poll(&test_proc);.
+        // (doc) The polled process will be scheduled immediately, and a PROCESS_EVENT_POLL event will be delivered to it.
+        
+        process_poll(&oar_debug_process);
 
     PROCESS_END();
 }
@@ -1037,6 +1050,100 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 // #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROCESS_THREAD(oar_dev_process, ev, data)
+{
+    button_hal_button_t *btn;
+
+    PROCESS_BEGIN();
+
+        printf("\n");
+        
+        printf("[OAR] > [DEV] > MANUAL OVERRIDE:   ACTIVATED\n");
+        printf("[OAR] > [DEV] > AVAILABLE BUTTONS: %u\n", button_hal_button_count);
+
+        printf("\n");
+
+        for (int button_index = 0; button_index < button_hal_button_count; button_index++)
+        {
+            btn = button_hal_get_by_index(button_index);
+
+            if(btn) 
+            {
+                printf("[OAR] > [DEV] > %.5s | PIN = %u | ID = %u | LOGIC = %s | PULL = %s\n", BUTTON_HAL_GET_DESCRIPTION(btn), btn->pin, button_index, btn->negative_logic ? "NEGATIVE" : "POSITIVE", btn->pull == GPIO_HAL_PIN_CFG_PULL_UP ? "UP" : "DOWN");
+            }
+        }
+        
+        printf("\n");
+        
+        while(1) {
+
+            PROCESS_YIELD();
+
+            if(ev == button_hal_press_event) 
+            {
+                btn = (button_hal_button_t *)data;
+
+                printf("\n");
+
+                printf("[OAR] > [DEV] > EVENT: BUTTON PRESS (%.5s)\n", BUTTON_HAL_GET_DESCRIPTION(btn));
+
+                printf("\n");
+            } 
+            else
+            {
+
+                if(ev == button_hal_release_event) 
+                {
+                    btn = (button_hal_button_t *)data;
+
+                    printf("\n");
+
+                    printf("[OAR] > [DEV] > EVENT: BUTTON RELEASE (%.5s)\n", BUTTON_HAL_GET_DESCRIPTION(btn));
+
+                    printf("\n");
+                } 
+                else
+                {
+                    if(ev == button_hal_periodic_event) 
+                    {
+                        btn = (button_hal_button_t *)data;
+                        printf("[OAR] > [DEV] > EVENT: PERIODIC | %u (%.5s)\n", btn->press_duration_seconds, BUTTON_HAL_GET_DESCRIPTION(btn));
+
+                        if(btn->press_duration_seconds > OAR_CONF_DEV_OVERIIDE_TIME) 
+                        {                        
+                            printf("\n");
+
+                            printf("[OAR] > [DEV] > ENGAGING BUOY <!> MANUAL OVERRIDE <!>\n");
+                            
+                            // (doc) If the AUTOSTART_PROCESSES() line does not include an existing process, 
+                            // (doc) then that process has to be started manually by using the process_start() function.
+                            
+                            process_start(&oar_buoy_process, NULL);
+                        }
+                    }
+                }
+            }
+        }
+
+    PROCESS_END();
+}
 
 
 

@@ -24,6 +24,100 @@ const mongoosePaginate = require('mongoose-paginate');
 const morgan = require("morgan");
 const sdbm = require('sdbm');
 
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// WEB SCRPAING ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const rp = require('request-promise');
+
+// contiki-ng RPL border router runs an HTTP server (http://[fd00::212:4b00:f24:8385]/)
+// to help finding out global IPv6 node addresses. The index.html served looks like: 
+
+// <html>
+//   <head>
+//     <title>Contiki-NG</title>
+//   </head>
+// <body>
+//   Neighbors
+//   <ul>
+//     <li>fe80::212:4b00:f83:b601</li>
+//     <li>fe80::212:4b00:f82:a600</li>
+//     <li>fe80::212:4b00:f82:da03</li>
+//   </ul>
+//   Routing links
+//   <ul>
+//     <li>fd00::212:4b00:f83:b601 (parent: fd00::212:4b00:f24:8385) 1500s</li>
+//     <li>fd00::212:4b00:f82:a600 (parent: fd00::212:4b00:f24:8385) 960s</li>
+//     <li>fd00::212:4b00:f82:da03 (parent: fd00::212:4b00:f24:8385) 1680s</li>
+//   </ul>
+// </body>
+// </html>
+
+// regular expression that matches any string:
+// - starting with the two characters "fd"
+// - contains any number of non-white characters
+// - and does not end with ')' character
+// - case insensitive and global (find all)
+
+const nodesRegExp = /fd\S*(?<!\))\s/gi
+
+// excecution order: the scraping function passes nodes in callback
+
+function scrap(nodes, borderRouter, callback) {
+    rp(borderRouter)
+    .then(function(html) {
+        
+        console.log("");
+        console.log(html);
+        
+        // [ 'fd00::212:4b00:f83:b601 ', 
+        //   'fd00::212:4b00:f82:a600 ', 
+        //   'fd00::212:4b00:f82:da03 ' ]
+
+        nodes = html.match(nodesRegExp)
+
+        if (nodes != null) {
+            // nodes arrray contains all matching strings 
+            // but with a space charactet appended at the end
+            // (side effect of out regular expression lacking kung fu)
+            // this white space character must be removed
+
+            nodes = nodes.map((node) => node.slice(0, -1))
+            
+            // [ 'fd00::212:4b00:f83:b601', 
+            //   'fd00::212:4b00:f82:a600', 
+            //   'fd00::212:4b00:f82:da03' ]
+
+            console.log(nodes);
+            
+            callback(nodes);
+        } else {
+            
+            console.log("NO MOTES FOUND, RESTARTING SCRAPE");
+            // scrap(nodes, borderRouter, callback);
+        }
+
+    
+        
+    })
+    .catch(function(err){
+        console.log(err);
+    });
+}
+
+    
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGODB CREDENTIALS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1755,13 +1849,14 @@ const request = require('request');
 // WAR BUOY // NUKE ENABLED /////////////////////////////////////////////////////////////////////////////////////////
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-function moor(uri) {
-    request.get(`http://[fd00::212:4b00:f82:da03]/${uri}`,function(err, res, body ){ 
+function moor(host, port, path) {
+    request.get(`http://[${host}]:${port}/${path}`,function(err, res, body ){ 
         
         if(err) {
-                console.log(err);
-                return;
-            }
+            console.log();
+            console.log(err);
+            return;
+        }
 
 // !/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/
 // !/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/
@@ -1769,10 +1864,8 @@ function moor(uri) {
 // !/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/
 // !/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/!/
         
-        console.log("");
-        console.log('<--- <--- <--- <--- <--- <--- <--- <--- <--- <--- <---');
-        console.log('get JSON  <--- oar (http://[fd00::212:4b00:f83:b601]/)');
-        console.log('<--- <--- <--- <--- <--- <--- <--- <--- <--- <--- <---');
+        // console.log("");
+        // console.log('<--- oar (http://[fd00::212:4b00:f83:b601]/) <--- <--- <---');
         
         // ----------------------------------------------------------------------------------------
         // RECEIVE JSON ///////////////////////////////////////////////////////////////////////////
@@ -1916,7 +2009,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -1956,7 +2049,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2002,7 +2095,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2053,7 +2146,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2099,7 +2192,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2157,7 +2250,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2201,7 +2294,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2243,7 +2336,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2291,7 +2384,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2339,7 +2432,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2387,7 +2480,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2428,7 +2521,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2478,7 +2571,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2528,7 +2621,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2578,7 +2671,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2628,7 +2721,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2673,7 +2766,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2726,7 +2819,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2770,7 +2863,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2820,7 +2913,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2870,7 +2963,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2920,7 +3013,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2970,7 +3063,7 @@ function moor(uri) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                                console.log(`cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -3019,9 +3112,10 @@ function moor(uri) {
                         // saved!
                         
                         console.log("");
-                        console.log(`cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT`);
+                        console.log(`cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                     });
                 }
+
             } catch(e) {
 
                 // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -3031,14 +3125,15 @@ function moor(uri) {
                 // print that json failed to parse 
                 // to console for debugging purposes
 
-                console.log("");
-                console.error("JSON: INVALID");
+                // console.log("");
+                // console.error(e);
 
                 // print the error that caused parse to fail 
                 // to console for debugging purposes
 
+                console.log();
                 console.error(e); // error in the above string (in this case, yes)!
-                console.log("");
+                
             }
         }
     });
@@ -3064,11 +3159,84 @@ function moor(uri) {
 // WAR BUOY // NUKE ENABLED /////////////////////////////////////////////////////////////////////////////////////////
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-var uri = -1;
+const borderRouter = 'http://[fd00::212:4b00:f24:8385]/'; 
 
-setInterval(function() {
+// nodeHosts[] array will hold the nodes scraped addr
+// found at the index.html served by border router
+
+// nodePaths[] array will hold the paths of the GET 
+// (every path corresponds to a discrete resource)
+// requests that our middleware sends to the nodes
+
+var nodeHosts = new Array; // scrapted nodes' host addresses
+var nodePorts = new Array; // nodes' http server port (default: 80)
+var nodePaths = new Array; // nodes' requested resource
+
+
+
+// attempting to scrap border router's index.html
+
+
+scrap(nodeHosts, borderRouter, function(nodeHosts) {
+
+    // initializations
+
+    nodeHosts.forEach(function(node, index){
+        
+        nodePorts[index] = 80;
+
+        // paths are being initialized: -1 
+        // will be incremented to 0 at first call
+        
+        nodePaths[index] = -1;
+    });
+
+    console.log();
+    console.log("HOSTS: " + nodeHosts);
+    console.log("PORTS: " + nodePorts);
+    console.log("PATHS: " + nodePaths);
     
-    uri++; uri = uri % 23; // increment the resource identifier
-    moor(uri)
+    // console.log("TOTAL NODES: " + nodeHosts.length);
 
-}, 5000);
+    var activeNodeIndex = -1;
+
+    setInterval(function() {
+    
+        activeNodeIndex++;              
+        activeNodeIndex = activeNodeIndex % nodeHosts.length; // incerement the active node index
+        
+        nodePaths[activeNodeIndex]++;   
+        nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 23;
+    
+        console.log();
+        console.log('/?/?/?/?/?/?/?/?/?/?/?/?/?');
+        console.log(`QUERING NODE: ${activeNodeIndex} / TOTAL: ${nodeHosts.length} `);
+        console.log('/?/?/?/?/?/?/?/?/?/?/?/?/?');
+    
+        console.log();
+        console.log('---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ----> ');
+        console.log(`---> GET http://[${nodeHosts[activeNodeIndex]}:${nodePorts[activeNodeIndex]}/${nodePaths[activeNodeIndex]} ---> ---> --->`);
+        console.log('---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ----> ');
+        
+        moor(nodeHosts[activeNodeIndex], nodePorts[activeNodeIndex], nodePaths[activeNodeIndex]);
+        
+
+    
+    }, 5000)
+});
+
+
+
+
+
+
+
+
+
+
+
+// yellow:  fd00::212:4b00:f24:8385
+// red:     fd00::212:4b00:f83:b601
+// green:   fd00::212:4b00:f82:a600
+// blue:    fd00::212:4b00:f82:da03
+

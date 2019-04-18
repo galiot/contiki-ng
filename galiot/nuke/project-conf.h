@@ -45,6 +45,9 @@
 #define ENERGEST_CONF_ON                                                    1
 #define UIP_CONF_STATISTICS                                                 1
 
+/* Force button descriptions */
+#define BUTTON_HAL_CONF_WITH_DESCRIPTION                                    1
+
 /* NBR_TABLE_CONF_MAX_NEIGHBORS specifies the maximum number of neighbors
     that each node will be able to handle. */
 
@@ -192,8 +195,23 @@
 // leds, buttons, sensors: LED1 for BUOY, LED2 for webserver
 #define OAR_CONF_DEV                                                        1                   // (ON:1||OFF: 0)
 
-// time in seconds for pressing button 1 to enable BUOY process
-#define OAR_CONF_DEV_TIME                                                   5                   // SECONDS
+
+
+
+
+// <|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|
+// DEV //////////////////////////////////////////////////////////////////////
+// <|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|><|
+
+// enable/disable manually engaging buoy by holding down button 1
+#define OAR_CONF_DEV_OVERRIDE                                               1                   // (ON:1||OFF: 0)
+
+// duration in seconds for pressing button 1 to enable BUOY process
+#define OAR_CONF_DEV_OVERIIDE_TIME                                          5                   // SECONDS
+
+
+
+
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
