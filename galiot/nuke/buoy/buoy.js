@@ -1028,6 +1028,7 @@ var tug = {
                         goto: null, 
                         data: system                
                     })
+                    // res.send(system)
                 }
             })
         }
@@ -1527,6 +1528,24 @@ var tug = {
 // and initialize the app
 
 const app = express();
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+// Cross-origin resource sharing (CORS) is a mechanism that allows many resources (e.g., fonts, JavaScript, etc.) on a web page 
+// to be requested from another domain outside the domain the resource originated from. https://www.wikiwand.com/en/Cross-origin_resource_sharing
+
+// (CLIENT) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// (CLIENT) Access to XMLHttpRequest at 'http://localhost:8080/api/system' from origin 'null' has been blocked by CORS policy: XXXXXXXXXXXXXX
+// (CLIENT) No 'Access-Control-Allow-Origin' header is present on the requested resource. XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// (CLIENT) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// (CLIENT) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// (CLIENT) Cross-Origin Read Blocking (CORB) blocked cross-origin response http://localhost:8080/api/system with MIME type application/json. 
+// (CLIENT) See https://www.chromestatus.com/feature/5629709824032768 for more details. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// (CLIENT) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// filter and setting the allowed origin that can access the server
+const corsOptions = {origin: true, credentials: true};
+app.use(cors(corsOptions)); // app.use(cors());
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
