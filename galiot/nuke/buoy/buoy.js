@@ -291,11 +291,11 @@ var stats_network_icmpSchema = new mongoose.Schema({
     stats_network_icmp: {
         uipStatistics: Boolean,
         icmp: {
-            ipRecv: Number,    
-            ipSent: Number,     
-            ipForwarded: Number,
-            ipDrop: Number,     
-            ipVhlerr: Number  
+            icmpRecv: Number,    
+            icmpSent: Number,     
+            icmpDrop: Number,
+            icmTypeerr: Number,     
+            icmpChkerr: Number  
         } 
     },
     checksum: {
@@ -335,10 +335,10 @@ var stats_transportSchema = new mongoose.Schema({
         },
         udp: {
             udp: Boolean,  
-            tcpDrop: Number,
-            tcpRecv: Number,  
-            tcpSent: Number,  
-            tcpChkerr: Number
+            udpDrop: Number,
+            udpRecv: Number,  
+            udpSent: Number,  
+            udpChkerr: Number
         } 
     },
     checksum: {
@@ -1028,7 +1028,6 @@ var tug = {
                         goto: null, 
                         data: system                
                     })
-                    // res.send(system)
                 }
             })
         }
@@ -1559,14 +1558,36 @@ router.get('/', function (req, res) {
     res.json({
         status: null, 
         text: null,
+        goto: ['/nuke', '/oar', '/cargo', '/buoy'],
+        data: null
+    });
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+router.get('/cargo', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/create', '/read', '/update', '/delete'],
+        data: null
+    });
+});
+
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/CRUD
+
+router.get('/cargo/read', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
         goto: ['/system', '/device', '/stats', '/cmd'],
         data: null
     });
 });
 
-// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/read/GOTOs
 
-router.get('/stats', function (req, res) {
+router.get('/cargo/read/stats', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1575,7 +1596,7 @@ router.get('/stats', function (req, res) {
     });
 });
 
-router.get('/stats/network', function (req, res) {
+router.get('/cargo/read/stats/network', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1584,9 +1605,7 @@ router.get('/stats/network', function (req, res) {
     });
 });
 
-// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/
-
-router.get('/cmd', function (req, res) {
+router.get('/cargo/read/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1595,7 +1614,7 @@ router.get('/cmd', function (req, res) {
     });
 });
 
-router.get('/cmd/ipneighbors', function (req, res) {
+router.get('/cargo/read/cmd/ipneighbors', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1604,7 +1623,7 @@ router.get('/cmd/ipneighbors', function (req, res) {
     });
 });
 
-router.get('/cmd/routes/routinglinks', function (req, res) {
+router.get('/cargo/read/cmd/routes/routinglinks', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1613,7 +1632,7 @@ router.get('/cmd/routes/routinglinks', function (req, res) {
     });
 });
 
-router.get('/cmd/routes/routingentries', function (req, res) {
+router.get('/cargo/read/cmd/routes/routingentries', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1622,7 +1641,7 @@ router.get('/cmd/routes/routingentries', function (req, res) {
     });
 });
 
-router.get('/cmd/rplnbr', function (req, res) {
+router.get('/cargo/read/cmd/rplnbr', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1631,82 +1650,82 @@ router.get('/cmd/rplnbr', function (req, res) {
     });
 });
 
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/read/collections
 
 // routes for API accordingly
 // each send rest jsons
 
-router.route('/system')
+router.route('/cargo/read/system')
     .get(tug.system.index);
 
-router.route('/device')
+router.route('/cargo/read/device')
     .get(tug.device.index);
 
-router.route('/energest')
+router.route('/cargo/read/energest')
     .get(tug.energest.index);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
-router.route('/stats/network/ip')
+router.route('/cargo/read/stats/network/ip')
     .get(tug.stats_network_ip.index);
 
-router.route('/stats/network/icmp')
+router.route('/cargo/read/stats/network/icmp')
     .get(tug.stats_network_icmp.index);
 
-router.route('/stats/transport')
+router.route('/cargo/read/stats/transport')
     .get(tug.stats_transport.index);
 
-router.route('/stats/discovery')
+router.route('/cargo/read/stats/discovery')
     .get(tug.stats_discovery.index);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
-router.route('/cmd/ipaddr')
+router.route('/cargo/read/cmd/ipaddr')
     .get(tug.cmd_ipAddr.index);
 
-router.route('/cmd/ipneighbors/ipaddr')
+router.route('/cargo/read/cmd/ipneighbors/ipaddr')
     .get(tug.cmd_IpNeighbors_ipAddr.index);
 
-router.route('/cmd/ipneighbors/ipaddr')
+router.route('/cargo/read/cmd/ipneighbors/ipaddr')
     .get(tug.cmd_IpNeighbors_llAddr.index);
 
-router.route('/cmd/ipneighbors/info')
+router.route('/cargo/read/cmd/ipneighbors/info')
     .get(tug.cmd_IpNeighbors_info.index);
 
-router.route('/cmd/routes')
+router.route('/cargo/read/cmd/routes')
     .get(tug.cmd_routes.index);
 
-router.route('/cmd/routinglinks/sources')
+router.route('/cargo/read/cmd/routinglinks/sources')
     .get(tug.cmd_routes_routingLinks_sources.index);
 
-router.route('/cmd/routinglinks/destinations')
+router.route('/cargo/read/cmd/routinglinks/destinations')
     .get(tug.cmd_routes_routingLinks_destinations.index);
 
-router.route('/cmd/routingentries/routes')
+router.route('/cargo/read/cmd/routingentries/routes')
     .get(tug.cmd_routes_routingEntries_routes.index);
 
-router.route('/cmd/routingentries/vias')
+router.route('/cargo/read/cmd/routingentries/vias')
     .get(tug.cmd_routes_routingEntries_vias.index);
 
-router.route('/cmd/rplstatus')
+router.route('/cargo/read/cmd/rplstatus')
     .get(tug.cmd_rplStatus.index);
 
-router.route('/cmd/rplstatus/dag')
+router.route('/cargo/read/cmd/rplstatus/dag')
     .get(tug.cmd_rplStatus_dag.index);
 
-router.route('/cmd/rplstatus/tricletimer')
+router.route('/cargo/read/cmd/rplstatus/tricletimer')
     .get(tug.cmd_rplStatus_trickleTimer.index);
 
-router.route('/cmd/rplnbr/addr')
+router.route('/cargo/read/cmd/rplnbr/addr')
     .get(tug.cmd_rplNbr_addr.index);
 
-router.route('/cmd/rplnbr/ranks')
+router.route('/cargo/read/cmd/rplnbr/ranks')
     .get(tug.cmd_rplNbr_ranks.index);
 
-router.route('/cmd/rplnbr/values')
+router.route('/cargo/read/cmd/rplnbr/values')
     .get(tug.cmd_rplNbr_values.index);
 
-router.route('/cmd/rplnbr/parens')
+router.route('/cargo/read/cmd/rplnbr/parens')
     .get(tug.cmd_rplNbr_parens.index);
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2188,11 +2207,11 @@ function moor(host, port, path) {
                                 stats_network_icmp: {
                                     uipStatistics: obj.icSt.uS,
                                     icmp: {
-                                        ipRecv: obj.icSt.ic.rx,    
-                                        ipSent: obj.icSt.ic.tx,     
-                                        ipForwarded: obj.icSt.ic.dr,
-                                        ipDrop: obj.icSt.ic.tE,     
-                                        ipVhlerr: obj.icSt.ic.cE  
+                                        icmpRecv: obj.icSt.ic.rx,    
+                                        icmpSent: obj.icSt.ic.tx,     
+                                        icmpDrop: obj.icSt.ic.dr,
+                                        icmpTypeerr: obj.icSt.ic.tE,     
+                                        icmpChkerr: obj.icSt.ic.cE  
                                     } 
                                 },
                                 checksum: {
@@ -2247,10 +2266,10 @@ function moor(host, port, path) {
                                     },
                                     udp: {
                                         udp: obj.tSt.udp.use,  
-                                        tcpDrop: obj.tSt.udp.dr,
-                                        tcpRecv: obj.tSt.udp.rx,  
-                                        tcpSent: obj.tSt.udp.tx,  
-                                        tcpChkerr: obj.tSt.udp.cE
+                                        udpDrop: obj.tSt.udp.dr,
+                                        udpRecv: obj.tSt.udp.rx,  
+                                        udpSent: obj.tSt.udp.tx,  
+                                        udpChkerr: obj.tSt.udp.cE
                                     } 
                                 },
                                 checksum: {
