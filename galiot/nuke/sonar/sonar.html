@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>sonar</title>
+
+    <style>
+        .list-group{
+            display:inline-block;
+        }
+    </style>
+  
+</head>
+  <body class="bg-dark">
+    
+    
+    <!--BORDER ROUTER //////////////////////////////////////////////////////// -->
+    <div class="p-3 my-5 mx-auto container bg-dark border border-info rounded" id="br-div">
+
+        <h1 class="text-center text-light">border router</h1> 
+        
+        
+        <!-- BORDER ROUTER > SCRPAP ::::::::::::::::: -->
+        <div class="p-2 p-auto m-2 m-auto input-group">
+            
+            <!-- prepends to input group -->
+            <div class="input-group-prepend">
+                <span class="input-group-text">http://</span>
+            </div>
+            
+            <!-- input itself -->
+            <input type="text" class="form-control" value='[fd00::212:4b00:f24:8385]' id="br-input">
+            
+            <!-- appends to input group -->
+            <div class="input-group-append">
+                <span class="input-group-text">/</span>
+            </div>
+
+            <!-- scrapting button -->
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" id="br-button">scrap</button>
+            </div>
+        
+        </div>
+       
+        <!-- BORDER ROUTER > NEIGHBORS :::::::::::::: -->
+        <div class="d-none row text-center" id="br-output"></div>
+
+        <br>
+
+        <!-- neighbors unordered list -->
+        <h2 class="d-none text-center text-muted" id="br-h2-neighbors">neighbors</h2>
+        <div class="row">
+            <!-- list of link-local neighbor addresses -->
+            <ul class="list-group d-none m-auto p-auto" id="neighbors">
+            </ul>
+        </div>
+
+        <br>
+        
+        <!-- routing links unordered list -->
+        <h2 class="d-none text-center text-muted" id="br-h2-routing-links">routing links</h2>
+        <div class="row">
+            <!-- list of link-local neighbor addresses -->
+            <ul class="list-group d-none p-auto m-auto" id="routing-links">
+            </ul>
+        </div>
+
+        <br>
+
+        <div class="container text-center m-auto p-auto">
+            <button class="btn btn-outline-danger" id="br-button-reload">reload</button>
+            <button class="btn btn-outline-warning" id="br-button-clear">clear</button>
+            <button class="btn btn-outline-secondary" id="br-button-continue">continue</button>
+        </div>
+
+
+        <!-- <div class="container text-center m-auto p-auto">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <button class="btn btn-outline-danger" id="br-button-reload">reload</button>
+                </div>
+                <div class="col">
+                        <button class="btn btn-outline-muted" id="br-button-continue">continue</button>
+                    </div>
+            </div>
+        </div> -->
+
+    </div>
+    
+    <!--NODES //////////////////////////////////////////////////////////////// -->
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="nodes-div">
+
+        <h1 class="text-center text-muted" id="nodes-h1">nodes</h1> 
+
+       
+
+        <div id="nodes-input"></div>
+
+        <br>
+
+        <h2 class="d-none text-center text-muted" id="nodes-h2-encoded-response">response</h2>
+        
+        <div class="container text-center justify-content-center m-auto p-auto">
+            <div style="word-break: break-all" class="d-none p-auto m-auto container-fluid bg-secondary border border-dark text-left text-light" id="nodes-encoded-response-div"></div>
+            <button class="p-auto my-3 mx-auto d-none btn btn-primary text-center" id="nodes-button-decode">decode</button>
+        </div>
+
+        <!-- <h2 class="d-none text-center text-muted" id="nodes-h2-encrypted-response">encrypted response</h2> -->
+        
+        <div class="container text-center justify-content-center m-auto p-auto">
+            <div style="word-break: break-all" class="d-none p-auto m-auto container-fluid bg-secondary border border-dark text-left text-light" id="nodes-encrypted-response-div"></div>
+            <button class="p-auto my-3 mx-auto d-none btn btn-primary text-center" id="nodes-button-decrypt">decrypt</button>
+        </div>
+
+        <!-- <h2 class="d-none text-center text-muted" id="nodes-h2-encrypted-response">encrypted response</h2> -->
+        
+        <div class="container text-center justify-content-center m-auto p-auto">
+            <div style="word-break: break-all" class="d-none p-auto m-auto container-fluid bg-secondary border border-dark text-left text-light" id="nodes-stringified-response-div"></div>
+        </div>
+
+        <div class="d-none row text-center" id="nodes-output-checksum"></div>
+
+        <div class="container text-center my-3  justify-content-center p-auto">
+            <button class=" mx-auto mt-3 mb-1 d-none btn btn-primary" id="nodes-button-checksum">checksum</button>
+            <button class="mx-auto mt-1 mb-1 d-none btn btn-primary" id="nodes-button-parse">parse</button>
+        </div>
+        
+        <div class="container my-3 justify-content-center p-auto">
+            <pre class="bg-dark text-light border-light rounded" id="nodes-parsed-response-div"></pre>
+        </div>
+
+        <br>
+
+        <div class="container text-center m-auto p-auto">
+            <button class="btn btn-outline-danger" id="nodes-button-reload">reload</button>
+            <button class="btn btn-outline-warning" id="nodes-button-clear">clear</button>
+            <button class="btn btn-outline-secondary" id="nodes-button-continue">continue</button>
+        </div>
+    
+    </div>
+
+    
+    
+    
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+    <!-- bridge JavaScript -->
+    <script src="sonar.js"></script>
+    </body>
+</html>
