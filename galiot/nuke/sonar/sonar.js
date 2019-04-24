@@ -11,27 +11,27 @@
 // };
 
 // https://stackoverflow.com/a/7220510
-function syntaxHighlight(json) {
-    if (typeof json != 'string') {
-         json = JSON.stringify(json, undefined, 2);
-    }
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
+// function syntaxHighlight(json) {
+//     if (typeof json != 'string') {
+//          json = JSON.stringify(json, undefined, 2);
+//     }
+//     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+//     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+//         var cls = 'number';
+//         if (/^"/.test(match)) {
+//             if (/:$/.test(match)) {
+//                 cls = 'key';
+//             } else {
+//                 cls = 'string';
+//             }
+//         } else if (/true|false/.test(match)) {
+//             cls = 'boolean';
+//         } else if (/null/.test(match)) {
+//             cls = 'null';
+//         }
+//         return '<span class="' + cls + '">' + match + '</span>';
+//     });
+// }
 
 
 // https://stackoverflow.com/questions/36631762/returning-html-with-fetch
@@ -46,6 +46,17 @@ console.log('hello world');
 ///////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+function oarCrypt(input) {
+    var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
+    var output = [];
+    
+    for (var i = 0; i < input.length; i++) {
+        var charCode = input.charCodeAt(i) ^ (key[i % key.length].charCodeAt(0));
+        output.push(String.fromCharCode(charCode));
+    }
+    return output.join("");
+}
 
 // SDBM non-cryptographic hash function
 // https://github.com/sindresorhus/sdbm
@@ -95,12 +106,6 @@ function nodesInputHTML(nodesAddr) {
 }
 
 
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC HTML ELEMENTS GLOBAL DECLARATIONS ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,6 +141,7 @@ const nodesEncryptedResponseDiv = document.getElementById('nodes-encrypted-respo
 const nodesButtonDecrypt = document.getElementById('nodes-button-decrypt');
 
 const nodesStringifiedResponseDiv = document.getElementById('nodes-stringified-response-div');
+
 const nodesButtonParse = document.getElementById('nodes-button-parse');
 const nodesButtonChecksum = document.getElementById('nodes-button-checksum');
 
@@ -212,6 +218,37 @@ nodesButtonClear.addEventListener('click', () => {
 
     nodesInput.innerHTML = '';
 
+    nodesEncodedResponseDiv.classList.replace('d-block', 'd-none');
+    nodesEncryptedResponseDiv.classList.replace('d-block', 'd-none');
+    nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none');
+    
+    nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesEncodedResponseDiv.innerText = '_';
+    nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesEncryptedResponseDiv.innerText = '_';
+    nodesStringifiedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesStringifiedResponseDiv.innerText = '_';
+
+    nodesButtonDecode.classList.replace('d-block', 'd-none');
+    nodesButtonDecrypt.classList.replace('d-block', 'd-none');
+    nodesButtonChecksum.classList.replace('d-block', 'd-none');
+    nodesButtonParse.classList.replace('d-block', 'd-none');
+    
+    nodesButtonDecode.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+    nodesButtonDecode.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+    nodesButtonDecode.classList.add('btn-muted');
+    nodesButtonDecrypt.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+    nodesButtonDecrypt.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+    nodesButtonDecrypt.classList.add('btn-muted');
+    nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+    nodesButtonChecksum.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+    nodesButtonChecksum.classList.add('btn-muted');
+    nodesButtonParse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+    nodesButtonParse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+    nodesButtonParse.classList.add('btn-muted');
+
+    nodesOutputChecksum.classList.replace('d-block', 'd-none');
+
 })
 
 
@@ -228,6 +265,128 @@ nodesButtonContinue.addEventListener('click', () => consoleDiv.classList.replace
 
 
 
+
+
+
+
+
+
+
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+// NODES ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+function constructResponse_OK() {
+
+    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
+
+    document.getElementById(`nodes-output-${index}`).innerText = 'OK';
+    
+    document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger', 'bg-warning', 'bg-info'); document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
+    document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+    
+    document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
+
+    nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
+    nodesEncodedResponseDiv.innerText = text;
+
+    
+    nodesButtonDecode.classList.replace('d-none', 'd-block')
+}
+
+function constructDecoding(text) {
+
+    let decodedResponse = atob(text);
+    
+    nodesEncodedResponseDiv.classList.replace('text-light', 'text-dark');
+    nodesButtonDecode.classList.replace('btn-primary', 'btn-outline-success');
+
+    nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block');
+    nodesEncryptedResponseDiv.innerText = decodedResponse;
+
+    return decodedResponse
+}
+
+function constructDecryption(decodedResponse) {
+
+    nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark');
+    nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success');
+
+    let decryptedResponse = oarCrypt(decodedResponse);
+    
+    nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block');
+    nodesStringifiedResponseDiv.innerText = decryptedResponse;
+
+    return decryptedResponse;
+}
+
+function checksum(decryptedResponse) {
+
+    let obj = JSON.parse(decryptedResponse);
+    let payloadHash = obj.hash;
+    let goa = obj;
+    delete goa.hash;
+    goa = JSON.stringify(goa);
+    let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+
+    return intact;
+}
+
+function constructIntactness() {
+
+    nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-success');                                                        
+    nodesOutputChecksum.innerText = 'INTACT';
+    nodesOutputChecksum.classList.remove('bg-danger', 'bg-warning'); nodesOutputChecksum.classList.add('bg-success');
+    nodesOutputChecksum.classList.replace('d-none', 'd-block');
+}
+
+function constructCorruptness() {
+
+    nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-danger')                                                    
+    nodesOutputChecksum.innerText = 'CORRUPTED';
+    nodesOutputChecksum.classList.remove('bg-danger', 'bg-success'); nodesOutputChecksum.classList.add('bg-warning');
+    nodesOutputChecksum.classList.replace('d-none', 'd-block')
+
+    nodesDiv.classList.remove('bg-danger', 'bg-success', 'bg-info'); nodesDiv.classList.add('bg-warning');
+}
+
+function constructParse_OK(parsedResponse) {
+
+    nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
+    nodesParsedResponseDiv.innerHTML = JSON.stringify(parsedResponse, null, 2);
+
+    nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary');
+    nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
+    nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary');
+    
+    nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary');
+    nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
+    nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary');
+
+    nodesButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+    nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary');
+    nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary');
+    nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary');
+
+    nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
+}
+
+function constructParse_FAIL(error) {
+    
+    nodesDiv.classList.remove('bg-warning');
+    nodesDiv.classList.remove('bg-danger');
+    nodesDiv.classList.add('bg-danger');
+
+    nodesOutputChecksum.innerText = error;
+
+    nodesOutputChecksum.classList.remove('bg-success');
+    nodesOutputChecksum.classList.remove('bg-warning');
+    nodesOutputChecksum.classList.add('bg-danger');
+    nodesOutputChecksum.classList.replace('d-none', 'd-block')
+
+    nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
+}
 
 
 
@@ -337,301 +496,376 @@ function scrap() {
                     
                     
                     
-                    // let nodesInputHTML = ''
-
-                    // nodesAddr.forEach((node, index) => {
-
-                    //     nodesInputHTML += `
-                    //         <div class="p-2 p-auto m-2 m-auto input-group"> 
-                    //             <div class="input-group-prepend"> 
-                    //                 <button class="btn btn-primary" type="button" id="nodes-button-${index}">GET</button>  
-                    //             </div> 
-                    //             <div class="input-group-prepend"> 
-                    //                 <span class="input-group-text">http://</span>  
-                    //             </div> 
-                    //             <input type="text" class="form-control" value='${node}' id="nodes-addr-input-${index}"></input> 
-                    //             <div class="input-group-append"> 
-                    //                 <span class="input-group-text">/</span> 
-                    //             </div>
-                    //                 <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
-                    //         </div>
-                    //         <div class="row text-center justify-content-center" id="nodes-output-${index}"></div>`
-                    // })
-
-                    // nodesInputHTML += `<div class="container" id="nodes-response"></div>`
                     
-                    nodesInput.innerHTML = nodesInputHTML(nodesAddr);
 
                     nodesButtonIndex.addEventListener('click', () => {
                         
-                        // nodesButtonIndex.classList.replace('d-block', 'd-none')
+                        nodesButtonIndex.classList.replace('d-block', 'd-none')
                         nodesInput.innerHTML = nodesInputHTML(nodesAddr);
 
-                    })
-                    
-                    
-                    
-                    
-                    
-                    
+                        nodesAddr.forEach((node, index) => {
 
-
-
-
-
-                    nodesAddr.forEach((node, index) => {
-
-                        document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
-
-                            console.log('getgetget');
-                            let addr = document.getElementById(`nodes-addr-input-${index}`).value;
-                            let path = document.getElementById(`nodes-path-input-${index}`).value;
-                            
-                            fetch(`http://[${addr}]/${path}`)
-                                .then(function(response) {
-                                    
-                                    return response.text()
-                                })
-                                    .then(function(text) {
-                                        console.log(text);
-
-                                        nodesDiv.classList.remove('border-info');
-                                        nodesDiv.classList.remove('border-warning');
-                                        nodesDiv.classList.remove('border-danger');
-                                        nodesDiv.classList.add('border-success');
-
-                                        document.getElementById(`nodes-output-${index}`).innerText = 'OK';
-                                        
-                                        document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
-                                        document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger');
-                                        document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
-                                        document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                        
-                                        document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
-
-                                        nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
-                                        nodesEncodedResponseDiv.innerText = text;
-
-                                        nodesButtonDecode.classList.replace('d-none', 'd-block')
-
-                                        
-
-                                        // nodesButtonClear.addEventListener('click', () => {
-                                        
-                                        //     nodesDiv.classList.replace('border-success', 'border-primary');
-                                        //     nodesEncodedResponseDiv.innerText = '';
-
-                                        // })
-                    
-                                        nodesButtonDecode.addEventListener('click', () => {
-                                            
-                                            nodesEncodedResponseDiv.classList.replace('text-light', 'text-dark')
-                                            nodesButtonDecode.classList.replace('btn-primary', 'btn-outline-success')
-
-                                            
-                                            let decodedResponse = atob(text);
-
-                                            // document.getElementById('nodes-h2-encrypted-response').classList.replace('d-none', 'd-block')
-
-                                            
-                                        
-                                            nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block')
-                                            nodesEncryptedResponseDiv.innerText = decodedResponse;
-
-                                            nodesButtonDecrypt.classList.replace('d-none', 'd-block')
-
-                                            // nodesButtonClear.addEventListener('click', () => {
-                                        
-                                            //     nodesDiv.classList.replace('border-success', 'border-primary');
-                                            //     nodesEncodedResponseDiv.innerText = '';
-                                                
-                                            //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                                            //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
-                                            //     nodesEncryptedResponseDiv.innerText= ''
+                            document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
     
-                                            // })
+                                console.log('getgetget');
+                                let addr = document.getElementById(`nodes-addr-input-${index}`).value;
+                                let path = document.getElementById(`nodes-path-input-${index}`).value;
+                                
+                                fetch(`http://[${addr}]/${path}`)
+                                    
+                                    .then(function(response) {
+                                        
+                                        return response.text()
+                                    })
+                                        
+                                        .then(function(text) {
+                                            
+                                            nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
+                                            
+                                            document.getElementById(`nodes-output-${index}`).innerText = 'OK';
 
-                                            nodesButtonDecrypt.addEventListener('click', () => {
+                                            document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger', 'bg-warning'); document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
+                                            document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+                                            
+                                            
+                                            
+                                            
+                                            document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
+    
+                                            nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
+                                            nodesEncodedResponseDiv.innerText = text;
+                                            
 
-                                                nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark')
-                                                nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success')
+
+                                            nodesButtonDecode.classList.replace('btn-muted', 'btn-primary');
+                                            nodesButtonDecode.classList.replace('d-none', 'd-block')
+                                            nodesButtonDecode.addEventListener('click', () => {
                                                 
-                                                function oarCrypt(input) {
-                                                    var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
-                                                    var output = [];
+                                                let decodedResponse = constructDecoding(text);
+                                                
+
+
+                                                nodesButtonDecrypt.classList.replace('btn-muted', 'btn-primary');
+                                                nodesButtonDecrypt.classList.replace('d-none', 'd-block')
+                                                nodesButtonDecrypt.addEventListener('click', () => {
+    
+                                                    let decryptedResponse = constructDecryption(decodedResponse);
+                                                    let intact = checksum(decryptedResponse);
+    
                                                     
-                                                    for (var i = 0; i < input.length; i++) {
-                                                        var charCode = input.charCodeAt(i) ^ (key[i % key.length].charCodeAt(0));
-                                                        output.push(String.fromCharCode(charCode));
-                                                    }
-                                                    return output.join("");
-                                                }
 
-                                                let decryptedResponse = oarCrypt(decodedResponse);
-                                                
-                                                
-                                        
-                                                nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block')
-                                                nodesStringifiedResponseDiv.innerText = decryptedResponse;
-
-                                                nodesButtonParse.classList.replace('d-none', 'd-block')
-                                                nodesButtonChecksum.classList.replace('d-none', 'd-block')
-
-                                                
-
-                                                // nodesButtonClear.addEventListener('click', () => {
-                                        
-                                                //     nodesDiv.classList.replace('border-success', 'border-primary');
-                                                //     nodesEncodedResponseDiv.innerText = '';
+                                                    nodesButtonChecksum.classList.replace('btn-muted', 'btn-primary');
+                                                    nodesButtonChecksum.classList.replace('d-none', 'd-block');
+                                                    nodesButtonChecksum.addEventListener('click', () => {
+    
+                                                        if(intact) {
+                                                            constructIntactness(); 
+                                                        } else {
+                                                            constructCorruptness();
+                                                        }
+                                                    })
                                                     
-                                                //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                                                //     nodesButtonDecode.classList.replace('btn-outline-success', 'btn-primary')
-                                                //     nodesEncryptedResponseDiv.innerText= ''
-
-                                                //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
-                                                //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
-
-                                                //     nodesStringifiedResponseDiv.innerText = '';
-
-                                                // })
-
-                                                let obj = JSON.parse(decryptedResponse);
-                                                let payloadHash = obj.hash;
-                                                let goa = obj;
-                                                delete goa.hash;
-                                                goa = JSON.stringify(goa);
-                                                let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
-                                                console.log(intact);
-
-                                                nodesButtonChecksum.addEventListener('click', () => {
-
-                                                    if(intact) {
-                                                        nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-success')
+                                                    nodesButtonParse.classList.replace('btn-muted', 'btn-primary');
+                                                    nodesButtonParse.classList.replace('d-none', 'd-block');
+                                                    nodesButtonParse.addEventListener('click', () => {
                                                         
-                                                        nodesOutputChecksum.innerText = 'INTACT';
-
-                                                        nodesOutputChecksum.classList.remove('bg-danger');
-                                                        nodesOutputChecksum.classList.remove('bg-warning');
-                                                        nodesOutputChecksum.classList.add('bg-success');
-                                                        nodesOutputChecksum.classList.replace('d-none', 'd-block')
-                                                    } else {
-                                                        nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-danger')
-                                                        
-                                                        nodesOutputChecksum.innerText = 'CORRUPTED';
-
-                                                        nodesOutputChecksum.classList.remove('bg-success');
-                                                        nodesOutputChecksum.classList.remove('bg-danger');
-                                                        nodesOutputChecksum.classList.add('bg-warning');
-                                                        nodesOutputChecksum.classList.replace('d-none', 'd-block')
-
-                                                        nodesDiv.classList.remove('bg-success');
-                                                        nodesDiv.classList.remove('bg-danger');
-                                                        nodesDiv.classList.add('bg-warning');
-                                                    }
-                                                })
-                                                
-                                                nodesButtonParse.addEventListener('click', () => {
-                                                    try{
-                                                        var parsedResponse = JSON.parse(decryptedResponse);
-                                                        nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
-
-                                                        
-                                                        
-                                                        nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
-
-                                                        nodesParsedResponseDiv.innerHTML = JSON.stringify(parsedResponse, null, 2);
-
-                                                        console.log(syntaxHighlight(parsedResponse));
-
-                                                        nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary')
-                                                        nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
-                                                        nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary')
-                                                        
-                                                        nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary')
-                                                        nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
-                                                        nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary')
-
-                                                        nodesButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-
-                                                        nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary')
-                                                        nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary')
-                                                        nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary')
-
-                                                        // nodesButtonClear.addEventListener('click', () => {
-                                        
-                                                        //     nodesDiv.classList.replace('border-success', 'border-primary');
-                                                        //     nodesEncodedResponseDiv.innerText = '';
-                                                        //     nodesButtonDecode.classList.replace('d-block', 'd-none');
-                                                        //     nodesDiv.classList.replace('d-block', 'd-none')
+                                                        try{
                                                             
-                                                        //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                                                        //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
-                                                        //     nodesEncryptedResponseDiv.classList.replace('d-block', 'd-node')
-                                                        //     nodesEncryptedResponseDiv.innerText= ''
-        
-                                                        //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
-                                                        //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
-        
-                                                        //     nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none')
-                                                        //     nodesStringifiedResponseDiv.innerText = '';
-        
-                                                        //     nodesButtonParse.classList.replace('d-block', 'd-none')
-                                                        //     nodesButtonChecksum.classList.replace('d-block', 'd-none')
+                                                            let parsedResponse = JSON.parse(decryptedResponse);
 
-                                                        //     nodesOutputChecksum.classList.replace('d-block', 'd-none')
-                                                        //     nodesButtonParse.classList.replace('btn-outline-success', 'btn-primary');
-                                                        //     nodesParsedResponseDiv.classList.replace('d-block', 'd-none');
-                                                        //     nodesParsedResponseDiv.innerHTML = ''
-        
-                                                        // })
-                                                        
-                                                        // CONTINUE FROM HERE TOMORROW
+                                                            constructParse_OK(parsedResponse);
+                                                            constructLegend(parsedResponse, intact);
+    
+                                                        } 
+                                                        catch(error) {
+                                                            
+                                                            constructParse_FAIL(error);
 
-                                                        
-
-                                                        constructLegend(parsedResponse, intact);
-
-
-                                                    } catch(error) {
-                                                        nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
-
-                                                        nodesDiv.classList.remove('bg-warning');
-                                                        nodesDiv.classList.remove('bg-danger');
-                                                        nodesDiv.classList.add('bg-danger');
-
-                                                        nodesOutputChecksum.innerText = error;
-
-                                                        nodesOutputChecksum.classList.remove('bg-success');
-                                                        nodesOutputChecksum.classList.remove('bg-warning');
-                                                        nodesOutputChecksum.classList.add('bg-danger');
-                                                        nodesOutputChecksum.classList.replace('d-none', 'd-block')
-                                                    }
+                                                        }
+                                                    })
                                                 })
                                             })
                                         })
-                                    })
-                                .catch(function(error) {
-
                                     
-                                    
-                                    nodesDiv.classList.remove('border-info');
-                                    nodesDiv.classList.remove('border-success');
-                                    nodesDiv.classList.remove('border-warning');
-                                    nodesDiv.classList.add('border-danger');
+                                    .catch(function(error) {
 
-                                    document.getElementById(`nodes-output-${index}`).innerText = error;
+                                        nodesDiv.classList.remove('border-warning', 'border-success', 'border-info'); nodesDiv.classList.add('border-danger');
+                                    
+                                        document.getElementById(`nodes-output-${index}`).innerText = error;
+
+                                        document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning', 'bg-success'); document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
+                                        document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
                                         
-                                    document.getElementById(`nodes-output-${index}`).classList.remove('bg-success');
-                                    document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
-                                    document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
-                                    document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                    
-                                    console.log(error);
-                                }
-                            )
-                            
+                                        console.log(error);
+                                    }
+                                )  
+                            })
                         })
                     })
+                    
+                    
+                    
+                    
+                    
+                    
+
+
+
+
+
+                    // nodesAddr.forEach((node, index) => {
+
+                    //     document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
+
+                    //         console.log('getgetget');
+                    //         let addr = document.getElementById(`nodes-addr-input-${index}`).value;
+                    //         let path = document.getElementById(`nodes-path-input-${index}`).value;
+                            
+                    //         fetch(`http://[${addr}]/${path}`)
+                    //             .then(function(response) {
+                                    
+                    //                 return response.text()
+                    //             })
+                    //                 .then(function(text) {
+                    //                     console.log(text);
+
+                    //                     nodesDiv.classList.remove('border-info');
+                    //                     nodesDiv.classList.remove('border-warning');
+                    //                     nodesDiv.classList.remove('border-danger');
+                    //                     nodesDiv.classList.add('border-success');
+
+                    //                     document.getElementById(`nodes-output-${index}`).innerText = 'OK';
+                                        
+                    //                     document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
+                    //                     document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger');
+                    //                     document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
+                    //                     document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+                                        
+                    //                     document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
+
+                    //                     nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
+                    //                     nodesEncodedResponseDiv.innerText = text;
+
+                    //                     nodesButtonDecode.classList.replace('d-none', 'd-block')
+
+                                        
+
+                    //                     // nodesButtonClear.addEventListener('click', () => {
+                                        
+                    //                     //     nodesDiv.classList.replace('border-success', 'border-primary');
+                    //                     //     nodesEncodedResponseDiv.innerText = '';
+
+                    //                     // })
+                    
+                    //                     nodesButtonDecode.addEventListener('click', () => {
+                                            
+                    //                         nodesEncodedResponseDiv.classList.replace('text-light', 'text-dark')
+                    //                         nodesButtonDecode.classList.replace('btn-primary', 'btn-outline-success')
+
+                                            
+                    //                         let decodedResponse = atob(text);
+
+                    //                         // document.getElementById('nodes-h2-encrypted-response').classList.replace('d-none', 'd-block')
+
+                                            
+                                        
+                    //                         nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block')
+                    //                         nodesEncryptedResponseDiv.innerText = decodedResponse;
+
+                    //                         nodesButtonDecrypt.classList.replace('d-none', 'd-block')
+
+                    //                         // nodesButtonClear.addEventListener('click', () => {
+                                        
+                    //                         //     nodesDiv.classList.replace('border-success', 'border-primary');
+                    //                         //     nodesEncodedResponseDiv.innerText = '';
+                                                
+                    //                         //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
+                    //                         //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
+                    //                         //     nodesEncryptedResponseDiv.innerText= ''
+    
+                    //                         // })
+
+                    //                         nodesButtonDecrypt.addEventListener('click', () => {
+
+                    //                             nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark')
+                    //                             nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success')
+                                                
+                    //                             function oarCrypt(input) {
+                    //                                 var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
+                    //                                 var output = [];
+                                                    
+                    //                                 for (var i = 0; i < input.length; i++) {
+                    //                                     var charCode = input.charCodeAt(i) ^ (key[i % key.length].charCodeAt(0));
+                    //                                     output.push(String.fromCharCode(charCode));
+                    //                                 }
+                    //                                 return output.join("");
+                    //                             }
+
+                    //                             let decryptedResponse = oarCrypt(decodedResponse);
+                                                
+                                                
+                                        
+                    //                             nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block')
+                    //                             nodesStringifiedResponseDiv.innerText = decryptedResponse;
+
+                    //                             nodesButtonParse.classList.replace('d-none', 'd-block')
+                    //                             nodesButtonChecksum.classList.replace('d-none', 'd-block')
+
+                                                
+
+                    //                             // nodesButtonClear.addEventListener('click', () => {
+                                        
+                    //                             //     nodesDiv.classList.replace('border-success', 'border-primary');
+                    //                             //     nodesEncodedResponseDiv.innerText = '';
+                                                    
+                    //                             //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
+                    //                             //     nodesButtonDecode.classList.replace('btn-outline-success', 'btn-primary')
+                    //                             //     nodesEncryptedResponseDiv.innerText= ''
+
+                    //                             //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
+                    //                             //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
+
+                    //                             //     nodesStringifiedResponseDiv.innerText = '';
+
+                    //                             // })
+
+                    //                             let obj = JSON.parse(decryptedResponse);
+                    //                             let payloadHash = obj.hash;
+                    //                             let goa = obj;
+                    //                             delete goa.hash;
+                    //                             goa = JSON.stringify(goa);
+                    //                             let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+                    //                             console.log(intact);
+
+                    //                             nodesButtonChecksum.addEventListener('click', () => {
+
+                    //                                 if(intact) {
+                    //                                     nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-success')
+                                                        
+                    //                                     nodesOutputChecksum.innerText = 'INTACT';
+
+                    //                                     nodesOutputChecksum.classList.remove('bg-danger');
+                    //                                     nodesOutputChecksum.classList.remove('bg-warning');
+                    //                                     nodesOutputChecksum.classList.add('bg-success');
+                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
+                    //                                 } else {
+                    //                                     nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-danger')
+                                                        
+                    //                                     nodesOutputChecksum.innerText = 'CORRUPTED';
+
+                    //                                     nodesOutputChecksum.classList.remove('bg-success');
+                    //                                     nodesOutputChecksum.classList.remove('bg-danger');
+                    //                                     nodesOutputChecksum.classList.add('bg-warning');
+                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
+
+                    //                                     nodesDiv.classList.remove('bg-success');
+                    //                                     nodesDiv.classList.remove('bg-danger');
+                    //                                     nodesDiv.classList.add('bg-warning');
+                    //                                 }
+                    //                             })
+                                                
+                    //                             nodesButtonParse.addEventListener('click', () => {
+                    //                                 try{
+                    //                                     var parsedResponse = JSON.parse(decryptedResponse);
+                    //                                     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
+
+                                                        
+                                                        
+                    //                                     nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
+
+                    //                                     nodesParsedResponseDiv.innerHTML = JSON.stringify(parsedResponse, null, 2);
+
+                    //                                     console.log(syntaxHighlight(parsedResponse));
+
+                    //                                     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary')
+                    //                                     nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
+                    //                                     nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary')
+                                                        
+                    //                                     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary')
+                    //                                     nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
+                    //                                     nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary')
+
+                    //                                     nodesButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    //                                     nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary')
+                    //                                     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary')
+                    //                                     nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary')
+
+                    //                                     // nodesButtonClear.addEventListener('click', () => {
+                                        
+                    //                                     //     nodesDiv.classList.replace('border-success', 'border-primary');
+                    //                                     //     nodesEncodedResponseDiv.innerText = '';
+                    //                                     //     nodesButtonDecode.classList.replace('d-block', 'd-none');
+                    //                                     //     nodesDiv.classList.replace('d-block', 'd-none')
+                                                            
+                    //                                     //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
+                    //                                     //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
+                    //                                     //     nodesEncryptedResponseDiv.classList.replace('d-block', 'd-node')
+                    //                                     //     nodesEncryptedResponseDiv.innerText= ''
+        
+                    //                                     //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
+                    //                                     //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
+        
+                    //                                     //     nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none')
+                    //                                     //     nodesStringifiedResponseDiv.innerText = '';
+        
+                    //                                     //     nodesButtonParse.classList.replace('d-block', 'd-none')
+                    //                                     //     nodesButtonChecksum.classList.replace('d-block', 'd-none')
+
+                    //                                     //     nodesOutputChecksum.classList.replace('d-block', 'd-none')
+                    //                                     //     nodesButtonParse.classList.replace('btn-outline-success', 'btn-primary');
+                    //                                     //     nodesParsedResponseDiv.classList.replace('d-block', 'd-none');
+                    //                                     //     nodesParsedResponseDiv.innerHTML = ''
+        
+                    //                                     // })
+                                                        
+                    //                                     // CONTINUE FROM HERE TOMORROW
+
+                                                        
+
+                    //                                     constructLegend(parsedResponse, intact);
+
+
+                    //                                 } catch(error) {
+                    //                                     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
+
+                    //                                     nodesDiv.classList.remove('bg-warning');
+                    //                                     nodesDiv.classList.remove('bg-danger');
+                    //                                     nodesDiv.classList.add('bg-danger');
+
+                    //                                     nodesOutputChecksum.innerText = error;
+
+                    //                                     nodesOutputChecksum.classList.remove('bg-success');
+                    //                                     nodesOutputChecksum.classList.remove('bg-warning');
+                    //                                     nodesOutputChecksum.classList.add('bg-danger');
+                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
+                    //                                 }
+                    //                             })
+                    //                         })
+                    //                     })
+                    //                 })
+                    //             .catch(function(error) {
+
+                                    
+                                    
+                    //                 nodesDiv.classList.remove('border-info');
+                    //                 nodesDiv.classList.remove('border-success');
+                    //                 nodesDiv.classList.remove('border-warning');
+                    //                 nodesDiv.classList.add('border-danger');
+
+                    //                 document.getElementById(`nodes-output-${index}`).innerText = error;
+                                        
+                    //                 document.getElementById(`nodes-output-${index}`).classList.remove('bg-success');
+                    //                 document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
+                    //                 document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
+                    //                 document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+                                    
+                    //                 console.log(error);
+                    //             }
+                    //         )
+                            
+                    //     })
+                    // })
                     
             } catch {
                 
