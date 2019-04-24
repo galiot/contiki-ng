@@ -47,8 +47,8 @@ console.log('hello world');
 // FUNCTIONS //////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-function oarCrypt(input) {
-    var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
+function oarCrypt(input, key) {
+    // var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
     var output = [];
     
     for (var i = 0; i < input.length; i++) {
@@ -139,6 +139,9 @@ const nodesButtonDecode = document.getElementById('nodes-button-decode');
 
 const nodesEncryptedResponseDiv = document.getElementById('nodes-encrypted-response-div');
 const nodesButtonDecrypt = document.getElementById('nodes-button-decrypt');
+
+const nodesKeySpan = document.getElementById('nodes-key-span');
+const nodesKeyInput = document.getElementById('nodes-key-input');
 
 const nodesStringifiedResponseDiv = document.getElementById('nodes-stringified-response-div');
 
@@ -247,6 +250,9 @@ nodesButtonClear.addEventListener('click', () => {
     nodesButtonParse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
     nodesButtonParse.classList.add('btn-muted');
 
+    nodesKeySpan.classList.replace('d-block', 'd-none');
+    nodesKeyInput.classList.replace('d-block', 'd-none');
+
     nodesOutputChecksum.classList.replace('d-block', 'd-none');
 
 })
@@ -312,7 +318,7 @@ function constructDecryption(decodedResponse) {
     nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark');
     nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success');
 
-    let decryptedResponse = oarCrypt(decodedResponse);
+    let decryptedResponse = oarCrypt(decodedResponse, nodesKeyInput.value);
     
     nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block');
     nodesStringifiedResponseDiv.innerText = decryptedResponse;
@@ -322,14 +328,22 @@ function constructDecryption(decodedResponse) {
 
 function checksum(decryptedResponse) {
 
-    let obj = JSON.parse(decryptedResponse);
-    let payloadHash = obj.hash;
-    let goa = obj;
-    delete goa.hash;
-    goa = JSON.stringify(goa);
-    let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+    try{
+        let obj = JSON.parse(decryptedResponse);
+        let payloadHash = obj.hash;
+        let goa = obj;
+        delete goa.hash;
+        goa = JSON.stringify(goa);
+        let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+        return intact;
+    }
+    catch(error) {
+        console.log(error);
+        let intact = false;
+        return intact;
+    }
 
-    return intact;
+   
 }
 
 function constructIntactness() {
@@ -342,7 +356,7 @@ function constructIntactness() {
 
 function constructCorruptness() {
 
-    nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-danger')                                                    
+    nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-warning')                                                    
     nodesOutputChecksum.innerText = 'CORRUPTED';
     nodesOutputChecksum.classList.remove('bg-danger', 'bg-success'); nodesOutputChecksum.classList.add('bg-warning');
     nodesOutputChecksum.classList.replace('d-none', 'd-block')
@@ -374,9 +388,7 @@ function constructParse_OK(parsedResponse) {
 
 function constructParse_FAIL(error) {
     
-    nodesDiv.classList.remove('bg-warning');
-    nodesDiv.classList.remove('bg-danger');
-    nodesDiv.classList.add('bg-danger');
+    nodesDiv.classList.remove('border-warning', 'border-success', 'border-primary'); nodesDiv.classList.add('border-danger');
 
     nodesOutputChecksum.innerText = error;
 
@@ -385,7 +397,9 @@ function constructParse_FAIL(error) {
     nodesOutputChecksum.classList.add('bg-danger');
     nodesOutputChecksum.classList.replace('d-none', 'd-block')
 
+    nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary','btn-outline-muted'); nodesButtonChecksum.classList.add('btn-outline-secondary')
     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
+
 }
 
 
@@ -543,7 +557,8 @@ function scrap() {
                                                 
                                                 let decodedResponse = constructDecoding(text);
                                                 
-
+                                                nodesKeySpan.classList.replace('d-none', 'd-block');
+                                                nodesKeyInput.classList.replace('d-none', 'd-block');
 
                                                 nodesButtonDecrypt.classList.replace('btn-muted', 'btn-primary');
                                                 nodesButtonDecrypt.classList.replace('d-none', 'd-block')

@@ -159,8 +159,17 @@
         <div class="container text-center justify-content-center m-auto p-auto">
             <!-- nodes-encrypted-response-div -->
             <div style="word-break: break-all" class="d-none p-auto m-auto container-fluid bg-secondary border border-dark text-left text-light" id="nodes-encrypted-response-div"></div>
+            
+            <div class=" px-5 my-3 mx-auto text-center input-group">
+
+                <div class="input-group-prepend"><span class=" d-none input-group-text bg-secondary text-dark border-secondary" id="nodes-key-span">key</span></div>
+                <input type="password" class=" d-none form-control text-light bg-dark border-secondary" value='!@#$%^&*' id="nodes-key-input">
+                <div class="input-group-append "><button class=" d-none btn btn-primary" id="nodes-button-decrypt">decrypt</button></div>
+                
+            </div>
+            
             <!-- "nodes-button-decrypt -->
-            <button class="p-auto my-3 mx-auto d-none btn btn-primary text-center" id="nodes-button-decrypt">decrypt</button>
+            <!-- <button class="p-auto my-3 mx-auto d-none btn btn-primary text-center" id="nodes-button-decrypt">decrypt</button> -->
         </div>
 
 
