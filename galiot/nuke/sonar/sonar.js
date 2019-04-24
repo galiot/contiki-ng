@@ -45,6 +45,10 @@ console.log('hello world');
 
 const brDiv = document.getElementById('br-div');
 const brButton = document.getElementById('br-button');
+
+const neighborsElement = document.getElementById('neighbors');
+const routingLinksElement = document.getElementById('routing-links');
+
 const brButtonReload = document.getElementById('br-button-reload');
 const brButtonClear = document.getElementById('br-button-clear');
 const brButtonContinue = document.getElementById('br-button-continue');
@@ -52,10 +56,26 @@ const nodesButtonReload = document.getElementById('nodes-button-reload');
 const nodesButtonClear = document.getElementById('nodes-button-clear');
 const nodesButtonContinue = document.getElementById('nodes-button-continue');
 
+
+
+
 const nodesDiv = document.getElementById('nodes-div');
 const nodesH1 = document.getElementById('nodes-h1');
 
+
+
+
+
+
+
+
+
+
+
+
 brButton.addEventListener('click', scrap);
+
+// BUTTON RELOAD
 
 brButtonReload.addEventListener('click', () => {
     event.preventDefault();
@@ -105,23 +125,16 @@ function scrap() {
                     console.log(neighborsArray);
                     console.log(routingLinksArray);
 
-                    brDiv.classList.remove('border-info');
-                    brDiv.classList.remove('border-warning');
-                    brDiv.classList.remove('border-danger');
-                    brDiv.classList.add('border-success');
-                    
+                    brDiv.classList.remove('border-info', 'border-warning', 'border-danger'); brDiv.classList.add('border-success');
+                
                     brOutput.innerText = 'OK';
-
-                    brOutput.classList.remove('bg-danger');
-                    brOutput.classList.remove('bg-warning');
-                    brOutput.classList.add('bg-success');
+                    brOutput.classList.remove('bg-info', 'bg-warning', 'bg-danger'); brOutput.classList.add('bg-success');
                     brOutput.classList.replace('d-none', 'd-block')
 
                     document.getElementById('br-h2-neighbors').classList.replace('d-none', 'd-block')
                     document.getElementById('br-h2-routing-links').classList.replace('d-none', 'd-block')
                     
-                    const neighborsElement = document.getElementById('neighbors');
-                    const routingLinksElement = document.getElementById('routing-links');
+                    
 
                     neighborsElement.classList.replace('d-none', 'd-block');
                     routingLinksElement.classList.replace('d-none', 'd-block');
@@ -150,7 +163,7 @@ function scrap() {
                     })
 
                     const nodesRegExp = /fd\S*\s/gi
-                    let nodesAddr = [];
+                    var nodesAddr = [];
                     let regExpResults = text.match(nodesRegExp);
 
                     if (nodesAddr != null) {
@@ -163,19 +176,26 @@ function scrap() {
                         console.log(nodesAddr);
                     }
 
+
                     
 
                     // NODES
                     
-                    
-                    
-                    
+
+
+
+
 
                     nodesDiv.classList.remove('border-secondary', 'border-success', 'border-warning', 'border-danger');
                     nodesDiv.classList.add('border-info');
+                    
                     nodesH1.classList.replace('text-muted', 'text-light');
 
                     const nodesInput = document.getElementById('nodes-input');
+                    
+                    
+                    
+                    
                     let nodesInputHTML = ''
 
                     nodesAddr.forEach((node, index) => {
@@ -198,12 +218,17 @@ function scrap() {
                     })
 
                     nodesInputHTML += `<div class="container" id="nodes-response"></div>`
-                    
-
+                
                     nodesInput.innerHTML = nodesInputHTML;
 
+
+
+
+
                     nodesAddr.forEach((node, index) => {
+
                         document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
+                            
                             let path = document.getElementById(`nodes-path-input-${index}`).value;
                             
                             fetch(`http://[${node}]/${path}`)
@@ -319,14 +344,15 @@ function scrap() {
 
                                                 // })
 
+                                                let obj = JSON.parse(decryptedResponse);
+                                                let payloadHash = obj.hash;
+                                                let goa = obj;
+                                                delete goa.hash;
+                                                goa = JSON.stringify(goa);
+                                                let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+                                                console.log(intact);
+
                                                 nodesButtonChecksum.addEventListener('click', () => {
-                                                    let obj = JSON.parse(decryptedResponse);
-                                                    let payloadHash = obj.hash;
-                                                    let goa = obj;
-                                                    delete goa.hash;
-                                                    goa = JSON.stringify(goa);
-                                                    let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
-                                                    console.log(intact);
 
                                                     if(intact) {
                                                         nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-success')
@@ -410,6 +436,11 @@ function scrap() {
                                                         
                                                         // CONTINUE FROM HERE TOMORROW
 
+                                                        
+
+                                                        constructLegend(parsedResponse, intact);
+
+
                                                     } catch(error) {
                                                         nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
 
@@ -485,4 +516,62 @@ function scrap() {
             brOutput.classList.replace('d-none', 'd-block')
             console.log(error);
         })
+}
+
+function simConsole(nodesAddr) {
+    console.log(nodesAddr);
+}
+
+
+function constructLegend(obj, intact) {
+
+    let elaboratedObj = elaborate(obj, intact);
+    console.log(elaboratedObj);
+
+}
+
+function elaborate(obj, intact) {
+
+    if(obj.pckt.vld === true) {
+
+        switch(obj.ndx) {
+
+            case 0: 
+                var system = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    system: {
+                        contikiVersion: obj.sys.cV,
+                        networkStackRouting: obj.sys.rt,
+                        networkStackNetwork: obj.sys.net,
+                        ieee802154PANID: obj.sys.pId,
+            
+                        networkStackMac: {
+                            name: obj.sys.mac.t,
+                            tschDefaultHoppingSequence: obj.sys.mac.tDhS,
+                            defaultChannel: obj.sys.mac.dCh
+                        },
+                        nodeId: obj.sys.nId,
+                        tentaticeLinkLocalIPv6address: obj.sys.tIad
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return system;
+        }
+    }
+
 }
