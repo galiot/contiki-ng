@@ -1,14 +1,14 @@
-// https://github.com/sindresorhus/sdbm
-const sdbm = string => {
-	let hash = 0;
+// // https://github.com/sindresorhus/sdbm
+// const sdbm = string => {
+// 	let hash = 0;
 
-	for (let i = 0; i < string.length; i++) {
-		hash = string.charCodeAt(i) + (hash << 6) + (hash << 16) - hash;
-	}
+// 	for (let i = 0; i < string.length; i++) {
+// 		hash = string.charCodeAt(i) + (hash << 6) + (hash << 16) - hash;
+// 	}
 
-	// Convert it to an unsigned 32-bit integer
-	return hash >>> 0;
-};
+// 	// Convert it to an unsigned 32-bit integer
+// 	return hash >>> 0;
+// };
 
 // https://stackoverflow.com/a/7220510
 function syntaxHighlight(json) {
@@ -36,15 +36,82 @@ function syntaxHighlight(json) {
 
 // https://stackoverflow.com/questions/36631762/returning-html-with-fetch
 // https://stackoverflow.com/a/50812705
-
 // https://www.codecademy.com/articles/what-is-cors
 
 // http://[fd00::212:4b00:f24:8385]/
 
 console.log('hello world');
 
+
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTIONS //////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// SDBM non-cryptographic hash function
+// https://github.com/sindresorhus/sdbm
+
+const sdbm = string => {
+	let hash = 0;
+
+	for (let i = 0; i < string.length; i++) {
+		hash = string.charCodeAt(i) + (hash << 6) + (hash << 16) - hash;
+	}
+
+	// Convert it to an unsigned 32-bit integer
+	return hash >>> 0;
+};
+
+// generate nodes-input section
+// construct GET requests to nodes
+// query nodes specifying path
+
+function nodesInputHTML(nodesAddr) {
+
+    let nodesInputHTML = ''
+
+    nodesAddr.forEach((node, index) => {
+
+        nodesInputHTML += `
+            <div class="p-2 p-auto m-2 m-auto input-group"> 
+                <div class="input-group-prepend"> 
+                    <button class="btn btn-primary" type="button" id="nodes-button-${index}">GET</button>  
+                </div> 
+                <div class="input-group-prepend"> 
+                    <span class="input-group-text">http://</span>  
+                </div> 
+                <input type="text" class="form-control" value='${node}' id="nodes-addr-input-${index}"></input> 
+                <div class="input-group-append"> 
+                    <span class="input-group-text">/</span> 
+                </div>
+                    <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
+            </div>
+            <div class="row text-center justify-content-center" id="nodes-output-${index}"></div>`
+    })
+
+    nodesInputHTML += `<div class="container" id="nodes-response"></div>`
+
+    return nodesInputHTML;
+
+}
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// STATIC HTML ELEMENTS GLOBAL DECLARATIONS ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// BORDER ROUTER
+
 const brDiv = document.getElementById('br-div');
 const brButton = document.getElementById('br-button');
+
+const brInput = document.getElementById('br-input');
+const brOutput = document.getElementById('br-output');
 
 const neighborsElement = document.getElementById('neighbors');
 const routingLinksElement = document.getElementById('routing-links');
@@ -52,16 +119,109 @@ const routingLinksElement = document.getElementById('routing-links');
 const brButtonReload = document.getElementById('br-button-reload');
 const brButtonClear = document.getElementById('br-button-clear');
 const brButtonContinue = document.getElementById('br-button-continue');
-const nodesButtonReload = document.getElementById('nodes-button-reload');
-const nodesButtonClear = document.getElementById('nodes-button-clear');
-const nodesButtonContinue = document.getElementById('nodes-button-continue');
 
-
-
+// NODES
 
 const nodesDiv = document.getElementById('nodes-div');
 const nodesH1 = document.getElementById('nodes-h1');
 
+const nodesButtonIndex = document.getElementById('nodes-button-index');
+
+const nodesInput = document.getElementById('nodes-input');
+
+const nodesEncodedResponseDiv = document.getElementById('nodes-encoded-response-div');
+const nodesButtonDecode = document.getElementById('nodes-button-decode');
+
+const nodesEncryptedResponseDiv = document.getElementById('nodes-encrypted-response-div');
+const nodesButtonDecrypt = document.getElementById('nodes-button-decrypt');
+
+const nodesStringifiedResponseDiv = document.getElementById('nodes-stringified-response-div');
+const nodesButtonParse = document.getElementById('nodes-button-parse');
+const nodesButtonChecksum = document.getElementById('nodes-button-checksum');
+
+const nodesOutputChecksum = document.getElementById('nodes-output-checksum');
+const nodesParsedResponseDiv = document.getElementById('nodes-parsed-response-div');
+
+const nodesButtonReload = document.getElementById('nodes-button-reload');
+const nodesButtonClear = document.getElementById('nodes-button-clear');
+const nodesButtonContinue = document.getElementById('nodes-button-continue');
+
+// CONSOLE
+
+const consoleDiv = document.getElementById('console-div');
+const consoleH1 = document.getElementById('console-h1');
+
+const consoleButtonReload = document.getElementById('console-button-reload');
+const consoleButtonClear = document.getElementById('console-button-clear');
+const consoleButtonContinue = document.getElementById('console-button-continue');
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// RELOAD BUTTONS FUNCTIONALITY ///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// BORDER ROUTER
+
+brButtonReload.addEventListener('click', () => {
+    event.preventDefault();
+    window.location.reload(true);
+});
+
+// NODES
+
+nodesButtonReload.addEventListener('click', () => {
+    event.preventDefault();
+    window.location.reload(true);
+});
+
+
+///////////////////////////////////////////////////////////////////////////////
+// CLEAR BUTTONS FUNCTIONALITY ////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// BORDER ROUTER
+
+brButtonClear.addEventListener('click', () => {
+                        
+    brDiv.classList.remove('border-danger', 'border-warning', 'border-success');
+    brDiv.classList.add('border-info');
+    
+    neighborsElement.innerHTML = '';
+    routingLinksElement.innerHTML = '';
+    
+    brOutput.classList.replace('d-block', 'd-none');
+    nodesEncodedResponseDiv.innerText = ''
+})
+
+// NODES
+
+nodesButtonClear.addEventListener('click', () => {
+
+    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-success');
+    nodesDiv.classList.add('border-primary');
+
+    nodesButtonIndex.classList.replace('d-none', 'd-block');
+
+    nodesInput.innerHTML = '';
+
+})
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// CONTINUE BUTTONS FUNCTIONALITY /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+brButtonContinue.addEventListener('click', () => nodesDiv.classList.replace('d-none', 'd-block'));
+nodesButtonContinue.addEventListener('click', () => consoleDiv.classList.replace('d-none', 'd-block'));
 
 
 
@@ -77,26 +237,15 @@ brButton.addEventListener('click', scrap);
 
 // BUTTON RELOAD
 
-brButtonReload.addEventListener('click', () => {
-    event.preventDefault();
-    window.location.reload(true);
-});
-nodesButtonReload.addEventListener('click', () => {
-    event.preventDefault();
-    window.location.reload(true);
-});
 
 
 
 
 
 
-
-brButtonContinue.addEventListener('click', () => nodesDiv.classList.replace('d-none', 'd-block'))
 
 function scrap() {
-    const brInput = document.getElementById('br-input');
-    const brOutput = document.getElementById('br-output');
+    
     console.log(brInput.value)
 
     fetch(`http://${brInput.value}/`)
@@ -150,17 +299,7 @@ function scrap() {
                     
                     brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
-                    brButtonClear.addEventListener('click', () => {
-                        
-                        neighborsElement.innerHTML = '';
-                        routingLinksElement.innerHTML = '';
-                        brDiv.classList.replace('border-success', 'border-primary');
-                        brOutput.classList.replace('d-block', 'd-none')
-
-                        document.getElementById('br-h2-neighbors').classList.replace('d-block', 'd-none')
-                        document.getElementById('br-h2-routing-links').classList.replace('d-block', 'd-none')
-
-                    })
+                    
 
                     const nodesRegExp = /fd\S*\s/gi
                     var nodesAddr = [];
@@ -188,38 +327,53 @@ function scrap() {
 
                     nodesDiv.classList.remove('border-secondary', 'border-success', 'border-warning', 'border-danger');
                     nodesDiv.classList.add('border-info');
+
+                    nodesButtonIndex.classList.replace('d-none', 'd-block');
                     
                     nodesH1.classList.replace('text-muted', 'text-light');
 
-                    const nodesInput = document.getElementById('nodes-input');
                     
                     
                     
                     
-                    let nodesInputHTML = ''
+                    
+                    // let nodesInputHTML = ''
 
-                    nodesAddr.forEach((node, index) => {
+                    // nodesAddr.forEach((node, index) => {
 
-                        nodesInputHTML += `
-                            <div class="p-2 p-auto m-2 m-auto input-group"> 
-                                <div class="input-group-prepend"> 
-                                    <button class="btn btn-primary" type="button" id="nodes-button-${index}">GET</button>  
-                                </div> 
-                                <div class="input-group-prepend"> 
-                                    <span class="input-group-text">http://</span>  
-                                </div> 
-                                <input type="text" class="form-control" value='${node}' id="nodes-addr-input-${index}"></input> 
-                                <div class="input-group-append"> 
-                                    <span class="input-group-text">/</span> 
-                                </div>
-                                    <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
-                            </div>
-                            <div class="row text-center justify-content-center" id="nodes-output-${index}"></div>`
+                    //     nodesInputHTML += `
+                    //         <div class="p-2 p-auto m-2 m-auto input-group"> 
+                    //             <div class="input-group-prepend"> 
+                    //                 <button class="btn btn-primary" type="button" id="nodes-button-${index}">GET</button>  
+                    //             </div> 
+                    //             <div class="input-group-prepend"> 
+                    //                 <span class="input-group-text">http://</span>  
+                    //             </div> 
+                    //             <input type="text" class="form-control" value='${node}' id="nodes-addr-input-${index}"></input> 
+                    //             <div class="input-group-append"> 
+                    //                 <span class="input-group-text">/</span> 
+                    //             </div>
+                    //                 <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
+                    //         </div>
+                    //         <div class="row text-center justify-content-center" id="nodes-output-${index}"></div>`
+                    // })
+
+                    // nodesInputHTML += `<div class="container" id="nodes-response"></div>`
+                    
+                    nodesInput.innerHTML = nodesInputHTML(nodesAddr);
+
+                    nodesButtonIndex.addEventListener('click', () => {
+                        
+                        // nodesButtonIndex.classList.replace('d-block', 'd-none')
+                        nodesInput.innerHTML = nodesInputHTML(nodesAddr);
+
                     })
-
-                    nodesInputHTML += `<div class="container" id="nodes-response"></div>`
-                
-                    nodesInput.innerHTML = nodesInputHTML;
+                    
+                    
+                    
+                    
+                    
+                    
 
 
 
@@ -228,11 +382,14 @@ function scrap() {
                     nodesAddr.forEach((node, index) => {
 
                         document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
-                            
+
+                            console.log('getgetget');
+                            let addr = document.getElementById(`nodes-addr-input-${index}`).value;
                             let path = document.getElementById(`nodes-path-input-${index}`).value;
                             
-                            fetch(`http://[${node}]/${path}`)
+                            fetch(`http://[${addr}]/${path}`)
                                 .then(function(response) {
+                                    
                                     return response.text()
                                 })
                                     .then(function(text) {
@@ -252,22 +409,19 @@ function scrap() {
                                         
                                         document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
 
-                                        const nodesEncodedResponseDiv = document.getElementById('nodes-encoded-response-div');
-                                        const nodesButtonDecode = document.getElementById('nodes-button-decode');
-                                        
                                         nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
                                         nodesEncodedResponseDiv.innerText = text;
 
                                         nodesButtonDecode.classList.replace('d-none', 'd-block')
 
-                                        var globalIndex = index;
-
-                                        nodesButtonClear.addEventListener('click', () => {
                                         
-                                            nodesDiv.classList.replace('border-success', 'border-primary');
-                                            nodesEncodedResponseDiv.innerText = '';
 
-                                        })
+                                        // nodesButtonClear.addEventListener('click', () => {
+                                        
+                                        //     nodesDiv.classList.replace('border-success', 'border-primary');
+                                        //     nodesEncodedResponseDiv.innerText = '';
+
+                                        // })
                     
                                         nodesButtonDecode.addEventListener('click', () => {
                                             
@@ -279,24 +433,23 @@ function scrap() {
 
                                             // document.getElementById('nodes-h2-encrypted-response').classList.replace('d-none', 'd-block')
 
-                                            const nodesEncryptedResponseDiv = document.getElementById('nodes-encrypted-response-div');
-                                            const nodesButtonDecrypt = document.getElementById('nodes-button-decrypt');
+                                            
                                         
                                             nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block')
                                             nodesEncryptedResponseDiv.innerText = decodedResponse;
 
                                             nodesButtonDecrypt.classList.replace('d-none', 'd-block')
 
-                                            nodesButtonClear.addEventListener('click', () => {
+                                            // nodesButtonClear.addEventListener('click', () => {
                                         
-                                                nodesDiv.classList.replace('border-success', 'border-primary');
-                                                nodesEncodedResponseDiv.innerText = '';
+                                            //     nodesDiv.classList.replace('border-success', 'border-primary');
+                                            //     nodesEncodedResponseDiv.innerText = '';
                                                 
-                                                nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                                                nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
-                                                nodesEncryptedResponseDiv.innerText= ''
+                                            //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
+                                            //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
+                                            //     nodesEncryptedResponseDiv.innerText= ''
     
-                                            })
+                                            // })
 
                                             nodesButtonDecrypt.addEventListener('click', () => {
 
@@ -316,9 +469,7 @@ function scrap() {
 
                                                 let decryptedResponse = oarCrypt(decodedResponse);
                                                 
-                                                const nodesStringifiedResponseDiv = document.getElementById('nodes-stringified-response-div');
-                                                const nodesButtonParse = document.getElementById('nodes-button-parse');
-                                                const nodesButtonChecksum = document.getElementById('nodes-button-checksum');
+                                                
                                         
                                                 nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block')
                                                 nodesStringifiedResponseDiv.innerText = decryptedResponse;
@@ -326,7 +477,7 @@ function scrap() {
                                                 nodesButtonParse.classList.replace('d-none', 'd-block')
                                                 nodesButtonChecksum.classList.replace('d-none', 'd-block')
 
-                                                const nodesOutputChecksum = document.getElementById('nodes-output-checksum')
+                                                
 
                                                 // nodesButtonClear.addEventListener('click', () => {
                                         
@@ -384,7 +535,7 @@ function scrap() {
                                                         var parsedResponse = JSON.parse(decryptedResponse);
                                                         nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
 
-                                                        const nodesParsedResponseDiv = document.getElementById('nodes-parsed-response-div');
+                                                        
                                                         
                                                         nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
 
@@ -460,6 +611,8 @@ function scrap() {
                                         })
                                     })
                                 .catch(function(error) {
+
+                                    
                                     
                                     nodesDiv.classList.remove('border-info');
                                     nodesDiv.classList.remove('border-success');
