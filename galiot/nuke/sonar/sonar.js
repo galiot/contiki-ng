@@ -126,6 +126,849 @@ function nodesInputHTML(nodesAddr) {
 
 }
 
+function constructLegend(content, appendix) {
+
+    legendDiv.classList.replace('d-none', 'd-block');
+
+    legendContent.innerHTML = content;
+    legendAppendix.innerHTML = appendix;
+}
+
+function elaborate(obj, intact) {
+
+    if(obj.pckt.vld === true) {
+
+        switch(obj.ndx) {
+
+            case 0: 
+                
+                var system = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    system: {
+                        contikiVersion: obj.sys.cV,
+                        networkStackRouting: obj.sys.rt,
+                        networkStackNetwork: obj.sys.net,
+                        ieee802154PANID: obj.sys.pId,
+            
+                        networkStackMac: {
+                            name: obj.sys.mac.t,
+                            tschDefaultHoppingSequence: obj.sys.mac.tDhS,
+                            defaultChannel: obj.sys.mac.dCh
+                        },
+                        nodeId: obj.sys.nId,
+                        tentaticeLinkLocalIPv6address: obj.sys.tIad
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return system;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 2:
+                
+                var energest = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    energest: {
+                        energest: obj.nrg.en,
+                        cpu: obj.nrg.cp,
+                        lpm: obj.nrg.lp,
+                        deepLpm: obj.nrg.dL,
+                        totalTime: obj.nrg.tT,
+                        radioListening: obj.nrg.rL,
+                        radioTransmiting: obj.nrg.rT,
+                        radioOff: obj.nrg.r0
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return energest;
+               
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 3:
+                
+                var stats_network_ip = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_ip: {
+                        uipStatistics: obj.ipSt.uS,
+                        ip: {
+                            ipRecv: obj.ipSt.ip.rx,
+                            ipSent: obj.ipSt.ip.tx,
+                            ipForwarded: obj.ipSt.ip.fw,
+                            ipDrop: obj.ipSt.ip.dr,    
+                            ipVhlerr: obj.ipSt.ip.vE,  
+                            ipHblenerr: obj.ipSt.ip.hE,
+                            ipLblenerr: obj.ipSt.ip.lE,
+                            ipFragerr: obj.ipSt.ip.fE, 
+                            ipChkerr: obj.ipSt.ip.cE, 
+                            ipProtoerr: obj.ipSt.ip.pE
+                        }
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+                
+                return stats_network_ip;
+               
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 4:
+                
+                var stats_network_icmp = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_icmp: {
+                        uipStatistics: obj.icSt.uS,
+                        icmp: {
+                            icmpRecv: obj.icSt.ic.rx,    
+                            icmpSent: obj.icSt.ic.tx,     
+                            icmpDrop: obj.icSt.ic.dr,
+                            icmpTypeerr: obj.icSt.ic.tE,     
+                            icmpChkerr: obj.icSt.ic.cE  
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_network_icmp;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 5:
+                var stats_transport = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_transport: {
+                        uipStatistics: obj.tSt.uS,
+                        tcp: {
+                            tcp: obj.tSt.tcp.use,        
+                            tcpRecv: obj.tSt.tcp.rx,    
+                            tcpSent: obj.tSt.tcp.tx,    
+                            tcpDrop: obj.tSt.tcp.dr,    
+                            tcpChkerr: obj.tSt.tcp.cE,  
+                            tcpAckerr: obj.tSt.tcp.aA,  
+                            tcpRst: obj.tSt.tcp.rst,     
+                            tcpRexmit: obj.tSt.tcp.rM,  
+                            tcpSyndrop: obj.tSt.tcp.sD, 
+                            tcpSynrst: obj.tSt.tcp.sR  
+                        },
+                        udp: {
+                            udp: obj.tSt.udp.use,  
+                            udpDrop: obj.tSt.udp.dr,
+                            udpRecv: obj.tSt.udp.rx,  
+                            udpSent: obj.tSt.udp.tx,  
+                            udpChkerr: obj.tSt.udp.cE
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_transport;
+               
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 6:
+                var stats_discovery = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_discovery: {
+                        uipStatistics: obj.dSt.uS,
+                        nd6: {
+                            nd6drop: obj.dSt.nd6.dr,
+                            nd6recv: obj.dSt.nd6.rx,
+                            nd6sent: obj.dSt.nd6.tx
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_discovery;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 7:
+                var cmd_ipAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipAddr: {
+                        ipv6: obj.addr.IPv6,
+                        nodeIPv6addresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = {nodeIPv6address: address});
+                
+                return cmd_ipAddr;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 8:
+                var cmd_IpNeighbors_ipAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_IpNeighbors_ipAddr: {
+                        ipv6: obj.nsIP.IPv6,
+                        nodeIPv6neighborIpAddresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.nsIP.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = {nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr}
+                    } else {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
+                    }
+                });
+
+                return cmd_IpNeighbors_ipAddr;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 9:
+                var cmd_ipNeighbors_llAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipNeighbors_llAddr: {
+                        ipv6: obj.nsLL.IPv6,
+                        nodeIPv6neighborLlAddresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.nsLL.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = {nodeIPv6neighborLlAddress: neighbor.llAddr}
+                    } else {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
+                    }
+                });
+
+                return cmd_ipNeighbors_llAddr;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 10:
+                var cmd_ipNeighbors_info = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipNeighbors_info: {
+                        ipv6: obj.nsSt.IPv6,
+                        nodeIPv6neighborInfo: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.nsSt.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = new{nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state}
+                    } else {
+                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
+                    }
+                });
+                
+                return cmd_ipNeighbors_info;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 11:
+                var cmd_routes ={
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes: {
+                        ipv6: obj.rt.IPv6,
+                        defaultRoute: obj.rt.df,
+                        lifetime: obj.rt.lt
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return cmd_routes;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 12:
+                var cmd_routes_routingLinks_sources = new {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingLinks_sources: {
+                        ipv6: obj.rtLS.IPv6,
+                        rpl: obj.rtLS.rpl,
+                        totalRoutingLinks: obj.rtLS.totLs,
+                        routeSources: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rtLS.ls.forEach(function(link, index) {
+                    if (link != null) {
+                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
+                    } else {
+                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = null
+                    }
+                });
+
+                return cmd_routes_routingLinks_sources;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 13:
+                var cmd_routes_routingLinks_destinations = new {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingLinks_destinations: {
+                        ipv6: obj.rtLD.IPv6,
+                        rpl: obj.rtLD.rpl,
+                        totalRoutingLinks: obj.rtLD.totLs,
+                        routeDestinations: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rtLD.ls.forEach(function(link, index) {
+                    if (link != null) {
+                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = new {linkDestinationAddr: link.to, lifetime: link.lf}
+                    } else {
+                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
+                    }
+                });
+
+                return cmd_routes_routingLinks_destinations;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 14:
+                var cmd_routes_routingEntries_routes = new {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingEntries_routes: {
+                        ipv6: obj.rtERt.IPv6,
+                        maxRoutesNon0: obj.rtERt.maxRtsN0,
+                        totalRoutingEntries: obj.rtERt.totEs,
+                        routes: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rtERt.es.forEach(function(entry, index) {
+                    if (entry != null) {
+                        cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = {entryRouteAddr: entry.rt}
+                    } else {
+                        cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = null
+                    }
+                });
+
+                return cmd_routes_routingEntries_routes;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 15:
+                var cmd_routes_routingEntries_vias = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingEntries_vias: {
+                        ipv6: obj.rtEVia.IPv6,
+                        maxRoutesNon0: obj.rtEVia.maxRtsN0,
+                        totalRoutingEntries: obj.rtEVia.totEs,
+                        vias: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rtEVia.es.forEach(function(entry, index) {
+                    if (entry != null) {
+                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = new {entryViaAddr: entry.via, lifetime: entry.lf}
+                    } else {
+                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = null
+                    }
+                });
+
+                return cmd_routes_routingEntries_vias;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 16:
+                var cmd_rplStatus = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus: {
+                        rplLite: obj.rSt.rL,
+                        instance: obj.rSt.iId,
+                        modeOfOperation: obj.rSt.mop,
+                        objectiveCodePoint: obj.rSt.of,
+                        hopRankIncrement: obj.rSt.hRkI,
+                        defaultLifetime: obj.rSt.dLt,
+                        dtsnOut: obj.rSt.dtsn0
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return cmd_rplStatus;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 17:
+                var cmd_rplStatus_dag = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus_dag: {
+                        rplLite: obj.rStDag.rL,
+                        instance: obj.rStDag.iId,
+                        dagRole: obj.rStDag.dT,
+                        dagId: obj.rStDag.dId,
+                        dagPrefix: obj.rStDag.dPf,
+                        dagPrefixLength: obj.rStDag.dPfL,
+                        dagState: obj.rStDag.st,
+                        dagPreferedParent: obj.rStDag.pP,
+                        dagRank: obj.rStDag.rk,
+                        dagLowestRank: obj.rStDag.lRk,
+                        maxRankIncrement: obj.rStDag.mRkI,
+                        dao: {
+                            daoSequenceLastSent: obj.rStDag.dao.lS,
+                            daoSequenceLastAcked: obj.rStDag.dao.lA
+                        }
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return cmd_rplStatus_dag;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 18:
+                var cmd_rplStatus_trickleTimer = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus_trickleTimer: {
+                        rplLite: obj.rStTt.rL,
+                        instance: obj.rStTt.iId,
+                        current: obj.rStTt.cur,
+                        min: obj.rStTt.min, 
+                        max: obj.rStTt.max,
+                        redundancy: obj.rStTt.red
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return cmd_rplStatus_trickleTimer;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 19:
+                var cmd_rplNbr_addr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_addr: {
+                        rplLite: obj.rN.rL,
+                        instance: obj.rN.iId,
+                        rplNeighborCount: obj.rN.c,
+                        addresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rN.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = new {rplAddress: neighbor.ad}
+                    } else {
+                        cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = null
+                    }
+                });
+
+                return cmd_rplNbr_addr;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 20:
+                var cmd_rplNbr_ranks = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_ranks: {
+                        rplLite: obj.rNR.rL,
+                        instance: obj.rNR.iId,
+                        rplNeighborCount: obj.rNR.c,
+                        ranks: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rNR.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = {rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN}
+                    } else {
+                        cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = null
+                    }
+                });
+
+                return cmd_rplNbr_ranks;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 21:
+                var cmd_rplNbr_values = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_values: {
+                        rplLite: obj.rNV.rL,
+                        instance: obj.rNV.iId,
+                        rplNeighborCount: obj.rNV.c,
+                        values: [rplValuesSchema]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rNV.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_values.cmd_rplNbr_values.values[index] = {rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p}
+                    } else {
+                        cmd_rplNbr_values.cmd_rplNbr_values.values[index] = null
+                    }
+                });
+
+                return cmd_rplNbr_ranks;
+               
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 22:
+                var cmd_rplNbr_parens = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_parens: {
+                        rplLite: obj.rNP.rL,
+                        instance: obj.rNP.iId,
+                        rplNeighborCount: obj.rNP.c,
+                        parens: [rplParensSchema]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.rNP.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = {rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bs}
+                    } else {
+                        cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = null
+                    }
+                });
+
+                return cmd_rplNbr_parens;              
+        }
+    } else {
+
+        var errorReport = {
+            packet: {
+                valid: obj.pckt.vld,
+                error: {
+                    text: obj.err.txt,
+                    code: obj.err.cd
+                }
+            },
+            mote: {
+                systemTime: obj.id.sT,
+                linkLayerAddress: obj.id.adr,
+                moteCode: obj.id.cd
+            },
+            checksum: {
+                hash: obj.hash,
+                check: intact
+            },
+            update: new Date
+        };
+
+        return errorReport;
+    }
+
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC HTML ELEMENTS GLOBAL DECLARATIONS ///////////////////////////////////
@@ -184,6 +1027,12 @@ const consoleH1 = document.getElementById('console-h1');
 const consoleButtonReload = document.getElementById('console-button-reload');
 const consoleButtonClear = document.getElementById('console-button-clear');
 const consoleButtonContinue = document.getElementById('console-button-continue');
+
+// LEGEND
+
+const legendDiv = document.getElementById('legend-div');
+const legendContent = document.getElementById('legend-content');
+const legendAppendix = document.getElementById('legend-appendix')
 
 
 
@@ -359,6 +1208,10 @@ function constructDecryption(decodedResponse) {
     nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block');
     nodesStringifiedResponseDiv.innerText = decryptedResponse;
 
+    nodesOutputChecksum.classList.replace('d-block', 'd-none');
+    nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary','btn-outline-secondary', 'btn-outline-muted'); nodesButtonChecksum.classList.add('btn-primary');
+    nodesButtonParse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary','btn-outline-secondary', 'btn-outline-muted', 'btn-muted'); nodesButtonParse.classList.add('btn-primary');
+
     return decryptedResponse;
 }
 
@@ -388,6 +1241,10 @@ function constructIntactness() {
     nodesOutputChecksum.innerText = 'INTACT';
     nodesOutputChecksum.classList.remove('bg-danger', 'bg-warning'); nodesOutputChecksum.classList.add('bg-success');
     nodesOutputChecksum.classList.replace('d-none', 'd-block');
+
+    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-primary'); nodesDiv.classList.add( 'border-success');
+
+    nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary','btn-outline-secondary', 'btn-outline-muted'); nodesButtonChecksum.classList.add('btn-outline-success')
 }
 
 function constructCorruptness() {
@@ -397,7 +1254,7 @@ function constructCorruptness() {
     nodesOutputChecksum.classList.remove('bg-danger', 'bg-success'); nodesOutputChecksum.classList.add('bg-warning');
     nodesOutputChecksum.classList.replace('d-none', 'd-block')
 
-    nodesDiv.classList.remove('bg-danger', 'bg-success', 'bg-info'); nodesDiv.classList.add('bg-warning');
+    nodesDiv.classList.remove('border-danger', 'border-success', 'border-info'); nodesDiv.classList.add('border-warning');
 }
 
 function constructParse_OK(parsedResponse) {
@@ -422,7 +1279,12 @@ function constructParse_OK(parsedResponse) {
     nodesKeyInput.classList.replace('border-success', 'border-secondary');
     nodesKeyInput.classList.replace('text-light', 'text-secondary');
 
-    nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
+    nodesButtonParse.classList.remove('btn-primary', 'btn-outline-danger'); nodesButtonParse.classList.add('btn-outline-success');
+
+    nodesOutputChecksum.classList.remove('bg-danger', 'bg-warning'); nodesOutputChecksum.classList.add('bg-success');
+    nodesOutputChecksum.innerText = "OK";
+
+    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-primary'); nodesDiv.classList.add( 'border-success');
 }
 
 function constructParse_FAIL(error) {
@@ -431,14 +1293,11 @@ function constructParse_FAIL(error) {
 
     nodesOutputChecksum.innerText = error;
 
-    nodesOutputChecksum.classList.remove('bg-success');
-    nodesOutputChecksum.classList.remove('bg-warning');
-    nodesOutputChecksum.classList.add('bg-danger');
-    nodesOutputChecksum.classList.replace('d-none', 'd-block')
+    nodesOutputChecksum.classList.remove('bg-warning', 'bg-success'); nodesOutputChecksum.classList.add('bg-danger');
+    nodesOutputChecksum.classList.replace('d-none', 'd-block');
 
     nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary','btn-outline-muted'); nodesButtonChecksum.classList.add('btn-outline-secondary')
     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
-
 }
 
 
@@ -621,7 +1480,13 @@ function scrap() {
                                                             let parsedResponse = JSON.parse(decryptedResponse);
 
                                                             constructParse_OK(parsedResponse);
-                                                            constructLegend(parsedResponse, intact);
+
+                                                            console.log(JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2));
+                                                            
+
+                                                            constructLegend('<pre>' + JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2) + '</pre>');
+
+                                                            
     
                                                         } 
                                                         catch(error) {
@@ -694,336 +1559,3 @@ function simConsole(nodesAddr) {
 }
 
 
-function constructLegend(obj, intact) {
-
-    let elaboratedObj = elaborate(obj, intact);
-    console.log(elaboratedObj);
-
-}
-
-function elaborate(obj, intact) {
-
-    if(obj.pckt.vld === true) {
-
-        switch(obj.ndx) {
-
-            case 0: 
-                
-                var system = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    system: {
-                        contikiVersion: obj.sys.cV,
-                        networkStackRouting: obj.sys.rt,
-                        networkStackNetwork: obj.sys.net,
-                        ieee802154PANID: obj.sys.pId,
-            
-                        networkStackMac: {
-                            name: obj.sys.mac.t,
-                            tschDefaultHoppingSequence: obj.sys.mac.tDhS,
-                            defaultChannel: obj.sys.mac.dCh
-                        },
-                        nodeId: obj.sys.nId,
-                        tentaticeLinkLocalIPv6address: obj.sys.tIad
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                return system;
-            
-            case 2:
-                
-                var energest = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    energest: {
-                        energest: obj.nrg.en,
-                        cpu: obj.nrg.cp,
-                        lpm: obj.nrg.lp,
-                        deepLpm: obj.nrg.dL,
-                        totalTime: obj.nrg.tT,
-                        radioListening: obj.nrg.rL,
-                        radioTransmiting: obj.nrg.rT,
-                        radioOff: obj.nrg.r0
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                return energest;
-
-            case 3:
-                
-                var stats_network_ip = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    stats_network_ip: {
-                        uipStatistics: obj.ipSt.uS,
-                        ip: {
-                            ipRecv: obj.ipSt.ip.rx,
-                            ipSent: obj.ipSt.ip.tx,
-                            ipForwarded: obj.ipSt.ip.fw,
-                            ipDrop: obj.ipSt.ip.dr,    
-                            ipVhlerr: obj.ipSt.ip.vE,  
-                            ipHblenerr: obj.ipSt.ip.hE,
-                            ipLblenerr: obj.ipSt.ip.lE,
-                            ipFragerr: obj.ipSt.ip.fE, 
-                            ipChkerr: obj.ipSt.ip.cE, 
-                            ipProtoerr: obj.ipSt.ip.pE
-                        }
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-                
-                return stats_network_ip;
-
-            case 4:
-                
-                var stats_network_icmp = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    stats_network_icmp: {
-                        uipStatistics: obj.icSt.uS,
-                        icmp: {
-                            icmpRecv: obj.icSt.ic.rx,    
-                            icmpSent: obj.icSt.ic.tx,     
-                            icmpDrop: obj.icSt.ic.dr,
-                            icmpTypeerr: obj.icSt.ic.tE,     
-                            icmpChkerr: obj.icSt.ic.cE  
-                        } 
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                return stats_network_icmp;
-
-            case 5:
-                var stats_transport = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    stats_transport: {
-                        uipStatistics: obj.tSt.uS,
-                        tcp: {
-                            tcp: obj.tSt.tcp.use,        
-                            tcpRecv: obj.tSt.tcp.rx,    
-                            tcpSent: obj.tSt.tcp.tx,    
-                            tcpDrop: obj.tSt.tcp.dr,    
-                            tcpChkerr: obj.tSt.tcp.cE,  
-                            tcpAckerr: obj.tSt.tcp.aA,  
-                            tcpRst: obj.tSt.tcp.rst,     
-                            tcpRexmit: obj.tSt.tcp.rM,  
-                            tcpSyndrop: obj.tSt.tcp.sD, 
-                            tcpSynrst: obj.tSt.tcp.sR  
-                        },
-                        udp: {
-                            udp: obj.tSt.udp.use,  
-                            udpDrop: obj.tSt.udp.dr,
-                            udpRecv: obj.tSt.udp.rx,  
-                            udpSent: obj.tSt.udp.tx,  
-                            udpChkerr: obj.tSt.udp.cE
-                        } 
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                return stats_transport;
-
-            case 6:
-                var stats_discovery = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    stats_discovery: {
-                        uipStatistics: obj.dSt.uS,
-                        nd6: {
-                            nd6drop: obj.dSt.nd6.dr,
-                            nd6recv: obj.dSt.nd6.rx,
-                            nd6sent: obj.dSt.nd6.tx
-                        } 
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                return stats_discovery;
-
-            case 7:
-                var cmd_ipAddr = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    cmd_ipAddr: {
-                        ipv6: obj.addr.IPv6,
-                        nodeIPv6addresses: [null]
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = {nodeIPv6address: address});
-                
-                return cmd_ipAddr;
-
-            case 8:
-                var cmd_IpNeighbors_ipAddr = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    cmd_IpNeighbors_ipAddr: {
-                        ipv6: obj.nsIP.IPv6,
-                        nodeIPv6neighborIpAddresses: [null]
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                obj.nsIP.ns.forEach(function(neighbor, index) {
-                    if (neighbor != null) {
-                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = {nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr}
-                    } else {
-                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
-                    }
-                });
-
-                return cmd_IpNeighbors_ipAddr;
-
-            case 9:
-                var cmd_ipNeighbors_llAddr = {
-                    packet: {
-                        valid: obj.pckt.vld,
-                        error: null
-                    },
-                    record: obj.rcrd,
-                    index: obj.ndx,
-                    mote: {
-                        systemTime: obj.id.sT,
-                        linkLayerAddress: obj.id.adr,
-                        moteCode: obj.id.cd
-                    },
-                    cmd_ipNeighbors_llAddr: {
-                        ipv6: obj.nsLL.IPv6,
-                        nodeIPv6neighborLlAddresses: [null]
-                    },
-                    checksum: {
-                        hash: obj.hash,
-                        check: intact
-                    },
-                    update: new Date
-                };
-
-                obj.nsLL.ns.forEach(function(neighbor, index) {
-                    if (neighbor != null) {
-                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = {nodeIPv6neighborLlAddress: neighbor.llAddr}
-                    } else {
-                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
-                    }
-                });
-
-                return cmd_ipNeighbors_llAddr;
-
-
-
-                
-
-            
-        }
-    }
-
-}
