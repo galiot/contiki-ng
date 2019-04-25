@@ -77,8 +77,28 @@ const sdbm = string => {
 // query nodes specifying path
 
 function nodesInputHTML(nodesAddr) {
-
+    
     let nodesInputHTML = ''
+
+    if(nodesAddr == undefined) {
+
+        nodesInputHTML += ` 
+        <div class="p-2 p-auto m-2 m-auto input-group"> 
+            <div class="input-group-prepend"> 
+                <button class="btn btn-secondary" type="button" id="nodes-button-0">GET</button>  
+            </div> 
+            <div class="input-group-prepend"> 
+                <span class="input-group-text bg-dark border-secondary text-secondary">http://</span>  
+            </div> 
+            <input type="text" class="form-control" placeholder="[fd:: ]" id="nodes-addr-input-0"></input> 
+            <div class="input-group-append"> 
+                <span class="input-group-text bg-dark border-secondary text-secondary">/</span> 
+            </div>
+                <input type="number" class="form-control bg-dark text-light border-secondary"  id="nodes-path-input-0"></input> 
+            </div>
+            <div class="row text-center justify-content-center" id="nodes-output-0">
+        </div>`
+    }
 
     nodesAddr.forEach((node, index) => {
 
@@ -96,7 +116,8 @@ function nodesInputHTML(nodesAddr) {
                 </div>
                     <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
             </div>
-            <div class="row text-center justify-content-center" id="nodes-output-${index}"></div>`
+            <div class="row text-center justify-content-center" id="nodes-output-${index}">
+        </div>`
     })
 
     nodesInputHTML += `<div class="container" id="nodes-response"></div>`
@@ -140,7 +161,7 @@ const nodesButtonDecode = document.getElementById('nodes-button-decode');
 const nodesEncryptedResponseDiv = document.getElementById('nodes-encrypted-response-div');
 const nodesButtonDecrypt = document.getElementById('nodes-button-decrypt');
 
-const nodesKeySpan = document.getElementById('nodes-key-span');
+// const nodesKeySpan = document.getElementById('nodes-key-span');
 const nodesKeyInput = document.getElementById('nodes-key-input');
 
 const nodesStringifiedResponseDiv = document.getElementById('nodes-stringified-response-div');
@@ -250,7 +271,16 @@ nodesButtonClear.addEventListener('click', () => {
     nodesButtonParse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
     nodesButtonParse.classList.add('btn-muted');
 
-    nodesKeySpan.classList.replace('d-block', 'd-none');
+    nodesEncodedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
+    nodesEncodedResponseDiv.classList.replace('text-secondary', 'text-light');
+    nodesEncryptedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
+    nodesEncryptedResponseDiv.classList.replace('text-secondary', 'text-light');
+
+    // nodesKeySpan.classList.remove('border-success');
+    nodesKeyInput.classList.remove('border-success', 'border-secondary');
+    nodesKeyInput.classList.add('border-primary');
+    nodesKeyInput.classList.replace('text-secondary', 'text-light');
+    // nodesKeySpan.classList.replace('d-block', 'd-none');
     nodesKeyInput.classList.replace('d-block', 'd-none');
 
     nodesOutputChecksum.classList.replace('d-block', 'd-none');
@@ -318,6 +348,12 @@ function constructDecryption(decodedResponse) {
     nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark');
     nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success');
 
+    // nodesKeySpan.classList.add('border-success');
+    // nodesKeySpan.classList.add('bg-dark');
+
+    nodesKeyInput.classList.add('border-success');
+    nodesKeyInput.classList.add('bg-dark');
+
     let decryptedResponse = oarCrypt(decodedResponse, nodesKeyInput.value);
     
     nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block');
@@ -383,6 +419,9 @@ function constructParse_OK(parsedResponse) {
     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary');
     nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary');
 
+    nodesKeyInput.classList.replace('border-success', 'border-secondary');
+    nodesKeyInput.classList.replace('text-light', 'text-secondary');
+
     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
 }
 
@@ -422,10 +461,12 @@ function scrap() {
     console.log(brInput.value)
 
     fetch(`http://${brInput.value}/`)
+        
         .then(function(response) {
             // console.log(response);
             return response.text()
         })
+            
             .then(function(text) {
                 // Initialize the DOM parser
                 var parser = new DOMParser();
@@ -490,28 +531,19 @@ function scrap() {
 
 
                     
-
-                    // NODES
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // NODES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     
-
-
-
-
-
                     nodesDiv.classList.remove('border-secondary', 'border-success', 'border-warning', 'border-danger');
                     nodesDiv.classList.add('border-info');
-
-                    nodesButtonIndex.classList.replace('d-none', 'd-block');
-                    
                     nodesH1.classList.replace('text-muted', 'text-light');
-
+                    nodesButtonIndex.classList.replace('btn-muted', 'btn-outline-primary');
                     
                     
                     
                     
-                    
-                    
-
+                    nodesButtonIndex.classList.replace('d-none', 'd-block');
                     nodesButtonIndex.addEventListener('click', () => {
                         
                         nodesButtonIndex.classList.replace('d-block', 'd-none')
@@ -557,7 +589,7 @@ function scrap() {
                                                 
                                                 let decodedResponse = constructDecoding(text);
                                                 
-                                                nodesKeySpan.classList.replace('d-none', 'd-block');
+                                                // nodesKeySpan.classList.replace('d-none', 'd-block');
                                                 nodesKeyInput.classList.replace('d-none', 'd-block');
 
                                                 nodesButtonDecrypt.classList.replace('btn-muted', 'btn-primary');
@@ -618,291 +650,28 @@ function scrap() {
                         })
                     })
                     
+                } catch {
                     
-                    
-                    
-                    
-                    
+                    if(uls.length < 2) {
 
+                        brDiv.classList.remove('border-info');
+                        brDiv.classList.remove('border-success');
+                        brDiv.classList.remove('border-danger');
+                        brDiv.classList.add('border-warning');
 
+                        brOutput.innerText = 'INCOMPLETE';
 
+                        brOutput.classList.remove('bg-danger');
+                        brOutput.classList.remove('bg-success');
+                        brOutput.classList.add('bg-warning');
+                        brOutput.classList.replace('d-none', 'd-block')
 
+                        brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-muted');
 
-                    // nodesAddr.forEach((node, index) => {
-
-                    //     document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
-
-                    //         console.log('getgetget');
-                    //         let addr = document.getElementById(`nodes-addr-input-${index}`).value;
-                    //         let path = document.getElementById(`nodes-path-input-${index}`).value;
-                            
-                    //         fetch(`http://[${addr}]/${path}`)
-                    //             .then(function(response) {
-                                    
-                    //                 return response.text()
-                    //             })
-                    //                 .then(function(text) {
-                    //                     console.log(text);
-
-                    //                     nodesDiv.classList.remove('border-info');
-                    //                     nodesDiv.classList.remove('border-warning');
-                    //                     nodesDiv.classList.remove('border-danger');
-                    //                     nodesDiv.classList.add('border-success');
-
-                    //                     document.getElementById(`nodes-output-${index}`).innerText = 'OK';
-                                        
-                    //                     document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
-                    //                     document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger');
-                    //                     document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
-                    //                     document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                        
-                    //                     document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
-
-                    //                     nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
-                    //                     nodesEncodedResponseDiv.innerText = text;
-
-                    //                     nodesButtonDecode.classList.replace('d-none', 'd-block')
-
-                                        
-
-                    //                     // nodesButtonClear.addEventListener('click', () => {
-                                        
-                    //                     //     nodesDiv.classList.replace('border-success', 'border-primary');
-                    //                     //     nodesEncodedResponseDiv.innerText = '';
-
-                    //                     // })
-                    
-                    //                     nodesButtonDecode.addEventListener('click', () => {
-                                            
-                    //                         nodesEncodedResponseDiv.classList.replace('text-light', 'text-dark')
-                    //                         nodesButtonDecode.classList.replace('btn-primary', 'btn-outline-success')
-
-                                            
-                    //                         let decodedResponse = atob(text);
-
-                    //                         // document.getElementById('nodes-h2-encrypted-response').classList.replace('d-none', 'd-block')
-
-                                            
-                                        
-                    //                         nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block')
-                    //                         nodesEncryptedResponseDiv.innerText = decodedResponse;
-
-                    //                         nodesButtonDecrypt.classList.replace('d-none', 'd-block')
-
-                    //                         // nodesButtonClear.addEventListener('click', () => {
-                                        
-                    //                         //     nodesDiv.classList.replace('border-success', 'border-primary');
-                    //                         //     nodesEncodedResponseDiv.innerText = '';
-                                                
-                    //                         //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                    //                         //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
-                    //                         //     nodesEncryptedResponseDiv.innerText= ''
-    
-                    //                         // })
-
-                    //                         nodesButtonDecrypt.addEventListener('click', () => {
-
-                    //                             nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark')
-                    //                             nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success')
-                                                
-                    //                             function oarCrypt(input) {
-                    //                                 var key = ['!', '@', '#', '$', '%', '^', '&', '*'];
-                    //                                 var output = [];
-                                                    
-                    //                                 for (var i = 0; i < input.length; i++) {
-                    //                                     var charCode = input.charCodeAt(i) ^ (key[i % key.length].charCodeAt(0));
-                    //                                     output.push(String.fromCharCode(charCode));
-                    //                                 }
-                    //                                 return output.join("");
-                    //                             }
-
-                    //                             let decryptedResponse = oarCrypt(decodedResponse);
-                                                
-                                                
-                                        
-                    //                             nodesStringifiedResponseDiv.classList.replace('d-none', 'd-block')
-                    //                             nodesStringifiedResponseDiv.innerText = decryptedResponse;
-
-                    //                             nodesButtonParse.classList.replace('d-none', 'd-block')
-                    //                             nodesButtonChecksum.classList.replace('d-none', 'd-block')
-
-                                                
-
-                    //                             // nodesButtonClear.addEventListener('click', () => {
-                                        
-                    //                             //     nodesDiv.classList.replace('border-success', 'border-primary');
-                    //                             //     nodesEncodedResponseDiv.innerText = '';
-                                                    
-                    //                             //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                    //                             //     nodesButtonDecode.classList.replace('btn-outline-success', 'btn-primary')
-                    //                             //     nodesEncryptedResponseDiv.innerText= ''
-
-                    //                             //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
-                    //                             //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
-
-                    //                             //     nodesStringifiedResponseDiv.innerText = '';
-
-                    //                             // })
-
-                    //                             let obj = JSON.parse(decryptedResponse);
-                    //                             let payloadHash = obj.hash;
-                    //                             let goa = obj;
-                    //                             delete goa.hash;
-                    //                             goa = JSON.stringify(goa);
-                    //                             let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
-                    //                             console.log(intact);
-
-                    //                             nodesButtonChecksum.addEventListener('click', () => {
-
-                    //                                 if(intact) {
-                    //                                     nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-success')
-                                                        
-                    //                                     nodesOutputChecksum.innerText = 'INTACT';
-
-                    //                                     nodesOutputChecksum.classList.remove('bg-danger');
-                    //                                     nodesOutputChecksum.classList.remove('bg-warning');
-                    //                                     nodesOutputChecksum.classList.add('bg-success');
-                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
-                    //                                 } else {
-                    //                                     nodesButtonChecksum.classList.replace('btn-primary', 'btn-outline-danger')
-                                                        
-                    //                                     nodesOutputChecksum.innerText = 'CORRUPTED';
-
-                    //                                     nodesOutputChecksum.classList.remove('bg-success');
-                    //                                     nodesOutputChecksum.classList.remove('bg-danger');
-                    //                                     nodesOutputChecksum.classList.add('bg-warning');
-                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
-
-                    //                                     nodesDiv.classList.remove('bg-success');
-                    //                                     nodesDiv.classList.remove('bg-danger');
-                    //                                     nodesDiv.classList.add('bg-warning');
-                    //                                 }
-                    //                             })
-                                                
-                    //                             nodesButtonParse.addEventListener('click', () => {
-                    //                                 try{
-                    //                                     var parsedResponse = JSON.parse(decryptedResponse);
-                    //                                     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-success');
-
-                                                        
-                                                        
-                    //                                     nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
-
-                    //                                     nodesParsedResponseDiv.innerHTML = JSON.stringify(parsedResponse, null, 2);
-
-                    //                                     console.log(syntaxHighlight(parsedResponse));
-
-                    //                                     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary')
-                    //                                     nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
-                    //                                     nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary')
-                                                        
-                    //                                     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary')
-                    //                                     nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark')
-                    //                                     nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary')
-
-                    //                                     nodesButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-
-                    //                                     nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary')
-                    //                                     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary')
-                    //                                     nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary')
-
-                    //                                     // nodesButtonClear.addEventListener('click', () => {
-                                        
-                    //                                     //     nodesDiv.classList.replace('border-success', 'border-primary');
-                    //                                     //     nodesEncodedResponseDiv.innerText = '';
-                    //                                     //     nodesButtonDecode.classList.replace('d-block', 'd-none');
-                    //                                     //     nodesDiv.classList.replace('d-block', 'd-none')
-                                                            
-                    //                                     //     nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light')
-                    //                                     //     nodesButtonDecode.classList.replace('btn-success', 'btn-outline-primary')
-                    //                                     //     nodesEncryptedResponseDiv.classList.replace('d-block', 'd-node')
-                    //                                     //     nodesEncryptedResponseDiv.innerText= ''
-        
-                    //                                     //     nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light')
-                    //                                     //     nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-primary')
-        
-                    //                                     //     nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none')
-                    //                                     //     nodesStringifiedResponseDiv.innerText = '';
-        
-                    //                                     //     nodesButtonParse.classList.replace('d-block', 'd-none')
-                    //                                     //     nodesButtonChecksum.classList.replace('d-block', 'd-none')
-
-                    //                                     //     nodesOutputChecksum.classList.replace('d-block', 'd-none')
-                    //                                     //     nodesButtonParse.classList.replace('btn-outline-success', 'btn-primary');
-                    //                                     //     nodesParsedResponseDiv.classList.replace('d-block', 'd-none');
-                    //                                     //     nodesParsedResponseDiv.innerHTML = ''
-        
-                    //                                     // })
-                                                        
-                    //                                     // CONTINUE FROM HERE TOMORROW
-
-                                                        
-
-                    //                                     constructLegend(parsedResponse, intact);
-
-
-                    //                                 } catch(error) {
-                    //                                     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
-
-                    //                                     nodesDiv.classList.remove('bg-warning');
-                    //                                     nodesDiv.classList.remove('bg-danger');
-                    //                                     nodesDiv.classList.add('bg-danger');
-
-                    //                                     nodesOutputChecksum.innerText = error;
-
-                    //                                     nodesOutputChecksum.classList.remove('bg-success');
-                    //                                     nodesOutputChecksum.classList.remove('bg-warning');
-                    //                                     nodesOutputChecksum.classList.add('bg-danger');
-                    //                                     nodesOutputChecksum.classList.replace('d-none', 'd-block')
-                    //                                 }
-                    //                             })
-                    //                         })
-                    //                     })
-                    //                 })
-                    //             .catch(function(error) {
-
-                                    
-                                    
-                    //                 nodesDiv.classList.remove('border-info');
-                    //                 nodesDiv.classList.remove('border-success');
-                    //                 nodesDiv.classList.remove('border-warning');
-                    //                 nodesDiv.classList.add('border-danger');
-
-                    //                 document.getElementById(`nodes-output-${index}`).innerText = error;
-                                        
-                    //                 document.getElementById(`nodes-output-${index}`).classList.remove('bg-success');
-                    //                 document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning');
-                    //                 document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
-                    //                 document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                    
-                    //                 console.log(error);
-                    //             }
-                    //         )
-                            
-                    //     })
-                    // })
-                    
-            } catch {
-                
-                if(uls.length < 2) {
-
-                    brDiv.classList.remove('border-info');
-                    brDiv.classList.remove('border-success');
-                    brDiv.classList.remove('border-danger');
-                    brDiv.classList.add('border-warning');
-
-                    brOutput.innerText = 'warning: detected neighbor data are incomplete.';
-
-                    brOutput.classList.remove('bg-danger');
-                    brOutput.classList.remove('bg-success');
-                    brOutput.classList.add('bg-warning');
-                    brOutput.classList.replace('d-none', 'd-block')
-
-                    brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-muted');
-
+                    }
                 }
-            }
-        })
+            })
+
         .catch(function(error) {
 
             brDiv.classList.remove('border-info');
@@ -939,6 +708,7 @@ function elaborate(obj, intact) {
         switch(obj.ndx) {
 
             case 0: 
+                
                 var system = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -973,6 +743,286 @@ function elaborate(obj, intact) {
                 };
 
                 return system;
+            
+            case 2:
+                
+                var energest = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    energest: {
+                        energest: obj.nrg.en,
+                        cpu: obj.nrg.cp,
+                        lpm: obj.nrg.lp,
+                        deepLpm: obj.nrg.dL,
+                        totalTime: obj.nrg.tT,
+                        radioListening: obj.nrg.rL,
+                        radioTransmiting: obj.nrg.rT,
+                        radioOff: obj.nrg.r0
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return energest;
+
+            case 3:
+                
+                var stats_network_ip = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_ip: {
+                        uipStatistics: obj.ipSt.uS,
+                        ip: {
+                            ipRecv: obj.ipSt.ip.rx,
+                            ipSent: obj.ipSt.ip.tx,
+                            ipForwarded: obj.ipSt.ip.fw,
+                            ipDrop: obj.ipSt.ip.dr,    
+                            ipVhlerr: obj.ipSt.ip.vE,  
+                            ipHblenerr: obj.ipSt.ip.hE,
+                            ipLblenerr: obj.ipSt.ip.lE,
+                            ipFragerr: obj.ipSt.ip.fE, 
+                            ipChkerr: obj.ipSt.ip.cE, 
+                            ipProtoerr: obj.ipSt.ip.pE
+                        }
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+                
+                return stats_network_ip;
+
+            case 4:
+                
+                var stats_network_icmp = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_icmp: {
+                        uipStatistics: obj.icSt.uS,
+                        icmp: {
+                            icmpRecv: obj.icSt.ic.rx,    
+                            icmpSent: obj.icSt.ic.tx,     
+                            icmpDrop: obj.icSt.ic.dr,
+                            icmpTypeerr: obj.icSt.ic.tE,     
+                            icmpChkerr: obj.icSt.ic.cE  
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_network_icmp;
+
+            case 5:
+                var stats_transport = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_transport: {
+                        uipStatistics: obj.tSt.uS,
+                        tcp: {
+                            tcp: obj.tSt.tcp.use,        
+                            tcpRecv: obj.tSt.tcp.rx,    
+                            tcpSent: obj.tSt.tcp.tx,    
+                            tcpDrop: obj.tSt.tcp.dr,    
+                            tcpChkerr: obj.tSt.tcp.cE,  
+                            tcpAckerr: obj.tSt.tcp.aA,  
+                            tcpRst: obj.tSt.tcp.rst,     
+                            tcpRexmit: obj.tSt.tcp.rM,  
+                            tcpSyndrop: obj.tSt.tcp.sD, 
+                            tcpSynrst: obj.tSt.tcp.sR  
+                        },
+                        udp: {
+                            udp: obj.tSt.udp.use,  
+                            udpDrop: obj.tSt.udp.dr,
+                            udpRecv: obj.tSt.udp.rx,  
+                            udpSent: obj.tSt.udp.tx,  
+                            udpChkerr: obj.tSt.udp.cE
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_transport;
+
+            case 6:
+                var stats_discovery = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_discovery: {
+                        uipStatistics: obj.dSt.uS,
+                        nd6: {
+                            nd6drop: obj.dSt.nd6.dr,
+                            nd6recv: obj.dSt.nd6.rx,
+                            nd6sent: obj.dSt.nd6.tx
+                        } 
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                return stats_discovery;
+
+            case 7:
+                var cmd_ipAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipAddr: {
+                        ipv6: obj.addr.IPv6,
+                        nodeIPv6addresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = {nodeIPv6address: address});
+                
+                return cmd_ipAddr;
+
+            case 8:
+                var cmd_IpNeighbors_ipAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_IpNeighbors_ipAddr: {
+                        ipv6: obj.nsIP.IPv6,
+                        nodeIPv6neighborIpAddresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.nsIP.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = {nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr}
+                    } else {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
+                    }
+                });
+
+                return cmd_IpNeighbors_ipAddr;
+
+            case 9:
+                var cmd_ipNeighbors_llAddr = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipNeighbors_llAddr: {
+                        ipv6: obj.nsLL.IPv6,
+                        nodeIPv6neighborLlAddresses: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.nsLL.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = {nodeIPv6neighborLlAddress: neighbor.llAddr}
+                    } else {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
+                    }
+                });
+
+                return cmd_ipNeighbors_llAddr;
+
+
+
+                
+
+            
         }
     }
 
