@@ -64,7 +64,7 @@
 
 
         <!-- BORDER ROUTER OUTPUT ///////////////////////////////////////////////////////// -->
-        <div class="d-none row text-center" id="br-output"></div>
+        <div class="d-none row text-center mt-0" id="br-output"></div>
 
 
 
@@ -163,7 +163,7 @@
             <div class=" px-5 my-3 mx-auto text-center input-group">
 
                 <!-- <div class="input-group-prepend"><span class=" d-none input-group-text bg-dark text-primary border-primary" id="nodes-key-span">key</span></div> -->
-                <input type="password" class=" d-none form-control text-light bg-dark border-primary" value='!@#$%^&*' id="nodes-key-input">
+                <input type="password" class=" d-none form-control text-light bg-dark border-primary" value="!@#$%^&*" id="nodes-key-input">
                 <div class="input-group-append "><button class=" d-none btn btn-primary" id="nodes-button-decrypt">decrypt</button></div>
                 
             </div>
@@ -227,18 +227,106 @@
     <!--CONSOLE DIVISDION ================================================================= -->
     <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="console-div">
 
+        <!-- nodes-h1 -->
+        <h1 class="text-center text-secondary" id="console-h1">console</h1> 
 
-            <!-- nodes-h1 -->
-            <h1 class="text-center text-muted" id="console-h1">console</h1> 
+        <br>
 
-            <br>
+           
+        <div class="container m-auto p-auto">
+            <div class="row justify-content-center">
+                <div class="input-group mx-5">
 
-            <div class="container text-center m-auto p-auto">
-                <!-- BUTTONS -->
-                <button class="btn btn-outline-danger" id="console-button-reload">reload</button>
-                <button class="btn btn-outline-warning" id="console-button-clear">clear</button>
-                <button class="btn btn-outline-secondary" id="console-button-continue">continue</button>
+                
+                    <select class="custom-select text-secondary bg-dark border-secondary" id="console-select-node">
+                        <option selected>node...</option>
+                        <!-- <option value="system">device: system information</option>
+                        <option value="device">device: sensor readings</option>
+                        <option value="energy">device: energy consumption</option>
+                        <option value="network">network statistics (ip)</option>
+                        <option value="network">network statistics (icmp)</option>
+                        <option value="network">network statistics (tcp/udp)</option>
+                        <option value="network">network statistics (nd6)</option>
+                        <option value="shell">simulated shell command: mac-addr</option>
+                        <option value="shell">simulated shell command: ip-addr</option>
+                        <option value="shell">simulated shell command: ip-nbr</option>
+                        <option value="shell">simulated shell command: rpl-status</option>
+                        <option value="shell">simulated shell command: rpl-nbr</option> -->
+                    </select>
+                
+            
+            
+                
+                    <span class="bg-dark">&nbsp;</span>
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-dark text-secondary border-secondary" id="console-input-span">key:</span>
+                    </div>
+                    
+                    <input type="password" class="form-control bg-dark text-secondary border-secondary" value="!@#$%^&*" id="console-input-key">
+                
+                    <span class="bg-dark">&nbsp;</span>
+
+                
+                    <select class="custom-select text-secondary bg-dark border-secondary" id="console-select-query">
+                        <option selected>data...</option>
+                        <option value="device-system">device: system information</option>
+                        <option value="device-sensor">device: sensor readings</option>
+                        <option value="device-energy">device: energy consumption</option>
+                        <option value="network-ip">ip statistics: network layer (ip)</option>
+                        <option value="network-icmp">ip statistics: network layer (icmp)</option>
+                        <option value="network-tcpudp">ip statistics: transport layer (tcp/udp)</option>
+                        <option value="network-nd6">ip statistics: discovery (nd6)</option>
+                        <option value="shell-macaddr">simulated shell command: mac-addr</option>
+                        <option value="shell-ipaddr">simulated shell command: ip-addr</option>
+                        <option value="shell-ipnbr">simulated shell command: ip-nbr</option>
+                        <option value="shell-rplstatus">simulated shell command: rpl-status</option>
+                        <option value="shell-rplnbr">simulated shell command: rpl-nbr</option>
+                    </select>
+                
+        
+                
+                <button class="btn btn-outline-secondary " id="console-button-query">query</button>
+            
             </div>
+            </div>
+        </div>
+    
+
+        <div class="d-none bg-success row text-center justify-content-center mt-2" id="console-output-query">OK</div>
+
+        <div class="d-none container m-auto p-auto text-center mx-5 " id="console-table-query">
+            <table class="table table-sm table-dark">
+                <tbody id="console-table-query-tbody">
+                    
+                </tbody>
+            </table>
+        </div>
+        
+            
+
+        <br>
+
+
+        <div class="container text-center m-auto p-auto" id="console-data-div">
+
+                <h2 class="d-none text-center text-secondary" id="console-h2">data</h2> 
+
+                <br>
+
+                <div class="container text-left m-auto p-auto" id="console-data"></div>
+
+        </div>
+
+        <br>
+        <br>
+
+        <div class="container text-center m-auto p-auto">
+            <!-- BUTTONS -->
+            <button class="btn btn-outline-danger" id="console-button-reload">reload</button>
+            <button class="btn btn-outline-warning" id="console-button-clear">clear</button>
+            <button class="btn btn-outline-secondary" id="console-button-continue">continue</button>
+        </div>
 
     
     </div>
@@ -250,24 +338,444 @@
     <!--LEGEND DIVISDION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     
     
-    <div class="p-3 mt-5 container-fluid bg-light border border-light border-left-0 border-right-0" id="legend-div">
+    <div class="d-none p-3 mt-5 container-fluid bg-light border border-light border-left-0 border-right-0" id="legend-div">
 
         <h2 class="text-center">legend</h2>
 
-        <div class="container m-auto p-auto" id="legend-content"></div>
-        <div class="container m-auto p auto" id="legend-appendix"></div>
+        <div class="d-none container m-auto p-auto" id="legend-content"></div>
+        <div class="d-none container m-auto p auto" id="legend-appendix"></div>
+
+        <br>
 
         <div class="container">
 
-            <div class="table-responsive">
-                
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-system">
                 <caption>system</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">contikiVersion</th>
+                        <td colspan="2">contiki version</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">networkStackRouting</th>
+                        <td colspan="2">routing protocol</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">networkStackNetwork</th>
+                        <td colspan="2">network layer technology</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">ieee802154PANID</th>
+                        <td colspan="2">IEEE 802.15.4 PAN ID</td>
+                    </tr>
 
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">networkStackMac</th>
+                        <td colspan="2" class="bg-secondary">mac layer technology</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></p></th>
+                        <th>type</th>
+                        <td class="bg-secondary"></td>
+                        <td>mac protocol</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>tschDefaultHoppingSequence</th>
+                        <td class="bg-secondary"></td>
+                        <td>TSCH default hopping sequence</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>defaultChannel</th>
+                        <td class="bg-secondary"></td>
+                        <td>CSMA default channel</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" colspan="2">nodeId</th>
+                        <td colspan="2">node ID</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">tentaticeLinkLocalIPv6address</th>
+                        <td colspan="2">tentatice link-oca lIPv6 address</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-device">
+                <caption>device</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">temperatureSensor</th>
+                        <td colspan="2">simulated temperature sensor ( = 15 + rand( ) % 30)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">humiditySensor</th>
+                        <td colspan="2">simulated humidity sensor ( = 80 + rand( ) % 17)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-energest">
+                <caption>energest</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">energest</th>
+                        <td colspan="2">energest module used</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">cpu</th>
+                        <td colspan="2">cpu active (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">lpm</th>
+                        <td colspan="2">cpu in low power mode (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">deepLpm</th>
+                        <td colspan="2">cpu in deep low power mode (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">totalTime</th>
+                        <td colspan="2">total tracking time (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">radioListening</th>
+                        <td colspan="2">radio listening (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">radioTransmiting</th>
+                        <td colspan="2">radio transmiting (energest time source, seconds)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">radioOff</th>
+                        <td colspan="2">radioOff (energest time source, seconds)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-stats_network_ip">
+                <caption>stats_network_ip</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">uipStatistics</th>
+                        <td colspan="2">ip statistics collection active</td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">ip</th>
+                        <td colspan="2" class="bg-secondary">collected network layer statistics: ip</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>recv</th>
+                        <td class="bg-secondary"></td>
+                        <td>received packets at the IP layer</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>sent</th>
+                        <td class="bg-secondary"></td>
+                        <td>sent packets at the IP layer</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>forwarded</th>
+                        <td class="bg-secondary"></td>
+                        <td>forwarded packets at the IP layer</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>drop</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped packets at the IP layer</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></p></th>
+                        <th>vhlerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped due to wrong IP version or header length</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>hHblenerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped due to wrong IP length, high byte</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>lblenerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped due to wrong IP length, low byte</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>fragerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped because they were IP fragments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>chkerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped due to IP checksum errors</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>protoerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>packets dropped because they were neither ICMP, UDP nor TCP</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-stats_network_icmp">
+                <caption>stats_network_icmp</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">uipStatistics</th>
+                        <td colspan="2">ip statistics collection active</td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">icmp</th>
+                        <td colspan="2" class="bg-secondary">collected network layer statistics: icmp</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>recv</th>
+                        <td class="bg-secondary"></td>
+                        <td>received ICMP packets</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>sent</th>
+                        <td class="bg-secondary"></td>
+                        <td>sent ICMP packets</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>drop</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped ICMP packets</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>typeerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>ICMP packets with a wrong type</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>chkerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>ICMP packets with a bad checksum</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-stats_transport">
+                <caption>stats_transport</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">uipStatistics</th>
+                        <td colspan="2">ip statistics collection active</td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">tcp</th>
+                        <td colspan="2" class="bg-secondary">collected transport layer statistics: tcp</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>tcp</th>
+                        <td class="bg-secondary"></td>
+                        <td>TCP used</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>recv</th>
+                        <td class="bg-secondary"></td>
+                        <td>received TCP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>sent</th>
+                        <td class="bg-secondary"></td>
+                        <td>sent TCP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>drop</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped TCP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>chkerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>TCP segments with a bad checksum</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>ackerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>TCP segments with a bad ACK number</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>rst</th>
+                        <td class="bg-secondary"></td>
+                        <td>received TCP RST (reset) segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>rexmit</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped SYNs because too few connections were available</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>syndrop</th>
+                        <td class="bg-secondary"></td>
+                        <td>SYNs for closed ports, triggering a RST</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>synrst</th>
+                        <td class="bg-secondary"></td>
+                        <td>ICMP packets with a bad checksum</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">udp</th>
+                        <td colspan="2" class="bg-secondary">transport layer statistics: udp</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>udp</th>
+                        <td class="bg-secondary"></td>
+                        <td>UDP used</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>drop</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped UDP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>recv</th>
+                        <td class="bg-secondary"></td>
+                        <td>received UDP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>sent</th>
+                        <td class="bg-secondary"></td>
+                        <td>sent UDP segments</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>chkerr</th>
+                        <td class="bg-secondary"></td>
+                        <td>UDP segments with a bad checksum</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table class="d-none table table-sm table-striped table-bordered" id="legend-table-stats_discovery">
+                <caption>stats_discovery"</caption>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="2" class="text-center">property</th>
+                        <th scope="col" colspan="2"class="text-center">definition</th>
+                    </tr>
+                </thread>
+                <tbody class="bg-gray">
+                    <tr>
+                        <th scope="row" colspan="2">uipStatistics</th>
+                        <td colspan="2">ip statistics collection active</td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row" colspan="2" class="bg-secondary">nd6</th>
+                        <td colspan="2" class="bg-secondary">collected network discovery statistics</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>drop</th>
+                        <td class="bg-secondary"></td>
+                        <td>dropped ND6 packets</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>recv</th>
+                        <td class="bg-secondary"></td>
+                        <td>received ND6 packets</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-secondary"></th>
+                        <th>sent</th>
+                        <td class="bg-secondary"></td>
+                        <td>sent ND6 packets</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        
+        </div>
+
+       
+
+            
+                
+                
+                
+                
                 <!-- https://getbootstrap.com/docs/4.3/content/tables/ -->
 
-            </div>
 
-        </div>
 
     </div>
 

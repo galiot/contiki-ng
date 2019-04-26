@@ -2115,7 +2115,7 @@ function moor(host, port, path) {
                                     totalTime: obj.nrg.tT,
                                     radioListening: obj.nrg.rL,
                                     radioTransmiting: obj.nrg.rT,
-                                    radioOff: obj.nrg.r0
+                                    radioOff: obj.nrg.rO
                                 },
                                 checksum: {
                                     hash: payloadHash,
