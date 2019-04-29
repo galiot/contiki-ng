@@ -404,7 +404,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
     
     #if (OAR_CONF_DEV)
 
-        leds_single_on(LEDS_LED1);
+        leds_single_on(LEDS_LED2);
     
     #endif // (OAR_CONF_DEV)
 
@@ -981,7 +981,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
     #if (OAR_CONF_DEV)
 
-        leds_single_off(LEDS_LED1);
+        leds_single_off(LEDS_LED2);
 
     #endif // (OAR_CONF_DEV)
     
@@ -1027,7 +1027,7 @@ PROCESS_THREAD(oar_buoy_process, ev, data)
 
         #if (OAR_CONF_DEV)
 
-            leds_single_on(LEDS_LED2);
+            leds_single_on(LEDS_LED1);
         
         #endif // (OAR_CONF_DEV)
 

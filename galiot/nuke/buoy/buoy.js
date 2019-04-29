@@ -710,9 +710,11 @@ var cmd_rplStatus_dagSchema = new mongoose.Schema({
         instance: mongoose.Schema.Types.Mixed,
         dagRole: String,
         dagId: String,
+        dagVersion: Number,
         dagPrefix: String,
         dagPrefixLength: Number,
         dagPreferedParent: String,
+        dagPreferedParentLastDTSN: Number,
         dagState: String,
         dagRank: Number,
         dagLowestRank: Number,
@@ -2786,7 +2788,7 @@ function moor(host, port, path) {
                                     objectiveCodePoint: obj.rSt.of,
                                     hopRankIncrement: obj.rSt.hRkI,
                                     defaultLifetime: obj.rSt.dLt,
-                                    dtsnOut: obj.rSt.dtsn0
+                                    dtsnOut: obj.rSt.dtsnO
                                 },
                                 checksum: {
                                     hash: payloadHash,
@@ -2829,10 +2831,12 @@ function moor(host, port, path) {
                                     instance: obj.rStDag.iId,
                                     dagRole: obj.rStDag.dT,
                                     dagId: obj.rStDag.dId,
+                                    dagVersion: obj.rStDag.dVer,
                                     dagPrefix: obj.rStDag.dPf,
                                     dagPrefixLength: obj.rStDag.dPfL,
                                     dagState: obj.rStDag.st,
                                     dagPreferedParent: obj.rStDag.pP,
+                                    dagPreferedParentLastDTSN: obj.rStDag.lD,
                                     dagRank: obj.rStDag.rk,
                                     dagLowestRank: obj.rStDag.lRk,
                                     maxRankIncrement: obj.rStDag.mRkI,

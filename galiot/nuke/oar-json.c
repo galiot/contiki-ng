@@ -3777,6 +3777,7 @@ static int oar_json_append_rpl_status_dag(char * buf)
                 sprintf(str, "\"" "dPfL"    "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "st"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "pP"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "lD"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "rk"      "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "lRk"     "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "mRkI"    "\"" ":" "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
@@ -3822,11 +3823,13 @@ static int oar_json_append_rpl_status_dag(char * buf)
                 if (curr_instance.dag.preferred_parent) 
                 {
                     oar_json_ipaddr_to_str(oar_json_ipaddr, rpl_neighbor_get_ipaddr(curr_instance.dag.preferred_parent));
-                    sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_ipaddr    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "pP"  "\"" ":" "\"" "%s"      "\""    ,oar_json_ipaddr                            ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "lD"  "\"" ":"      "%u"              ,curr_instance.dag.preferred_parent->dtsn   ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 }
                 else
                 {
-                    sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                              ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "pP" "\"" ":" "\"" "none"    "\""                                                 ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    sprintf(str, "\"" "lD"  "\"" ":"     "null"                                                         ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 }
 
                 sprintf(str, "\"" "rk"      "\"" ":"          "%u"          ,curr_instance.dag.rank                                 ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -3873,6 +3876,7 @@ static int oar_json_append_rpl_status_dag(char * buf)
             sprintf(str, "\"" "dPfL"    "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             sprintf(str, "\"" "st"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             sprintf(str, "\"" "pP"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str, "\"" "lD"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             sprintf(str, "\"" "rk"      "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             sprintf(str, "\"" "lRk"     "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
             sprintf(str, "\"" "mRkI"    "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    
