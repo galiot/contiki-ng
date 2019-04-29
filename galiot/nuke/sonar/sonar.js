@@ -569,7 +569,7 @@ function elaborate(obj, intact) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             case 12:
-                var cmd_routes_routingLinks_sources = new {
+                var cmd_routes_routingLinks_sources = {
                     packet: {
                         valid: obj.pckt.vld,
                         error: null
@@ -596,7 +596,7 @@ function elaborate(obj, intact) {
 
                 obj.rtLS.ls.forEach(function(link, index) {
                     if (link != null) {
-                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
+                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = {linkSourceAddr: link.from, dodagRoot: link.dodagRoot}
                     } else {
                         cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = null
                     }
@@ -607,7 +607,7 @@ function elaborate(obj, intact) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             case 13:
-                var cmd_routes_routingLinks_destinations = new {
+                var cmd_routes_routingLinks_destinations = {
                     packet: {
                         valid: obj.pckt.vld,
                         error: null
@@ -634,7 +634,7 @@ function elaborate(obj, intact) {
 
                 obj.rtLD.ls.forEach(function(link, index) {
                     if (link != null) {
-                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = new {linkDestinationAddr: link.to, lifetime: link.lf}
+                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = {linkDestinationAddr: link.to, lifetime: link.lf}
                     } else {
                         cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
                     }
@@ -645,7 +645,7 @@ function elaborate(obj, intact) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             case 14:
-                var cmd_routes_routingEntries_routes = new {
+                var cmd_routes_routingEntries_routes = {
                     packet: {
                         valid: obj.pckt.vld,
                         error: null
@@ -710,7 +710,7 @@ function elaborate(obj, intact) {
 
                 obj.rtEVia.es.forEach(function(entry, index) {
                     if (entry != null) {
-                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = new {entryViaAddr: entry.via, lifetime: entry.lf}
+                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = {entryViaAddr: entry.via, lifetime: entry.lf}
                     } else {
                         cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = null
                     }
@@ -3376,9 +3376,965 @@ function simConsole(nodesAddr) {
                 }, 5000);
                 
                 break;
+            
+            case 'shell-routes':
+
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/11`)
+
+                        .then((response) => response.text())
+                            .then((text) => {
+                                
+                                console.log(text);
+                                let decodedText = atob(text);
+
+                                console.log(decodedText);
+                                console.log(consoleInputKey.value);
+
+                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                
+                                console.log(decryptedText);
+                                
+                                obj[0] = JSON.parse(decryptedText);
+                                
+                                if(checksum(decryptedText)) {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>11</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                    </tr>`
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                    consoleOutputQuery.innerText = 'OK';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                } else {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>11</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                    </tr>`
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                    consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                                }
+                                
+                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                consoleTableQueryTbody.innerHTML = tHTML;
+
+                                consoleH2.classList.replace('d-none', 'd-block');
+
+                                if(obj[0].pckt.vld) {
+
+                                    dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Default route:</td>
+                                            </tr>`;
+                                            
+                                            if(obj[0].rt.lt == "infinite") {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                </tr>`;
+        
+                                            } else {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                </tr>`;
+                                            };
+                                    
+                                    dataHTML += `
+                                            </tbody>
+                                        </table>`;
+                                            
+                                    consoleData.innerHTML = dataHTML;
+
+                                } else {
+
+                                    // createErrorTable(obj[0]);
+
+                                }
+
+                                legendDiv.classList.replace('d-none', 'd-show');
+                                constructLegend(`
+                                    <br>  
+                                    <pre> 
+                                        ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                    </pre>`, undefined);
+                            })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>11</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`;
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+                        });
+
+                }, 1000);
+
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/12`)
+
+                        .then((response) => response.text())
+                            .then((text) => {
+                                
+                                console.log(text);
+                                let decodedText = atob(text);
+
+                                console.log(decodedText);
+                                console.log(consoleInputKey.value);
+
+                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                
+                                console.log(decryptedText);
+                                
+                                obj[1] = JSON.parse(decryptedText);
+                                
+                                if(checksum(decryptedText)) {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                    consoleOutputQuery.innerText = 'OK';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                } else {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                    </tr>`
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                    consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                };
+                                
+                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                consoleTableQueryTbody.innerHTML = tHTML;
+
+                                consoleH2.classList.replace('d-none', 'd-block');
+
+                                if(obj[1].pckt.vld) {
+
+                                    dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Default route:</td>
+                                            </tr>`;
+                                            
+                                            if(obj[0].rt.lt == "infinite") {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                </tr>`;
+        
+                                            } else {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                </tr>`;
+                                            };
+
+                                            let atLeast1routingLink = false;
+
+                                            for(let source = 0; source < obj[1].rtLS.ls.length; source++) {
+
+                                                if(obj[1].rtLS.ls[source] != null) {
+
+                                                    atLeast1routingLink = true;
+
+                                                }
+                                            };
+
+                                            if(atLeast1routingLink) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                    </tr>`;
+
+                                                for(source = 0; source < obj[1].rtLS.ls.length; source++) {
+
+                                                    if(obj[1].rtLS.ls[source] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[source].from} ${obj[1].rtLS.ls[source].dodagRoot ? '(DODAG root)' : ''}</td>
+                                                            </tr>`
+                
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                    </tr>`
+                                            };
+
+                                    dataHTML += `
+                                            </tbody>
+                                        </table>`;
+                                            
+                                    consoleData.innerHTML = dataHTML;
+
+                                } else {
+
+                                    // createErrorTable(obj[1]);
+
+                                }
+
+                                legendDiv.classList.replace('d-none', 'd-show');
+                                constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+                            })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+                        });
+
+                }, 3000);
+                
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/13`)
+
+                        .then((response) => response.text())
+                            .then((text) => {
+                                
+                                console.log(text);
+                                let decodedText = atob(text);
+
+                                console.log(decodedText);
+                                console.log(consoleInputKey.value);
+
+                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                
+                                console.log(decryptedText);
+                                
+                                obj[2] = JSON.parse(decryptedText);
+                                
+                                if(checksum(decryptedText)) {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                    consoleOutputQuery.innerText = 'OK';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                } else {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                    </tr>`
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                    consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                };
+                                
+                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                consoleTableQueryTbody.innerHTML = tHTML;
+
+                                consoleH2.classList.replace('d-none', 'd-block');
+
+                                if(obj[2].pckt.vld) {
+
+                                    dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Default route:</td>
+                                            </tr>`;
+                                            
+                                            if(obj[0].rt.lt == "infinite") {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                </tr>`;
+        
+                                            } else {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                </tr>`;
+                                            };
+
+                                            let atLeast1routingLink = false;
+
+                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+
+                                                if(obj[2].rtLD.ls[destination] != null) {
+
+                                                    atLeast1routingLink = true;
+                                                }
+                                            };
+
+                                            if(atLeast1routingLink) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                    </tr>`;
+
+                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+
+                                                    if(obj[2].rtLS.ls[destination] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                            </tr>`
+                
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                    </tr>`
+                                            };
+
+                                    dataHTML += `
+                                            </tbody>
+                                        </table>`;
+                                            
+                                    consoleData.innerHTML = dataHTML;
+
+                                } else {
+
+                                    // createErrorTable(obj[2]);
+
+                                }
+
+                                legendDiv.classList.replace('d-none', 'd-show');
+                                constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+                            })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+                        });
+
+                }, 5000);
+
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/14`)
+
+                        .then((response) => response.text())
+                            .then((text) => {
+                                
+                                console.log(text);
+                                let decodedText = atob(text);
+
+                                console.log(decodedText);
+                                console.log(consoleInputKey.value);
+
+                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                
+                                console.log(decryptedText);
+                                
+                                obj[3] = JSON.parse(decryptedText);
+                                
+                                if(checksum(decryptedText)) {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                    consoleOutputQuery.innerText = 'OK';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                } else {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                    consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                };
+                                
+                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                consoleTableQueryTbody.innerHTML = tHTML;
+
+                                consoleH2.classList.replace('d-none', 'd-block');
+
+                                if(obj[3].pckt.vld) {
+
+                                    dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Default route:</td>
+                                            </tr>`;
+                                            
+                                            if(obj[0].rt.lt == "infinite") {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                </tr>`;
+        
+                                            } else {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                </tr>`;
+                                            };
+
+                                            let atLeast1routingLink = false;
+
+                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+
+                                                if(obj[2].rtLD.ls[destination] != null) {
+
+                                                    atLeast1routingLink = true;
+                                                }
+                                            };
+
+                                            if(atLeast1routingLink) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                    </tr>`;
+
+                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+
+                                                    if(obj[2].rtLS.ls[destination] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                            </tr>`
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                    </tr>`
+                                            };
+
+                                            let atLeast1routingEntry = false;
+
+                                            for(let route = 0; route < obj[3].rtERt.es.length; route++) {
+
+                                                if(obj[3].rtERt.es[route] != null) {
+
+                                                    atLeast1routingEntry = true;
+                                                }
+                                            };
+
+                                            if(atLeast1routingEntry) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[3].rtERt.totEs} in total):</td>
+                                                    </tr>`;
+
+                                                for(route = 0; route < obj[3].rtERt.es.length; route++) {
+
+                                                    if(obj[3].rtERt.es[route] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[route].rt}</td>
+                                                            </tr>`
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
+                                                    </tr>`
+                                            };
+
+
+
+                                    dataHTML += `
+                                            </tbody>
+                                        </table>`;
+                                            
+                                    consoleData.innerHTML = dataHTML;
+
+                                } else {
+
+                                    // createErrorTable(obj[3]);
+
+                                }
+
+                                legendDiv.classList.replace('d-none', 'd-show');
+                                constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+                            })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`;
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+                        });
+
+                }, 7000);
+
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/15`)
+
+                        .then((response) => response.text())
+                            .then((text) => {
+                                
+                                console.log(text);
+                                let decodedText = atob(text);
+
+                                console.log(decodedText);
+                                console.log(consoleInputKey.value);
+
+                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                
+                                console.log(decryptedText);
+                                
+                                obj[4] = JSON.parse(decryptedText);
+                                
+                                if(checksum(decryptedText)) {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                    consoleOutputQuery.innerText = 'OK';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                } else {
+
+                                    tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
+                                    </tr>`
+
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                    consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                };
+                                
+                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                consoleTableQueryTbody.innerHTML = tHTML;
+
+                                consoleH2.classList.replace('d-none', 'd-block');
+
+                                if(obj[4].pckt.vld) {
+
+                                    dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Default route:</td>
+                                            </tr>`;
+                                            
+                                            if(obj[0].rt.lt == "infinite") {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                </tr>`;
+        
+                                            } else {
+
+                                                dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                </tr>`;
+                                            };
+
+                                            let atLeast1routingLink = false;
+
+                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+
+                                                if(obj[2].rtLD.ls[destination] != null) {
+
+                                                    atLeast1routingLink = true;
+                                                }
+                                            }
+
+                                            if(atLeast1routingLink) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                    </tr>`;
+
+                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+
+                                                    if(obj[2].rtLS.ls[destination] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                            </tr>`
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                    </tr>`
+                                            };
+
+                                            let atLeast1routingEntry = false;
+
+                                            for(let via = 0; via < obj[4].rtEVia.es.length; via++) {
+
+                                                if(obj[4].rtEVia.es[via] != null) {
+
+                                                    atLeast1routingEntry = true;
+                                                }
+                                            };
+
+                                            if(atLeast1routingEntry) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[4].rtEVia.totEs} in total):</td>
+                                                    </tr>`;
+
+                                                for(via = 0; via < obj[4].rtERt.es.length; via++) {
+
+                                                    if(obj[4].rtEVia.es[via] != null) {
+        
+                                                        dataHTML += `
+                                                            <tr>
+                                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[via].rt} via ${obj[4].rtEVia.es[via].via} (lifetime: ${obj[4].rtEVia.es[via].lf})} </td>
+                                                            </tr>`               
+                                                    };
+                                                };
+
+                                            } else {
+
+                                                dataHTML += `
+                                                        <tr>
+                                                            <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
+                                                        </tr>`
+                                            };
+
+
+
+                                    dataHTML += `
+                                            </tbody>
+                                        </table>`;
+                                            
+                                    consoleData.innerHTML = dataHTML;
+
+                                } else {
+
+                                    // createErrorTable(obj[4]);
+
+                                }
+
+                                legendDiv.classList.replace('d-none', 'd-show');
+                                constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[4], checksum(decryptedText)), null, 2)}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+                            })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`;
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+
+                        });
+
+                }, 9000);
+                
+                break;
 
             case 'shell-rplstatus':
+
                 
+        
+
                 break;
 
             case 'shell-rplnbr':
