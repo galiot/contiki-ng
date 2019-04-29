@@ -273,15 +273,14 @@
                         <option value="device-system">device: system information</option>
                         <option value="device-sensor">device: sensor readings</option>
                         <option value="device-energy">device: energy consumption</option>
-                        <option value="network-ip">ip statistics: network layer (ip)</option>
-                        <option value="network-icmp">ip statistics: network layer (icmp)</option>
-                        <option value="network-tcpudp">ip statistics: transport layer (tcp/udp)</option>
-                        <option value="network-nd6">ip statistics: discovery (nd6)</option>
-                        <option value="shell-macaddr">simulated shell command: mac-addr</option>
-                        <option value="shell-ipaddr">simulated shell command: ip-addr</option>
-                        <option value="shell-ipnbr">simulated shell command: ip-nbr</option>
-                        <option value="shell-rplstatus">simulated shell command: rpl-status</option>
-                        <option value="shell-rplnbr">simulated shell command: rpl-nbr</option>
+                        <option value="network-link">network: link layer</option>
+                        <option value="network-internet">network: internet layer</option>
+                        <option value="network-transport">network: transport layer</option>
+                        <option value="shell-macaddr">simulated shell: mac-addr</option>
+                        <option value="shell-ipaddr">simulated shell: ip-addr</option>
+                        <option value="shell-ipnbr">simulated shell: ip-nbr</option>
+                        <option value="shell-rplstatus">simulated shell: rpl-status</option>
+                        <option value="shell-rplnbr">simulated shell: rpl-nbr</option>
                     </select>
                 
         
@@ -302,12 +301,9 @@
                 </tbody>
             </table>
         </div>
-        
-            
 
         <br>
-
-
+        
         <div class="container text-center m-auto p-auto" id="console-data-div">
 
                 <h2 class="d-none text-center text-secondary" id="console-h2">data</h2> 
@@ -344,7 +340,7 @@
 
         <div class="d-none container m-auto p-auto" id="legend-content"></div>
         <div class="d-none container m-auto p auto" id="legend-appendix"></div>
-
+        
         <br>
 
         <div class="container">
@@ -671,19 +667,19 @@
                         <th scope="row" class="bg-secondary"></th>
                         <th>rexmit</th>
                         <td class="bg-secondary"></td>
-                        <td>dropped SYNs because too few connections were available</td>
+                        <td>retransmitted TCP segments</td>
                     </tr>
                     <tr>
                         <th scope="row" class="bg-secondary"></th>
                         <th>syndrop</th>
                         <td class="bg-secondary"></td>
-                        <td>SYNs for closed ports, triggering a RST</td>
+                        <td>dropped SYNs because too few connections were available</td>
                     </tr>
                     <tr>
                         <th scope="row" class="bg-secondary"></th>
                         <th>synrst</th>
                         <td class="bg-secondary"></td>
-                        <td>ICMP packets with a bad checksum</td>
+                        <td>SYNs for closed ports, triggering a RST</td>
                     </tr>
 
                     <tr>

@@ -529,7 +529,7 @@ function elaborate(obj, intact) {
 
                 obj.nsSt.ns.forEach(function(neighbor, index) {
                     if (neighbor != null) {
-                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = new{nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state}
+                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = {nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state}
                     } else {
                         cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
                     }
@@ -1662,6 +1662,10 @@ function simConsole(nodesAddr) {
     consoleSelectNode.innerHTML = consoleSelectNodeHTML;
 
     consoleButtonQuery.addEventListener('click', () => {
+
+        let obj = new Array;
+        let tHTML = '';
+        let dataHTML = '';
     
         switch(consoleSelectQuery.value) {
 
@@ -1690,7 +1694,7 @@ function simConsole(nodesAddr) {
 
                                 tHTML += `
                                 <tr>
-                                    <td>http://${nodesAddr[consoleSelectNode.value]} /<b>0</b></td>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                     <td class="text-success">INTACT</td>
                                     <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                                 </tr>`
@@ -1705,7 +1709,7 @@ function simConsole(nodesAddr) {
 
                                 tHTML += `
                                 <tr>
-                                    <td>http://${nodesAddr[consoleSelectNode.value]} /<b>0</b></td>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                     <td class="text-warning">CORRUPTED</td>
                                     <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                                 </tr>`
@@ -1781,7 +1785,7 @@ function simConsole(nodesAddr) {
 
                         tHTML += `
                         <tr>
-                            <td>${nodesAddr[consoleSelectNode.value]}</td>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                             <td class="text-warning">CORRUPTED</td>
                             <td class="text-danger">${error}</td>
                         </tr>`
@@ -1826,7 +1830,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                             <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>1</b></td>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>1</b></td>
                                 <td class="text-success">INTACT</td>
                                 <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                             </tr>`
@@ -1841,7 +1845,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                             <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>0</b></td>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>1</b></td>
                                 <td class="text-warning">CORRUPTED</td>
                                 <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                             </tr>`
@@ -1895,7 +1899,7 @@ function simConsole(nodesAddr) {
 
                     tHTML += `
                     <tr>
-                        <td>${nodesAddr[consoleSelectNode.value]}</td>
+                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>1</b></td>
                         <td class="text-warning">CORRUPTED</td>
                         <td class="text-danger">${error}</td>
                     </tr>`
@@ -1940,7 +1944,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                             <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>2</b></td>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>2</b></td>
                                 <td class="text-success">INTACT</td>
                                 <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                             </tr>`
@@ -1955,7 +1959,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                             <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>0</b></td>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>2</b></td>
                                 <td class="text-warning">CORRUPTED</td>
                                 <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
                             </tr>`
@@ -2038,7 +2042,7 @@ function simConsole(nodesAddr) {
 
                     tHTML += `
                     <tr>
-                        <td>${nodesAddr[consoleSelectNode.value]}</td>
+                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>2</b></td>
                         <td class="text-warning">CORRUPTED</td>
                         <td class="text-danger">${error}</td>
                     </tr>`
@@ -2058,177 +2062,1318 @@ function simConsole(nodesAddr) {
                 
                 break;
 
-            case 'network-ip':
+            case 'network-internet':
 
-            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/3`)
+                window.setTimeout(() => {
 
-                .then((response) => response.text())
-                    .then((text) => {
-                        
-                        console.log(text);
-                        let decodedText = atob(text);
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/3`)
 
-                        console.log(decodedText);
-                        console.log(consoleInputKey.value);
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
 
-                        let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-        
-                        console.log(decryptedText);
-                        
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
 
-                        let obj = JSON.parse(decryptedText);
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>3</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>3</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="bg-gray">
+                                        <tr>
+                                            <td colspan="4" class="text-light bg-secondary">IP</td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
+                                        </tr> -->
+    .                                   <tr>
+                                            <td colspan="2" class="text-secondary">received packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.tx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">forwarded packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fw}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to wrong IP version or header length</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.vE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">high byte</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.hE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">low byte</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.lE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped because they were IP fragments</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to IP checksum errors</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.cE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.pE}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>`, undefined);
+
+                        })
+
+                    .catch((error) => {
                         let tHTML = '';
 
-                        if(checksum(decryptedText)) {
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>3</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
 
-                            tHTML += `
-                            <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>3</b></td>
-                                <td class="text-success">INTACT</td>
-                                <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
-                            </tr>`
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                            consoleOutputQuery.innerText = 'OK';
-
-                            consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                        } else {
-
-                            tHTML += `
-                            <tr>
-                                <td>http://${nodesAddr[consoleSelectNode.value]} /<b>0</b></td>
-                                <td class="text-warning">CORRUPTED</td>
-                                <td class="">systemTime: <b>${obj.id.sT}</b>s</td>
-                            </tr>`
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                            consoleOutputQuery.innerText = 'CORRUPTED';
-
-                            consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-
-                        }
-                        
                         consoleTableQuery.classList.replace('d-none', 'd-block');
                         consoleTableQueryTbody.innerHTML = tHTML;
 
-                        consoleH2.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
 
-                        if(obj.pckt.vld) {
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
 
-                            let dataHTML = `
-                            <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                <tbody class="bg-gray">
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">ip statistics collection active</td>
-                                        <td colspan="2" class="">${obj.ipSt.uS}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">received packets at the IP layer</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.rx}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">sent packets at the IP layer</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.tx}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">forwarded packets at the IP layer</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.fw}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">dropped packets at the IP layer</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.dr}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">packets dropped due to wrong IP version or header length</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.vE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
-                                        <td colspan="1" class="text-secondary">high byte</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.hE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
-                                        <td colspan="1" class="text-secondary">low byte</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.lE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">packets dropped because they were IP fragments</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.fE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">packets dropped due to IP checksum errors</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.cE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
-                                        <td colspan="2" class="">${obj.ipSt.ip.pE}</td>
-                                    </tr>
-                                </tbody>
-                            </table>`
-
-                            consoleData.innerHTML = dataHTML;
-
-                        } else {
-
-                            // createErrorTable(obj);
-
-                        }
-
-                        legendDiv.classList.replace('d-none', 'd-show');
-                        constructLegend('<pre>' + JSON.stringify(elaborate(obj, checksum(decryptedText)), null, 2) + '</pre>', undefined);
+                        console.log(error);
 
                     })
 
-                .catch((error) => {
-                    let tHTML = '';
+                },1000);
 
-                    tHTML += `
-                    <tr>
-                        <td>${nodesAddr[consoleSelectNode.value]}</td>
-                        <td class="text-warning">CORRUPTED</td>
-                        <td class="text-danger">${error}</td>
-                    </tr>`
+                window.setTimeout(() => {
 
-                    consoleTableQuery.classList.replace('d-none', 'd-block');
-                    consoleTableQueryTbody.innerHTML = tHTML;
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/4`)
 
-                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                    consoleOutputQuery.innerText = 'FAIL';
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
 
-                    consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
 
-                    console.log(error);
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[1] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
 
-                }) 
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[1].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="bg-gray">
+                                        <tr>
+                                            <td colspan="4" class="text-light bg-secondary">IP</td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
+                                        </tr> -->
+    .                                   <tr>
+                                            <td colspan="2" class="text-secondary">received packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.tx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">forwarded packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fw}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped packets at the IP layer</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to wrong IP version or header length</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.vE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">high byte</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.hE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">low byte</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.lE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped because they were IP fragments</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to IP checksum errors</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.cE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
+                                            <td colspan="2" class="">${ obj[0].ipSt.ip.pE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-light bg-secondary">ICMP</td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${obj[1].icSt.uS}</td>
+                                        </tr> -->
+    .                                   <tr>
+                                            <td colspan="2" class="text-secondary">received ICMP packets</td>
+                                            <td colspan="2" class="">${obj[1].icSt.ic.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent ICMP packets</td>
+                                            <td colspan="2" class="">${obj[1].icSt.ic.tx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped ICMP packets</td>
+                                            <td colspan="2" class="">${obj[1].icSt.ic.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">ICMP packets with a wrong type</td>
+                                            <td colspan="2" class="">${obj[1].icSt.ic.tE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">ICMP packets with a bad checksum</td>
+                                            <td colspan="2" class="">${obj[1].icSt.ic.cE}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    });
+
+                },3000);
+
+                break;
+
+            case 'network-transport':
+
+                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/5`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>5</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>5</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="bg-gray">
+                                        <!-- <tr>
+                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${obj[0].tSt.uS}</td>
+                                        </tr> -->
+                                        <tr>
+                                            <td colspan="2" class="text-light bg-secondary">TCP</td>
+                                            <td colspan="2" class="text-light bg-secondary">${obj[0].tSt.tcp.use}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">received TCP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent TCP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.tx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped TCP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">TCP segments with a bad checksum</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.cE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">TCP segments with a bad ACK number</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.aA}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">received TCP RST (reset) segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.rst}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">retransmitted TCP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.rM}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped SYNs because too few connections were available</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.sD}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">SYNs for closed ports, triggering a RST</td>
+                                            <td colspan="2" class="">${obj[0].tSt.tcp.sR}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-light bg-secondary">UDP</td>
+                                            <td colspan="2" class="text-light bg-secondary">${obj[0].tSt.udp.use}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped UDP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.udp.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">received UDP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.udp.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent UDP segments</td>
+                                            <td colspan="2" class="">${obj[0].tSt.udp.tx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">UDP segments with a bad checksum</td>
+                                            <td colspan="2" class="">${obj[0].tSt.udp.cE}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>  
+                                <pre> 
+                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                </pre>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>5</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    })
                 
                 break;
 
-            case 'network-icmp':
+            case 'network-link':
                 
-                break;
+                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/6`)
 
-            case 'network-tcpudp':
-                
-                break;
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
 
-            case 'network-nd6':
-                
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>6</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>6</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="bg-gray">
+                                        <!-- <tr>
+                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${obj[0].dSt.uS}</td>
+                                        </tr> -->
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">dropped ND6 packets</td>
+                                            <td colspan="2" class="">${obj[0].dSt.nd6.dr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">received ND6 packets</td>
+                                            <td colspan="2" class="">${obj[0].dSt.nd6.rx}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">sent ND6 packets</td>
+                                            <td colspan="2" class="">${obj[0].dSt.nd6.tx}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>  
+                                <pre> 
+                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                </pre>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>6</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    })
+
                 break;
 
             case 'shell-macaddr':
+
+                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/0`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="">
+                                        <tr>
+                                            <td colspan="1" class="text-center text-light bg-secondary">&lambda;</td>
+                                            <td colspan="1" class="text-center">mac-addr</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="">Node MAC address: ${obj[0].id.adr}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>  
+                                <pre> 
+                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                </pre>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    })
                 
                 break;
 
             case 'shell-ipaddr':
+
+                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/7`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>7</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>7</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                    <tbody class="">
+                                        <tr>
+                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="1" class="text-center">ipaddr</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">Node IPv6 addresses:</td>
+                                        </tr>`;
+                                
+                                obj[0].addr.ad.forEach((address, index) => {
+
+                                    if(address != null) {
+
+                                        dataHTML += `
+                                            <tr>
+                                                <td colspan="2" class="">-- ${address}</td>
+                                            </tr>`
+
+                                    }
+                                });
+
+                                dataHTML += `
+                                        </tbody>
+                                    </table>`;
+                                        
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>  
+                                <pre> 
+                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                </pre>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>7</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    })
                 
                 break;
 
             case 'shell-ipnbr':
+
+                window.setTimeout(() => {
+
+                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/8`)
+
+                            .then((response) => response.text())
+                                .then((text) => {
+                                    
+                                    console.log(text);
+                                    let decodedText = atob(text);
+
+                                    console.log(decodedText);
+                                    console.log(consoleInputKey.value);
+
+                                    let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                    
+                                    console.log(decryptedText);
+                                    
+                                    obj[0] = JSON.parse(decryptedText);
+                                    
+                                    if(checksum(decryptedText)) {
+
+                                        tHTML += `
+                                        <tr>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>8</b></td>
+                                            <td class="text-success">INTACT</td>
+                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                        </tr>`
+
+                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                        consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                        consoleOutputQuery.innerText = 'OK';
+
+                                        consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                                    } else {
+
+                                        tHTML += `
+                                        <tr>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>8</b></td>
+                                            <td class="text-warning">CORRUPTED</td>
+                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                        </tr>`
+
+                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                        consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                        consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                                    }
+                                    
+                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                    consoleTableQueryTbody.innerHTML = tHTML;
+
+                                    consoleH2.classList.replace('d-none', 'd-block');
+
+                                    if(obj[0].pckt.vld) {
+
+                                        dataHTML = `
+                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                            <tbody class="">
+                                                <tr>
+                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                    <td colspan="1" class="text-center">ip_nbr</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"></td>
+                                                </tr>
+                                                <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                                </tr>`;
+                                        
+                                        for(let nbr = 0; nbr < obj[0].nsIP.ns.length; nbr++) {
+
+                                            if(obj[0].nsIP.ns[nbr] != null) {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr}</td>
+                                                    </tr>`
+
+                                            }
+                                        };
+                                        
+                                        dataHTML += `
+                                                </tbody>
+                                            </table>`;
+                                                
+                                        consoleData.innerHTML = dataHTML;
+
+                                    } else {
+
+                                        // createErrorTable(obj[0]);
+
+                                    }
+
+                                    legendDiv.classList.replace('d-none', 'd-show');
+                                    constructLegend(`
+                                        <br>  
+                                        <pre> 
+                                            ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                        </pre>`, undefined);
+
+                                })
+
+                        .catch((error) => {
+                            let tHTML = '';
+
+                            tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>8</b></td>
+                                <td class="text-warning">CORRUPTED</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`
+
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                            consoleOutputQuery.innerText = 'FAIL';
+
+                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                            console.log(error);
+
+                        });
+
+                }, 1000);
+                
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/9`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[1] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[1].pckt.vld) {
+
+                                dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                            </tr>`;
+                                
+                                for(let nbr = 0; nbr < obj[1].nsLL.ns.length; nbr++) {
+
+                                    if(obj[1].nsLL.ns[nbr] != null) {
+
+                                        dataHTML += `
+                                            <tr>
+                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}</td>
+                                            </tr>`
+
+                                    }
+                                };
+
+                                dataHTML += `
+                                        </tbody>
+                                    </table>`;
+                                        
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    });
+
+                }, 3000);
+
+                window.setTimeout(() => {
+
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/10`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[2] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                                    <td class="text-success">INTACT</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+
+                            } else {
+
+                                tHTML += `
+                                <tr>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                                    <td class="text-warning">CORRUPTED</td>
+                                    <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                </tr>`
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+
+                            }
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[2].pckt.vld) {
+
+                                dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                <td colspan="1" class="text-center">ip_nbr</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"></td>
+                                            </tr>
+                                            <tr>
+                                                    <td colspan="2" style="background-color: rgb(41, 4, 30)" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                            </tr>`;
+                                
+                                for(let nbr = 0; nbr < obj[2].nsSt.ns.length; nbr++) {
+
+                                    if(obj[2].nsSt.ns[nbr] != null) {
+
+                                        dataHTML += `
+                                            <tr>
+                                                <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}, router ${obj[2].nsSt.ns[nbr].router}, state: ${obj[2].nsSt.ns[nbr].state}</td>
+                                            </tr>`
+
+                                    }
+                                };
+
+                                dataHTML += `
+                                        </tbody>
+                                    </table>`;
+                                        
+                                consoleData.innerHTML = dataHTML;
+
+                            } else {
+
+                                // createErrorTable(obj[0]);
+
+                            }
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col border">
+                                            <pre> 
+                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                        <div class="col border">
+                                            <pre>  
+                                                ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>`, undefined);
+
+                        })
+
+                    .catch((error) => {
+                        let tHTML = '';
+
+                        tHTML += `
+                        <tr>
+                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                            <td class="text-warning">CORRUPTED</td>
+                            <td class="text-danger">${error}</td>
+                        </tr>`
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+
+                    });
+
+                }, 5000);
                 
                 break;
 

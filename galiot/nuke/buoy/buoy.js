@@ -2407,7 +2407,7 @@ function moor(host, port, path) {
 
                             obj.nsIP.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr})
+                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.ipAddr})
                                 } else {
                                     cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
                                 }
