@@ -1571,25 +1571,14 @@ router.get('/cargo', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/create', '/read', '/update', '/delete'],
-        data: null
-    });
-});
-
-// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/CRUD
-
-router.get('/cargo/read', function (req, res) {
-    res.json({
-        status: null, 
-        text: null,
         goto: ['/system', '/device', '/stats', '/cmd'],
         data: null
     });
 });
 
-// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/read/GOTOs
+// ~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/ cargo/GOTOs
 
-router.get('/cargo/read/stats', function (req, res) {
+router.get('/cargo/stats', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1598,7 +1587,7 @@ router.get('/cargo/read/stats', function (req, res) {
     });
 });
 
-router.get('/cargo/read/stats/network', function (req, res) {
+router.get('/cargo/stats/network', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1607,7 +1596,7 @@ router.get('/cargo/read/stats/network', function (req, res) {
     });
 });
 
-router.get('/cargo/read/cmd', function (req, res) {
+router.get('/cargo/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1616,7 +1605,7 @@ router.get('/cargo/read/cmd', function (req, res) {
     });
 });
 
-router.get('/cargo/read/cmd/ipneighbors', function (req, res) {
+router.get('/cargo/cmd/ipneighbors', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1625,7 +1614,7 @@ router.get('/cargo/read/cmd/ipneighbors', function (req, res) {
     });
 });
 
-router.get('/cargo/read/cmd/routes/routinglinks', function (req, res) {
+router.get('/cargo/cmd/routes/routinglinks', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1634,7 +1623,7 @@ router.get('/cargo/read/cmd/routes/routinglinks', function (req, res) {
     });
 });
 
-router.get('/cargo/read/cmd/routes/routingentries', function (req, res) {
+router.get('/cargo/cmd/routes/routingentries', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1643,7 +1632,7 @@ router.get('/cargo/read/cmd/routes/routingentries', function (req, res) {
     });
 });
 
-router.get('/cargo/read/cmd/rplnbr', function (req, res) {
+router.get('/cargo/cmd/rplnbr', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -1657,77 +1646,77 @@ router.get('/cargo/read/cmd/rplnbr', function (req, res) {
 // routes for API accordingly
 // each send rest jsons
 
-router.route('/cargo/read/system')
+router.route('/cargo/system')
     .get(tug.system.index);
 
-router.route('/cargo/read/device')
+router.route('/cargo/device')
     .get(tug.device.index);
 
-router.route('/cargo/read/energest')
+router.route('/cargo/energest')
     .get(tug.energest.index);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
-router.route('/cargo/read/stats/network/ip')
+router.route('/cargo/stats/network/ip')
     .get(tug.stats_network_ip.index);
 
-router.route('/cargo/read/stats/network/icmp')
+router.route('/cargo/stats/network/icmp')
     .get(tug.stats_network_icmp.index);
 
-router.route('/cargo/read/stats/transport')
+router.route('/cargo/stats/transport')
     .get(tug.stats_transport.index);
 
-router.route('/cargo/read/stats/discovery')
+router.route('/cargo/stats/discovery')
     .get(tug.stats_discovery.index);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
-router.route('/cargo/read/cmd/ipaddr')
+router.route('/cargo/cmd/ipaddr')
     .get(tug.cmd_ipAddr.index);
 
-router.route('/cargo/read/cmd/ipneighbors/ipaddr')
+router.route('/cargo/cmd/ipneighbors/ipaddr')
     .get(tug.cmd_IpNeighbors_ipAddr.index);
 
-router.route('/cargo/read/cmd/ipneighbors/ipaddr')
+router.route('/cargo/cmd/ipneighbors/ipaddr')
     .get(tug.cmd_IpNeighbors_llAddr.index);
 
-router.route('/cargo/read/cmd/ipneighbors/info')
+router.route('/cargo/cmd/ipneighbors/info')
     .get(tug.cmd_IpNeighbors_info.index);
 
-router.route('/cargo/read/cmd/routes')
+router.route('/cargo/cmd/routes')
     .get(tug.cmd_routes.index);
 
-router.route('/cargo/read/cmd/routinglinks/sources')
+router.route('/cargo/cmd/routinglinks/sources')
     .get(tug.cmd_routes_routingLinks_sources.index);
 
-router.route('/cargo/read/cmd/routinglinks/destinations')
+router.route('/cargo/cmd/routinglinks/destinations')
     .get(tug.cmd_routes_routingLinks_destinations.index);
 
-router.route('/cargo/read/cmd/routingentries/routes')
+router.route('/cargo/cmd/routingentries/routes')
     .get(tug.cmd_routes_routingEntries_routes.index);
 
-router.route('/cargo/read/cmd/routingentries/vias')
+router.route('/cargo/cmd/routingentries/vias')
     .get(tug.cmd_routes_routingEntries_vias.index);
 
-router.route('/cargo/read/cmd/rplstatus')
+router.route('/cargo/cmd/rplstatus')
     .get(tug.cmd_rplStatus.index);
 
-router.route('/cargo/read/cmd/rplstatus/dag')
+router.route('/cargo/cmd/rplstatus/dag')
     .get(tug.cmd_rplStatus_dag.index);
 
 router.route('/cargo/read/cmd/rplstatus/tricletimer')
     .get(tug.cmd_rplStatus_trickleTimer.index);
 
-router.route('/cargo/read/cmd/rplnbr/addr')
+router.route('/cargo/cmd/rplnbr/addr')
     .get(tug.cmd_rplNbr_addr.index);
 
-router.route('/cargo/read/cmd/rplnbr/ranks')
+router.route('/cargo/cmd/rplnbr/ranks')
     .get(tug.cmd_rplNbr_ranks.index);
 
-router.route('/cargo/read/cmd/rplnbr/values')
+router.route('/cargo/cmd/rplnbr/values')
     .get(tug.cmd_rplNbr_values.index);
 
-router.route('/cargo/read/cmd/rplnbr/parens')
+router.route('/cargo/cmd/rplnbr/parens')
     .get(tug.cmd_rplNbr_parens.index);
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2049,7 +2038,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2089,7 +2078,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2135,7 +2124,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2186,7 +2175,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2232,7 +2221,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2290,7 +2279,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2334,7 +2323,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2376,7 +2365,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2424,7 +2413,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2472,7 +2461,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2520,7 +2509,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2561,7 +2550,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2611,7 +2600,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2661,7 +2650,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2711,7 +2700,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2761,7 +2750,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2806,7 +2795,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2861,7 +2850,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2905,7 +2894,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -2955,7 +2944,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -3005,7 +2994,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -3055,7 +3044,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -3105,7 +3094,7 @@ function moor(host, port, path) {
                                 // saved!
                                 
                                 console.log("");
-                                console.log(`cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                             });
 
                             break;
@@ -3154,7 +3143,7 @@ function moor(host, port, path) {
                         // saved!
                         
                         console.log("");
-                        console.log(`cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                        console.log(`<--- <--- <--- cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
                     });
                 }
 
@@ -3251,14 +3240,12 @@ scrap(nodeHosts, borderRouter, function(nodeHosts) {
         nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 23;
     
         console.log();
-        console.log('/?/?/?/?/?/?/?/?/?/?/?/?/?');
-        console.log(`QUERING NODE: ${activeNodeIndex} / TOTAL: ${nodeHosts.length} `);
-        console.log('/?/?/?/?/?/?/?/?/?/?/?/?/?');
+        console.log('</> </> </> </> </> </> </> </> </>');
+        console.log(`</> QUERING NODE: ${activeNodeIndex + 1} / TOTAL: ${nodeHosts.length}  </>`);
+        console.log('</> </> </> </> </> </> </> </> </>');
     
         console.log();
-        console.log('---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ----> ');
-        console.log(`---> GET http://[${nodeHosts[activeNodeIndex]}:${nodePorts[activeNodeIndex]}/${nodePaths[activeNodeIndex]} ---> ---> --->`);
-        console.log('---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ---> ----> ');
+        console.log(`---> ---> ---> GET ---> http://[${nodeHosts[activeNodeIndex]}:${nodePorts[activeNodeIndex]}/${nodePaths[activeNodeIndex]} ---> ---> ---> ---> ---> ---> ---> ---> --->`);
         
         moor(nodeHosts[activeNodeIndex], nodePorts[activeNodeIndex], nodePaths[activeNodeIndex]);
         
