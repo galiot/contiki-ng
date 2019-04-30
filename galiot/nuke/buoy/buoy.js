@@ -3029,7 +3029,7 @@ function moor(host, port, path) {
                                     rplLite: obj.rNV.rL,
                                     instance: obj.rNV.iId,
                                     rplNeighborCount: obj.rNV.c,
-                                    values: [rplValuesSchema]
+                                    values: [null]
                                 },
                                 checksum: {
                                     hash: payloadHash,
@@ -3079,7 +3079,7 @@ function moor(host, port, path) {
                                     rplLite: obj.rNP.rL,
                                     instance: obj.rNP.iId,
                                     rplNeighborCount: obj.rNP.c,
-                                    parens: [rplParensSchema]
+                                    parens: [null]
                                 },
                                 checksum: {
                                     hash: payloadHash,
@@ -3090,7 +3090,7 @@ function moor(host, port, path) {
 
                             obj.rNP.ns.forEach(function(neighbor, index) {
                                 if (neighbor != null) {
-                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bs})
+                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bS})
                                 } else {
                                     cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = null
                                 }

@@ -3982,7 +3982,7 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
 
             if(!curr_instance.used)             
             { 
-                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""                               );  if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 sprintf(str, "\"" "cur" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "min" "\"" ":" "null"     ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -3991,7 +3991,7 @@ static int oar_json_append_rpl_status_trickle_timer(char * buf)
             }
             else
             {
-                sprintf(str, "\"" "iId" "\"" ":" "\"" "none" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "\"" "iId" "\"" ":"      "%u"          ,curr_instance.instance_id  );  if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
                 sprintf(str, "\"" "cur" "\"" ":" "%u"    ,curr_instance.dag.dio_intcurrent                       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                 sprintf(str, "\"" "min" "\"" ":" "%u"    ,curr_instance.dio_intmin                               ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, "," ); if(seguard(buf, str)){return 1;} strcat(buf, str);
