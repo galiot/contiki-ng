@@ -9,6 +9,25 @@
 // cargo    (2019) /////// database /////////
 /////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // require() //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +42,16 @@ const mongoosePaginate = require('mongoose-paginate');
 
 const morgan = require("morgan");
 const sdbm = require('sdbm');
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -75,8 +104,11 @@ const nodesRegExp = /fd\S*(?<!\))\s/gi
 function scrap(nodes, borderRouter, callback) {
     rp(borderRouter)
     .then(function(html) {
+
+        console.log();
+        console.log('BORDER ROUTER: ' + borderRouter);
         
-        console.log("");
+        console.log();
         console.log(html);
         
         // [ 'fd00::212:4b00:f83:b601 ', 
@@ -100,6 +132,7 @@ function scrap(nodes, borderRouter, callback) {
             console.log(nodes);
             
             callback(nodes);
+
         } else {
             
             console.log("NO MOTES FOUND, RESTARTING SCRAPE");
@@ -114,7 +147,22 @@ function scrap(nodes, borderRouter, callback) {
     });
 }
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -132,14 +180,33 @@ if(process.env.NODE_ENV === 'production') {
     // var MONGO_USER = null;
     // var MONGO_PASSWORD = null;
     
-  } else {
+} else {
 
     var PORT = process.env.PORT || 8080;
     var MONGO_URI = "mongodb://localhost:27017/cargo";
     var MONGO_USER = "galiot";
     var MONGO_PASSWORD = "eat_sleep_code_repeat";
 
-  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGOOSE SCHEMAS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -922,6 +989,25 @@ var errorReportSchema = new mongoose.Schema({
     update: { type: Date, default: Date.now }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGOOSE MODELS ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -980,11 +1066,30 @@ var Cmd_rplNbr_parens                       = mongoose.model('Cmd_rplNbr_parens'
 
 var ErrorReport                             = mongoose.model('ErrorReport',                             errorReportSchema);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// checkSave //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// checkProcessSaveReturn /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function checkSave(obj) {
+function checkProcessSaveReturn(obj, doReturn) {
 
     // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     // CHECKSUM CHECK /////////////////////////////////////////////////////////////////
@@ -1059,16 +1164,22 @@ function checkSave(obj) {
                 console.log("");
                 console.log(system);
 
-                system.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
 
-                break;
+                    return(system);
+                } else {
+
+                    system.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
             
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
@@ -1099,16 +1210,23 @@ function checkSave(obj) {
                 console.log("");
                 console.log(device);
 
-                device.save(function (err) {
-                    if (err) console.log(err);
+                if(doReturn) {
                     
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                    return(device);
 
-                break;
+                } else {
+
+                    device.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
@@ -1145,17 +1263,24 @@ function checkSave(obj) {
                 console.log("");
                 console.log(energest);
 
-                energest.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
 
-                break;
-            
+                    return(energest);
+
+                } else {
+
+                    energest.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                }
+
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
             case 3:
@@ -1196,16 +1321,23 @@ function checkSave(obj) {
                 console.log("");
                 console.log(stats_network_ip);
 
-                stats_network_ip.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
 
-                break;
+                    return(stats_network_ip);
+
+                } else {
+
+                    stats_network_ip.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
@@ -1242,16 +1374,23 @@ function checkSave(obj) {
                 console.log("");
                 console.log(stats_network_icmp);
 
-                stats_network_icmp.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
 
-                break;
+                    return(stats_network_icmp);
+                
+                } else {
+
+                    stats_network_icmp.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
@@ -1300,16 +1439,21 @@ function checkSave(obj) {
                 console.log("");
                 console.log(stats_transport);
 
-                stats_transport.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
+                    return(stats_transport);
+                } else {
 
-                break;
+                    stats_transport.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1344,16 +1488,23 @@ function checkSave(obj) {
                 console.log("");
                 console.log(stats_discovery);
 
-                stats_discovery.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                if(doReturn) {
 
-                break;
+                    return(stats_discovery);
+
+                } else {
+
+                    stats_discovery.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1386,16 +1537,25 @@ function checkSave(obj) {
                 console.log("");
                 console.log(cmd_ipAddr);
 
-                cmd_ipAddr.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_ipAddr);
+                
+                } else {
+
+                    cmd_ipAddr.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1434,16 +1594,25 @@ function checkSave(obj) {
                 console.log("");
                 console.log(cmd_IpNeighbors_ipAddr);
                 
-                cmd_IpNeighbors_ipAddr.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_IpNeighbors_ipAddr);
+
+                } else {
+                    
+                    cmd_IpNeighbors_ipAddr.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1481,17 +1650,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_ipNeighbors_llAddr);
-                
-                cmd_ipNeighbors_llAddr.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_ipNeighbors_llAddr);
+                
+                } else {
+
+                    cmd_ipNeighbors_llAddr.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1529,17 +1705,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_ipNeighbors_info);
-                
-                cmd_ipNeighbors_info.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_ipNeighbors_info);
+                
+                } else {
+
+                    cmd_ipNeighbors_info.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1570,17 +1753,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_routes);
-                
-                cmd_routes.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_routes);
+                
+                } else {
+
+                    cmd_routes.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1620,17 +1810,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_routes_routingLinks_sources);
-                
-                cmd_routes_routingLinks_sources.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_routes_routingLinks_sources);
+                
+                } else {
+
+                    cmd_routes_routingLinks_sources.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                }
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1670,17 +1867,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_routes_routingLinks_destinations);
-                
-                cmd_routes_routingLinks_destinations.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_routes_routingLinks_destinations);
+                
+                } else {
+
+                    cmd_routes_routingLinks_destinations.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1720,17 +1924,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_routes_routingEntries_routes);
-                
-                cmd_routes_routingEntries_routes.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_routes_routingEntries_routes);
+                
+                } else {
+
+                    cmd_routes_routingEntries_routes.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1770,17 +1981,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_routes_routingEntries_vias);
-                
-                cmd_routes_routingEntries_vias.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_routes_routingEntries_vias);
+                
+                } else {
+
+                    cmd_routes_routingEntries_vias.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1815,17 +2033,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplStatus);
-                
-                cmd_rplStatus.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplStatus);
+
+                } else {
+
+                    cmd_rplStatus.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1870,17 +2095,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplStatus_dag);
-                
-                cmd_rplStatus_dag.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplStatus_dag);
+
+                } else {
+
+                    cmd_rplStatus_dag.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1914,17 +2146,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplStatus_trickleTimer);
-                
-                cmd_rplStatus_trickleTimer.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplStatus_trickleTimer);
+                
+                } else {
+
+                    cmd_rplStatus_trickleTimer.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -1964,17 +2203,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplNbr_addr);
-                
-                cmd_rplNbr_addr.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplNbr_addr);
+                
+                } else {
+
+                    cmd_rplNbr_addr.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -2014,17 +2260,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplNbr_ranks);
-                
-                cmd_rplNbr_ranks.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplNbr_ranks);
+                
+                } else {
+
+                    cmd_rplNbr_ranks.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -2064,17 +2317,24 @@ function checkSave(obj) {
 
                 console.log("");
                 console.log(cmd_rplNbr_values);
-                
-                cmd_rplNbr_values.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplNbr_values);
+
+                } else {
+
+                    cmd_rplNbr_values.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -2115,23 +2375,33 @@ function checkSave(obj) {
                 console.log("");
                 console.log(cmd_rplNbr_parens);
                 
-                cmd_rplNbr_parens.save(function (err) {
-                    if (err) console.log(err);
-                    
-                    // saved!
-                    
-                    console.log("");
-                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                });
+                
 
-                break;
+                if(doReturn) {
+
+                    return(cmd_rplNbr_parens);
+                
+                } else {
+
+                    cmd_rplNbr_parens.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+                    
+                    break;
+                };
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             default: 
                 console.log("");
                 console.log("ERROR: INDEX OUT OF RANGE");
-        }
+        };
+
     } else {
 
         // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
@@ -2163,25 +2433,40 @@ function checkSave(obj) {
 
         console.log("");
         console.log(route);
+
+        if(doReturn) {
+
+            return(errorReport);
         
-        errorReport.save(function (err) {
-            if (err) console.log(err);
-            
-            // saved!
-            
-            console.log("");
-            console.log(`<--- <--- <--- cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-        });
+        } else {
+
+            errorReport.save(function (err) {
+                if (err) console.log(err);
+                
+                // saved!
+                
+                console.log("");
+                console.log(`<--- <--- <--- cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+            });
+        };
     };
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// PROCESS OBJ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function processedSave(content) {
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2213,7 +2498,25 @@ db.once('open', function() {
     // we're connected!
 });
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CONTROLLER SETUP ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2237,9 +2540,6 @@ var tug = {
                     });
                 };
             });
-        },
-        new: function (req, res) {
-             
         }
     },
     device: {
@@ -2729,6 +3029,22 @@ var tug = {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // WEB SERVER SETUP ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2980,8 +3296,73 @@ app.listen(PORT, function() {
     console.log('~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~');
 });
 
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+// POST /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+
+
+// https://stackoverflow.com/questions/9177049/express-js-req-body-undefined
+// https://stackoverflow.com/a/13779626
+
+// https://stackoverflow.com/questions/43227729/express-js-req-body-returns-empty
+// https://stackoverflow.com/questions/43227729/express-js-req-body-returns-empty#comment73525765_43227729
+
+app.post("/api/cargo", function(req, res) {
+    
+    console.log('POST: ' + req.body);
+
+    const obj = checkProcessSaveReturn(req.body, true);
+
+    obj.save()
+
+        .then(data => {
+            
+            res.send({
+                
+                status: 'ok', 
+                text: null,
+                goto: null,
+                data: data 
+            });
+    })
+        
+        .catch(err => {
+            
+            res.send({
+                
+                status: 'error', 
+                text: err,
+                goto: null,
+                data: null 
+        });
+    })
+
+});
+
+// {"pckt":{"vld":true,"err":null},"rcrd":2,"ndx":0,"id":{"sT":7886,"adr":"0012.4b00.0f82.da03","cd":"BLUE"},"sys":{"cV":"Contiki-NG-release/v4.2-335-ga95cf54ef-dirty","rt":"RPL Lite","net":"sicslowpan","pId":"0xabcd","mac":{"t":"CSMA","tDhS":null,"dCh":26},"nId":55811,"tIad":"fe80::212:4b00:f82:da03"},"hash":392888623}
+
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+// POST /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -3015,7 +3396,6 @@ app.listen(PORT, function() {
 // app.use(bodyParser.json());
 
 // // HTTP request logger with Morgan
-// app.use(morgan("dev"));
 
 
 
@@ -3027,7 +3407,25 @@ app.listen(PORT, function() {
 
 
 
-var http = require('http').Server(app);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3052,6 +3450,25 @@ function oarCrypt(input) {
 	}
 	return output.join("");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // moor() FUNCTION: PROCESS JSON FROM OAR ---> SAVE TO CARGO //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3167,7 +3584,7 @@ function moor(host, port, path) {
                 console.log("");
                 console.log(obj);
                 
-                checkSave(obj);
+                checkProcessSaveReturn(obj, false);
 
             } catch(e) {
 
@@ -3192,6 +3609,24 @@ function moor(host, port, path) {
     });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // moor() EVERY 5000 ms ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3212,8 +3647,6 @@ function moor(host, port, path) {
 // WAR BUOY // NUKE ENABLED /////////////////////////////////////////////////////////////////////////////////////////
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-const borderRouter = 'http://[fd00::212:4b00:f24:8385]/'; 
-
 // nodeHosts[] array will hold the nodes scraped addr
 // found at the index.html served by border router
 
@@ -3233,7 +3666,7 @@ var nodePaths = new Array; // nodes' requested resource
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function activateScrap() {
+function activateScrap(borderRouter, interval) {
 
     scrap(nodeHosts, borderRouter, function(nodeHosts) {
 
@@ -3248,7 +3681,7 @@ function activateScrap() {
             
             nodePaths[index] = -1;
         });
-    
+        
         console.log();
         console.log("HOSTS: " + nodeHosts);
         console.log("PORTS: " + nodePorts);
@@ -3276,17 +3709,96 @@ function activateScrap() {
             
             moor(nodeHosts[activeNodeIndex], nodePorts[activeNodeIndex], nodePaths[activeNodeIndex]);
             
-        }, 5000)
+        }, interval)
         
     });    
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*
+// *-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*
+// *-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*-|-*
+
 // https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
 
+const borderRouter = 'http://[fd00::212:4b00:f24:8385]/'; 
+
 if(process.env.auto) {
-    activateScrap();
+    if(process.env.br) {
+        
+        console.log();
+        console.log();
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        console.log('[!][!][!] AUTO > BORDER ROUTER SCRAPE:   ACTIVATED [!][!][!]');
+        console.log('[!][!][!] AUTO > PERIODIC NODE QUERY:    ACTIVATED [!][!][!]');
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        
+        console.log();
+        console.log('INTERVAL: ' + process.env.auto + 'ms');
+
+        activateScrap(process.env.br, process.env.auto);
+    
+    } else {
+
+        console.log();
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        console.log('[!][!][!] AUTO > BORDER ROUTER SCRAPE:   ACTIVATED [!][!][!]');
+        console.log('[!][!][!] AUTO > PERIODIC NODE QUERY:    ACTIVATED [!][!][!]');
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        
+        console.log();
+        console.log('INTERVAL: ' + process.env.auto + 'ms');
+        
+        activateScrap(borderRouter, process.env.auto);
+    };
+
+} else {
+
+    if(process.argv[2] == '--auto') {
+
+        console.log();
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        console.log('[!][!][!] AUTO > BORDER ROUTER SCRAPE:   ACTIVATED [!][!][!]');
+        console.log('[!][!][!] AUTO > PERIODIC NODE QUERY:    ACTIVATED [!][!][!]');
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
+        
+        console.log();
+        console.log('INTERVAL: ' + 5000 + 'ms');
+
+        activateScrap(borderRouter, 5000);
+
+    } else {
+
+        console.log();
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!]');
+        console.log('[!][!][!] AUTO:   DISABLED [!][!][!]');
+        console.log('[!][!][!][!][!][!][!][!][!][!][!][!]');
+    }
 }
+
+
+
+
+
+
 
 
 
