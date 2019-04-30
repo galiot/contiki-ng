@@ -981,6 +981,1211 @@ var Cmd_rplNbr_parens                       = mongoose.model('Cmd_rplNbr_parens'
 var ErrorReport                             = mongoose.model('ErrorReport',                             errorReportSchema);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// checkSave //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function checkSave(obj) {
+
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // CHECKSUM CHECK /////////////////////////////////////////////////////////////////
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    
+    /////////////////////////////////////////
+    // how to recalculate the checksum:    //
+    // ----------------------------------- //
+    // get the hash value from JSON        //
+    // remove the "hash" keypair from JSON //
+    // stringify the JSON                  //
+    // remove last character '}'           //
+    // concatenate a comma ','             //
+    // calculate the hash of the string    //
+    // check with original hash value      //
+    /////////////////////////////////////////
+
+    let payloadHash = obj.hash;
+    let goa = obj;
+    delete goa.hash;
+    goa = JSON.stringify(goa);
+    
+    // print if checksum matches the inlcuded one 
+    // to console for debugging purposes
+
+    console.log("");
+    console.log( (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? "CHECKSUM: VALID" : "CHECKSUM: INVALID" );
+    console.log('PAYLOAD HASH: ' + payloadHash);
+
+    if (obj.pckt.vld == true) {
+
+        // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+        // VALID PACKET TO CARGO /////////////////////////////////
+        // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+
+        switch(obj.ndx) {
+
+            case 0: 
+                var system = new System({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    system: {
+                        contikiVersion: obj.sys.cV,
+                        networkStackRouting: obj.sys.rt,
+                        networkStackNetwork: obj.sys.net,
+                        ieee802154PANID: obj.sys.pId,
+            
+                        networkStackMac: {
+                            name: obj.sys.mac.t,
+                            tschDefaultHoppingSequence: obj.sys.mac.tDhS,
+                            defaultChannel: obj.sys.mac.dCh
+                        },
+                        nodeId: obj.sys.nId,
+                        tentaticeLinkLocalIPv6address: obj.sys.tIad
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(system);
+
+                system.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+            
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 1:
+                var device = new Device({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    device: {
+                        temperatureSensor: obj.dev.tp,
+                        humiditySensor: obj.dev.hd
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(device);
+
+                device.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 2:
+                var energest = new Energest({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    energest: {
+                        energest: obj.nrg.en,
+                        cpu: obj.nrg.cp,
+                        lpm: obj.nrg.lp,
+                        deepLpm: obj.nrg.dL,
+                        totalTime: obj.nrg.tT,
+                        radioListening: obj.nrg.rL,
+                        radioTransmiting: obj.nrg.rT,
+                        radioOff: obj.nrg.rO
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(energest);
+
+                energest.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+            
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 3:
+                var stats_network_ip = new Stats_network_ip({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_ip: {
+                        uipStatistics: obj.ipSt.uS,
+                        ip: {
+                            ipRecv: obj.ipSt.ip.rx,
+                            ipSent: obj.ipSt.ip.tx,
+                            ipForwarded: obj.ipSt.ip.fw,
+                            ipDrop: obj.ipSt.ip.dr,    
+                            ipVhlerr: obj.ipSt.ip.vE,  
+                            ipHblenerr: obj.ipSt.ip.hE,
+                            ipLblenerr: obj.ipSt.ip.lE,
+                            ipFragerr: obj.ipSt.ip.fE, 
+                            ipChkerr: obj.ipSt.ip.cE, 
+                            ipProtoerr: obj.ipSt.ip.pE
+                        }
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(stats_network_ip);
+
+                stats_network_ip.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 4:
+                var stats_network_icmp = new Stats_network_icmp({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_network_icmp: {
+                        uipStatistics: obj.icSt.uS,
+                        icmp: {
+                            icmpRecv: obj.icSt.ic.rx,    
+                            icmpSent: obj.icSt.ic.tx,     
+                            icmpDrop: obj.icSt.ic.dr,
+                            icmpTypeerr: obj.icSt.ic.tE,     
+                            icmpChkerr: obj.icSt.ic.cE  
+                        } 
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(stats_network_icmp);
+
+                stats_network_icmp.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 5:
+                var stats_transport = new Stats_transport({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_transport: {
+                        uipStatistics: obj.tSt.uS,
+                        tcp: {
+                            tcp: obj.tSt.tcp.use,        
+                            tcpRecv: obj.tSt.tcp.rx,    
+                            tcpSent: obj.tSt.tcp.tx,    
+                            tcpDrop: obj.tSt.tcp.dr,    
+                            tcpChkerr: obj.tSt.tcp.cE,  
+                            tcpAckerr: obj.tSt.tcp.aA,  
+                            tcpRst: obj.tSt.tcp.rst,     
+                            tcpRexmit: obj.tSt.tcp.rM,  
+                            tcpSyndrop: obj.tSt.tcp.sD, 
+                            tcpSynrst: obj.tSt.tcp.sR  
+                        },
+                        udp: {
+                            udp: obj.tSt.udp.use,  
+                            udpDrop: obj.tSt.udp.dr,
+                            udpRecv: obj.tSt.udp.rx,  
+                            udpSent: obj.tSt.udp.tx,  
+                            udpChkerr: obj.tSt.udp.cE
+                        } 
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(stats_transport);
+
+                stats_transport.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 6:
+                var stats_discovery = new Stats_discovery({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    stats_discovery: {
+                        uipStatistics: obj.dSt.uS,
+                        nd6: {
+                            nd6drop: obj.dSt.nd6.dr,
+                            nd6recv: obj.dSt.nd6.rx,
+                            nd6sent: obj.dSt.nd6.tx
+                        } 
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(stats_discovery);
+
+                stats_discovery.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 7:
+                var cmd_ipAddr = new Cmd_ipAddr({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipAddr: {
+                        ipv6: obj.addr.IPv6,
+                        nodeIPv6addresses: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = new NodeIPv6address({nodeIPv6address: address}));
+                
+                console.log("");
+                console.log(cmd_ipAddr);
+
+                cmd_ipAddr.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 8:
+                var cmd_IpNeighbors_ipAddr = new Cmd_IpNeighbors_ipAddr({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_IpNeighbors_ipAddr: {
+                        ipv6: obj.nsIP.IPv6,
+                        nodeIPv6neighborIpAddresses: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.nsIP.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.ipAddr})
+                    } else {
+                        cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
+                    }
+                })
+
+                console.log("");
+                console.log(cmd_IpNeighbors_ipAddr);
+                
+                cmd_IpNeighbors_ipAddr.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 9:
+                var cmd_ipNeighbors_llAddr = new Cmd_ipNeighbors_llAddr({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipNeighbors_llAddr: {
+                        ipv6: obj.nsLL.IPv6,
+                        nodeIPv6neighborLlAddresses: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.nsLL.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = new NodeIPv6neighborLlAddress({nodeIPv6neighborLlAddress: neighbor.llAddr})
+                    } else {
+                        cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_ipNeighbors_llAddr);
+                
+                cmd_ipNeighbors_llAddr.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 10:
+                var cmd_ipNeighbors_info = new Cmd_ipNeighbors_info({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_ipNeighbors_info: {
+                        ipv6: obj.nsSt.IPv6,
+                        nodeIPv6neighborInfo: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.nsSt.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = new NodeIPv6neighborInfo({nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state})
+                    } else {
+                        cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_ipNeighbors_info);
+                
+                cmd_ipNeighbors_info.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 11:
+                var cmd_routes = new Cmd_routes({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes: {
+                        ipv6: obj.rt.IPv6,
+                        defaultRoute: obj.rt.df,
+                        lifetime: obj.rt.lt
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(cmd_routes);
+                
+                cmd_routes.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 12:
+                var cmd_routes_routingLinks_sources = new Cmd_routes_routingLinks_sources({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingLinks_sources: {
+                        ipv6: obj.rtLS.IPv6,
+                        rpl: obj.rtLS.rpl,
+                        totalRoutingLinks: obj.rtLS.totLs,
+                        routeSources: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rtLS.ls.forEach(function(link, index) {
+                    if (link != null) {
+                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
+                    } else {
+                        cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_routes_routingLinks_sources);
+                
+                cmd_routes_routingLinks_sources.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 13:
+                var cmd_routes_routingLinks_destinations = new Cmd_routes_routingLinks_destinations({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingLinks_destinations: {
+                        ipv6: obj.rtLD.IPv6,
+                        rpl: obj.rtLD.rpl,
+                        totalRoutingLinks: obj.rtLD.totLs,
+                        routeDestinations: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rtLD.ls.forEach(function(link, index) {
+                    if (link != null) {
+                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = new LinkDestination({linkDestinationAddr: link.to, lifetime: link.lf})
+                    } else {
+                        cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_routes_routingLinks_destinations);
+                
+                cmd_routes_routingLinks_destinations.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 14:
+                var cmd_routes_routingEntries_routes = new Cmd_routes_routingEntries_routes({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingEntries_routes: {
+                        ipv6: obj.rtERt.IPv6,
+                        maxRoutesNon0: obj.rtERt.maxRtsN0,
+                        totalRoutingEntries: obj.rtERt.totEs,
+                        routes: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rtERt.es.forEach(function(entry, index) {
+                    if (entry != null) {
+                        cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = new EntryRoute({entryRouteAddr: entry.rt})
+                    } else {
+                        cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_routes_routingEntries_routes);
+                
+                cmd_routes_routingEntries_routes.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 15:
+                var cmd_routes_routingEntries_vias = new Cmd_routes_routingEntries_vias({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_routes_routingEntries_vias: {
+                        ipv6: obj.rtEVia.IPv6,
+                        maxRoutesNon0: obj.rtEVia.maxRtsN0,
+                        totalRoutingEntries: obj.rtEVia.totEs,
+                        vias: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rtEVia.es.forEach(function(entry, index) {
+                    if (entry != null) {
+                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = new EntryVia({entryViaAddr: entry.via, lifetime: entry.lf})
+                    } else {
+                        cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_routes_routingEntries_vias);
+                
+                cmd_routes_routingEntries_vias.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 16:
+                var cmd_rplStatus = new Cmd_rplStatus({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus: {
+                        rplLite: obj.rSt.rL,
+                        instance: obj.rSt.iId,
+                        modeOfOperation: obj.rSt.mop,
+                        objectiveCodePoint: obj.rSt.of,
+                        hopRankIncrement: obj.rSt.hRkI,
+                        defaultLifetime: obj.rSt.dLt,
+                        dtsnOut: obj.rSt.dtsnO
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(cmd_rplStatus);
+                
+                cmd_rplStatus.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 17:
+                var cmd_rplStatus_dag = new Cmd_rplStatus_dag({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus_dag: {
+                        rplLite: obj.rStDag.rL,
+                        instance: obj.rStDag.iId,
+                        dagRole: obj.rStDag.dT,
+                        dagId: obj.rStDag.dId,
+                        dagVersion: obj.rStDag.dVer,
+                        dagPrefix: obj.rStDag.dPf,
+                        dagPrefixLength: obj.rStDag.dPfL,
+                        dagState: obj.rStDag.st,
+                        dagPreferedParent: obj.rStDag.pP,
+                        dagPreferedParentLastDTSN: obj.rStDag.lD,
+                        dagRank: obj.rStDag.rk,
+                        dagLowestRank: obj.rStDag.lRk,
+                        maxRankIncrement: obj.rStDag.mRkI,
+                        dao: {
+                            daoSequenceLastSent: obj.rStDag.dao.lS,
+                            daoSequenceLastAcked: obj.rStDag.dao.lA
+                        }
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(cmd_rplStatus_dag);
+                
+                cmd_rplStatus_dag.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 18:
+                var cmd_rplStatus_trickleTimer = new Cmd_rplStatus_trickleTimer({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplStatus_trickleTimer: {
+                        rplLite: obj.rStTt.rL,
+                        instance: obj.rStTt.iId,
+                        current: obj.rStTt.cur,
+                        min: obj.rStTt.min, 
+                        max: obj.rStTt.max,
+                        redundancy: obj.rStTt.red
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(cmd_rplStatus_trickleTimer);
+                
+                cmd_rplStatus_trickleTimer.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 19:
+                var cmd_rplNbr_addr = new Cmd_rplNbr_addr({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_addr: {
+                        rplLite: obj.rN.rL,
+                        instance: obj.rN.iId,
+                        rplNeighborCount: obj.rN.c,
+                        addresses: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rN.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = new RplAddress({rplAddress: neighbor.ad})
+                    } else {
+                        cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_rplNbr_addr);
+                
+                cmd_rplNbr_addr.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 20:
+                var cmd_rplNbr_ranks = new Cmd_rplNbr_ranks({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_ranks: {
+                        rplLite: obj.rNR.rL,
+                        instance: obj.rNR.iId,
+                        rplNeighborCount: obj.rNR.c,
+                        ranks: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rNR.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = new RplRanks({rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN})
+                    } else {
+                        cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_rplNbr_ranks);
+                
+                cmd_rplNbr_ranks.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 21:
+                var cmd_rplNbr_values = new Cmd_rplNbr_values({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_values: {
+                        rplLite: obj.rNV.rL,
+                        instance: obj.rNV.iId,
+                        rplNeighborCount: obj.rNV.c,
+                        values: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rNV.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_values.cmd_rplNbr_values.values[index] = new RplValues({rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p})
+                    } else {
+                        cmd_rplNbr_values.cmd_rplNbr_values.values[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_rplNbr_values);
+                
+                cmd_rplNbr_values.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 22:
+                var cmd_rplNbr_parens = new Cmd_rplNbr_parens({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_rplNbr_parens: {
+                        rplLite: obj.rNP.rL,
+                        instance: obj.rNP.iId,
+                        rplNeighborCount: obj.rNP.c,
+                        parens: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.rNP.ns.forEach(function(neighbor, index) {
+                    if (neighbor != null) {
+                        cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bS})
+                    } else {
+                        cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_rplNbr_parens);
+                
+                cmd_rplNbr_parens.save(function (err) {
+                    if (err) console.log(err);
+                    
+                    // saved!
+                    
+                    console.log("");
+                    console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                });
+
+                break;
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            default: 
+                console.log("");
+                console.log("ERROR: INDEX OUT OF RANGE");
+        }
+    } else {
+
+        // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+        // ERROR PACKET TO CARGO /////////////////////////////////
+        // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
+
+        console.log("");
+        console.log('ERROR RECIEVED FROM OAR');
+
+        var errorReport = new ErrorReport({
+            packet: {
+                valid: obj.pckt.vld,
+                error: {
+                    text: obj.err.txt,
+                    code: obj.err.cd
+                }
+            },
+            mote: {
+                systemTime: obj.id.sT,
+                linkLayerAddress: obj.id.adr,
+                moteCode: obj.id.cd
+            },
+            checksum: {
+                hash: payloadHash,
+                check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+            },
+            update: new Date
+        });
+
+        console.log("");
+        console.log(route);
+        
+        errorReport.save(function (err) {
+            if (err) console.log(err);
+            
+            // saved!
+            
+            console.log("");
+            console.log(`<--- <--- <--- cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+        });
+    };
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PROCESS OBJ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function processedSave(content) {
+
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MONGOOSE CONNECTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1029,9 +2234,12 @@ var tug = {
                         text: null, 
                         goto: null, 
                         data: system                
-                    })
-                }
-            })
+                    });
+                };
+            });
+        },
+        new: function (req, res) {
+             
         }
     },
     device: {
@@ -1959,1193 +3167,7 @@ function moor(host, port, path) {
                 console.log("");
                 console.log(obj);
                 
-                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-                // CHECKSUM CHECK /////////////////////////////////////////////////////////////////
-                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-                
-                /////////////////////////////////////////
-                // how to recalculate the checksum:    //
-                // ----------------------------------- //
-                // get the hash value from JSON        //
-                // remove the "hash" keypair from JSON //
-                // stringify the JSON                  //
-                // remove last character '}'           //
-                // concatenate a comma ','             //
-                // calculate the hash of the string    //
-                // check with original hash value      //
-                /////////////////////////////////////////
-
-                let payloadHash = obj.hash;
-                let goa = obj;
-                delete goa.hash;
-                goa = JSON.stringify(goa);
-                
-                // print if checksum matches the inlcuded one 
-                // to console for debugging purposes
-
-                console.log("");
-                console.log( (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? "CHECKSUM: VALID" : "CHECKSUM: INVALID" );
-                console.log('PAYLOAD HASH: ' + payloadHash);
-
-                if (obj.pckt.vld == true) {
-
-                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-                    // VALID PACKET TO CARGO /////////////////////////////////
-                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-
-                    switch(obj.ndx) {
-
-                        case 0: 
-                            var system = new System({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                system: {
-                                    contikiVersion: obj.sys.cV,
-                                    networkStackRouting: obj.sys.rt,
-                                    networkStackNetwork: obj.sys.net,
-                                    ieee802154PANID: obj.sys.pId,
-                        
-                                    networkStackMac: {
-                                        name: obj.sys.mac.t,
-                                        tschDefaultHoppingSequence: obj.sys.mac.tDhS,
-                                        defaultChannel: obj.sys.mac.dCh
-                                    },
-                                    nodeId: obj.sys.nId,
-                                    tentaticeLinkLocalIPv6address: obj.sys.tIad
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(system);
-        
-                            system.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- system COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-                        
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        
-                        case 1:
-                            var device = new Device({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                device: {
-                                    temperatureSensor: obj.dev.tp,
-                                    humiditySensor: obj.dev.hd
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(device);
-
-                            device.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- device COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        
-                        case 2:
-                            var energest = new Energest({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                energest: {
-                                    energest: obj.nrg.en,
-                                    cpu: obj.nrg.cp,
-                                    lpm: obj.nrg.lp,
-                                    deepLpm: obj.nrg.dL,
-                                    totalTime: obj.nrg.tT,
-                                    radioListening: obj.nrg.rL,
-                                    radioTransmiting: obj.nrg.rT,
-                                    radioOff: obj.nrg.rO
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(energest);
-
-                            energest.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- energest COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-                        
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        
-                        case 3:
-                            var stats_network_ip = new Stats_network_ip({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                stats_network_ip: {
-                                    uipStatistics: obj.ipSt.uS,
-                                    ip: {
-                                        ipRecv: obj.ipSt.ip.rx,
-                                        ipSent: obj.ipSt.ip.tx,
-                                        ipForwarded: obj.ipSt.ip.fw,
-                                        ipDrop: obj.ipSt.ip.dr,    
-                                        ipVhlerr: obj.ipSt.ip.vE,  
-                                        ipHblenerr: obj.ipSt.ip.hE,
-                                        ipLblenerr: obj.ipSt.ip.lE,
-                                        ipFragerr: obj.ipSt.ip.fE, 
-                                        ipChkerr: obj.ipSt.ip.cE, 
-                                        ipProtoerr: obj.ipSt.ip.pE
-                                    }
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(stats_network_ip);
-
-                            stats_network_ip.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_ip COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        
-                        case 4:
-                            var stats_network_icmp = new Stats_network_icmp({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                stats_network_icmp: {
-                                    uipStatistics: obj.icSt.uS,
-                                    icmp: {
-                                        icmpRecv: obj.icSt.ic.rx,    
-                                        icmpSent: obj.icSt.ic.tx,     
-                                        icmpDrop: obj.icSt.ic.dr,
-                                        icmpTypeerr: obj.icSt.ic.tE,     
-                                        icmpChkerr: obj.icSt.ic.cE  
-                                    } 
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(stats_network_icmp);
-
-                            stats_network_icmp.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_network_icmp COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        
-                        case 5:
-                            var stats_transport = new Stats_transport({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                stats_transport: {
-                                    uipStatistics: obj.tSt.uS,
-                                    tcp: {
-                                        tcp: obj.tSt.tcp.use,        
-                                        tcpRecv: obj.tSt.tcp.rx,    
-                                        tcpSent: obj.tSt.tcp.tx,    
-                                        tcpDrop: obj.tSt.tcp.dr,    
-                                        tcpChkerr: obj.tSt.tcp.cE,  
-                                        tcpAckerr: obj.tSt.tcp.aA,  
-                                        tcpRst: obj.tSt.tcp.rst,     
-                                        tcpRexmit: obj.tSt.tcp.rM,  
-                                        tcpSyndrop: obj.tSt.tcp.sD, 
-                                        tcpSynrst: obj.tSt.tcp.sR  
-                                    },
-                                    udp: {
-                                        udp: obj.tSt.udp.use,  
-                                        udpDrop: obj.tSt.udp.dr,
-                                        udpRecv: obj.tSt.udp.rx,  
-                                        udpSent: obj.tSt.udp.tx,  
-                                        udpChkerr: obj.tSt.udp.cE
-                                    } 
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(stats_transport);
-
-                            stats_transport.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_transport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 6:
-                            var stats_discovery = new Stats_discovery({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                stats_discovery: {
-                                    uipStatistics: obj.dSt.uS,
-                                    nd6: {
-                                        nd6drop: obj.dSt.nd6.dr,
-                                        nd6recv: obj.dSt.nd6.rx,
-                                        nd6sent: obj.dSt.nd6.tx
-                                    } 
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(stats_discovery);
-
-                            stats_discovery.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- stats_discovery COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 7:
-                            var cmd_ipAddr = new Cmd_ipAddr({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_ipAddr: {
-                                    ipv6: obj.addr.IPv6,
-                                    nodeIPv6addresses: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.addr.ad.forEach((address, index) => cmd_ipAddr.cmd_ipAddr.nodeIPv6addresses[index] = new NodeIPv6address({nodeIPv6address: address}));
-                            
-                            console.log("");
-                            console.log(cmd_ipAddr);
-
-                            cmd_ipAddr.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 8:
-                            var cmd_IpNeighbors_ipAddr = new Cmd_IpNeighbors_ipAddr({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_IpNeighbors_ipAddr: {
-                                    ipv6: obj.nsIP.IPv6,
-                                    nodeIPv6neighborIpAddresses: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.nsIP.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = new NodeIPv6neighborIpAddress({nodeIPv6neighborIpAddress: neighbor.ipAddr})
-                                } else {
-                                    cmd_IpNeighbors_ipAddr.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
-                                }
-                            })
-
-                            console.log("");
-                            console.log(cmd_IpNeighbors_ipAddr);
-                            
-                            cmd_IpNeighbors_ipAddr.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_IpNeighbors_ipAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 9:
-                            var cmd_ipNeighbors_llAddr = new Cmd_ipNeighbors_llAddr({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_ipNeighbors_llAddr: {
-                                    ipv6: obj.nsLL.IPv6,
-                                    nodeIPv6neighborLlAddresses: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.nsLL.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = new NodeIPv6neighborLlAddress({nodeIPv6neighborLlAddress: neighbor.llAddr})
-                                } else {
-                                    cmd_ipNeighbors_llAddr.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_ipNeighbors_llAddr);
-                            
-                            cmd_ipNeighbors_llAddr.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_llAddr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 10:
-                            var cmd_ipNeighbors_info = new Cmd_ipNeighbors_info({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_ipNeighbors_info: {
-                                    ipv6: obj.nsSt.IPv6,
-                                    nodeIPv6neighborInfo: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.nsSt.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = new NodeIPv6neighborInfo({nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state})
-                                } else {
-                                    cmd_ipNeighbors_info.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_ipNeighbors_info);
-                            
-                            cmd_ipNeighbors_info.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_ipNeighbors_info COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 11:
-                            var cmd_routes = new Cmd_routes({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_routes: {
-                                    ipv6: obj.rt.IPv6,
-                                    defaultRoute: obj.rt.df,
-                                    lifetime: obj.rt.lt
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(cmd_routes);
-                            
-                            cmd_routes.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 12:
-                            var cmd_routes_routingLinks_sources = new Cmd_routes_routingLinks_sources({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_routes_routingLinks_sources: {
-                                    ipv6: obj.rtLS.IPv6,
-                                    rpl: obj.rtLS.rpl,
-                                    totalRoutingLinks: obj.rtLS.totLs,
-                                    routeSources: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rtLS.ls.forEach(function(link, index) {
-                                if (link != null) {
-                                    cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = new LinkSource({linkSourceAddr: link.from, dodagRoot: link.dodagRoot})
-                                } else {
-                                    cmd_routes_routingLinks_sources.cmd_routes_routingLinks_sources.routeSources[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_routes_routingLinks_sources);
-                            
-                            cmd_routes_routingLinks_sources.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_sources COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 13:
-                            var cmd_routes_routingLinks_destinations = new Cmd_routes_routingLinks_destinations({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_routes_routingLinks_destinations: {
-                                    ipv6: obj.rtLD.IPv6,
-                                    rpl: obj.rtLD.rpl,
-                                    totalRoutingLinks: obj.rtLD.totLs,
-                                    routeDestinations: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rtLD.ls.forEach(function(link, index) {
-                                if (link != null) {
-                                    cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = new LinkDestination({linkDestinationAddr: link.to, lifetime: link.lf})
-                                } else {
-                                    cmd_routes_routingLinks_destinations.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_routes_routingLinks_destinations);
-                            
-                            cmd_routes_routingLinks_destinations.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingLinks_destinations COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 14:
-                            var cmd_routes_routingEntries_routes = new Cmd_routes_routingEntries_routes({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_routes_routingEntries_routes: {
-                                    ipv6: obj.rtERt.IPv6,
-                                    maxRoutesNon0: obj.rtERt.maxRtsN0,
-                                    totalRoutingEntries: obj.rtERt.totEs,
-                                    routes: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rtERt.es.forEach(function(entry, index) {
-                                if (entry != null) {
-                                    cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = new EntryRoute({entryRouteAddr: entry.rt})
-                                } else {
-                                    cmd_routes_routingEntries_routes.cmd_routes_routingEntries_routes.routes[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_routes_routingEntries_routes);
-                            
-                            cmd_routes_routingEntries_routes.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_routes COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 15:
-                            var cmd_routes_routingEntries_vias = new Cmd_routes_routingEntries_vias({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_routes_routingEntries_vias: {
-                                    ipv6: obj.rtEVia.IPv6,
-                                    maxRoutesNon0: obj.rtEVia.maxRtsN0,
-                                    totalRoutingEntries: obj.rtEVia.totEs,
-                                    vias: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rtEVia.es.forEach(function(entry, index) {
-                                if (entry != null) {
-                                    cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = new EntryVia({entryViaAddr: entry.via, lifetime: entry.lf})
-                                } else {
-                                    cmd_routes_routingEntries_vias.cmd_routes_routingEntries_vias.vias[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_routes_routingEntries_vias);
-                            
-                            cmd_routes_routingEntries_vias.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_routes_routingEntries_vias COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 16:
-                            var cmd_rplStatus = new Cmd_rplStatus({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplStatus: {
-                                    rplLite: obj.rSt.rL,
-                                    instance: obj.rSt.iId,
-                                    modeOfOperation: obj.rSt.mop,
-                                    objectiveCodePoint: obj.rSt.of,
-                                    hopRankIncrement: obj.rSt.hRkI,
-                                    defaultLifetime: obj.rSt.dLt,
-                                    dtsnOut: obj.rSt.dtsnO
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplStatus);
-                            
-                            cmd_rplStatus.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 17:
-                            var cmd_rplStatus_dag = new Cmd_rplStatus_dag({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplStatus_dag: {
-                                    rplLite: obj.rStDag.rL,
-                                    instance: obj.rStDag.iId,
-                                    dagRole: obj.rStDag.dT,
-                                    dagId: obj.rStDag.dId,
-                                    dagVersion: obj.rStDag.dVer,
-                                    dagPrefix: obj.rStDag.dPf,
-                                    dagPrefixLength: obj.rStDag.dPfL,
-                                    dagState: obj.rStDag.st,
-                                    dagPreferedParent: obj.rStDag.pP,
-                                    dagPreferedParentLastDTSN: obj.rStDag.lD,
-                                    dagRank: obj.rStDag.rk,
-                                    dagLowestRank: obj.rStDag.lRk,
-                                    maxRankIncrement: obj.rStDag.mRkI,
-                                    dao: {
-                                        daoSequenceLastSent: obj.rStDag.dao.lS,
-                                        daoSequenceLastAcked: obj.rStDag.dao.lA
-                                    }
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplStatus_dag);
-                            
-                            cmd_rplStatus_dag.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_dag COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 18:
-                            var cmd_rplStatus_trickleTimer = new Cmd_rplStatus_trickleTimer({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplStatus_trickleTimer: {
-                                    rplLite: obj.rStTt.rL,
-                                    instance: obj.rStTt.iId,
-                                    current: obj.rStTt.cur,
-                                    min: obj.rStTt.min, 
-                                    max: obj.rStTt.max,
-                                    redundancy: obj.rStTt.red
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplStatus_trickleTimer);
-                            
-                            cmd_rplStatus_trickleTimer.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplStatus_trickleTimer COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 19:
-                            var cmd_rplNbr_addr = new Cmd_rplNbr_addr({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplNbr_addr: {
-                                    rplLite: obj.rN.rL,
-                                    instance: obj.rN.iId,
-                                    rplNeighborCount: obj.rN.c,
-                                    addresses: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rN.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = new RplAddress({rplAddress: neighbor.ad})
-                                } else {
-                                    cmd_rplNbr_addr.cmd_rplNbr_addr.addresses[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplNbr_addr);
-                            
-                            cmd_rplNbr_addr.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_addr COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 20:
-                            var cmd_rplNbr_ranks = new Cmd_rplNbr_ranks({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplNbr_ranks: {
-                                    rplLite: obj.rNR.rL,
-                                    instance: obj.rNR.iId,
-                                    rplNeighborCount: obj.rNR.c,
-                                    ranks: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rNR.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = new RplRanks({rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN})
-                                } else {
-                                    cmd_rplNbr_ranks.cmd_rplNbr_ranks.ranks[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplNbr_ranks);
-                            
-                            cmd_rplNbr_ranks.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_ranks COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 21:
-                            var cmd_rplNbr_values = new Cmd_rplNbr_values({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplNbr_values: {
-                                    rplLite: obj.rNV.rL,
-                                    instance: obj.rNV.iId,
-                                    rplNeighborCount: obj.rNV.c,
-                                    values: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rNV.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_rplNbr_values.cmd_rplNbr_values.values[index] = new RplValues({rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p})
-                                } else {
-                                    cmd_rplNbr_values.cmd_rplNbr_values.values[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplNbr_values);
-                            
-                            cmd_rplNbr_values.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_values COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        case 22:
-                            var cmd_rplNbr_parens = new Cmd_rplNbr_parens({
-                                packet: {
-                                    valid: obj.pckt.vld,
-                                    error: null
-                                },
-                                record: obj.rcrd,
-                                index: obj.ndx,
-                                mote: {
-                                    systemTime: obj.id.sT,
-                                    linkLayerAddress: obj.id.adr,
-                                    moteCode: obj.id.cd
-                                },
-                                cmd_rplNbr_parens: {
-                                    rplLite: obj.rNP.rL,
-                                    instance: obj.rNP.iId,
-                                    rplNeighborCount: obj.rNP.c,
-                                    parens: [null]
-                                },
-                                checksum: {
-                                    hash: payloadHash,
-                                    check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                                },
-                                update: new Date
-                            });
-
-                            obj.rNP.ns.forEach(function(neighbor, index) {
-                                if (neighbor != null) {
-                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = new RplParens({rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bS})
-                                } else {
-                                    cmd_rplNbr_parens.cmd_rplNbr_parens.parens[index] = null
-                                }
-                            });
-
-                            console.log("");
-                            console.log(cmd_rplNbr_parens);
-                            
-                            cmd_rplNbr_parens.save(function (err) {
-                                if (err) console.log(err);
-                                
-                                // saved!
-                                
-                                console.log("");
-                                console.log(`<--- <--- <--- cargo DATABASE <--- cmd_rplNbr_parens COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                            });
-
-                            break;
-
-                        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-                        default: 
-                            console.log("");
-                            console.log("ERROR: INDEX OUT OF RANGE");
-                    }
-                } else {
-
-                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-                    // ERROR PACKET TO CARGO /////////////////////////////////
-                    // --> --> --> --> --> --> --> --> --> --> --> --> --> -->
-
-                    console.log("");
-                    console.log('ERROR RECIEVED FROM OAR');
-
-                    var errorReport = new ErrorReport({
-                        packet: {
-                            valid: obj.pckt.vld,
-                            error: {
-                                text: obj.err.txt,
-                                code: obj.err.cd
-                            }
-                        },
-                        mote: {
-                            systemTime: obj.id.sT,
-                            linkLayerAddress: obj.id.adr,
-                            moteCode: obj.id.cd
-                        },
-                        checksum: {
-                            hash: payloadHash,
-                            check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
-                        },
-                        update: new Date
-                    });
-
-                    console.log("");
-                    console.log(route);
-                    
-                    errorReport.save(function (err) {
-                        if (err) console.log(err);
-                        
-                        // saved!
-                        
-                        console.log("");
-                        console.log(`<--- <--- <--- cargo DATABASE <--- errorReport COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
-                    });
-                }
+                checkSave(obj);
 
             } catch(e) {
 
@@ -3207,52 +3229,67 @@ var nodePaths = new Array; // nodes' requested resource
 
 // attempting to scrap border router's index.html
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-scrap(nodeHosts, borderRouter, function(nodeHosts) {
+function activateScrap() {
 
-    // initializations
+    scrap(nodeHosts, borderRouter, function(nodeHosts) {
 
-    nodeHosts.forEach(function(node, index){
-        
-        nodePorts[index] = 80;
-
-        // paths are being initialized: -1 
-        // will be incremented to 0 at first call
-        
-        nodePaths[index] = -1;
-    });
-
-    console.log();
-    console.log("HOSTS: " + nodeHosts);
-    console.log("PORTS: " + nodePorts);
-    console.log("PATHS: " + nodePaths);
+        // initializations
     
-    // console.log("TOTAL NODES: " + nodeHosts.length);
-
-    var activeNodeIndex = -1;
-
-    setInterval(function() {
+        nodeHosts.forEach(function(node, index){
+            
+            nodePorts[index] = 80;
     
-        activeNodeIndex++;              
-        activeNodeIndex = activeNodeIndex % nodeHosts.length; // incerement the active node index
-        
-        nodePaths[activeNodeIndex]++;   
-        nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 23;
+            // paths are being initialized: -1 
+            // will be incremented to 0 at first call
+            
+            nodePaths[index] = -1;
+        });
     
         console.log();
-        console.log('</> </> </> </> </> </> </> </> </>');
-        console.log(`</> QUERING NODE: ${activeNodeIndex + 1} / TOTAL: ${nodeHosts.length}  </>`);
-        console.log('</> </> </> </> </> </> </> </> </>');
+        console.log("HOSTS: " + nodeHosts);
+        console.log("PORTS: " + nodePorts);
+        console.log("PATHS: " + nodePaths);
+        
+        // console.log("TOTAL NODES: " + nodeHosts.length);
     
-        console.log();
-        console.log(`---> ---> ---> GET ---> http://[${nodeHosts[activeNodeIndex]}:${nodePorts[activeNodeIndex]}/${nodePaths[activeNodeIndex]} ---> ---> ---> ---> ---> ---> ---> ---> --->`);
+        let activeNodeIndex = -1;
+    
+        var monitorInterval = setInterval(function() {
         
-        moor(nodeHosts[activeNodeIndex], nodePorts[activeNodeIndex], nodePaths[activeNodeIndex]);
+            activeNodeIndex++;              
+            activeNodeIndex = activeNodeIndex % nodeHosts.length; // incerement the active node index
+            
+            nodePaths[activeNodeIndex]++;   
+            nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 23;
         
+            console.log();
+            console.log('</> </> </> </> </> </> </> </> </>');
+            console.log(`</> QUERING NODE: ${activeNodeIndex + 1} / TOTAL: ${nodeHosts.length}  </>`);
+            console.log('</> </> </> </> </> </> </> </> </>');
+        
+            console.log();
+            console.log(`---> ---> ---> GET ---> http://[${nodeHosts[activeNodeIndex]}:${nodePorts[activeNodeIndex]}/${nodePaths[activeNodeIndex]} ---> ---> ---> ---> ---> ---> ---> ---> --->`);
+            
+            moor(nodeHosts[activeNodeIndex], nodePorts[activeNodeIndex], nodePaths[activeNodeIndex]);
+            
+        }, 5000)
+        
+    });    
+};
 
-    
-    }, 5000)
-});
+
+// https://medium.com/the-node-js-collection/making-your-node-js-work-everywhere-with-environment-variables-2da8cdf6e786
+
+if(process.env.auto) {
+    activateScrap();
+}
+
+
+
 
 
 
