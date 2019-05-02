@@ -368,7 +368,7 @@
                     <div class="input-group-prepend"> 
                         <span class="input-group-text">/</span>  
                     </div>
-                    <input type="text" class="form-control" value='api/cargo' id="store-input-path"></input>`;
+                    <input type="text" class="form-control" value='api/cargo' id="store-input-path"></input>
                 </div>
 
                 <div class="col-4"> 
@@ -428,21 +428,74 @@
     
     
     <!--DATABASE DIVISDION ================================================================= -->
-    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-primary rounded" id="database-div">
+    <div class=" p-3 my-5 mx-auto container bg-dark border border-primary rounded" id="database-div">
 
             <h1 class="text-center text-light" id="database-h1">database</h1>
         
             <br>
 
-        <br>
-        <br>
+            
+                
+                
+                    
+            <div class="input-group" id="database-input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-primary" type="button" id="database-button-get">GET</button>  
+                </div>
+                <div class="input-group-prepend"> 
+                    <span class="input-group-text">http://</span>  
+                </div>
+                <input type="text" class="form-control" value='localhost' id="database-input-address"></input>
+                <div class="input-group-prepend"> 
+                    <span class="input-group-text">:</span>  
+                </div>
+                <input type="number" class="form-control" value=8080 id="database-input-port"></input>
+                <div class="input-group-prepend"> 
+                    <span class="input-group-text">/api/cargo/</span>  
+                </div>
+                <select class="custom-select" id="database-select">
+                    <option value="system">system</option>
+                    <option value="devices">devices</option>
+                    <option value="energy">energy</option>
+                    <option value="stats/network/ip">stats/network/ip</option>
+                    <option value="stats/network/icmp">stats/network/icmp</option>
+                    <option value="stats/transport">stats/transport</option>
+                    <option value="stats/discovery">stats/discovery</option>
+                    <option value="cmd/ipaddr/">cmd/ipaddr</option>
+                    <option value="cmd/ipnbr/ipaddr">cmd/ipnbr/ipaddr</option>
+                    <option value="cmd/ipnbr/lladdr">cmd/ipnbr/lladdr</option>
+                    <option value="cmd/ipnbr/info">cmd/ipnbr/info</option>
+                    <option value="cmd/routes/default">cmd/routes/default</option>
+                    <option value="cmd/routes/links/sources">cmd/routes/links/sources</option>
+                    <option value="cmd/routes/links/destinations">cmd/routes/links/destinations</option>
+                    <option value="cmd/routes/entries/routes">cmd/routes/entries/routes</option>
+                    <option value="cmd/routes/entries/vias">cmd/routes/entries/vias</option>
+                    <option value="cmd/rplstatus/id">cmd/rplstatus/id</option>
+                    <option value="cmd/rplstatus/dag">cmd/rplstatus/dag</option>
+                    <option value="cmd/rplstatus/time">cmd/rplstatus/time</option>
+                    <option value="cmd/rplnbr/addr">cmd/rplnbr/addr</option>
+                    <option value="cmd/rplnbr/ranks">cmd/rplnbr/ranks</option>
+                    <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
+                    <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
+                </select> 
+            </div>
+    
+            <div class="d-none row text-center mt-2" id="database-output"></div>
 
-        <div class="container text-center m-auto p-auto">
-            <!-- BUTTONS -->
-            <button class="btn btn-outline-danger" id="database-button-reload">reload</button>
-            <button class="btn btn-outline-warning" id="database-button-clear">clear</button>
-            <button class="btn btn-outline-primary" id="database-button-continue">continue</button>
-        </div>
+            <br>
+
+            <h2 class="d-none text-center text-muted" id="database-h2-response">response</h2>
+            <div class="p-auto m-auto container bg-dark text-left text-light" id="database-response"></div>
+
+            <br>
+            <br>
+
+            <div class="container text-center m-auto p-auto">
+                <!-- BUTTONS -->
+                <button class="btn btn-outline-danger" id="database-button-reload">reload</button>
+                <button class="btn btn-outline-warning" id="database-button-clear">clear</button>
+                <button class="btn btn-outline-primary" id="database-button-continue">continue</button>
+            </div>
 
     </div>
 

@@ -2712,7 +2712,7 @@ var tug = {
     },
     cmd_IpNeighbors_llAddr: {
         index: function (req, res) {
-            Cmd_IpNeighbors_llAddr.find(function (err, cmd_IpNeighbors_llAddr) {
+            Cmd_ipNeighbors_llAddr.find(function (err, cmd_IpNeighbors_llAddr) {
                 if (err) {
                     res.json({
                         status: 'error',  
@@ -2733,7 +2733,7 @@ var tug = {
     },
     cmd_IpNeighbors_info: {
         index: function (req, res) {
-            Cmd_IpNeighbors_info.find(function (err, cmd_IpNeighbors_info) {
+            Cmd_ipNeighbors_info.find(function (err, cmd_IpNeighbors_info) {
                 if (err) {
                     res.json({
                         status: 'error',  
@@ -3095,7 +3095,7 @@ router.get('/cargo', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/system', '/device', '/stats', '/cmd'],
+        goto: ['/system', '/devices', '/energy', '/stats', '/cmd'],
         data: null
     });
 });
@@ -3124,12 +3124,12 @@ router.get('/cargo/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/ipaddr', '/ipneighbors', '/routes', '/rplstatus', '/rplnbr'], 
+        goto: ['/ipaddr', '/ipnbr', '/routes', '/rplstatus', '/rplnbr'], 
         data: null
     });
 });
 
-router.get('/cargo/cmd/ipneighbors', function (req, res) {
+router.get('/cargo/cmd/ipnbr', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -3138,7 +3138,16 @@ router.get('/cargo/cmd/ipneighbors', function (req, res) {
     });
 });
 
-router.get('/cargo/cmd/routes/routinglinks', function (req, res) {
+router.get('/cargo/cmd/routes', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/default', '/links', '/entries'], 
+        data: null
+    });
+});
+
+router.get('/cargo/cmd/routes/links', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -3147,11 +3156,20 @@ router.get('/cargo/cmd/routes/routinglinks', function (req, res) {
     });
 });
 
-router.get('/cargo/cmd/routes/routingentries', function (req, res) {
+router.get('/cargo/cmd/routes/entries', function (req, res) {
     res.json({
         status: null, 
         text: null,
         goto: ['/routes', '/vias'], 
+        data: null
+    });
+});
+
+router.get('/cargo/cmd/rplstatus', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/id', '/dag', '/time'],
         data: null
     });
 });
@@ -3173,10 +3191,10 @@ router.get('/cargo/cmd/rplnbr', function (req, res) {
 router.route('/cargo/system')
     .get(tug.system.index);
 
-router.route('/cargo/device')
+router.route('/cargo/devices')
     .get(tug.device.index);
 
-router.route('/cargo/energest')
+router.route('/cargo/energy')
     .get(tug.energest.index);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
@@ -3198,37 +3216,37 @@ router.route('/cargo/stats/discovery')
 router.route('/cargo/cmd/ipaddr')
     .get(tug.cmd_ipAddr.index);
 
-router.route('/cargo/cmd/ipneighbors/ipaddr')
+router.route('/cargo/cmd/ipnbr/ipaddr')
     .get(tug.cmd_IpNeighbors_ipAddr.index);
 
-router.route('/cargo/cmd/ipneighbors/ipaddr')
+router.route('/cargo/cmd/ipnbr/lladdr')
     .get(tug.cmd_IpNeighbors_llAddr.index);
 
-router.route('/cargo/cmd/ipneighbors/info')
+router.route('/cargo/cmd/ipnbr/info')
     .get(tug.cmd_IpNeighbors_info.index);
 
-router.route('/cargo/cmd/routes')
+router.route('/cargo/cmd/routes/default')
     .get(tug.cmd_routes.index);
 
-router.route('/cargo/cmd/routinglinks/sources')
+router.route('/cargo/cmd/routes/links/sources')
     .get(tug.cmd_routes_routingLinks_sources.index);
 
-router.route('/cargo/cmd/routinglinks/destinations')
+router.route('/cargo/cmd/routes/links/destinations')
     .get(tug.cmd_routes_routingLinks_destinations.index);
 
-router.route('/cargo/cmd/routingentries/routes')
+router.route('/cargo/cmd/routes/entries/routes')
     .get(tug.cmd_routes_routingEntries_routes.index);
 
-router.route('/cargo/cmd/routingentries/vias')
+router.route('/cargo/cmd/routes/entries/vias')
     .get(tug.cmd_routes_routingEntries_vias.index);
 
-router.route('/cargo/cmd/rplstatus')
+router.route('/cargo/cmd/rplstatus/id')
     .get(tug.cmd_rplStatus.index);
 
 router.route('/cargo/cmd/rplstatus/dag')
     .get(tug.cmd_rplStatus_dag.index);
 
-router.route('/cargo/read/cmd/rplstatus/tricletimer')
+router.route('/cargo/cmd/rplstatus/time')
     .get(tug.cmd_rplStatus_trickleTimer.index);
 
 router.route('/cargo/cmd/rplnbr/addr')

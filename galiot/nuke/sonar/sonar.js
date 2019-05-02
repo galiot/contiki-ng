@@ -1115,6 +1115,19 @@ const storeButtonContinue = document.getElementById('store-button-continue');
 const databaseDiv = document.getElementById('database-div');
 const databaseH1 = document.getElementById('database-h1');
 
+const databaseInputGroup = document.getElementById('database-input-group');
+
+const databaseSelect = document.getElementById('database-select');
+const databaseButtonGet = document.getElementById('database-button-get');
+const databaseInputAddress = document.getElementById('database-input-address');
+const databaseInputPort = document.getElementById('database-input-port');
+const databaseInputPath = document.getElementById('database-input-path');
+
+const databaseOutput = document.getElementById('database-output');
+
+const databaseH2Response = document.getElementById('database-h2-response');
+const databaseResponse = document.getElementById('database-response');
+
 const databaseButtonReload = document.getElementById('database-button-reload');
 const databaseButtonClear = document.getElementById('database-button-clear');
 const databaseButtonContinue = document.getElementById('database-button-continue');
@@ -1284,7 +1297,7 @@ consoleButtonClear.addEventListener('click', () => {
 
 storeButtonClear.addEventListener('click', () => {
 
-    storeDiv.classList.remove('border-danger', 'border-warning', 'border-success'); consoleDiv.classList.add('border-primary');
+    storeDiv.classList.remove('border-danger', 'border-warning', 'border-success'); storeDiv.classList.add('border-primary');
 
     storeButtonSave.classList.remove('d-none');
 
@@ -1297,6 +1310,19 @@ storeButtonClear.addEventListener('click', () => {
     storeSelect.innerHTML = '';
 
 });
+
+// DATABASE
+
+databaseButtonClear.addEventListener('click', () => {
+
+    databaseDiv.classList.remove('border-danger', 'border-warning', 'border-success'); databaseDiv.classList.add('border-primary');
+
+    databaseOutput.classList.replace('d-block', 'd-none');
+
+    databaseResponse.innerHTML = '';
+
+});
+
 
 
 
@@ -6406,4 +6432,39 @@ function simDatabase(nodesAddr) {
     storeDiv.classList.replace('border-secondary', 'border-primary');
     storeH1.classList.replace('text-secondary', 'text-light');
 };
+
+
+
+databaseButtonGet.addEventListener('click', () => {
+
+    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`)
+
+        .then(res => res.json())
+        .then(data => {
+                
+            console.log(data);
+            
+            databaseOutput.classList.replace('d-none', 'd-block');
+            databaseOutput.classList.remove('bg-danger', 'bg-warning'); databaseOutput.classList.add('bg-success');
+            databaseOutput.innerText = 'OK';
+
+            databaseDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-success');
+            
+            databaseH2Response.classList.replace('d-none', 'd-block');
+            databaseResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
+
+            databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+        })
+        .catch(err => {
+
+            console.log(err);
+
+            databaseOutput.classList.replace('d-none', 'd-block');
+            databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-danger');
+            databaseOutput.innerText = err;
+
+            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+        })
+});
 
