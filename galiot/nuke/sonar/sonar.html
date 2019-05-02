@@ -315,10 +315,6 @@
 
         </div>
 
-        <div class="container text-center m-auto p-auto">
-            <button class="btn btn-muted d-none" id="console-button-save">save</button>
-        </div>
-
         <br>
         <br>
 
@@ -341,11 +337,102 @@
 
 
 
-     <!--DATABSE DIVISDION ================================================================= -->
-     <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="database-div">
+     <!--STORE DIVISDION ================================================================= -->
+     <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="store-div">
 
         <!-- nodes-h1 -->
-        <h1 class="text-center text-secondary" id="database-h1">database</h1> 
+        <h1 class="text-center text-secondary" id="store-h1">store</h1>
+        
+        <br>
+
+        <div class="container text-center justify-content-center m-auto p-auto">
+            <button class="btn btn-muted" id="store-button-save">save</button>
+        </div>
+
+        <div class="container justify-content-center m-auto p-auto d-none" id="store-div-save">
+                
+            <div class="row">
+                
+                <div class="col-8 input-group" id="store-input">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-primary" type="button" id="store-button-post">POST</button>  
+                    </div>
+                    <div class="input-group-prepend"> 
+                        <span class="input-group-text">http://</span>  
+                    </div>
+                    <input type="text" class="form-control" value='localhost' id="store-input-address"></input>
+                    <div class="input-group-prepend"> 
+                        <span class="input-group-text">:</span>  
+                    </div>
+                    <input type="number" class="form-control" value=8080 id="store-input-port"></input>
+                    <div class="input-group-prepend"> 
+                        <span class="input-group-text">/</span>  
+                    </div>
+                    <input type="text" class="form-control" value='api/cargo' id="store-input-path"></input>`;
+                </div>
+
+                <div class="col-4"> 
+                    <select class="text-center custom-select  bg-dark text-light" id="store-select"></select> 
+                </div>
+            
+            </div>
+            
+        </div>
+
+        <div class="d-none row text-center mt-2" id="store-output"></div>
+
+        <br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h2 class="d-none text-center text-muted" id="store-h2-request">request</h2>
+    
+                    <div class="container text-center justify-content-center m-auto p-auto">
+                        <div  class=" p-auto m-auto container bg-dark text-left text-light" id="store-request">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <h2 class="d-none text-center text-muted" id="store-h2-response">response</h2>
+    
+                    <div class="container text-center justify-content-center m-auto p-auto">
+                        <div  class=" p-auto m-auto container bg-dark text-left text-light" id="store-response">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <div class="container text-center m-auto p-auto">
+            <!-- BUTTONS -->
+            <button class="btn btn-outline-danger" id="store-button-reload">reload</button>
+            <button class="btn btn-outline-warning" id="store-button-clear">clear</button>
+            <button class="btn btn-outline-secondary" id="store-button-continue">continue</button>
+        </div>
+
+    </div>
+
+
+    
+    
+    
+    
+    
+    
+    
+    <!--DATABASE DIVISDION ================================================================= -->
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-primary rounded" id="database-div">
+
+            <h1 class="text-center text-light" id="database-h1">database</h1>
+        
+            <br>
 
         <br>
         <br>
@@ -354,7 +441,33 @@
             <!-- BUTTONS -->
             <button class="btn btn-outline-danger" id="database-button-reload">reload</button>
             <button class="btn btn-outline-warning" id="database-button-clear">clear</button>
-            <button class="btn btn-outline-secondary" id="database-button-continue">continue</button>
+            <button class="btn btn-outline-primary" id="database-button-continue">continue</button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <!--DEMO DIVISDION ================================================================= -->
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
+
+            <h1 class="text-center text-secondary" id="demo-h1">demo</h1>
+        
+            <br>
+
+        <br>
+        <br>
+
+        <div class="container text-center m-auto p-auto">
+            <!-- BUTTONS -->
+            <button class="btn btn-outline-danger" id="demo-button-reload">reload</button>
+            <button class="btn btn-outline-warning" id="demo-button-clear">clear</button>
+            <button class="btn btn-outline-secondary" id="demo-button-continue">continue</button>
         </div>
 
     </div>

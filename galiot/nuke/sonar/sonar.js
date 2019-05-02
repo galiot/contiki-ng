@@ -1078,11 +1078,37 @@ const consoleData = document.getElementById('console-data');
 
 const consoleH2 = document.getElementById('console-h2');
 
-const consoleButtonSave = document.getElementById('console-button-save');
-
 const consoleButtonReload = document.getElementById('console-button-reload');
 const consoleButtonClear = document.getElementById('console-button-clear');
 const consoleButtonContinue = document.getElementById('console-button-continue');
+
+// STORE
+
+const storeDiv = document.getElementById('store-div');
+const storeH1 = document.getElementById('store-h1');
+
+const storeButtonSave = document.getElementById('store-button-save');
+const storeDivSave = document.getElementById('store-div-save');
+
+const storeSelect = document.getElementById('store-select');
+const storeInput = document.getElementById('store-input');
+
+const storeButtonPost = document.getElementById('store-button-post');
+const storeInputAddress = document.getElementById('store-input-address');
+const storeInputPort = document.getElementById('store-input-port');
+const storeInputPath = document.getElementById('store-input-path');
+
+const storeOutput = document.getElementById('store-output');
+
+const storeH2Request = document.getElementById('store-h2-request');
+const storeH2Response = document.getElementById('store-h2-response');
+
+const storeRequest = document.getElementById('store-request');
+const storeResponse = document.getElementById('store-response');
+
+const storeButtonReload = document.getElementById('store-button-reload');
+const storeButtonClear = document.getElementById('store-button-clear');
+const storeButtonContinue = document.getElementById('store-button-continue');
 
 // DATABASE
 
@@ -1092,6 +1118,15 @@ const databaseH1 = document.getElementById('database-h1');
 const databaseButtonReload = document.getElementById('database-button-reload');
 const databaseButtonClear = document.getElementById('database-button-clear');
 const databaseButtonContinue = document.getElementById('database-button-continue');
+
+// DEMO
+
+const demoDiv = document.getElementById('demo-div');
+const demo1 = document.getElementById('demo-h1');
+
+const demoButtonReload = document.getElementById('demo-button-reload');
+const demoButtonClear = document.getElementById('demo-button-clear');
+const demoButtonContinue = document.getElementById('demo-button-continue');
 
 // LEGEND
 
@@ -1133,9 +1168,23 @@ consoleButtonReload.addEventListener('click', () => {
     window.location.reload(true);
 });
 
+// STORE
+
+storeButtonReload.addEventListener('click', () => {
+    event.preventDefault();
+    window.location.reload(true);
+});
+
 // DATABASE
 
 databaseButtonReload.addEventListener('click', () => {
+    event.preventDefault();
+    window.location.reload(true);
+});
+
+// DEMO
+
+demoButtonReload.addEventListener('click', () => {
     event.preventDefault();
     window.location.reload(true);
 });
@@ -1157,7 +1206,7 @@ brButtonClear.addEventListener('click', () => {
     
     brOutput.classList.replace('d-block', 'd-none');
     nodesEncodedResponseDiv.innerText = ''
-})
+});
 
 // NODES
 
@@ -1213,8 +1262,7 @@ nodesButtonClear.addEventListener('click', () => {
 
     nodesOutputChecksum.classList.replace('d-block', 'd-none');
     legendDiv.classList.replace('d-show', 'd-none');
-
-})
+});
 
 // COSNOLE
 
@@ -1226,11 +1274,27 @@ consoleButtonClear.addEventListener('click', () => {
     consoleTableQuery.classList.replace('d-block', 'd-none');
 
     consoleData.innerHTML = '';
-    consoleButtonSave.classList.replace('d-block', 'd-none');
+    storeButtonSave.classList.replace('d-block', 'd-none');
 
 
     consoleButtonContinue.classList.replace('btn-outline-primary', 'btn-outline-secondary');
+});
 
+// STORE
+
+storeButtonClear.addEventListener('click', () => {
+
+    storeDiv.classList.remove('border-danger', 'border-warning', 'border-success'); consoleDiv.classList.add('border-primary');
+
+    storeButtonSave.classList.remove('d-none');
+
+    storeDivSave.classList.replace('d-block', 'd-none');
+    storeOutput.classList.replace('d-block', 'd-none');
+
+    storeResponse.innerHTML = '';
+    storeRequest.innerHTML = '';
+
+    storeSelect.innerHTML = '';
 
 });
 
@@ -1249,10 +1313,17 @@ nodesButtonContinue.addEventListener('click', () => {
     legendDiv.classList.replace('d-show', 'd-none');
 });
 consoleButtonContinue.addEventListener('click', () => {
+    storeDiv.classList.replace('d-none', 'd-block');
+    legendDiv.classList.replace('d-show', 'd-none');
+});
+storeButtonContinue.addEventListener('click', () => {
     databaseDiv.classList.replace('d-none', 'd-block');
     legendDiv.classList.replace('d-show', 'd-none');
 });
-
+databaseButtonContinue.addEventListener('click', () => {
+    demoDiv.classList.replace('d-none', 'd-block');
+    legendDiv.classList.replace('d-show', 'd-none');
+});
 
 
 
@@ -1691,6 +1762,198 @@ function scrap() {
         })
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function cargoSave (node, obj) {
+
+    storeButtonSave.classList.add('d-none');
+    
+    // storeDivSave.classList.replace('d-none', 'd-block')
+    // storeDivSave.innerHTML =`
+    //     <table class="table table-bordered">
+    //         <tbody>`;
+
+    // obj.forEach((object, index) => {
+
+    //     storeDivSave.innerHTML += `
+    //         <tr>
+    //             <td>${JSON.stringify(object)}</td>
+    //             <td><button class="btn btn-primary" id="store-button-save-object">store</button></td>
+    //         </tr>`    
+    // });
+
+    // storeDivSave.innerHTML += `
+    //     </tbody>
+    //         </table>`;
+
+    // ----------------------------------------------------------------------------------
+    
+    // storeDivSave.classList.replace('d-none', 'd-block');
+    
+    // storeUL.innerHTML = '';
+    // storeUL.classList.replace('d-none', 'd-block');
+    
+    // obj.forEach((object, index) => {
+
+    //     storeUL.innerHTML += `
+    //         <li class="list-group-item bg-dark text-light border-secondary rounded">
+    //             ${JSON.stringify(object)}
+    //         </li>`;
+    // });
+
+    // storeDivSave.innerHTML += `
+    //     <br>
+    //     <button class="btn btn-primary justify-content-center text-center" id="store-button-save-object">store</button>`;
+
+    // ----------------------------------------------------------------------------------
+
+    // storeDivSave.classList.replace('d-none', 'd-block');
+
+    // storeDivSave.innerHTML =`<div class="container">`
+
+    // obj.forEach((object, index) => {
+
+    //     storeDivSave.innerHTML += `
+    //         <div class="row my-5 p-auto border border-secondary justify-content-center">
+    //             <div class="align-self-center col-10 text-right text-light"> ${JSON.stringify(object)} </div>
+    //             <div class="align-self-center col-2"><button class="btn btn-primary" id="store-button-save-object-${index}">store</button></div>
+    //         </div>`;
+    // });
+
+    // storeDivSave.innerHTML += `</div>`;
+
+
+    // nodesAddr.forEach((node, index) => {
+
+    //     nodesInputHTML += `
+    //         <div class="p-2 p-auto m-2 m-auto input-group"> 
+    //             <div class="input-group-prepend"> 
+    //                 <button class="btn btn-primary" type="button" id="nodes-button-${index}">GET</button>  
+    //             </div> 
+    //             <div class="input-group-prepend"> 
+    //                 <span class="input-group-text">http://</span>  
+    //             </div> 
+    //             <input type="text" class="form-control" value='${node}' id="nodes-addr-input-${index}"></input> 
+    //             <div class="input-group-append"> 
+    //                 <span class="input-group-text">/</span> 
+    //             </div>
+    //                 <input type="number" class="form-control"  id="nodes-path-input-${index}"></input> 
+    //         </div>
+    //         <div class="row text-center justify-content-center" id="nodes-output-${index}">
+    //     </div>`
+    // })
+
+    // nodesInputHTML += `<div class="container" id="nodes-response"></div>`
+
+    storeDivSave.classList.replace('d-none', 'd-block');
+    
+    obj.forEach((object, index) => {
+
+        storeSelect.innerHTML += `<option value="${index}">${node} /${object.ndx}</option>`;
+    });
+
+    storeButtonPost.addEventListener('click', () => {
+
+        console.log(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`);
+        console.log(storeSelect.value);
+        console.log(obj[storeSelect.value]);
+
+        fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj[storeSelect.value])
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+            
+            storeOutput.classList.replace('d-none', 'd-block');
+            storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+            storeOutput.innerText = 'OK';
+
+            storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+            
+            storeH2Request.classList.replace('d-none', 'd-block');
+            storeRequest.innerHTML = `<pre class="text-light">${JSON.stringify(obj[storeSelect.value], null, 2)}</pre>`;
+
+
+            storeH2Response.classList.replace('d-none', 'd-block');
+            storeResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
+
+            storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+        })
+        .catch(err => {
+
+            console.log(err);
+
+            storeOutput.classList.replace('d-none', 'd-block');
+            storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+            storeOutput.innerText = err;
+
+            storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+        })
+    });
+
+
+    console.log('>>>> obj length: ' + obj.length);
+    console.log('>>>> ' + obj);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function simConsole(nodesAddr) {
 
     consoleDiv.classList.replace('border-secondary', 'border-primary');
@@ -1713,6 +1976,14 @@ function simConsole(nodesAddr) {
     consoleSelectNode.innerHTML = consoleSelectNodeHTML;
 
     consoleButtonQuery.addEventListener('click', () => {
+
+        storeDiv.classList.remove('border-danger', 'border-warning', 'border-success'); consoleDiv.classList.add('border-primary');
+        storeButtonSave.classList.remove('d-none');
+        storeDivSave.classList.replace('d-block', 'd-none');
+        storeOutput.classList.replace('d-block', 'd-none');
+        storeResponse.innerHTML = '';
+        storeRequest.innerHTML = '';
+        storeSelect.innerHTML = '';
 
         let obj = new Array;
         let tHTML = '';
@@ -1843,7 +2114,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -1856,7 +2131,11 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             }
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -1968,7 +2247,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -1981,13 +2264,17 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
                             constructLegend('<pre>' + JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2) + '</pre>', undefined);
 
                             consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            storeButtonSave.addEventListener('click', () => {
+                                
+                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                            });
                         })
 
                     .catch((error) => {
@@ -2122,7 +2409,11 @@ function simConsole(nodesAddr) {
 
                             consoleData.innerHTML = dataHTML;
 
-                            consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                            storeButtonSave.addEventListener('click', () => {
+                                
+                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                            });
 
                         } else {
 
@@ -2135,7 +2426,11 @@ function simConsole(nodesAddr) {
                                     <td class="text-warning">${obj[0].id.sT}</td>
                                 </tr>`;
                             
-                            consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                            storeButtonSave.addEventListener('click', () => {
+                                
+                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                            });
                         };
 
                         legendDiv.classList.replace('d-none', 'd-show');
@@ -2311,7 +2606,7 @@ function simConsole(nodesAddr) {
                                             </pre>
                                         </div>`, undefined);
 
-                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                         })
 
                     .catch((error) => {
@@ -2478,7 +2773,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -2488,10 +2787,14 @@ function simConsole(nodesAddr) {
                                     <tr>
                                         <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                         <td class="text-warning">ERROR</td>
-                                        <td class="text-warning">${obj[0].id.sT}</td>
+                                        <td class="text-warning">${obj[1].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -2512,7 +2815,7 @@ function simConsole(nodesAddr) {
                                     </div>
                                 </div>`, undefined);
 
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                         })
 
                     .catch((error) => {
@@ -2683,7 +2986,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -2696,7 +3003,11 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -2706,7 +3017,7 @@ function simConsole(nodesAddr) {
                                     ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
                                 </pre>`, undefined);
 
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                         })
 
                     .catch((error) => {
@@ -2820,7 +3131,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -2833,7 +3148,11 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -2843,7 +3162,7 @@ function simConsole(nodesAddr) {
                                         ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
                                     </pre>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                         })
 
                     .catch((error) => {
@@ -2949,7 +3268,11 @@ function simConsole(nodesAddr) {
 
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -2962,7 +3285,11 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -3091,7 +3418,11 @@ function simConsole(nodesAddr) {
                                         
                                 consoleData.innerHTML = dataHTML;
 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
 
                             } else {
 
@@ -3104,7 +3435,11 @@ function simConsole(nodesAddr) {
                                         <td class="text-warning">${obj[0].id.sT}</td>
                                     </tr>`;
                                 
-                                consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
                             };
 
                             legendDiv.classList.replace('d-none', 'd-show');
@@ -3114,7 +3449,7 @@ function simConsole(nodesAddr) {
                                     ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
                                 </pre>`, undefined);
 
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                         })
 
                     .catch((error) => {
@@ -3253,7 +3588,7 @@ function simConsole(nodesAddr) {
                                             ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
                                         </pre>`, undefined);
 
-                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                                 })
 
                         .catch((error) => {
@@ -3375,7 +3710,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[1].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -3397,7 +3732,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
                             })
 
@@ -3513,7 +3848,11 @@ function simConsole(nodesAddr) {
                                             
                                     consoleData.innerHTML = dataHTML;
 
-                                    consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
 
                                 } else {
 
@@ -3523,10 +3862,14 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[2].id.sT}</td>
                                         </tr>`;
 
-                                    consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
                                 };
 
                                 legendDiv.classList.replace('d-none', 'd-show');
@@ -3552,7 +3895,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -3866,7 +4209,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[1].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -4050,7 +4393,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[2].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -4077,7 +4420,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -4275,7 +4618,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[3].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -4307,7 +4650,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -4497,7 +4840,11 @@ function simConsole(nodesAddr) {
                                             
                                     consoleData.innerHTML = dataHTML;
 
-                                    consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
 
                                 } else {
 
@@ -4507,10 +4854,14 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[4].id.sT}</td>
                                         </tr>`;
 
-                                        consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
                                 };
 
                                 legendDiv.classList.replace('d-none', 'd-show');
@@ -4546,7 +4897,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -4723,7 +5074,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -4925,7 +5276,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[1].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -4947,7 +5298,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -5146,7 +5497,11 @@ function simConsole(nodesAddr) {
                                             
                                     consoleData.innerHTML = dataHTML;
 
-                                    consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
 
                                 } else {
 
@@ -5156,10 +5511,14 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[2].id.sT}</td>
                                         </tr>`;
 
-                                        consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
                                 };
 
                                 legendDiv.classList.replace('d-none', 'd-show');
@@ -5185,7 +5544,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -5496,7 +5855,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[1].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -5518,7 +5877,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -5713,7 +6072,7 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[2].id.sT}</td>
                                         </tr>`;
                                 };
 
@@ -5740,7 +6099,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -5956,7 +6315,11 @@ function simConsole(nodesAddr) {
                                             
                                     consoleData.innerHTML = dataHTML;
 
-                                    consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); consoleButtonSave.classList.add('d-block', 'btn-primary');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                    storeButtonSave.addEventListener('click', () => {
+                                
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
 
                                 } else {
 
@@ -5966,10 +6329,14 @@ function simConsole(nodesAddr) {
                                         <tr>
                                             <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
                                             <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[0].id.sT}</td>
+                                            <td class="text-warning">${obj[3].id.sT}</td>
                                         </tr>`;
 
-                                        consoleButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); consoleButtonSave.classList.add('d-block', 'btn-warning');
+                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                    storeButtonSave.addEventListener('click', () => {
+                            
+                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                    });
                                 };
 
                                 legendDiv.classList.replace('d-none', 'd-show');
@@ -6000,7 +6367,7 @@ function simConsole(nodesAddr) {
                                         </div>
                                     </div>`, undefined);
 
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                             })
 
                         .catch((error) => {
@@ -6036,7 +6403,7 @@ function simConsole(nodesAddr) {
 
 function simDatabase(nodesAddr) {
 
-    databaseDiv.classList.replace('border-secondary', 'border-primary');
-    databaseH1.classList.replace('text-secondary', 'text-light');
+    storeDiv.classList.replace('border-secondary', 'border-primary');
+    storeH1.classList.replace('text-secondary', 'text-light');
 };
 
