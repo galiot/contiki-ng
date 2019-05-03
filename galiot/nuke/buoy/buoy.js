@@ -2540,6 +2540,25 @@ var tug = {
                     });
                 };
             });
+        },
+        drop: function (req, res) {
+            System.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     device: {
@@ -2561,6 +2580,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Device.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     energest: {
@@ -2582,6 +2620,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Energest.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     stats_network_ip: {
@@ -2603,6 +2660,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Stats_network_ip.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     stats_network_icmp: {
@@ -2624,6 +2700,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Stats_network_icmp.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     stats_transport: {
@@ -2645,6 +2740,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Stats_transport.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     stats_discovery: {
@@ -2666,6 +2780,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Stats_discovery.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_ipAddr: {
@@ -2687,6 +2820,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_ipAddr.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_IpNeighbors_ipAddr: {
@@ -2708,6 +2860,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_IpNeighbors_ipAddr.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_IpNeighbors_llAddr: {
@@ -2729,6 +2900,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_ipNeighbors_llAddr.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_IpNeighbors_info: {
@@ -2750,6 +2940,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_ipNeighbors_info.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_routes: {
@@ -2771,6 +2980,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_routes.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_routes_routingLinks_sources: {
@@ -2792,6 +3020,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_routes_routingLinks_sources.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_routes_routingLinks_destinations: {
@@ -2813,6 +3060,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_routes_routingLinks_destinations.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_routes_routingEntries_routes: {
@@ -2834,6 +3100,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_routes_routingEntries_routes.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_routes_routingEntries_vias: {
@@ -2855,6 +3140,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_routes_routingEntries_vias.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplStatus: {
@@ -2876,6 +3180,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplStatus.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplStatus_dag: {
@@ -2897,6 +3220,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplStatus_dag.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplStatus_trickleTimer: {
@@ -2918,6 +3260,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplStatus_trickleTimer.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplNbr_addr: {
@@ -2939,6 +3300,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplNbr_addr.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplNbr_ranks: {
@@ -2960,6 +3340,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplNbr_ranks.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplNbr_values: {
@@ -2981,6 +3380,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplNbr_values.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     cmd_rplNbr_parens: {
@@ -3002,6 +3420,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            Cmd_rplNbr_parens.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
     errorReport: {
@@ -3023,6 +3460,25 @@ var tug = {
                     })
                 }
             })
+        },
+        drop: function (req, res) {
+            ErrorReport.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     }
 }
@@ -3095,7 +3551,7 @@ router.get('/cargo', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/system', '/devices', '/energy', '/stats', '/cmd'],
+        goto: ['/system', '/devices', '/energy', '/stats', '/cmd', '/errors'],
         data: null
     });
 });
@@ -3189,77 +3645,106 @@ router.get('/cargo/cmd/rplnbr', function (req, res) {
 // each send rest jsons
 
 router.route('/cargo/system')
-    .get(tug.system.index);
+    .get(tug.system.index)
+    .delete(tug.system.drop);
 
 router.route('/cargo/devices')
-    .get(tug.device.index);
+    .get(tug.device.index)
+    .delete(tug.device.drop);
 
 router.route('/cargo/energy')
-    .get(tug.energest.index);
+    .get(tug.energest.index)
+    .delete(tug.energest.drop);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
 router.route('/cargo/stats/network/ip')
-    .get(tug.stats_network_ip.index);
+    .get(tug.stats_network_ip.index)
+    .delete(tug.stats_network_ip.drop);
 
 router.route('/cargo/stats/network/icmp')
-    .get(tug.stats_network_icmp.index);
+    .get(tug.stats_network_icmp.index)
+    .delete(tug.stats_network_icmp.drop);
 
 router.route('/cargo/stats/transport')
-    .get(tug.stats_transport.index);
+    .get(tug.stats_transport.index)
+    .delete(tug.stats_transport.drop);
 
 router.route('/cargo/stats/discovery')
-    .get(tug.stats_discovery.index);
+    .get(tug.stats_discovery.index)
+    .delete(tug.stats_discovery.drop);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
 router.route('/cargo/cmd/ipaddr')
-    .get(tug.cmd_ipAddr.index);
+    .get(tug.cmd_ipAddr.index)
+    .delete(tug.cmd_ipAddr.drop);
 
 router.route('/cargo/cmd/ipnbr/ipaddr')
-    .get(tug.cmd_IpNeighbors_ipAddr.index);
+    .get(tug.cmd_IpNeighbors_ipAddr.index)
+    .delete(tug.cmd_IpNeighbors_ipAddr.drop);
 
 router.route('/cargo/cmd/ipnbr/lladdr')
-    .get(tug.cmd_IpNeighbors_llAddr.index);
+    .get(tug.cmd_IpNeighbors_llAddr.index)
+    .delete(tug.cmd_IpNeighbors_llAddr.drop);
 
 router.route('/cargo/cmd/ipnbr/info')
-    .get(tug.cmd_IpNeighbors_info.index);
+    .get(tug.cmd_IpNeighbors_info.index)
+    .delete(tug.cmd_IpNeighbors_info.drop);
 
 router.route('/cargo/cmd/routes/default')
-    .get(tug.cmd_routes.index);
+    .get(tug.cmd_routes.index)
+    .delete(tug.cmd_routes.drop);
 
 router.route('/cargo/cmd/routes/links/sources')
-    .get(tug.cmd_routes_routingLinks_sources.index);
+    .get(tug.cmd_routes_routingLinks_sources.index)
+    .delete(tug.cmd_routes_routingLinks_sources.drop);
 
 router.route('/cargo/cmd/routes/links/destinations')
-    .get(tug.cmd_routes_routingLinks_destinations.index);
+    .get(tug.cmd_routes_routingLinks_destinations.index)
+    .delete(tug.cmd_routes_routingLinks_destinations.drop);
 
 router.route('/cargo/cmd/routes/entries/routes')
-    .get(tug.cmd_routes_routingEntries_routes.index);
+    .get(tug.cmd_routes_routingEntries_routes.index)
+    .delete(tug.cmd_routes_routingEntries_routes.drop);
 
 router.route('/cargo/cmd/routes/entries/vias')
-    .get(tug.cmd_routes_routingEntries_vias.index);
+    .get(tug.cmd_routes_routingEntries_vias.index)
+    .delete(tug.cmd_routes_routingEntries_vias.drop);
 
 router.route('/cargo/cmd/rplstatus/id')
-    .get(tug.cmd_rplStatus.index);
+    .get(tug.cmd_rplStatus.index)
+    .delete(tug.cmd_rplStatus.drop);
 
 router.route('/cargo/cmd/rplstatus/dag')
-    .get(tug.cmd_rplStatus_dag.index);
+    .get(tug.cmd_rplStatus_dag.index)
+    .delete(tug.cmd_rplStatus_dag.drop);
 
 router.route('/cargo/cmd/rplstatus/time')
-    .get(tug.cmd_rplStatus_trickleTimer.index);
+    .get(tug.cmd_rplStatus_trickleTimer.index)
+    .delete(tug.cmd_rplStatus_trickleTimer.drop);
 
 router.route('/cargo/cmd/rplnbr/addr')
-    .get(tug.cmd_rplNbr_addr.index);
+    .get(tug.cmd_rplNbr_addr.index)
+    .delete(tug.cmd_rplNbr_addr.drop);
 
 router.route('/cargo/cmd/rplnbr/ranks')
-    .get(tug.cmd_rplNbr_ranks.index);
+    .get(tug.cmd_rplNbr_ranks.index)
+    .delete(tug.cmd_rplNbr_ranks.drop);
 
 router.route('/cargo/cmd/rplnbr/values')
-    .get(tug.cmd_rplNbr_values.index);
+    .get(tug.cmd_rplNbr_values.index)
+    .delete(tug.cmd_rplNbr_values.drop);
 
 router.route('/cargo/cmd/rplnbr/parens')
-    .get(tug.cmd_rplNbr_parens.index);
+    .get(tug.cmd_rplNbr_parens.index)
+    .delete(tug.cmd_rplNbr_parens.drop);
+
+// <><><><><><><><><><><><><><><><><><><><><><><>
+
+router.route('/cargo/errors')
+    .get(tug.errorReport.index)
+    .delete(tug.errorReport.drop);
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 

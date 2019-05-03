@@ -1128,6 +1128,8 @@ const databaseOutput = document.getElementById('database-output');
 const databaseH2Response = document.getElementById('database-h2-response');
 const databaseResponse = document.getElementById('database-response');
 
+const databaseButtonDrop = document.getElementById('database-button-drop');
+
 const databaseButtonReload = document.getElementById('database-button-reload');
 const databaseButtonClear = document.getElementById('database-button-clear');
 const databaseButtonContinue = document.getElementById('database-button-continue');
@@ -1321,6 +1323,7 @@ databaseButtonClear.addEventListener('click', () => {
 
     databaseResponse.innerHTML = '';
 
+    databaseButtonDrop.classList.replace('d-block', 'd-none');
 });
 
 
@@ -6455,6 +6458,49 @@ databaseButtonGet.addEventListener('click', () => {
 
             databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
+            databaseButtonDrop.classList.replace('d-none', 'd-block');
+            databaseButtonDrop.addEventListener('click', () => {
+
+                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        console.log(data);
+                        
+                        if(data.status == 'error') {
+
+                            databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
+                            databaseOutput.innerText = data.text.errmsg;
+
+                            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+
+                        } else {
+                            
+                            databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-warning');
+                            databaseOutput.innerText = 'DROPPED';
+
+                            databaseDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-warning');
+
+                        }
+                        
+                        databaseResponse.innerHTML = '';
+        
+                        databaseButtonDrop.classList.replace('d-block', 'd-none');
+
+                    })
+                    
+                    // .catch(err => {
+
+                    //     console.log(err);
+
+                    //     databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
+                    //     databaseOutput.innerText = err;
+
+                    //     databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+                    // })
+            });
         })
         .catch(err => {
 
