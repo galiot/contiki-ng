@@ -32,31 +32,35 @@
         
         <h1 class="text-center text-light">border router</h1> 
         
-        <!-- BORDER ROUTER > SCRPAP ::::::::::::::::: -->
-        <div class="p-2 p-auto m-2 m-auto input-group">
-            
-            <!-- prepends to input group -->
-            <div class="input-group-prepend">
-                <span class="input-group-text">http://</span>
-            </div>
-            
-            <!-- BORDER ROUTER INPUT ////////////////////////////////////////////////////////// -->
-
-            <!-- input itself -->
-            <input type="text" class="form-control" value='[fd00::212:4b00:f24:8385]' id="br-input">
-            
-            <!-- appends to input group -->
-            <div class="input-group-append">
-                <span class="input-group-text">/</span>
-            </div>
-
-            <!-- BORDER ROUTER BUTTON ////////////////////////////////////////////////////////// -->
-
-            <!-- scrapting button -->
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button" id="br-button">scrap</button>
-            </div>
+        <div class="row">
         
+            <!-- BORDER ROUTER > SCRPAP ::::::::::::::::: -->
+            <div class="col-8 p-2 p-auto m-2 m-auto input-group">
+                
+                <!-- prepends to input group -->
+                <div class="input-group-prepend">
+                    <span class="input-group-text">http://</span>
+                </div>
+                
+                <!-- BORDER ROUTER INPUT ////////////////////////////////////////////////////////// -->
+
+                <!-- input itself -->
+                <input type="text" class="form-control" value='[fd00::212:4b00:f24:8385]' id="br-input">
+                
+                <!-- appends to input group -->
+                <div class="input-group-append">
+                    <span class="input-group-text">/</span>
+                </div>
+
+                <!-- BORDER ROUTER BUTTON ////////////////////////////////////////////////////////// -->
+
+                <!-- scrapting button -->
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="br-button">scrap</button>
+                </div>
+            
+            </div>
+
         </div>
        
 
@@ -500,7 +504,7 @@
                 <!-- BUTTONS -->
                 <button class="btn btn-outline-danger" id="database-button-reload">reload</button>
                 <button class="btn btn-outline-warning" id="database-button-clear">clear</button>
-                <button class="btn btn-outline-primary" id="database-button-continue">continue</button>
+                <button class="btn btn-outline-secondary" id="database-button-continue">continue</button>
             </div>
 
     </div>
@@ -513,11 +517,29 @@
 
 
     <!--DEMO DIVISDION ================================================================= -->
-    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
+    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
 
             <h1 class="text-center text-secondary" id="demo-h1">demo</h1>
         
             <br>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button class="btn btn-muted" id="demo-button-dump">dump</button>
+                    </div>
+                </div>
+            </div>
+
+        <div class="d-none bg-success row text-center justify-content-center mt-2" id="demo-output-dump"></div>
+
+        <div class="d-none container m-auto p-auto  mx-5 " id="demo-table-dump">
+            <table class="table table-sm table-dark">
+                <tbody id="demo-table-dump-tbody">
+                    
+                </tbody>
+            </table>
+        </div>
 
         <br>
         <br>

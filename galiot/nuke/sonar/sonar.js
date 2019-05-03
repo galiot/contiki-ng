@@ -1137,7 +1137,13 @@ const databaseButtonContinue = document.getElementById('database-button-continue
 // DEMO
 
 const demoDiv = document.getElementById('demo-div');
-const demo1 = document.getElementById('demo-h1');
+const demoH1 = document.getElementById('demo-h1');
+
+const demoButtonDump = document.getElementById('demo-button-dump');
+
+const demoOutputDump = document.getElementById('demo-output-dump');
+const demoTableDump = document.getElementById('demo-table-dump');
+const demoTableDumpTbody = document.getElementById('demo-table-dump-tbody');
 
 const demoButtonReload = document.getElementById('demo-button-reload');
 const demoButtonClear = document.getElementById('demo-button-clear');
@@ -6457,6 +6463,8 @@ databaseButtonGet.addEventListener('click', () => {
             databaseResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
 
             databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+            
+            demoRun();
 
             databaseButtonDrop.classList.replace('d-none', 'd-block');
             databaseButtonDrop.addEventListener('click', () => {
@@ -6513,4 +6521,783 @@ databaseButtonGet.addEventListener('click', () => {
             databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
         })
 });
+
+function cargoFetch(address, port, path, array, index, tbody, cadk) {
+
+    fetch(`http://${address}:${port}/api${path}`)
+
+        .then(res => res.json())
+        .then(data => {
+
+            console.log(`${path} DUMPED`);
+            array[index] = data.data;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td text-right>${path}</td>
+                    <td class="text-success">OK</td>
+                    <td class="">${array[index].length} docs</td>
+                </tr>`;
+
+            
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${path}</td>
+                    <td class="text-danger">FAIL</td>
+                    <td class="">err</td>
+                </tr>`;
+
+                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                demoOutputDump.innerText = err;
+        })
+
+        cadk;
+};
+
+function endFetch(array) {
+    
+    let sum = 0;
+
+    array.forEach((collection, index) => {
+
+        sum += collection.length;
+    })
+    
+    demoOutputDump.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-success');
+    demoOutputDump.innerText = `dumped: ${array.length} collections (total: ${sum} docs)`;
+
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+}
+
+
+function demoRun() {
+
+    demoDiv.classList.replace('border-secondary', 'border-info');
+    demoH1.classList.replace('text-secondary', 'text-light');
+    demoButtonDump.classList.replace('btn-muted', 'btn-outline-primary');
+
+    let datarray = new Array();
+
+    demoButtonDump.addEventListener('click', () => {
+        
+       
+        
+        demoButtonDump.classList.add('d-none');
+        
+        demoOutputDump.classList.replace('d-none', 'd-block');
+        demoOutputDump.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-info');
+        demoOutputDump.innerText = 'dumping database...'
+
+        demoTableDump.classList.replace('d-none', 'd-block');
+        demoTableDumpTbody.innerHTML = '';
+
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/system', datarray, 0, demoTableDumpTbody, 
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/devices', datarray, 1, demoTableDumpTbody, 
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/energy', datarray, 2, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/network/ip', datarray, 3, demoTableDumpTbody, 
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/network/icmp', datarray, 4, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/transport', datarray, 5, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/discovery', datarray, 6, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/ipaddr', datarray, 7, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/ipnbr/ipaddr', datarray, 8, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/ipnbr/lladdr', datarray, 9, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/ipnbr/info', datarray, 10, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/routes/default', datarray, 11, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/routes/links/sources', datarray, 12, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/routes/links/destinations', datarray, 13, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/routes/entries/routes', datarray, 14, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/routes/entries/vias', datarray, 15, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplstatus/id', datarray, 16, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplstatus/dag', datarray, 17, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplstatus/time', datarray, 18, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplnbr/addr', datarray, 19, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplnbr/ranks', datarray, 20, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplnbr/values', datarray, 21, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/cmd/rplnbr/parens', datarray, 22, demoTableDumpTbody,
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/errors', datarray, 23, demoTableDumpTbody, endFetch(datarray)))))))))))))))))))))))));
+
+        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/system`)
+
+        .then(res => res.json())
+        .then(data => {
+
+            datarray[0] = data.data;
+
+            demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>/api/cargo/system</td>
+                    <td class="text-success">OK</td>
+                    <td class="">${datarray[0].length} docs</td>
+                </tr>`;
+
+            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/devices`)
+
+            .then(res => res.json())
+            .then(data => {
+
+                datarray[1] = data.data;
+
+                demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>/api/cargo/devices</td>
+                        <td class="text-success">OK</td>
+                        <td class="">${datarray[1].length} docs</td>
+                    </tr>`;
+
+                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/energy`)
+
+                .then(res => res.json())
+                .then(data => {
+
+                    datarray[2] = data.data;
+
+                    demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>/api/cargo/energy</td>
+                            <td class="text-success">OK</td>
+                            <td class="">${datarray[2].length} docs</td>
+                        </tr>`;
+
+                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/network/ip`)
+
+                    .then(res => res.json())
+                    .then(data => {
+
+                        datarray[3] = data.data;
+
+                        demoTableDumpTbody.innerHTML += `
+                            <tr>
+                                <td>/api/cargo/stats/network/ip</td>
+                                <td class="text-success">OK</td>
+                                <td class="">${datarray[3].length} docs</td>
+                            </tr>`;
+
+                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/network/icmp`)
+
+                        .then(res => res.json())
+                        .then(data => {
+    
+                            datarray[4] = data.data;
+    
+                            demoTableDumpTbody.innerHTML += `
+                                <tr>
+                                    <td>/api/cargo/stats/network/icmp</td>
+                                    <td class="text-success">OK</td>
+                                    <td class="">${datarray[4].length} docs</td>
+                                </tr>`;
+
+                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/transport`)
+
+                            .then(res => res.json())
+                            .then(data => {
+        
+                                datarray[5] = data.data;
+        
+                                demoTableDumpTbody.innerHTML += `
+                                    <tr>
+                                        <td>/api//cargo/stats/transport</td>
+                                        <td class="text-success">OK</td>
+                                        <td class="">${datarray[5].length} docs</td>
+                                    </tr>`;
+    
+                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/discovery`)
+
+                                .then(res => res.json())
+                                .then(data => {
+            
+                                    datarray[6] = data.data;
+            
+                                    demoTableDumpTbody.innerHTML += `
+                                        <tr>
+                                            <td>/api/cargo/stats/discovery</td>
+                                            <td class="text-success">OK</td>
+                                            <td class="">${datarray[6].length} docs</td>
+                                        </tr>`;
+        
+                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipaddr`)
+
+                                    .then(res => res.json())
+                                    .then(data => {
+                
+                                        datarray[7] = data.data;
+                
+                                        demoTableDumpTbody.innerHTML += `
+                                            <tr>
+                                                <td>/api/cargo/cmd/ipaddr</td>
+                                                <td class="text-success">OK</td>
+                                                <td class="">${datarray[7].length} docs</td>
+                                            </tr>`;
+            
+                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/ipaddr`)
+
+                                        .then(res => res.json())
+                                        .then(data => {
+                    
+                                            datarray[8] = data.data;
+                    
+                                            demoTableDumpTbody.innerHTML += `
+                                                <tr>
+                                                    <td>/api/cargo/cmd/ipnbr/ipaddrr</td>
+                                                    <td class="text-success">OK</td>
+                                                    <td class="">${datarray[8].length} docs</td>
+                                                </tr>`;
+                
+                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/lladdr`)
+
+                                            .then(res => res.json())
+                                            .then(data => {
+                        
+                                                datarray[9] = data.data;
+                        
+                                                demoTableDumpTbody.innerHTML += `
+                                                    <tr>
+                                                        <td>/api/cargo/cmd/ipnbr/lladdr</td>
+                                                        <td class="text-success">OK</td>
+                                                        <td class="">${datarray[9].length} docs</td>
+                                                    </tr>`;
+                    
+                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/info`)
+
+                                                .then(res => res.json())
+                                                .then(data => {
+                            
+                                                    datarray[10] = data.data;
+                            
+                                                    demoTableDumpTbody.innerHTML += `
+                                                        <tr>
+                                                            <td>/api/cargo/cmd/ipnbr/info</td>
+                                                            <td class="text-success">OK</td>
+                                                            <td class="">${datarray[10].length} docs</td>
+                                                        </tr>`;
+                        
+                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/default`)
+
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                
+                                                        datarray[11] = data.data;
+                                
+                                                        demoTableDumpTbody.innerHTML += `
+                                                            <tr>
+                                                                <td>/api/cargo/cmd/routes/default</td>
+                                                                <td class="text-success">OK</td>
+                                                                <td class="">${datarray[11].length} docs</td>
+                                                            </tr>`;
+                            
+                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/sources`)
+
+                                                        .then(res => res.json())
+                                                        .then(data => {
+                                    
+                                                            datarray[12] = data.data;
+                                    
+                                                            demoTableDumpTbody.innerHTML += `
+                                                                <tr>
+                                                                    <td>/api/cargo/cmd/routes/links/sources</td>
+                                                                    <td class="text-success">OK</td>
+                                                                    <td class="">${datarray[12].length} docs</td>
+                                                                </tr>`;
+                                
+                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/destinations`)
+
+                                                            .then(res => res.json())
+                                                            .then(data => {
+                                        
+                                                                datarray[13] = data.data;
+                                        
+                                                                demoTableDumpTbody.innerHTML += `
+                                                                    <tr>
+                                                                        <td>/cargo/cmd/routes/links/destinations</td>
+                                                                        <td class="text-success">OK</td>
+                                                                        <td class="">${datarray[13].length} docs</td>
+                                                                    </tr>`;
+                                    
+                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/routes`)
+
+                                                                .then(res => res.json())
+                                                                .then(data => {
+                                            
+                                                                    datarray[14] = data.data;
+                                            
+                                                                    demoTableDumpTbody.innerHTML += `
+                                                                        <tr>
+                                                                            <td>/cargo/cmd/routes/entries/routes</td>
+                                                                            <td class="text-success">OK</td>
+                                                                            <td class="">${datarray[14].length} docs</td>
+                                                                        </tr>`;
+                                        
+                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/vias`)
+
+                                                                    .then(res => res.json())
+                                                                    .then(data => {
+                                                
+                                                                        datarray[15] = data.data;
+                                                
+                                                                        demoTableDumpTbody.innerHTML += `
+                                                                            <tr>
+                                                                                <td>/cargo/cmd/routes/entries/vias</td>
+                                                                                <td class="text-success">OK</td>
+                                                                                <td class="">${datarray[15].length} docs</td>
+                                                                            </tr>`;
+                                                                        
+                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/id`)
+
+                                                                        .then(res => res.json())
+                                                                        .then(data => {
+                                                    
+                                                                            datarray[16] = data.data;
+                                                    
+                                                                            demoTableDumpTbody.innerHTML += `
+                                                                                <tr>
+                                                                                    <td>/cargo/cmd/rplstatus/id</td>
+                                                                                    <td class="text-success">OK</td>
+                                                                                    <td class="">${datarray[16].length} docs</td>
+                                                                                </tr>`;
+                                                
+                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/dag`)
+
+                                                                            .then(res => res.json())
+                                                                            .then(data => {
+                                                        
+                                                                                datarray[17] = data.data;
+                                                        
+                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                    <tr>
+                                                                                        <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                        <td class="text-success">OK</td>
+                                                                                        <td class="">${datarray[17].length} docs</td>
+                                                                                    </tr>`;
+                                                    
+                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/time`)
+
+                                                                                .then(res => res.json())
+                                                                                .then(data => {
+                                                            
+                                                                                    datarray[18] = data.data;
+                                                            
+                                                                                    demoTableDumpTbody.innerHTML += `
+                                                                                        <tr>
+                                                                                            <td>/cargo/cmd/rplstatus/time</td>
+                                                                                            <td class="text-success">OK</td>
+                                                                                            <td class="">${datarray[18].length} docs</td>
+                                                                                        </tr>`;
+                                                        
+                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/addr`)
+
+                                                                                    .then(res => res.json())
+                                                                                    .then(data => {
+                                                                
+                                                                                        datarray[19] = data.data;
+                                                                
+                                                                                        demoTableDumpTbody.innerHTML += `
+                                                                                            <tr>
+                                                                                                <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                <td class="text-success">OK</td>
+                                                                                                <td class="">${datarray[19].length} docs</td>
+                                                                                            </tr>`;
+                                                            
+                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/ranks`)
+
+                                                                                        .then(res => res.json())
+                                                                                        .then(data => {
+                                                                    
+                                                                                            datarray[20] = data.data;
+                                                                    
+                                                                                            demoTableDumpTbody.innerHTML += `
+                                                                                                <tr>
+                                                                                                    <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                    <td class="text-success">OK</td>
+                                                                                                    <td class="">${datarray[20].length} docs</td>
+                                                                                                </tr>`;
+                                                                
+                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/values`)
+
+                                                                                            .then(res => res.json())
+                                                                                            .then(data => {
+                                                                        
+                                                                                                datarray[21] = data.data;
+                                                                        
+                                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                                    <tr>
+                                                                                                        <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                        <td class="text-success">OK</td>
+                                                                                                        <td class="">${datarray[21].length} docs</td>
+                                                                                                    </tr>`;
+                                                                    
+                                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/parens`)
+
+                                                                                                .then(res => res.json())
+                                                                                                .then(data => {
+                                                                            
+                                                                                                    datarray[22] = data.data;
+                                                                            
+                                                                                                    demoTableDumpTbody.innerHTML += `
+                                                                                                        <tr>
+                                                                                                            <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                            <td class="text-success">OK</td>
+                                                                                                            <td class="">${datarray[22].length} docs</td>
+                                                                                                        </tr>`;
+                                                                        
+                                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/errors`)
+
+                                                                                                    .then(res => res.json())
+                                                                                                    .then(data => {
+                                                                                
+                                                                                                        datarray[23] = data.data;
+                                                                                
+                                                                                                        demoTableDumpTbody.innerHTML += `
+                                                                                                            <tr>
+                                                                                                                <td>/cargo/errors</td>
+                                                                                                                <td class="text-success">OK</td>
+                                                                                                                <td class="">${datarray[23].length} docs</td>
+                                                                                                            </tr>`;
+                                                                            
+                                                                                                        endFetch(datarray);
+                                                                                                    })
+
+                                                                                                    .catch(err => {
+
+                                                                                                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                                        demoOutputDump.innerText = err;
+                                                                                            
+                                                                                                        demoTableDumpTbody.innerHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td>/cargo/errors</td>
+                                                                                                                        <td class="text-danger">FAIL</td>
+                                                                                                                        <td class="">${err}</td>
+                                                                                                                    </tr>`;
+                                                                                                    })
+                                                                                                })
+
+                                                                                                .catch(err => {
+
+                                                                                                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                                    demoOutputDump.innerText = err;
+                                                                                        
+                                                                                                    demoTableDumpTbody.innerHTML += `
+                                                                                                                <tr>
+                                                                                                                    <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                                    <td class="text-danger">FAIL</td>
+                                                                                                                    <td class="">${err}</td>
+                                                                                                                </tr>`;
+                                                                                                })
+                                                                                            })
+
+                                                                                            .catch(err => {
+
+                                                                                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                                demoOutputDump.innerText = err;
+                                                                                    
+                                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                                            <tr>
+                                                                                                                <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                                <td class="text-danger">FAIL</td>
+                                                                                                                <td class="">${err}</td>
+                                                                                                            </tr>`;
+                                                                                            })
+                                                                                        })
+
+                                                                                        .catch(err => {
+
+                                                                                            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                            demoOutputDump.innerText = err;
+                                                                                
+                                                                                            demoTableDumpTbody.innerHTML += `
+                                                                                                        <tr>
+                                                                                                            <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                            <td class="text-danger">FAIL</td>
+                                                                                                            <td class="">${err}</td>
+                                                                                                        </tr>`;
+                                                                                        })
+                                                                                    })
+
+                                                                                    .catch(err => {
+
+                                                                                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                        demoOutputDump.innerText = err;
+                                                                            
+                                                                                        demoTableDumpTbody.innerHTML += `
+                                                                                                    <tr>
+                                                                                                        <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                        <td class="text-danger">FAIL</td>
+                                                                                                        <td class="">${err}</td>
+                                                                                                    </tr>`;
+                                                                                    })
+                                                                                })
+
+                                                                                .catch(err => {
+
+                                                                                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                    demoOutputDump.innerText = err;
+                                                                        
+                                                                                    demoTableDumpTbody.innerHTML += `
+                                                                                                <tr>
+                                                                                                    <td>/cargo/cmd/rplstatus/time</td>
+                                                                                                    <td class="text-danger">FAIL</td>
+                                                                                                    <td class="">${err}</td>
+                                                                                                </tr>`;
+                                                                                })
+                                                                            })
+
+                                                                            .catch(err => {
+
+                                                                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                demoOutputDump.innerText = err;
+                                                                    
+                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                            <tr>
+                                                                                                <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                                <td class="text-danger">FAIL</td>
+                                                                                                <td class="">${err}</td>
+                                                                                            </tr>`;
+                                                                            })
+                                                                        })
+
+                                                                        .catch(err => {
+
+                                                                            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                            demoOutputDump.innerText = err;
+                                                                
+                                                                            demoTableDumpTbody.innerHTML += `
+                                                                                        <tr>
+                                                                                            <td>/cargo/cmd/rplstatus/id</td>
+                                                                                            <td class="text-danger">FAIL</td>
+                                                                                            <td class="">${err}</td>
+                                                                                        </tr>`;
+                                                                        })
+                                                                    })
+
+                                                                    .catch(err => {
+
+                                                                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                        demoOutputDump.innerText = err;
+                                                            
+                                                                        demoTableDumpTbody.innerHTML += `
+                                                                                    <tr>
+                                                                                        <td>/cargo/cmd/routes/entries/vias</td>
+                                                                                        <td class="text-danger">FAIL</td>
+                                                                                        <td class="">${err}</td>
+                                                                                    </tr>`;
+                                                                    })
+                                                                })
+
+                                                                .catch(err => {
+
+                                                                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                    demoOutputDump.innerText = err;
+                                                        
+                                                                    demoTableDumpTbody.innerHTML += `
+                                                                                <tr>
+                                                                                    <td>/cargo/cmd/routes/entries/routes</td>
+                                                                                    <td class="text-danger">FAIL</td>
+                                                                                    <td class="">${err}</td>
+                                                                                </tr>`;
+                                                                })
+                                                            })
+
+                                                            .catch(err => {
+
+                                                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                demoOutputDump.innerText = err;
+                                                    
+                                                                demoTableDumpTbody.innerHTML += `
+                                                                            <tr>
+                                                                                <td>/cargo/cmd/routes/links/destinations</td>
+                                                                                <td class="text-danger">FAIL</td>
+                                                                                <td class="">${err}</td>
+                                                                            </tr>`;
+                                                            })
+                                                        })
+
+                                                        .catch(err => {
+
+                                                            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                            demoOutputDump.innerText = err;
+                                                
+                                                            demoTableDumpTbody.innerHTML += `
+                                                                        <tr>
+                                                                            <td>/cargo/cmd/routes/links/sources</td>
+                                                                            <td class="text-danger">FAIL</td>
+                                                                            <td class="">${err}</td>
+                                                                        </tr>`;
+                                                        })
+                                                    })
+
+                                                    .catch(err => {
+
+                                                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                        demoOutputDump.innerText = err;
+                                            
+                                                        demoTableDumpTbody.innerHTML += `
+                                                                    <tr>
+                                                                        <td>/cargo/cmd/routes/default</td>
+                                                                        <td class="text-danger">FAIL</td>
+                                                                        <td class="">${err}</td>
+                                                                    </tr>`;
+                                                    })
+                                                })
+                                                
+                                                .catch(err => {
+
+                                                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                    demoOutputDump.innerText = err;
+                                        
+                                                    demoTableDumpTbody.innerHTML += `
+                                                                <tr>
+                                                                    <td>/cargo/cmd/ipnbr/info</td>
+                                                                    <td class="text-danger">FAIL</td>
+                                                                    <td class="">${err}</td>
+                                                                </tr>`;
+                                                })
+                                            })
+                                            
+                                            .catch(err => {
+
+                                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                demoOutputDump.innerText = err;
+                                    
+                                                demoTableDumpTbody.innerHTML += `
+                                                            <tr>
+                                                                <td>/cargo/cmd/ipnbr/lladdr'</td>
+                                                                <td class="text-danger">FAIL</td>
+                                                                <td class="">${err}</td>
+                                                            </tr>`;
+                                            })
+                                        })
+                                        
+                                        .catch(err => {
+
+                                            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                            demoOutputDump.innerText = err;
+                                
+                                            demoTableDumpTbody.innerHTML += `
+                                                        <tr>
+                                                            <td>/cargo/cmd/ipnbr/ipaddr</td>
+                                                            <td class="text-danger">FAIL</td>
+                                                            <td class="">${err}</td>
+                                                        </tr>`;
+                                        })
+                                    })
+                                    
+                                    .catch(err => {
+
+                                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                        demoOutputDump.innerText = err;
+                            
+                                        demoTableDumpTbody.innerHTML += `
+                                                    <tr>
+                                                        <td>/cargo/cmd/ipaddr</td>
+                                                        <td class="text-danger">FAIL</td>
+                                                        <td class="">${err}</td>
+                                                    </tr>`;
+                                    })
+                                })
+                                
+                                .catch(err => {
+
+                                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                    demoOutputDump.innerText = err;
+                        
+                                    demoTableDumpTbody.innerHTML += `
+                                                <tr>
+                                                    <td>/cargo/stats/discovery</td>
+                                                    <td class="text-danger">FAIL</td>
+                                                    <td class="">${err}</td>
+                                                </tr>`;
+                                })
+                            })
+
+                            .catch(err => {
+
+                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                demoOutputDump.innerText = err;
+                    
+                                demoTableDumpTbody.innerHTML += `
+                                            <tr>
+                                                <td>/cargo/stats/transport</td>
+                                                <td class="text-danger">FAIL</td>
+                                                <td class="">${err}</td>
+                                            </tr>`;
+                            })
+                        })
+
+                        .catch(err => {
+
+                            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                            demoOutputDump.innerText = err;
+                
+                            demoTableDumpTbody.innerHTML += `
+                                        <tr>
+                                            <td>/cargo/stats/network/icmp</td>
+                                            <td class="text-danger">FAIL</td>
+                                            <td class="">${err}</td>
+                                        </tr>`;
+                        })
+                    })
+
+                    .catch(err => {
+
+                        demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                        demoOutputDump.innerText = err;
+            
+                        demoTableDumpTbody.innerHTML += `
+                                    <tr>
+                                        <td>/cargo/stats/network/ip</td>
+                                        <td class="text-danger">FAIL</td>
+                                        <td class="">${err}</td>
+                                    </tr>`;
+                    })
+                })
+
+                .catch(err => {
+
+                    demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                    demoOutputDump.innerText = err;
+        
+                    demoTableDumpTbody.innerHTML += `
+                                <tr>
+                                    <td>/cargo/energy</td>
+                                    <td class="text-danger">FAIL</td>
+                                    <td class="">${err}</td>
+                                </tr>`;
+                })
+            })
+
+            .catch(err => {
+
+                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                demoOutputDump.innerText = err;
+    
+                demoTableDumpTbody.innerHTML += `
+                            <tr>
+                                <td>/cargo/devices</td>
+                                <td class="text-danger">FAIL</td>
+                                <td class="">${err}</td>
+                            </tr>`;
+            })
+        })
+            
+        .catch(err => {
+
+            demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+            demoOutputDump.innerText = err;
+
+            demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>/cargo/system</td>
+                            <td class="text-danger">FAIL</td>
+                            <td class="">${err}</td>
+                        </tr>`;
+        })
+              
+
+    })
+}
+
 
