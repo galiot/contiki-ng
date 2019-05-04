@@ -1098,6 +1098,8 @@ const storeInputAddress = document.getElementById('store-input-address');
 const storeInputPort = document.getElementById('store-input-port');
 const storeInputPath = document.getElementById('store-input-path');
 
+const storeButtonSaveAll = document.getElementById('store-button-save-all');
+
 const storeOutput = document.getElementById('store-output');
 
 const storeH2Request = document.getElementById('store-h2-request');
@@ -1105,6 +1107,9 @@ const storeH2Response = document.getElementById('store-h2-response');
 
 const storeRequest = document.getElementById('store-request');
 const storeResponse = document.getElementById('store-response');
+
+const storeTable = document.getElementById('store-table');
+const storeTableTbody = document.getElementById('store-table-tbody');
 
 const storeButtonReload = document.getElementById('store-button-reload');
 const storeButtonClear = document.getElementById('store-button-clear');
@@ -1316,6 +1321,9 @@ storeButtonClear.addEventListener('click', () => {
     storeRequest.innerHTML = '';
 
     storeSelect.innerHTML = '';
+
+    storeTable.classList.replace('d-block', 'd-none');
+    storeTableTbody.innerHTML = '';
 
 });
 
@@ -1951,6 +1959,732 @@ function cargoSave (node, obj) {
             storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
         })
     });
+
+    storeButtonSaveAll.addEventListener('click', () => {
+
+        storeTable.classList.replace('d-none', 'd-block');
+        storeTableTbody.innerHTML = '';
+        
+        if(obj[0].ndx == 0 || obj[0].ndx == 1|| obj[0].ndx == 2|| obj[0].ndx == 5|| obj[0].ndx == 6|| obj[0].ndx == 7)
+        {
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[storeSelect.value])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].ndx == 3) {
+
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[0])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                
+                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>stats/network/ip</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                </tr>`;
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(obj[1])
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                    storeOutput.innerText = 'saved';
+
+                    storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                    
+                    storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>stats/network/icmp</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                    </tr>`;
+
+                    storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                    storeOutput.innerText = err;
+
+                    storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                })
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].ndx == 8) {
+
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[0])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                
+                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>cmd/ipnbr/ipaddr</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                </tr>`;
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(obj[1])
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                    storeOutput.innerText = 'saved';
+
+                    storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                    
+                    storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>cmd/ipnbr/lladdr</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                    </tr>`;
+
+                    storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[2])
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        console.log(data);
+                        
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                        storeOutput.innerText = 'saved';
+
+                        storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                        
+                        storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>cmd/ipnbr/info</td>
+                            <td class="text-dark bg-success text-center">OK</td>
+                        </tr>`;
+
+                        storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    })
+                    .catch(err => {
+
+                        console.log(err);
+
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                        storeOutput.innerText = err;
+
+                        storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                    })
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                    storeOutput.innerText = err;
+
+                    storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                })
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].ndx == 11) {
+
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[0])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                
+                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>cmd/routes/default</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                </tr>`;
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(obj[1])
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                    storeOutput.innerText = 'saved';
+
+                    storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                    
+                    storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>cmd/routes/links/sources</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                    </tr>`;
+
+                    storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[2])
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        console.log(data);
+                        
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                        storeOutput.innerText = 'saved';
+
+                        storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                        
+                        storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>cmd/routes/links/destinations</td>
+                            <td class="text-dark bg-success text-center">OK</td>
+                        </tr>`;
+
+                        storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                        fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[3])
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            
+                            console.log(data);
+                            
+                            storeOutput.classList.replace('d-none', 'd-block');
+                            storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                            storeOutput.innerText = 'saved';
+
+                            storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                            
+                            storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                            <tr>
+                                <td>cmd/routes/entries/routes</td>
+                                <td class="text-dark bg-success text-center">OK</td>
+                            </tr>`;
+
+                            storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(obj[4])
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                
+                                console.log(data);
+                                
+                                storeOutput.classList.replace('d-none', 'd-block');
+                                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                                storeOutput.innerText = 'saved';
+
+                                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                                
+                                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                                <tr>
+                                    <td>cmd/routes/entries/vias</td>
+                                    <td class="text-dark bg-success text-center">OK</td>
+                                </tr>`;
+
+                                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                
+                            })
+                            .catch(err => {
+
+                                console.log(err);
+
+                                storeOutput.classList.replace('d-none', 'd-block');
+                                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                                storeOutput.innerText = err;
+
+                                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                            })
+                        })
+                        .catch(err => {
+
+                            console.log(err);
+
+                            storeOutput.classList.replace('d-none', 'd-block');
+                            storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                            storeOutput.innerText = err;
+
+                            storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                        })
+                    })
+                    .catch(err => {
+
+                        console.log(err);
+
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                        storeOutput.innerText = err;
+
+                        storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                    })
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                    storeOutput.innerText = err;
+
+                    storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                })
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].ndx == 16) {
+
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[0])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                
+                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>cmd/rplstatus/id</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                </tr>`;
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(obj[1])
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                    storeOutput.innerText = 'saved';
+
+                    storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                    
+                    storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>cmd/rplstatus/dag</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                    </tr>`;
+
+                    storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[2])
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        console.log(data);
+                        
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                        storeOutput.innerText = 'saved';
+
+                        storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                        
+                        storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>cmd/rplstatus/time</td>
+                            <td class="text-dark bg-success text-center">OK</td>
+                        </tr>`;
+
+                        storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    })
+                    .catch(err => {
+
+                        console.log(err);
+
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                        storeOutput.innerText = err;
+
+                        storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                    })
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                    storeOutput.innerText = err;
+
+                    storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                })
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].ndx == 19) {
+
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[0])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                
+                storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                <tr>
+                    <td>cmd/rplnbr/addr</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                </tr>`;
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(obj[1])
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                    storeOutput.innerText = 'saved';
+
+                    storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                    
+                    storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                    <tr>
+                        <td>cmd/rplnbr/ranks</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                    </tr>`;
+
+                    storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                    fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[2])
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        console.log(data);
+                        
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                        storeOutput.innerText = 'saved';
+
+                        storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                        
+                        storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                        <tr>
+                            <td>cmd/rplnbr/values</td>
+                            <td class="text-dark bg-success text-center">OK</td>
+                        </tr>`;
+
+                        storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                        fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj[3])
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            
+                            console.log(data);
+                            
+                            storeOutput.classList.replace('d-none', 'd-block');
+                            storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                            storeOutput.innerText = 'saved';
+
+                            storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+                            
+                            storeTableTbody.innerHTML = demoTableDumpTbody.innerHTML += `
+                            <tr>
+                                <td>cmd/rplnbr/parens</td>
+                                <td class="text-dark bg-success text-center">OK</td>
+                            </tr>`;
+
+                            storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                        })
+                        .catch(err => {
+
+                            console.log(err);
+
+                            storeOutput.classList.replace('d-none', 'd-block');
+                            storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                            storeOutput.innerText = err;
+
+                            storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                        })
+                    })
+                    .catch(err => {
+
+                        console.log(err);
+
+                        storeOutput.classList.replace('d-none', 'd-block');
+                        storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                        storeOutput.innerText = err;
+
+                        storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                    })
+                })
+                .catch(err => {
+
+                    console.log(err);
+
+                    storeOutput.classList.replace('d-none', 'd-block');
+                    storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                    storeOutput.innerText = err;
+
+                    storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+                })
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+        if(obj[0].pckt.vld == false)
+        {
+            fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj[storeSelect.value])
+            })
+            .then(res => res.json())
+            .then(data => {
+                
+                console.log(data);
+                
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-warning'); storeOutput.classList.add('bg-success');
+                storeOutput.innerText = 'saved';
+
+                storeDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-success');
+
+                storeButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+            })
+            .catch(err => {
+
+                console.log(err);
+
+                storeOutput.classList.replace('d-none', 'd-block');
+                storeOutput.classList.remove('bg-danger', 'bg-success'); storeOutput.classList.add('bg-danger');
+                storeOutput.innerText = err;
+
+                storeDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-danger');
+            })
+        };
+
+
+    })
 
 
     console.log('>>>> obj length: ' + obj.length);
@@ -2642,6 +3376,215 @@ function simConsole(nodesAddr) {
                                         </div>`, undefined);
 
                             consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                            window.setTimeout(() => {
+
+                                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/4`)
+            
+                                .then((response) => response.text())
+                                    .then((text) => {
+                                        
+                                        console.log(text);
+                                        let decodedText = atob(text);
+            
+                                        console.log(decodedText);
+                                        console.log(consoleInputKey.value);
+            
+                                        let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                        
+                                        console.log(decryptedText);
+                                        
+                                        obj[1] = JSON.parse(decryptedText);
+                                        
+                                        if(checksum(decryptedText)) {
+            
+                                            tHTML += `
+                                                <tr>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                                                    <td class="text-success">INTACT</td>
+                                                    <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                </tr>`;
+            
+                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                            consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                            consoleOutputQuery.innerText = 'OK';
+            
+                                            consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+            
+                                        } else {
+            
+                                            tHTML += `
+                                                <tr>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                                                    <td class="text-warning">CORRUPTED</td>
+                                                    <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                </tr>`
+            
+                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                            consoleOutputQuery.innerText = 'CORRUPTED';
+            
+                                            consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                        };
+                                        
+                                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                                        consoleTableQueryTbody.innerHTML = tHTML;
+            
+                                        consoleH2.classList.replace('d-none', 'd-block');
+            
+                                        if(obj[1].pckt.vld) {
+            
+                                            dataHTML = `
+                                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                    <tbody class="bg-gray">
+                                                        <tr>
+                                                            <td colspan="4" class="text-light bg-secondary">IP</td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
+                                                        </tr> -->
+                    .                                   <tr>
+                                                            <td colspan="2" class="text-secondary">received packets at the IP layer</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">sent packets at the IP layer</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.tx}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">forwarded packets at the IP layer</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fw}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">dropped packets at the IP layer</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.dr}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">packets dropped due to wrong IP version or header length</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.vE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                                            <td colspan="1" class="text-secondary">high byte</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.hE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
+                                                            <td colspan="1" class="text-secondary">low byte</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.lE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">packets dropped because they were IP fragments</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.fE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">packets dropped due to IP checksum errors</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.cE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
+                                                            <td colspan="2" class="">${ obj[0].ipSt.ip.pE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="text-light bg-secondary">ICMP</td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.uS}</td>
+                                                        </tr> -->
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">received ICMP packets</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.ic.rx}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">sent ICMP packets</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.ic.tx}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">dropped ICMP packets</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.ic.dr}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">ICMP packets with a wrong type</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.ic.tE}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2" class="text-secondary">ICMP packets with a bad checksum</td>
+                                                            <td colspan="2" class="">${obj[1].icSt.ic.cE}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>`
+            
+                                            consoleData.innerHTML = dataHTML;
+            
+                                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                            storeButtonSave.addEventListener('click', () => {
+                                            
+                                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                            });
+            
+                                        } else {
+            
+                                            createErrorTable(obj[1]);
+            
+                                            tHTML += `
+                                                <tr>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                    <td class="text-warning">ERROR</td>
+                                                    <td class="text-warning">${obj[1].id.sT}</td>
+                                                </tr>`;
+                                            
+                                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                            storeButtonSave.addEventListener('click', () => {
+                                            
+                                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                            });
+                                        };
+            
+                                        legendDiv.classList.replace('d-none', 'd-show');
+                                        constructLegend(`
+                                            <br>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col border">
+                                                        <pre> 
+                                                            ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                        </pre>
+                                                    </div>
+                                                    <div class="col border">
+                                                        <pre>  
+                                                            ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                        </pre>
+                                                    </div>
+                                                </div>
+                                            </div>`, undefined);
+            
+                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                    })
+            
+                                .catch((error) => {
+            
+                                    tHTML += `
+                                        <tr>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
+                                            <td class="text-warning">INVALID</td>
+                                            <td class="text-danger">${error}</td>
+                                        </tr>`;
+            
+                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                    consoleTableQueryTbody.innerHTML = tHTML;
+            
+                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                    consoleOutputQuery.innerText = 'FAIL';
+            
+                                    consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+            
+                                    console.log(error);
+                                });
+            
+                            },1000);
                         })
 
                     .catch((error) => {
@@ -2666,215 +3609,6 @@ function simConsole(nodesAddr) {
                     })
 
                 },1000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/4`)
-
-                    .then((response) => response.text())
-                        .then((text) => {
-                            
-                            console.log(text);
-                            let decodedText = atob(text);
-
-                            console.log(decodedText);
-                            console.log(consoleInputKey.value);
-
-                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-            
-                            console.log(decryptedText);
-                            
-                            obj[1] = JSON.parse(decryptedText);
-                            
-                            if(checksum(decryptedText)) {
-
-                                tHTML += `
-                                    <tr>
-                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
-                                        <td class="text-success">INTACT</td>
-                                        <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                    </tr>`;
-
-                                consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                consoleOutputQuery.innerText = 'OK';
-
-                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                            } else {
-
-                                tHTML += `
-                                    <tr>
-                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
-                                        <td class="text-warning">CORRUPTED</td>
-                                        <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                    </tr>`
-
-                                consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                            };
-                            
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleH2.classList.replace('d-none', 'd-block');
-
-                            if(obj[1].pckt.vld) {
-
-                                dataHTML = `
-                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                        <tbody class="bg-gray">
-                                            <tr>
-                                                <td colspan="4" class="text-light bg-secondary">IP</td>
-                                            </tr>
-                                            <!-- <tr>
-                                                <td colspan="2" class="text-secondary">network statistics collection active</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
-                                            </tr> -->
-        .                                   <tr>
-                                                <td colspan="2" class="text-secondary">received packets at the IP layer</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">sent packets at the IP layer</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.tx}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">forwarded packets at the IP layer</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.fw}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">dropped packets at the IP layer</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.dr}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">packets dropped due to wrong IP version or header length</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.vE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
-                                                <td colspan="1" class="text-secondary">high byte</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.hE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="1" class="text-secondary">packets dropped due to wrong IP length</td>
-                                                <td colspan="1" class="text-secondary">low byte</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.lE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">packets dropped because they were IP fragments</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.fE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">packets dropped due to IP checksum errors</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.cE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
-                                                <td colspan="2" class="">${ obj[0].ipSt.ip.pE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" class="text-light bg-secondary">ICMP</td>
-                                            </tr>
-                                            <!-- <tr>
-                                                <td colspan="2" class="text-secondary">network statistics collection active</td>
-                                                <td colspan="2" class="">${obj[1].icSt.uS}</td>
-                                            </tr> -->
-        .                                   <tr>
-                                                <td colspan="2" class="text-secondary">received ICMP packets</td>
-                                                <td colspan="2" class="">${obj[1].icSt.ic.rx}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">sent ICMP packets</td>
-                                                <td colspan="2" class="">${obj[1].icSt.ic.tx}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">dropped ICMP packets</td>
-                                                <td colspan="2" class="">${obj[1].icSt.ic.dr}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">ICMP packets with a wrong type</td>
-                                                <td colspan="2" class="">${obj[1].icSt.ic.tE}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-secondary">ICMP packets with a bad checksum</td>
-                                                <td colspan="2" class="">${obj[1].icSt.ic.cE}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>`
-
-                                consoleData.innerHTML = dataHTML;
-
-                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
-                                storeButtonSave.addEventListener('click', () => {
-                                
-                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                });
-
-                            } else {
-
-                                createErrorTable(obj[1]);
-
-                                tHTML += `
-                                    <tr>
-                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                        <td class="text-warning">ERROR</td>
-                                        <td class="text-warning">${obj[1].id.sT}</td>
-                                    </tr>`;
-                                
-                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
-                                storeButtonSave.addEventListener('click', () => {
-                                
-                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                });
-                            };
-
-                            legendDiv.classList.replace('d-none', 'd-show');
-                            constructLegend(`
-                                <br>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col border">
-                                            <pre> 
-                                                ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                            </pre>
-                                        </div>
-                                        <div class="col border">
-                                            <pre>  
-                                                ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                            </pre>
-                                        </div>
-                                    </div>
-                                </div>`, undefined);
-
-                            consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                        })
-
-                    .catch((error) => {
-
-                        tHTML += `
-                            <tr>
-                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>4</b></td>
-                                <td class="text-warning">INVALID</td>
-                                <td class="text-danger">${error}</td>
-                            </tr>`;
-
-                        consoleTableQuery.classList.replace('d-none', 'd-block');
-                        consoleTableQueryTbody.innerHTML = tHTML;
-
-                        consoleOutputQuery.classList.replace('d-none', 'd-block');
-                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                        consoleOutputQuery.innerText = 'FAIL';
-
-                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                        console.log(error);
-                    });
-
-                },3000);
 
                 break;
 
@@ -3293,9 +4027,6 @@ function simConsole(nodesAddr) {
                                                 <td colspan="1" class="text-center">mac-addr</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">Node MAC address: ${obj[0].id.adr}</td>
                                             </tr>
                                         </tbody>
@@ -3430,9 +4161,6 @@ function simConsole(nodesAddr) {
                                                 <td colspan="1" class="text-center">ipaddr</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                            <tr>
                                                     <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">Node IPv6 addresses:</td>
                                             </tr>`;
                                     
@@ -3442,7 +4170,7 @@ function simConsole(nodesAddr) {
 
                                         dataHTML += `
                                             <tr>
-                                                <td colspan="2" class="">-- ${address}</td>
+                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${address}</td>
                                             </tr>`
                                     };
                                 });
@@ -3581,9 +4309,6 @@ function simConsole(nodesAddr) {
                                                         <td colspan="1" class="text-center">ip_nbr</td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="2"></td>
-                                                    </tr>
-                                                    <tr>
                                                             <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
                                                     </tr>`;
                                         
@@ -3624,6 +4349,307 @@ function simConsole(nodesAddr) {
                                         </pre>`, undefined);
 
                                     consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                    window.setTimeout(() => {
+
+                                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/9`)
+                    
+                                            .then((response) => response.text())
+                                                .then((text) => {
+                                                    
+                                                    console.log(text);
+                                                    let decodedText = atob(text);
+                    
+                                                    console.log(decodedText);
+                                                    console.log(consoleInputKey.value);
+                    
+                                                    let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                    
+                                                    console.log(decryptedText);
+                                                    
+                                                    obj[1] = JSON.parse(decryptedText);
+                                                    
+                                                    if(checksum(decryptedText)) {
+                    
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                                                                <td class="text-success">INTACT</td>
+                                                                <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                                            </tr>`;
+                    
+                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                        consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                        consoleOutputQuery.innerText = 'OK';
+                    
+                                                        consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                    
+                                                    } else {
+                    
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                                                                <td class="text-warning">CORRUPTED</td>
+                                                                <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                                            </tr>`;
+                    
+                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                        consoleOutputQuery.innerText = 'CORRUPTED';
+                    
+                                                        consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                    };
+                                                    
+                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                    
+                                                    consoleH2.classList.replace('d-none', 'd-block');
+                    
+                                                    if(obj[1].pckt.vld) {
+                    
+                                                        dataHTML = `
+                                                            <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                <tbody class="">
+                                                                    <tr>
+                                                                        <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                        <td colspan="1" class="text-center">ip_nbr</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                            <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                                                    </tr>`;
+                                                        
+                                                        for(let nbr = 0; nbr < obj[1].nsLL.ns.length; nbr++) {
+                    
+                                                            if(obj[1].nsLL.ns[nbr] != null) {
+                    
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}</td>
+                                                                    </tr>`
+                                                            }
+                                                        };
+                    
+                                                        dataHTML += `
+                                                                </tbody>
+                                                            </table>`;
+                                                                
+                                                        consoleData.innerHTML = dataHTML;
+                    
+                                                    } else {
+                    
+                                                        createErrorTable(obj[1]);
+                        
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                <td class="text-warning">ERROR</td>
+                                                                <td class="text-warning">${obj[1].id.sT}</td>
+                                                            </tr>`;
+                                                    };
+                    
+                                                    legendDiv.classList.replace('d-none', 'd-show');
+                                                    constructLegend(`
+                                                        <br>
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col border">
+                                                                    <pre> 
+                                                                        ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                    </pre>
+                                                                </div>
+                                                                <div class="col border">
+                                                                    <pre>  
+                                                                        ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                    </pre>
+                                                                </div>
+                                                            </div>
+                                                        </div>`, undefined);
+                    
+                                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                    window.setTimeout(() => {
+
+                                                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/10`)
+                                    
+                                                            .then((response) => response.text())
+                                                                .then((text) => {
+                                                                    
+                                                                    console.log(text);
+                                                                    let decodedText = atob(text);
+                                    
+                                                                    console.log(decodedText);
+                                                                    console.log(consoleInputKey.value);
+                                    
+                                                                    let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                    
+                                                                    console.log(decryptedText);
+                                                                    
+                                                                    obj[2] = JSON.parse(decryptedText);
+                                                                    
+                                                                    if(checksum(decryptedText)) {
+                                    
+                                                                        tHTML += `
+                                                                            <tr>
+                                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                                                                                <td class="text-success">INTACT</td>
+                                                                                <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                                                            </tr>`;
+                                    
+                                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                        consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                        consoleOutputQuery.innerText = 'OK';
+                                    
+                                                                        consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                    
+                                                                    } else {
+                                    
+                                                                        tHTML += `
+                                                                            <tr>
+                                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                                                                                <td class="text-warning">CORRUPTED</td>
+                                                                                <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                                                            </tr>`;
+                                    
+                                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                        consoleOutputQuery.innerText = 'CORRUPTED';
+                                    
+                                                                        consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                    };
+                                                                    
+                                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                                    
+                                                                    consoleH2.classList.replace('d-none', 'd-block');
+                                    
+                                                                    if(obj[2].pckt.vld) {
+                                    
+                                                                        dataHTML = `
+                                                                            <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                                <tbody class="">
+                                                                                    <tr>
+                                                                                        <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                        <td colspan="1" class="text-center">ip_nbr</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                            <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                                                                    </tr>`;
+                                                                        
+                                                                        for(let nbr = 0; nbr < obj[2].nsSt.ns.length; nbr++) {
+                                    
+                                                                            if(obj[2].nsSt.ns[nbr] != null) {
+                                    
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}, router ${obj[2].nsSt.ns[nbr].router}, state: ${obj[2].nsSt.ns[nbr].state}</td>
+                                                                                    </tr>`
+                                                                            };
+                                                                        };
+                                    
+                                                                        dataHTML += `
+                                                                                </tbody>
+                                                                            </table>`;
+                                                                                
+                                                                        consoleData.innerHTML = dataHTML;
+                                    
+                                                                        storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                                                        storeButtonSave.addEventListener('click', () => {
+                                                                    
+                                                                            cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                        });
+                                    
+                                                                    } else {
+                                    
+                                                                        createErrorTable(obj[2]);
+                                        
+                                                                        tHTML += `
+                                                                            <tr>
+                                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                                <td class="text-warning">ERROR</td>
+                                                                                <td class="text-warning">${obj[2].id.sT}</td>
+                                                                            </tr>`;
+                                    
+                                                                        storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                                                        storeButtonSave.addEventListener('click', () => {
+                                                                    
+                                                                            cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                        });
+                                                                    };
+                                    
+                                                                    legendDiv.classList.replace('d-none', 'd-show');
+                                                                    constructLegend(`
+                                                                        <br>
+                                                                        <div class="container">
+                                                                            <div class="row">
+                                                                                <div class="col border">
+                                                                                    <pre> 
+                                                                                        ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                    </pre>
+                                                                                </div>
+                                                                                <div class="col border">
+                                                                                    <pre>  
+                                                                                        ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                                    </pre>
+                                                                                </div>
+                                                                                <div class="col border">
+                                                                                    <pre>  
+                                                                                        ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                                                                    </pre>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>`, undefined);
+                                    
+                                                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                                                })
+                                    
+                                                            .catch((error) => {
+                                    
+                                                                tHTML += `
+                                                                    <tr>
+                                                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
+                                                                        <td class="text-warning">INVALID</td>
+                                                                        <td class="text-danger">${error}</td>
+                                                                    </tr>`;
+                                    
+                                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                consoleTableQueryTbody.innerHTML = tHTML;
+                                    
+                                                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                                consoleOutputQuery.innerText = 'FAIL';
+                                    
+                                                                consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                    
+                                                                console.log(error);
+                                                            });
+                                    
+                                                    }, 1000);
+                    
+                                                })
+                    
+                                            .catch((error) => {
+                    
+                                                tHTML += `
+                                                    <tr>
+                                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
+                                                        <td class="text-warning">INVALID</td>
+                                                        <td class="text-danger">${error}</td>
+                                                    </tr>`;
+                    
+                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                consoleTableQueryTbody.innerHTML = tHTML;
+                    
+                                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                consoleOutputQuery.innerText = 'FAIL';
+                    
+                                                consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                    
+                                                console.log(error);
+                    
+                                            });
+                    
+                                    }, 1000);
                                 })
 
                         .catch((error) => {
@@ -3648,313 +4674,6 @@ function simConsole(nodesAddr) {
                         });
 
                 }, 1000);
-                
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/9`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[1] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[1].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
-                                                </tr>`;
-                                    
-                                    for(let nbr = 0; nbr < obj[1].nsLL.ns.length; nbr++) {
-
-                                        if(obj[1].nsLL.ns[nbr] != null) {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}</td>
-                                                </tr>`
-                                        }
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[1]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[1].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>9</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-
-                        });
-
-                }, 3000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/10`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[2] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[2].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
-                                                </tr>`;
-                                    
-                                    for(let nbr = 0; nbr < obj[2].nsSt.ns.length; nbr++) {
-
-                                        if(obj[2].nsSt.ns[nbr] != null) {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[0].nsIP.ns[nbr].ipAddr} <-> ${obj[1].nsLL.ns[nbr].llAddr}, router ${obj[2].nsSt.ns[nbr].router}, state: ${obj[2].nsSt.ns[nbr].state}</td>
-                                                </tr>`
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-
-                                } else {
-
-                                    createErrorTable(obj[2]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[2].id.sT}</td>
-                                        </tr>`;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>10</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                    }, 5000);
                 
                 break;
             
@@ -4030,9 +4749,6 @@ function simConsole(nodesAddr) {
                                                     <td colspan="1" class="text-center">ip_nbr</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
                                                         <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
                                                 </tr>`;
                                             
@@ -4083,6 +4799,846 @@ function simConsole(nodesAddr) {
                                     </div>`, undefined);
 
                                     consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                    window.setTimeout(() => {
+
+                                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/12`)
+                    
+                                            .then((response) => response.text())
+                                                .then((text) => {
+                                                    
+                                                    console.log(text);
+                                                    let decodedText = atob(text);
+                    
+                                                    console.log(decodedText);
+                                                    console.log(consoleInputKey.value);
+                    
+                                                    let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                    
+                                                    console.log(decryptedText);
+                                                    
+                                                    obj[1] = JSON.parse(decryptedText);
+                                                    
+                                                    if(checksum(decryptedText)) {
+                    
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                                                <td class="text-success">INTACT</td>
+                                                                <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                            </tr>`;
+                    
+                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                        consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                        consoleOutputQuery.innerText = 'OK';
+                    
+                                                        consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                    
+                                                    } else {
+                    
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                                                <td class="text-warning">CORRUPTED</td>
+                                                                <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                            </tr>`;
+                    
+                                                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                        consoleOutputQuery.innerText = 'CORRUPTED';
+                    
+                                                        consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                    };
+                                                    
+                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                    
+                                                    consoleH2.classList.replace('d-none', 'd-block');
+                    
+                                                    if(obj[1].pckt.vld) {
+                    
+                                                        dataHTML = `
+                                                            <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                <tbody class="">
+                                                                    <tr>
+                                                                        <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                        <td colspan="1" class="text-center">ip_nbr</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
+                                                                    </tr>`;
+                                                                
+                                                        if(obj[0].rt.lt == "infinite") {
+                    
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                                </tr>`;
+                    
+                                                        } else {
+                    
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                                </tr>`;
+                                                        };
+                    
+                                                        let atLeast1routingLink = false;
+                    
+                                                        for(let source = 0; source < obj[1].rtLS.ls.length; source++) {
+                    
+                                                            if(obj[1].rtLS.ls[source] != null) {
+                    
+                                                                atLeast1routingLink = true;
+                                                            };
+                                                        };
+                    
+                                                        if(atLeast1routingLink) {
+                    
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                                </tr>`;
+                    
+                                                            for(source = 0; source < obj[1].rtLS.ls.length; source++) {
+                    
+                                                                if(obj[1].rtLS.ls[source] != null) {
+                    
+                                                                    dataHTML += `
+                                                                        <tr>
+                                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[source].from} ${obj[1].rtLS.ls[source].dodagRoot ? '(DODAG root)' : ''}</td>
+                                                                        </tr>`;
+                                                                };
+                                                            };
+                    
+                                                            } else {
+                    
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                                    </tr>`;
+                                                            };
+                    
+                                                        dataHTML += `
+                                                                </tbody>
+                                                            </table>`;
+                                                                
+                                                        consoleData.innerHTML = dataHTML;
+                    
+                                                    } else {
+                    
+                                                        createErrorTable(obj[1]);
+                        
+                                                        tHTML += `
+                                                            <tr>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                <td class="text-warning">ERROR</td>
+                                                                <td class="text-warning">${obj[1].id.sT}</td>
+                                                            </tr>`;
+                                                    };
+                    
+                                                    legendDiv.classList.replace('d-none', 'd-show');
+                                                    constructLegend(`
+                                                        <br>
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col border">
+                                                                    <pre> 
+                                                                        ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                    </pre>
+                                                                </div>
+                                                                <div class="col border">
+                                                                    <pre>  
+                                                                        ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                    </pre>
+                                                                </div>
+                                                            </div>
+                                                        </div>`, undefined);
+                    
+                                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                        window.setTimeout(() => {
+
+                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/13`)
+                                        
+                                                                .then((response) => response.text())
+                                                                    .then((text) => {
+                                                                        
+                                                                        console.log(text);
+                                                                        let decodedText = atob(text);
+                                        
+                                                                        console.log(decodedText);
+                                                                        console.log(consoleInputKey.value);
+                                        
+                                                                        let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                        
+                                                                        console.log(decryptedText);
+                                                                        
+                                                                        obj[2] = JSON.parse(decryptedText);
+                                                                        
+                                                                        if(checksum(decryptedText)) {
+                                        
+                                                                            tHTML += `
+                                                                                <tr>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                                    <td class="text-success">INTACT</td>
+                                                                                    <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                                </tr>`;
+                                        
+                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                            consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                            consoleOutputQuery.innerText = 'OK';
+                                        
+                                                                            consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                        
+                                                                        } else {
+                                        
+                                                                            tHTML += `
+                                                                                <tr>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                                    <td class="text-warning">CORRUPTED</td>
+                                                                                    <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                                </tr>`;
+                                        
+                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                            consoleOutputQuery.innerText = 'CORRUPTED';
+                                        
+                                                                            consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                        };
+                                                                        
+                                                                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                        consoleTableQueryTbody.innerHTML = tHTML;
+                                        
+                                                                        consoleH2.classList.replace('d-none', 'd-block');
+                                        
+                                                                        if(obj[2].pckt.vld) {
+                                        
+                                                                            dataHTML = `
+                                                                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                                    <tbody class="">
+                                                                                        <tr>
+                                                                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                            <td colspan="1" class="text-center">ip_nbr</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
+                                                                                        </tr>`;
+                                                                                    
+                                                                            if(obj[0].rt.lt == "infinite") {
+                                        
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                                                    </tr>`;
+                                        
+                                                                            } else {
+                                        
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                                                    </tr>`;
+                                                                            };
+                                        
+                                                                            let atLeast1routingLink = false;
+                                        
+                                                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+                                        
+                                                                                if(obj[2].rtLD.ls[destination] != null) {
+                                        
+                                                                                    atLeast1routingLink = true;
+                                                                                };
+                                                                            };
+                                        
+                                                                            if(atLeast1routingLink) {
+                                        
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                                                    </tr>`;
+                                        
+                                                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+                                        
+                                                                                    if(obj[2].rtLS.ls[destination] != null) {
+                                        
+                                                                                        dataHTML += `
+                                                                                            <tr>
+                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                                                            </tr>`
+                                                                                    };
+                                                                                };
+                                        
+                                                                            } else {
+                                        
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                                                    </tr>`
+                                                                            };
+                                        
+                                                                            dataHTML += `
+                                                                                    </tbody>
+                                                                                </table>`;
+                                                                                    
+                                                                            consoleData.innerHTML = dataHTML;
+                                        
+                                                                        } else {
+                                        
+                                                                            createErrorTable(obj[2]);
+                                            
+                                                                            tHTML += `
+                                                                                <tr>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                                    <td class="text-warning">ERROR</td>
+                                                                                    <td class="text-warning">${obj[2].id.sT}</td>
+                                                                                </tr>`;
+                                                                        };
+                                        
+                                                                        legendDiv.classList.replace('d-none', 'd-show');
+                                                                        constructLegend(`
+                                                                            <br>
+                                                                            <div class="container">
+                                                                                <div class="row">
+                                                                                    <div class="col border">
+                                                                                        <pre> 
+                                                                                            ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                        </pre>
+                                                                                    </div>
+                                                                                    <div class="col border">
+                                                                                        <pre>  
+                                                                                            ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                                        </pre>
+                                                                                    </div>
+                                                                                    <div class="col border">
+                                                                                        <pre>  
+                                                                                            ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                                                                        </pre>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>`, undefined);
+                                        
+                                                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                                        window.setTimeout(() => {
+
+                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/14`)
+                                                        
+                                                                                .then((response) => response.text())
+                                                                                    .then((text) => {
+                                                                                        
+                                                                                        console.log(text);
+                                                                                        let decodedText = atob(text);
+                                                        
+                                                                                        console.log(decodedText);
+                                                                                        console.log(consoleInputKey.value);
+                                                        
+                                                                                        let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                                        
+                                                                                        console.log(decryptedText);
+                                                                                        
+                                                                                        obj[3] = JSON.parse(decryptedText);
+                                                                                        
+                                                                                        if(checksum(decryptedText)) {
+                                                        
+                                                                                            tHTML += `
+                                                                                                <tr>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                                    <td class="text-success">INTACT</td>
+                                                                                                    <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                                                                                </tr>`;
+                                                        
+                                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                            consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                                            consoleOutputQuery.innerText = 'OK';
+                                                        
+                                                                                            consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                                        
+                                                                                        } else {
+                                                        
+                                                                                            tHTML += `
+                                                                                                <tr>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                                    <td class="text-warning">CORRUPTED</td>
+                                                                                                    <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                                                                                </tr>`;
+                                                        
+                                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                                            consoleOutputQuery.innerText = 'CORRUPTED';
+                                                        
+                                                                                            consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                                        };
+                                                                                        
+                                                                                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                                        consoleTableQueryTbody.innerHTML = tHTML;
+                                                        
+                                                                                        consoleH2.classList.replace('d-none', 'd-block');
+                                                        
+                                                                                        if(obj[3].pckt.vld) {
+                                                        
+                                                                                            dataHTML = `
+                                                                                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                                                    <tbody class="">
+                                                                                                        <tr>
+                                                                                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                                            <td colspan="1" class="text-center">ip_nbr</td>
+                                                                                                        </tr>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
+                                                                                                        </tr>`;
+                                                                                                    
+                                                                                            if(obj[0].rt.lt == "infinite") {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                                                                    </tr>`;
+                                                        
+                                                                                            } else {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                                                                    </tr>`;
+                                                                                            };
+                                                        
+                                                                                            let atLeast1routingLink = false;
+                                                        
+                                                                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+                                                        
+                                                                                                if(obj[2].rtLD.ls[destination] != null) {
+                                                        
+                                                                                                    atLeast1routingLink = true;
+                                                                                                }
+                                                                                            };
+                                                        
+                                                                                            if(atLeast1routingLink) {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                                                                    </tr>`;
+                                                        
+                                                                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+                                                        
+                                                                                                    if(obj[2].rtLS.ls[destination] != null) {
+                                                        
+                                                                                                        dataHTML += `
+                                                                                                            <tr>
+                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                                                                            </tr>`
+                                                                                                    };
+                                                                                                };
+                                                        
+                                                                                            } else {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                                                                    </tr>`
+                                                                                            };
+                                                        
+                                                                                            let atLeast1routingEntry = false;
+                                                        
+                                                                                            for(let route = 0; route < obj[3].rtERt.es.length; route++) {
+                                                        
+                                                                                                if(obj[3].rtERt.es[route] != null) {
+                                                        
+                                                                                                    atLeast1routingEntry = true;
+                                                                                                };
+                                                                                            };
+                                                        
+                                                                                            if(atLeast1routingEntry) {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[3].rtERt.totEs} in total):</td>
+                                                                                                    </tr>`;
+                                                        
+                                                                                                for(route = 0; route < obj[3].rtERt.es.length; route++) {
+                                                        
+                                                                                                    if(obj[3].rtERt.es[route] != null) {
+                                                        
+                                                                                                        dataHTML += `
+                                                                                                            <tr>
+                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[route].rt}</td>
+                                                                                                            </tr>`
+                                                                                                    };
+                                                                                                };
+                                                        
+                                                                                            } else {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
+                                                                                                    </tr>`
+                                                                                            };
+                                                        
+                                                                                            dataHTML += `
+                                                                                                    </tbody>
+                                                                                                </table>`;
+                                                                                                    
+                                                                                            consoleData.innerHTML = dataHTML;
+                                                        
+                                                                                        } else {
+                                                        
+                                                                                            createErrorTable(obj[3]);
+                                                            
+                                                                                            tHTML += `
+                                                                                                <tr>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                                                    <td class="text-warning">ERROR</td>
+                                                                                                    <td class="text-warning">${obj[3].id.sT}</td>
+                                                                                                </tr>`;
+                                                                                        };
+                                                        
+                                                                                        legendDiv.classList.replace('d-none', 'd-show');
+                                                                                        constructLegend(`
+                                                                                            <br>
+                                                                                            <div class="container">
+                                                                                                <div class="row">
+                                                                                                    <div class="col border">
+                                                                                                        <pre> 
+                                                                                                            ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                                        </pre>
+                                                                                                    </div>
+                                                                                                    <div class="col border">
+                                                                                                        <pre>  
+                                                                                                            ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                                                        </pre>
+                                                                                                    </div>
+                                                                                                    <div class="col border">
+                                                                                                        <pre>  
+                                                                                                            ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                                                                                        </pre>
+                                                                                                    </div>
+                                                                                                    <div class="col border">
+                                                                                                        <pre>  
+                                                                                                            ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
+                                                                                                        </pre>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>`, undefined);
+                                                        
+                                                                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                                                        window.setTimeout(() => {
+
+                                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/15`)
+                                                                        
+                                                                                                .then((response) => response.text())
+                                                                                                    .then((text) => {
+                                                                                                        
+                                                                                                        console.log(text);
+                                                                                                        let decodedText = atob(text);
+                                                                        
+                                                                                                        console.log(decodedText);
+                                                                                                        console.log(consoleInputKey.value);
+                                                                        
+                                                                                                        let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                                                        
+                                                                                                        console.log(decryptedText);
+                                                                                                        
+                                                                                                        obj[4] = JSON.parse(decryptedText);
+                                                                                                        
+                                                                                                        if(checksum(decryptedText)) {
+                                                                        
+                                                                                                            tHTML += `
+                                                                                                                <tr>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                                    <td class="text-success">INTACT</td>
+                                                                                                                    <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
+                                                                                                                </tr>`;
+                                                                        
+                                                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                                            consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                                                            consoleOutputQuery.innerText = 'OK';
+                                                                        
+                                                                                                            consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                                                        
+                                                                                                        } else {
+                                                                        
+                                                                                                            tHTML += `
+                                                                                                                <tr>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                                    <td class="text-warning">CORRUPTED</td>
+                                                                                                                    <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
+                                                                                                                </tr>`;
+                                                                        
+                                                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                                                            consoleOutputQuery.innerText = 'CORRUPTED';
+                                                                        
+                                                                                                            consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                                                        };
+                                                                                                        
+                                                                                                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                                                        consoleTableQueryTbody.innerHTML = tHTML;
+                                                                        
+                                                                                                        consoleH2.classList.replace('d-none', 'd-block');
+                                                                        
+                                                                                                        if(obj[4].pckt.vld) {
+                                                                        
+                                                                                                            dataHTML = `
+                                                                                                                <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                                                                    <tbody class="">
+                                                                                                                        <tr>
+                                                                                                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                                                            <td colspan="1" class="text-center">ip_nbr</td>
+                                                                                                                        </tr>
+                                                                                                                        </tr>
+                                                                                                                        <tr>
+                                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
+                                                                                                                        </tr>`;
+                                                                                                                    
+                                                                                                            if(obj[0].rt.lt == "infinite") {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
+                                                                                                                    </tr>`;
+                                                                        
+                                                                                                            } else {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
+                                                                                                                    </tr>`;
+                                                                                                            };
+                                                                        
+                                                                                                            let atLeast1routingLink = false;
+                                                                        
+                                                                                                            for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
+                                                                        
+                                                                                                                if(obj[2].rtLD.ls[destination] != null) {
+                                                                        
+                                                                                                                    atLeast1routingLink = true;
+                                                                                                                };
+                                                                                                            };
+                                                                        
+                                                                                                            if(atLeast1routingLink) {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
+                                                                                                                    </tr>`;
+                                                                        
+                                                                                                                for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
+                                                                        
+                                                                                                                    if(obj[2].rtLS.ls[destination] != null) {
+                                                                        
+                                                                                                                        dataHTML += `
+                                                                                                                            <tr>
+                                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
+                                                                                                                            </tr>`
+                                                                                                                    };
+                                                                                                                };
+                                                                        
+                                                                                                            } else {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                                                                                    </tr>`
+                                                                                                            };
+                                                                        
+                                                                                                            let atLeast1routingEntry = false;
+                                                                        
+                                                                                                            for(let via = 0; via < obj[4].rtEVia.es.length; via++) {
+                                                                        
+                                                                                                                if(obj[4].rtEVia.es[via] != null) {
+                                                                        
+                                                                                                                    atLeast1routingEntry = true;
+                                                                                                                };
+                                                                                                            };
+                                                                        
+                                                                                                            if(atLeast1routingEntry) {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[4].rtEVia.totEs} in total):</td>
+                                                                                                                    </tr>`;
+                                                                        
+                                                                                                                for(via = 0; via < obj[4].rtERt.es.length; via++) {
+                                                                        
+                                                                                                                    if(obj[4].rtEVia.es[via] != null) {
+                                                                        
+                                                                                                                        dataHTML += `
+                                                                                                                            <tr>
+                                                                                                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[via].rt} via ${obj[4].rtEVia.es[via].via} (lifetime: ${obj[4].rtEVia.es[via].lf})} </td>
+                                                                                                                            </tr>`               
+                                                                                                                    };
+                                                                                                                };
+                                                                        
+                                                                                                            } else {
+                                                                        
+                                                                                                                dataHTML += `
+                                                                                                                        <tr>
+                                                                                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
+                                                                                                                        </tr>`
+                                                                                                            };
+                                                                        
+                                                                                                            dataHTML += `
+                                                                                                                    </tbody>
+                                                                                                                </table>`;
+                                                                                                                    
+                                                                                                            consoleData.innerHTML = dataHTML;
+                                                                        
+                                                                                                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                                                                                            storeButtonSave.addEventListener('click', () => {
+                                                                                                        
+                                                                                                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                                                            });
+                                                                        
+                                                                                                        } else {
+                                                                        
+                                                                                                            createErrorTable(obj[4]);
+                                                                            
+                                                                                                            tHTML += `
+                                                                                                                <tr>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                                                                    <td class="text-warning">ERROR</td>
+                                                                                                                    <td class="text-warning">${obj[4].id.sT}</td>
+                                                                                                                </tr>`;
+                                                                        
+                                                                                                            storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                                                                                            storeButtonSave.addEventListener('click', () => {
+                                                                                                        
+                                                                                                                cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                                                            });
+                                                                                                        };
+                                                                        
+                                                                                                        legendDiv.classList.replace('d-none', 'd-show');
+                                                                                                        constructLegend(`
+                                                                                                            <br>
+                                                                                                            <div class="container">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col border">
+                                                                                                                        <pre> 
+                                                                                                                            ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                                                        </pre>
+                                                                                                                    </div>
+                                                                                                                    <div class="col border">
+                                                                                                                        <pre>  
+                                                                                                                            ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
+                                                                                                                        </pre>
+                                                                                                                    </div>
+                                                                                                                    <div class="col border">
+                                                                                                                        <pre>  
+                                                                                                                            ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
+                                                                                                                        </pre>
+                                                                                                                    </div>
+                                                                                                                    <div class="col border">
+                                                                                                                        <pre>  
+                                                                                                                            ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
+                                                                                                                        </pre>
+                                                                                                                    </div>
+                                                                                                                    <div class="col border">
+                                                                                                                        <pre>  
+                                                                                                                            ${JSON.stringify(elaborate(obj[4], checksum(decryptedText)), null, 2)}
+                                                                                                                        </pre>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>`, undefined);
+                                                                        
+                                                                                                        consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                                                                                    })
+                                                                        
+                                                                                                .catch((error) => {
+                                                                        
+                                                                                                    tHTML += `
+                                                                                                        <tr>
+                                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                            <td class="text-warning">INVALID</td>
+                                                                                                            <td class="text-danger">${error}</td>
+                                                                                                        </tr>`;
+                                                                        
+                                                                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                                                                        
+                                                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                                                                    consoleOutputQuery.innerText = 'FAIL';
+                                                                        
+                                                                                                    consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                                                        
+                                                                                                    console.log(error);
+                                                                                                });
+                                                                        
+                                                                                        }, 1000);
+                                                                                    })
+                                                        
+                                                                                .catch((error) => {
+                                                        
+                                                                                    tHTML += `
+                                                                                        <tr>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                            <td class="text-warning">INVALID</td>
+                                                                                            <td class="text-danger">${error}</td>
+                                                                                        </tr>`;
+                                                        
+                                                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                                                        
+                                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                                                    consoleOutputQuery.innerText = 'FAIL';
+                                                        
+                                                                                    consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                                        
+                                                                                    console.log(error);
+                                                                                });
+                                                        
+                                                                        }, 1000);
+                                                                    })
+                                        
+                                                                .catch((error) => {
+                                        
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                            <td class="text-warning">INVALID</td>
+                                                                            <td class="text-danger">${error}</td>
+                                                                        </tr>`;
+                                        
+                                                                    consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleTableQueryTbody.innerHTML = tHTML;
+                                        
+                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                                    consoleOutputQuery.innerText = 'FAIL';
+                                        
+                                                                    consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                        
+                                                                    console.log(error);
+                                                                });
+                                        
+                                                        }, 1000);
+                                                })
+                    
+                                            .catch((error) => {
+                    
+                                                tHTML += `
+                                                    <tr>
+                                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                                        <td class="text-warning">INVALID</td>
+                                                        <td class="text-danger">${error}</td>
+                                                    </tr>`;
+                    
+                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                consoleTableQueryTbody.innerHTML = tHTML;
+                    
+                                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                consoleOutputQuery.innerText = 'FAIL';
+                    
+                                                consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                    
+                                                console.log(error);
+                                            });
+                    
+                                    }, 1000);
                             })
 
                         .catch((error) => {
@@ -4107,856 +5663,6 @@ function simConsole(nodesAddr) {
                         });
 
                 }, 1000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/12`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[1] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[1].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
-                                                </tr>`;
-                                            
-                                    if(obj[0].rt.lt == "infinite") {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
-                                            </tr>`;
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
-                                            </tr>`;
-                                    };
-
-                                    let atLeast1routingLink = false;
-
-                                    for(let source = 0; source < obj[1].rtLS.ls.length; source++) {
-
-                                        if(obj[1].rtLS.ls[source] != null) {
-
-                                            atLeast1routingLink = true;
-                                        };
-                                    };
-
-                                    if(atLeast1routingLink) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
-                                            </tr>`;
-
-                                        for(source = 0; source < obj[1].rtLS.ls.length; source++) {
-
-                                            if(obj[1].rtLS.ls[source] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[source].from} ${obj[1].rtLS.ls[source].dodagRoot ? '(DODAG root)' : ''}</td>
-                                                    </tr>`;
-                                            };
-                                        };
-
-                                        } else {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
-                                                </tr>`;
-                                        };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[1]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[1].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                    consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 3000);
-                
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/13`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[2] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[2].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
-                                                </tr>`;
-                                            
-                                    if(obj[0].rt.lt == "infinite") {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
-                                            </tr>`;
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
-                                            </tr>`;
-                                    };
-
-                                    let atLeast1routingLink = false;
-
-                                    for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
-
-                                        if(obj[2].rtLD.ls[destination] != null) {
-
-                                            atLeast1routingLink = true;
-                                        };
-                                    };
-
-                                    if(atLeast1routingLink) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
-                                            </tr>`;
-
-                                        for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
-
-                                            if(obj[2].rtLS.ls[destination] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
-                                                    </tr>`
-                                            };
-                                        };
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
-                                            </tr>`
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[2]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[2].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 5000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/14`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[3] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[3].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
-                                                </tr>`;
-                                            
-                                    if(obj[0].rt.lt == "infinite") {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
-                                            </tr>`;
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
-                                            </tr>`;
-                                    };
-
-                                    let atLeast1routingLink = false;
-
-                                    for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
-
-                                        if(obj[2].rtLD.ls[destination] != null) {
-
-                                            atLeast1routingLink = true;
-                                        }
-                                    };
-
-                                    if(atLeast1routingLink) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
-                                            </tr>`;
-
-                                        for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
-
-                                            if(obj[2].rtLS.ls[destination] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
-                                                    </tr>`
-                                            };
-                                        };
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
-                                            </tr>`
-                                    };
-
-                                    let atLeast1routingEntry = false;
-
-                                    for(let route = 0; route < obj[3].rtERt.es.length; route++) {
-
-                                        if(obj[3].rtERt.es[route] != null) {
-
-                                            atLeast1routingEntry = true;
-                                        };
-                                    };
-
-                                    if(atLeast1routingEntry) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[3].rtERt.totEs} in total):</td>
-                                            </tr>`;
-
-                                        for(route = 0; route < obj[3].rtERt.es.length; route++) {
-
-                                            if(obj[3].rtERt.es[route] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[route].rt}</td>
-                                                    </tr>`
-                                            };
-                                        };
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
-                                            </tr>`
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[3]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[3].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 7000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/15`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[4] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[4].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>
-                                                <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
-                                                </tr>`;
-                                            
-                                    if(obj[0].rt.lt == "infinite") {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt})</td>
-                                            </tr>`;
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${obj[0].rt.df} (lifetime: ${obj[0].rt.lt} seconds)</td>
-                                            </tr>`;
-                                    };
-
-                                    let atLeast1routingLink = false;
-
-                                    for(let destination = 0; destination < obj[2].rtLD.ls.length; destination++) {
-
-                                        if(obj[2].rtLD.ls[destination] != null) {
-
-                                            atLeast1routingLink = true;
-                                        };
-                                    };
-
-                                    if(atLeast1routingLink) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${obj[1].rtLS.totLs} in total):</td>
-                                            </tr>`;
-
-                                        for(destination = 0; destination < obj[1].rtLS.ls.length; destination++) {
-
-                                            if(obj[2].rtLS.ls[destination] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[1].rtLS.ls[destination].from} ${obj[1].rtLS.ls[destination].dodagRoot ? '(DODAG root)' : ''} to ${obj[2].rtLD.ls[destination].to} (lifetime: ${obj[2].rtLD.ls[destination].lf})</td>
-                                                    </tr>`
-                                            };
-                                        };
-
-                                    } else {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
-                                            </tr>`
-                                    };
-
-                                    let atLeast1routingEntry = false;
-
-                                    for(let via = 0; via < obj[4].rtEVia.es.length; via++) {
-
-                                        if(obj[4].rtEVia.es[via] != null) {
-
-                                            atLeast1routingEntry = true;
-                                        };
-                                    };
-
-                                    if(atLeast1routingEntry) {
-
-                                        dataHTML += `
-                                            <tr>
-                                                <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing entries (${obj[4].rtEVia.totEs} in total):</td>
-                                            </tr>`;
-
-                                        for(via = 0; via < obj[4].rtERt.es.length; via++) {
-
-                                            if(obj[4].rtEVia.es[via] != null) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${obj[3].rtERt.es[via].rt} via ${obj[4].rtEVia.es[via].via} (lifetime: ${obj[4].rtEVia.es[via].lf})} </td>
-                                                    </tr>`               
-                                            };
-                                        };
-
-                                    } else {
-
-                                        dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
-                                                </tr>`
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-
-                                } else {
-
-                                    createErrorTable(obj[4]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[4].id.sT}</td>
-                                        </tr>`;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)}  
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre>  
-                                                    ${JSON.stringify(elaborate(obj[4], checksum(decryptedText)), null, 2)}
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 9000);
                 
                 break;
 
@@ -5029,9 +5735,6 @@ function simConsole(nodesAddr) {
                                                 <tr>
                                                     <td colspan="1" class="text-center text-light bg-secondary">command:</td>
                                                     <td colspan="1" class="text-center">rpl-status</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
                                                 </tr>`;
 
                                     if(obj[0].rSt.rL == true) {
@@ -5110,6 +5813,470 @@ function simConsole(nodesAddr) {
                                     </div>`, undefined);
 
                                 consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                window.setTimeout(() => {
+
+                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/17`)
+                
+                                        .then((response) => response.text())
+                                            .then((text) => {
+                                                
+                                                console.log(text);
+                                                let decodedText = atob(text);
+                
+                                                console.log(decodedText);
+                                                console.log(consoleInputKey.value);
+                
+                                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                
+                                                console.log(decryptedText);
+                                                
+                                                obj[1] = JSON.parse(decryptedText);
+                                                
+                                                if(checksum(decryptedText)) {
+                
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                                            <td class="text-success">INTACT</td>
+                                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                        </tr>`;
+                
+                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                    consoleOutputQuery.innerText = 'OK';
+                
+                                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                
+                                                } else {
+                
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                                            <td class="text-warning">CORRUPTED</td>
+                                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                        </tr>`;
+                
+                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                    consoleOutputQuery.innerText = 'CORRUPTED';
+                
+                                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                };
+                                                
+                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                consoleTableQueryTbody.innerHTML = tHTML;
+                
+                                                consoleH2.classList.replace('d-none', 'd-block');
+                
+                                                if(obj[1].pckt.vld) {
+                
+                                                    dataHTML = `
+                                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                            <tbody class="">
+                                                                <tr>
+                                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                    <td colspan="1" class="text-center">rpl-status</td>
+                                                                </tr>`;
+                
+                                                    if(obj[1].rStDag.rL == true) {
+                
+                                                        if(obj[1].rStDag.iId == 'none') {
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: none</td>
+                                                                </tr>`;
+                
+                                                        } else {
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG ${obj[1].rStDag.dT}</td>
+                                                                </tr>`;
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG: ${obj[1].rStDag.dId}, version ${obj[1].rStDag.dVer}</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefix: ${obj[1].rStDag.dPf}/${obj[1].rStDag.dPfL}</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: ${obj[0].rSt.iId}</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- MOP: ${obj[0].rSt.mop}</td>
+                                                                </tr>`;
+                
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- OF: ${obj[0].rSt.of}</td>
+                                                                </tr>`;
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Hop rank incerement: ${obj[0].rSt.hRkI}</td>
+                                                                </tr>`;
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Default lifetime: ${obj[0].rSt.dLt} seconds</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- State: ${obj[1].rStDag.st}</td>
+                                                                </tr>`;
+                
+                                                            if(obj[1].rStDag.pP != 'none') {
+                
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: ${obj[1].rStDag.pP} (last DTSN: ${obj[1].rStDag.lD})</td>
+                                                                    </tr>`;
+                
+                                                            } else {
+                
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: none</td>
+                                                                    </tr>`;
+                                                            }
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Rank: ${obj[1].rStDag.rk}</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Lowest rank: ${obj[1].rStDag.lRk} (${obj[1].rStDag.mRkI})</td>
+                                                                </tr>`;
+                                                            
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DTSN out: ${obj[0].rSt.dtsnO}</td>
+                                                                </tr>`;
+                
+                                                            dataHTML += `
+                                                                <tr>
+                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAO sequence: last sent ${obj[1].rStDag.dao.lS}, last acked ${obj[1].rStDag.dao.lA}</td>
+                                                                </tr>`;
+                                                        };
+                                                    };
+                
+                                                    dataHTML += `
+                                                            </tbody>
+                                                        </table>`;
+                                                            
+                                                    consoleData.innerHTML = dataHTML;
+                
+                                                } else {
+                
+                                                    createErrorTable(obj[1]);
+                    
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                            <td class="text-warning">ERROR</td>
+                                                            <td class="text-warning">${obj[1].id.sT}</td>
+                                                        </tr>`;
+                                                };
+                
+                                                legendDiv.classList.replace('d-none', 'd-show');
+                                                constructLegend(`
+                                                    <br>
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col border">
+                                                                <pre> 
+                                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                </pre>
+                                                            </div>
+                                                            <div class="col border">
+                                                                <pre> 
+                                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
+                                                                </pre>
+                                                            </div>
+                                                        </div>
+                                                    </div>`, undefined);
+                
+                                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                window.setTimeout(() => {
+
+                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/18`)
+                                
+                                                        .then((response) => response.text())
+                                                            .then((text) => {
+                                                                
+                                                                console.log(text);
+                                                                let decodedText = atob(text);
+                                
+                                                                console.log(decodedText);
+                                                                console.log(consoleInputKey.value);
+                                
+                                                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                
+                                                                console.log(decryptedText);
+                                                                
+                                                                obj[2] = JSON.parse(decryptedText);
+                                                                
+                                                                if(checksum(decryptedText)) {
+                                
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                                            <td class="text-success">INTACT</td>
+                                                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                        </tr>`;
+                                
+                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                    consoleOutputQuery.innerText = 'OK';
+                                
+                                                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                
+                                                                } else {
+                                
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                                            <td class="text-warning">CORRUPTED</td>
+                                                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                        </tr>`;
+                                
+                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                    consoleOutputQuery.innerText = 'CORRUPTED';
+                                
+                                                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                };
+                                                                
+                                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                consoleTableQueryTbody.innerHTML = tHTML;
+                                
+                                                                consoleH2.classList.replace('d-none', 'd-block');
+                                
+                                                                if(obj[2].pckt.vld) {
+                                
+                                                                    dataHTML = `
+                                                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                            <tbody class="">
+                                                                                <tr>
+                                                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                    <td colspan="1" class="text-center">rpl-status</td>
+                                                                                </tr>`;
+                                
+                                                                    if(obj[2].rStTt.rL == true) {
+                                
+                                                                        if(obj[2].rStTt.iId == 'none') {
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: none</td>
+                                                                                </tr>`;
+                                
+                                                                        } else {
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG ${obj[1].rStDag.dT}</td>
+                                                                                </tr>`;
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG: ${obj[1].rStDag.dId}, version ${obj[1].rStDag.dVer}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefix: ${obj[1].rStDag.dPf}/${obj[1].rStDag.dPfL}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: ${obj[0].rSt.iId}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- MOP: ${obj[0].rSt.mop}</td>
+                                                                                </tr>`;
+                                
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- OF: ${obj[0].rSt.of}</td>
+                                                                                </tr>`;
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Hop rank incerement: ${obj[0].rSt.hRkI}</td>
+                                                                                </tr>`;
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Default lifetime: ${obj[0].rSt.dLt} seconds</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- State: ${obj[1].rStDag.st}</td>
+                                                                                </tr>`;
+                                
+                                                                            if(obj[1].rStDag.pP != 'none') {
+                                
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: ${obj[1].rStDag.pP} (last DTSN: ${obj[1].rStDag.lD})</td>
+                                                                                    </tr>`;
+                                
+                                                                            } else {
+                                
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: none</td>
+                                                                                    </tr>`;
+                                                                            }
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Rank: ${obj[1].rStDag.rk}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Lowest rank: ${obj[1].rStDag.lRk} (${obj[1].rStDag.mRkI})</td>
+                                                                                </tr>`;
+                                                                            
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DTSN out: ${obj[0].rSt.dtsnO}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAO sequence: last sent ${obj[1].rStDag.dao.lS}, last acked ${obj[1].rStDag.dao.lA}</td>
+                                                                                </tr>`;
+                                
+                                                                            dataHTML += `
+                                                                                <tr>
+                                                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Trickle timer: current ${obj[2].rStTt.cur}, min ${obj[2].rStTt.min}, max ${obj[2].rStTt.max}, redundancy ${obj[2].rStTt.red} </td>
+                                                                                </tr>`;
+                                                                        };
+                                                                    };
+                                
+                                                                    dataHTML += `
+                                                                            </tbody>
+                                                                        </table>`;
+                                                                            
+                                                                    consoleData.innerHTML = dataHTML;
+                                
+                                                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                                                    storeButtonSave.addEventListener('click', () => {
+                                                                
+                                                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                    });
+                                
+                                                                } else {
+                                
+                                                                    createErrorTable(obj[2]);
+                                    
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                            <td class="text-warning">ERROR</td>
+                                                                            <td class="text-warning">${obj[2].id.sT}</td>
+                                                                        </tr>`;
+                                
+                                                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                                                    storeButtonSave.addEventListener('click', () => {
+                                                                
+                                                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                    });
+                                                                };
+                                
+                                                                legendDiv.classList.replace('d-none', 'd-show');
+                                                                constructLegend(`
+                                                                    <br>
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>`, undefined);
+                                
+                                                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                                            })
+                                
+                                                        .catch((error) => {
+                                
+                                                            tHTML += `
+                                                                <tr>
+                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                                    <td class="text-warning">INVALID</td>
+                                                                    <td class="text-danger">${error}</td>
+                                                                </tr>`;
+                                
+                                                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                            consoleTableQueryTbody.innerHTML = tHTML;
+                                
+                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                            consoleOutputQuery.innerText = 'FAIL';
+                                
+                                                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                
+                                                            console.log(error);
+                                                        });
+                                                
+                                                }, 1000);
+                                            })
+                
+                                        .catch((error) => {
+                
+                                            tHTML += `
+                                                <tr>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                                    <td class="text-warning">INVALID</td>
+                                                    <td class="text-danger">${error}</td>
+                                                </tr>`;
+                
+                                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                                            consoleTableQueryTbody.innerHTML = tHTML;
+                
+                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                            consoleOutputQuery.innerText = 'FAIL';
+                
+                                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                
+                                            console.log(error);
+                                        });
+                
+                                }, 1000);
                             })
 
                         .catch((error) => {
@@ -5134,476 +6301,6 @@ function simConsole(nodesAddr) {
                         });
 
                 }, 1000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/17`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[1] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[1].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">rpl-status</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>`;
-
-                                    if(obj[1].rStDag.rL == true) {
-
-                                        if(obj[1].rStDag.iId == 'none') {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: none</td>
-                                                </tr>`;
-
-                                        } else {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG ${obj[1].rStDag.dT}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG: ${obj[1].rStDag.dId}, version ${obj[1].rStDag.dVer}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefix: ${obj[1].rStDag.dPf}/${obj[1].rStDag.dPfL}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: ${obj[0].rSt.iId}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- MOP: ${obj[0].rSt.mop}</td>
-                                                </tr>`;
-
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- OF: ${obj[0].rSt.of}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Hop rank incerement: ${obj[0].rSt.hRkI}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Default lifetime: ${obj[0].rSt.dLt} seconds</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- State: ${obj[1].rStDag.st}</td>
-                                                </tr>`;
-
-                                            if(obj[1].rStDag.pP != 'none') {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: ${obj[1].rStDag.pP} (last DTSN: ${obj[1].rStDag.lD})</td>
-                                                    </tr>`;
-
-                                            } else {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: none</td>
-                                                    </tr>`;
-                                            }
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Rank: ${obj[1].rStDag.rk}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Lowest rank: ${obj[1].rStDag.lRk} (${obj[1].rStDag.mRkI})</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DTSN out: ${obj[0].rSt.dtsnO}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAO sequence: last sent ${obj[1].rStDag.dao.lS}, last acked ${obj[1].rStDag.dao.lA}</td>
-                                                </tr>`;
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[1]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[1].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 3000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/18`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[2] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[2].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="1" class="text-center">rpl-status</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2"></td>
-                                                </tr>`;
-
-                                    if(obj[2].rStTt.rL == true) {
-
-                                        if(obj[2].rStTt.iId == 'none') {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: none</td>
-                                                </tr>`;
-
-                                        } else {
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG ${obj[1].rStDag.dT}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG: ${obj[1].rStDag.dId}, version ${obj[1].rStDag.dVer}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefix: ${obj[1].rStDag.dPf}/${obj[1].rStDag.dPfL}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: ${obj[0].rSt.iId}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- MOP: ${obj[0].rSt.mop}</td>
-                                                </tr>`;
-
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- OF: ${obj[0].rSt.of}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Hop rank incerement: ${obj[0].rSt.hRkI}</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Default lifetime: ${obj[0].rSt.dLt} seconds</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- State: ${obj[1].rStDag.st}</td>
-                                                </tr>`;
-
-                                            if(obj[1].rStDag.pP != 'none') {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: ${obj[1].rStDag.pP} (last DTSN: ${obj[1].rStDag.lD})</td>
-                                                    </tr>`;
-
-                                            } else {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: none</td>
-                                                    </tr>`;
-                                            }
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Rank: ${obj[1].rStDag.rk}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Lowest rank: ${obj[1].rStDag.lRk} (${obj[1].rStDag.mRkI})</td>
-                                                </tr>`;
-                                            
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DTSN out: ${obj[0].rSt.dtsnO}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAO sequence: last sent ${obj[1].rStDag.dao.lS}, last acked ${obj[1].rStDag.dao.lA}</td>
-                                                </tr>`;
-
-                                            dataHTML += `
-                                                <tr>
-                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Trickle timer: current ${obj[2].rStTt.cur}, min ${obj[2].rStTt.min}, max ${obj[2].rStTt.max}, redundancy ${obj[2].rStTt.red} </td>
-                                                </tr>`;
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-
-                                } else {
-
-                                    createErrorTable(obj[2]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[2].id.sT}</td>
-                                        </tr>`;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-                
-                }, 5000);
 
                 break;
 
@@ -5676,11 +6373,8 @@ function simConsole(nodesAddr) {
                                             <tbody class="">
                                                 <tr>
                                                     <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="11" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12"></td>
-                                                </tr>`;
+                                                    <td colspan="11" class="text-center">rpl-nbr</td>
+                                                </tr`;
 
                                     if(obj[0].rN.rL == true) {
 
@@ -5746,6 +6440,654 @@ function simConsole(nodesAddr) {
                                 </div>`, undefined);
 
                                 consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                window.setTimeout(() => {
+
+                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/20`)
+                
+                                        .then((response) => response.text())
+                                            .then((text) => {
+                                                
+                                                console.log(text);
+                                                let decodedText = atob(text);
+                
+                                                console.log(decodedText);
+                                                console.log(consoleInputKey.value);
+                
+                                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                
+                                                console.log(decryptedText);
+                                                
+                                                obj[1] = JSON.parse(decryptedText);
+                                                
+                                                if(checksum(decryptedText)) {
+                
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                                            <td class="text-success">INTACT</td>
+                                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                        </tr>`;
+                
+                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                    consoleOutputQuery.innerText = 'OK';
+                
+                                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                
+                                                } else {
+                
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                                            <td class="text-warning">CORRUPTED</td>
+                                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
+                                                        </tr>`;
+                
+                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                    consoleOutputQuery.innerText = 'CORRUPTED';
+                
+                                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                
+                                                }
+                                                
+                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                consoleTableQueryTbody.innerHTML = tHTML;
+                
+                                                consoleH2.classList.replace('d-none', 'd-block');
+                
+                                                if(obj[1].pckt.vld) {
+                
+                                                    dataHTML = `
+                                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                            <tbody class="">
+                                                                <tr>
+                                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                    <td colspan="11" class="text-center">rpl-nbr</td>
+                                                                </tr`;
+                
+                                                    if(obj[1].rNR.rL == true) {
+                
+                                                        if(obj[1].rNR.iId != 'none') {
+                                                            
+                                                            if(obj[1].rNR.c == 0) {
+                
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
+                                                                    </tr>`;
+                                                            
+                                                            } else {
+                        
+                                                                dataHTML += `
+                                                                    <tr>
+                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
+                                                                    </tr>`;
+                        
+                                                                for (let nbr = 0; nbr < obj[1].rNR.c; nbr++) {
+                        
+                                                                    if(obj[1].rNR.ns[nbr] != null) {
+                
+                                                                        dataHTML += `
+                                                                            <tr>
+                                                                                <td colspan="8" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
+                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
+                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
+                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
+                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0">${obj[1].rNR.ns[nbr].rkN}</td>
+                                                                            </tr>`;
+                                                                    };
+                                                                };
+                                                            };
+                                                        };
+                                                    };
+                
+                                                    dataHTML += `
+                                                            </tbody>
+                                                        </table>`;
+                                                            
+                                                    consoleData.innerHTML = dataHTML;
+                
+                                                } else {
+                
+                                                    createErrorTable(obj[1]);
+                    
+                                                    tHTML += `
+                                                        <tr>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                            <td class="text-warning">ERROR</td>
+                                                            <td class="text-warning">${obj[1].id.sT}</td>
+                                                        </tr>`;
+                                                };
+                
+                                                legendDiv.classList.replace('d-none', 'd-show');
+                                                constructLegend(`
+                                                    <br>
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col border">
+                                                                <pre> 
+                                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                </pre>
+                                                            </div>
+                                                            <div class="col border">
+                                                                <pre> 
+                                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
+                                                                </pre>
+                                                            </div>
+                                                        </div>
+                                                    </div>`, undefined);
+                
+                                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                window.setTimeout(() => {
+
+                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/21`)
+                                
+                                                        .then((response) => response.text())
+                                                            .then((text) => {
+                                                                
+                                                                console.log(text);
+                                                                let decodedText = atob(text);
+                                
+                                                                console.log(decodedText);
+                                                                console.log(consoleInputKey.value);
+                                
+                                                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                
+                                                                console.log(decryptedText);
+                                                                
+                                                                obj[2] = JSON.parse(decryptedText);
+                                                                
+                                                                if(checksum(decryptedText)) {
+                                
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                                            <td class="text-success">INTACT</td>
+                                                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                        </tr>`;
+                                
+                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                    consoleOutputQuery.innerText = 'OK';
+                                
+                                                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                
+                                                                } else {
+                                
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                                            <td class="text-warning">CORRUPTED</td>
+                                                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
+                                                                        </tr>`;
+                                
+                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                    consoleOutputQuery.innerText = 'CORRUPTED';
+                                
+                                                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                };
+                                                                
+                                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                consoleTableQueryTbody.innerHTML = tHTML;
+                                
+                                                                consoleH2.classList.replace('d-none', 'd-block');
+                                
+                                                                if(obj[2].pckt.vld) {
+                                
+                                                                    dataHTML = `
+                                                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                            <tbody class="">
+                                                                                <tr>
+                                                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                    <td colspan="11" class="text-center">rpl-nbr</td>
+                                                                                </tr>`;
+                                
+                                                                    if(obj[2].rNV.rL == true) {
+                                
+                                                                        if(obj[2].rNV.iId != 'none') {
+                                                                            
+                                                                            if(obj[2].rNV.c == 0) {
+                                
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
+                                                                                    </tr>`;
+                                                                            
+                                                                            } else {
+                                        
+                                                                                dataHTML += `
+                                                                                    <tr>
+                                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
+                                                                                    </tr>`;
+                                        
+                                                                                for (let nbr = 0; nbr < obj[2].rNV.c; nbr++) {
+                                        
+                                                                                    if(obj[2].rNV.ns[nbr] != null) {
+                                
+                                                                                        dataHTML += `
+                                                                                            <tr>
+                                                                                                <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rkN}</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">--</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[2].rNV.ns[nbr].fr}</td>
+                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">`;
+                                
+                                                                                        if(obj[2].rNV.ns[nbr].r == true) {
+                                
+                                                                                            dataHTML += `r `;
+                                
+                                                                                        } else {
+                                
+                                                                                            dataHTML += `- `;
+                                                                                        };
+                                
+                                                                                        if(obj[2].rNV.ns[nbr].b == true) {
+                                
+                                                                                            dataHTML += `b `;
+                                
+                                                                                        } else {
+                                
+                                                                                            dataHTML += `- `;
+                                                                                        };
+                                
+                                                                                        if(obj[2].rNV.ns[nbr].a == true) {
+                                
+                                                                                            dataHTML += `a `;
+                                
+                                                                                        } else {
+                                
+                                                                                            dataHTML += `- `;
+                                                                                        };
+                                
+                                                                                        if(obj[2].rNV.ns[nbr].f == true) {
+                                
+                                                                                            dataHTML += `f `;
+                                
+                                                                                        } else {
+                                
+                                                                                            dataHTML += `- `;
+                                                                                        };
+                                
+                                                                                        if(obj[2].rNV.ns[nbr].p == true) {
+                                
+                                                                                            dataHTML += `p `;
+                                
+                                                                                        } else {
+                                
+                                                                                            dataHTML += `- `;
+                                                                                        };
+                                
+                                                                                        dataHTML += `
+                                                                                                </td>
+                                                                                            </tr>`;
+                                                                                    };
+                                                                                };
+                                                                            };
+                                                                        };
+                                                                    };
+                                
+                                                                    dataHTML += `
+                                                                            </tbody>
+                                                                        </table>`;
+                                                                            
+                                                                    consoleData.innerHTML = dataHTML;
+                                
+                                                                } else {
+                                
+                                                                    createErrorTable(obj[2]);
+                                    
+                                                                    tHTML += `
+                                                                        <tr>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                            <td class="text-warning">ERROR</td>
+                                                                            <td class="text-warning">${obj[2].id.sT}</td>
+                                                                        </tr>`;
+                                                                };
+                                
+                                                                legendDiv.classList.replace('d-none', 'd-show');
+                                                                constructLegend(`
+                                                                    <br>
+                                                                    <div class="container">
+                                                                        <div class="row">
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                            <div class="col border">
+                                                                                <pre> 
+                                                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
+                                                                                </pre>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>`, undefined);
+                                
+                                                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                                                                window.setTimeout(() => {
+
+                                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/22`)
+                                                
+                                                                        .then((response) => response.text())
+                                                                            .then((text) => {
+                                                                                
+                                                                                console.log(text);
+                                                                                let decodedText = atob(text);
+                                                
+                                                                                console.log(decodedText);
+                                                                                console.log(consoleInputKey.value);
+                                                
+                                                                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+                                                                
+                                                                                console.log(decryptedText);
+                                                                                
+                                                                                obj[3] = JSON.parse(decryptedText);
+                                                                                
+                                                                                if(checksum(decryptedText)) {
+                                                
+                                                                                    tHTML += `
+                                                                                        <tr>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                                            <td class="text-success">INTACT</td>
+                                                                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                                                                        </tr>`;
+                                                
+                                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                                                                    consoleOutputQuery.innerText = 'OK';
+                                                
+                                                                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
+                                                
+                                                                                } else {
+                                                
+                                                                                    tHTML += `
+                                                                                        <tr>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                                            <td class="text-warning">CORRUPTED</td>
+                                                                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
+                                                                                        </tr>`;
+                                                
+                                                                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                                                                    consoleOutputQuery.innerText = 'CORRUPTED';
+                                                
+                                                                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                                                                                };
+                                                                                
+                                                                                consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                                consoleTableQueryTbody.innerHTML = tHTML;
+                                                
+                                                                                consoleH2.classList.replace('d-none', 'd-block');
+                                                
+                                                                                if(obj[3].pckt.vld) {
+                                                
+                                                                                    dataHTML = `
+                                                                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                                                                            <tbody class="">
+                                                                                                <tr>
+                                                                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                                                                                    <td colspan="11" class="text-center">rpl-nbr</td>
+                                                                                                </tr>`;
+                                                
+                                                                                    if(obj[3].rNP.rL == true) {
+                                                
+                                                                                        if(obj[3].rNP.iId != 'none') {
+                                                                                            
+                                                                                            if(obj[3].rNP.c == 0) {
+                                                
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
+                                                                                                    </tr>`;
+                                                                                            
+                                                                                            } else {
+                                                        
+                                                                                                dataHTML += `
+                                                                                                    <tr>
+                                                                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
+                                                                                                    </tr>`;
+                                                        
+                                                                                                for (let nbr = 0; nbr < obj[3].rNP.c; nbr++) {
+                                                        
+                                                                                                    if(obj[3].rNP.ns[nbr] != null) {
+                                                
+                                                                                                        dataHTML += `
+                                                                                                            <tr>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rkN}</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">--</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[2].rNV.ns[nbr].fr}</td>
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">`;
+                                                
+                                                                                                        if(obj[2].rNV.ns[nbr].r == true) {
+                                                
+                                                                                                            dataHTML += `r `;
+                                                
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `- `;
+                                                                                                        };
+                                                
+                                                                                                        if(obj[2].rNV.ns[nbr].b == true) {
+                                                
+                                                                                                            dataHTML += `b `;
+                                                
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `- `;
+                                                                                                        };
+                                                
+                                                                                                        if(obj[2].rNV.ns[nbr].a == true) {
+                                                
+                                                                                                            dataHTML += `a `;
+                                                
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `- `;
+                                                                                                        };
+                                                
+                                                                                                        if(obj[2].rNV.ns[nbr].f == true) {
+                                                
+                                                                                                            dataHTML += `f `;
+                                                
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `- `;
+                                                                                                        };
+                                                
+                                                                                                        if(obj[2].rNV.ns[nbr].p == true) {
+                                                
+                                                                                                            dataHTML += `p `;
+                                                
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `- `;
+                                                                                                        };
+                                                
+                                                                                                        dataHTML += `
+                                                                                                                </td>`;
+                                                
+                                                                                                        dataHTML += `<td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">(</td>`;
+                                                
+                                                                                                        if(obj[3].rNP.ns[nbr].lTx > 0) {
+                                                
+                                                                                                            dataHTML += `
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">last tx ${obj[3].rNP.ns[nbr].lTx} min ago</td>`;
+                                                                                                        
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">no tx</td>`;
+                                                                                                        }
+                                                
+                                                                                                        if(obj[3].rNP.ns[nbr].bS > 0) {
+                                                
+                                                                                                            dataHTML += `
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">, better since ${obj[3].rNP.ns[nbr].bS} min</td>`;
+                                                                                                        
+                                                                                                        } else {
+                                                
+                                                                                                            dataHTML += `
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0"></td>`;
+                                                                                                        }
+                                                
+                                                                                                        dataHTML += `
+                                                                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">)</td>`;
+                                                                                                        
+                                                                                                        dataHTML += `
+                                                                                                            </tr>`;
+                                                                                                    };
+                                                                                                };
+                                                                                            };
+                                                                                        };
+                                                                                    };
+                                                
+                                                                                    dataHTML += `
+                                                                                            </tbody>
+                                                                                        </table>`;
+                                                                                            
+                                                                                    consoleData.innerHTML = dataHTML;
+                                                
+                                                                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                                                                    storeButtonSave.addEventListener('click', () => {
+                                                                                
+                                                                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                                    });
+                                                
+                                                                                } else {
+                                                
+                                                                                    createErrorTable(obj[3]);
+                                                    
+                                                                                    tHTML += `
+                                                                                        <tr>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                                                                            <td class="text-warning">ERROR</td>
+                                                                                            <td class="text-warning">${obj[3].id.sT}</td>
+                                                                                        </tr>`;
+                                                
+                                                                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                                                                    storeButtonSave.addEventListener('click', () => {
+                                                                            
+                                                                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                                                                    });
+                                                                                };
+                                                
+                                                                                legendDiv.classList.replace('d-none', 'd-show');
+                                                                                constructLegend(`
+                                                                                    <br>
+                                                                                    <div class="container">
+                                                                                        <div class="row">
+                                                                                            <div class="col border">
+                                                                                                <pre> 
+                                                                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                                                                                </pre>
+                                                                                            </div>
+                                                                                            <div class="col border">
+                                                                                                <pre> 
+                                                                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
+                                                                                                </pre>
+                                                                                            </div>
+                                                                                            <div class="col border">
+                                                                                                <pre> 
+                                                                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
+                                                                                                </pre>
+                                                                                            </div>
+                                                                                            <div class="col border">
+                                                                                                <pre> 
+                                                                                                    ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)} 
+                                                                                                </pre>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>`, undefined);
+                                                
+                                                                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                                                                            })
+                                                
+                                                                        .catch((error) => {
+                                                
+                                                                            tHTML += `
+                                                                                <tr>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                                    <td class="text-warning">INVALID</td>
+                                                                                    <td class="text-danger">${error}</td>
+                                                                                </tr>`;
+                                                
+                                                                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                                            consoleTableQueryTbody.innerHTML = tHTML;
+                                                
+                                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                                            consoleOutputQuery.innerText = 'FAIL';
+                                                
+                                                                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                                
+                                                                            console.log(error);
+                                                                        });
+                                                
+                                                                }, 1000);
+                                                            })
+                                
+                                                        .catch((error) => {
+                                
+                                                            tHTML += `
+                                                                <tr>
+                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                                    <td class="text-warning">INVALID</td>
+                                                                    <td class="text-danger">${error}</td>
+                                                                </tr>`;
+                                
+                                                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                                                            consoleTableQueryTbody.innerHTML = tHTML;
+                                
+                                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                                            consoleOutputQuery.innerText = 'FAIL';
+                                
+                                                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                                
+                                                            console.log(error);
+                                                        });
+                                
+                                                }, 1000);
+                                            })
+                
+                                        .catch((error) => {
+                
+                                            tHTML += `
+                                                <tr>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                                    <td class="text-warning">INVALID</td>
+                                                    <td class="text-danger">${error}</td>
+                                                </tr>`;
+                
+                                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                                            consoleTableQueryTbody.innerHTML = tHTML;
+                
+                                            consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                                            consoleOutputQuery.innerText = 'FAIL';
+                
+                                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+                
+                                            console.log(error);
+                                        });
+                
+                                }, 1000);
                             })
 
                         .catch((error) => {
@@ -5770,663 +7112,6 @@ function simConsole(nodesAddr) {
                         });
 
                 }, 1000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/20`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[1] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-
-                                }
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[1].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="11" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12"></td>
-                                                </tr>`;
-
-                                    if(obj[1].rNR.rL == true) {
-
-                                        if(obj[1].rNR.iId != 'none') {
-                                            
-                                            if(obj[1].rNR.c == 0) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
-                                                    </tr>`;
-                                            
-                                            } else {
-        
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
-                                                    </tr>`;
-        
-                                                for (let nbr = 0; nbr < obj[1].rNR.c; nbr++) {
-        
-                                                    if(obj[1].rNR.ns[nbr] != null) {
-
-                                                        dataHTML += `
-                                                            <tr>
-                                                                <td colspan="8" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0">${obj[1].rNR.ns[nbr].rkN}</td>
-                                                            </tr>`;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[1]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[1].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 3000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/21`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[2] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[2].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="11" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12"></td>
-                                                </tr>`;
-
-                                    if(obj[2].rNV.rL == true) {
-
-                                        if(obj[2].rNV.iId != 'none') {
-                                            
-                                            if(obj[2].rNV.c == 0) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
-                                                    </tr>`;
-                                            
-                                            } else {
-        
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
-                                                    </tr>`;
-        
-                                                for (let nbr = 0; nbr < obj[2].rNV.c; nbr++) {
-        
-                                                    if(obj[2].rNV.ns[nbr] != null) {
-
-                                                        dataHTML += `
-                                                            <tr>
-                                                                <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rkN}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">--</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[2].rNV.ns[nbr].fr}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">`;
-
-                                                        if(obj[2].rNV.ns[nbr].r == true) {
-
-                                                            dataHTML += `r `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].b == true) {
-
-                                                            dataHTML += `b `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].a == true) {
-
-                                                            dataHTML += `a `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].f == true) {
-
-                                                            dataHTML += `f `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].p == true) {
-
-                                                            dataHTML += `p `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        dataHTML += `
-                                                                </td>
-                                                            </tr>`;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                } else {
-
-                                    createErrorTable(obj[2]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[2].id.sT}</td>
-                                        </tr>`;
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 5000);
-
-                window.setTimeout(() => {
-
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/22`)
-
-                        .then((response) => response.text())
-                            .then((text) => {
-                                
-                                console.log(text);
-                                let decodedText = atob(text);
-
-                                console.log(decodedText);
-                                console.log(consoleInputKey.value);
-
-                                let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
-                
-                                console.log(decryptedText);
-                                
-                                obj[3] = JSON.parse(decryptedText);
-                                
-                                if(checksum(decryptedText)) {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
-                                            <td class="text-success">INTACT</td>
-                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
-                                    consoleOutputQuery.innerText = 'OK';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-success');
-
-                                } else {
-
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
-                                            <td class="text-warning">CORRUPTED</td>
-                                            <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
-                                        </tr>`;
-
-                                    consoleOutputQuery.classList.replace('d-none', 'd-block');
-                                    consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
-                                    consoleOutputQuery.innerText = 'CORRUPTED';
-
-                                    consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
-                                };
-                                
-                                consoleTableQuery.classList.replace('d-none', 'd-block');
-                                consoleTableQueryTbody.innerHTML = tHTML;
-
-                                consoleH2.classList.replace('d-none', 'd-block');
-
-                                if(obj[3].pckt.vld) {
-
-                                    dataHTML = `
-                                        <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
-                                            <tbody class="">
-                                                <tr>
-                                                    <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                                    <td colspan="11" class="text-center">ip_nbr</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12"></td>
-                                                </tr>`;
-
-                                    if(obj[3].rNP.rL == true) {
-
-                                        if(obj[3].rNP.iId != 'none') {
-                                            
-                                            if(obj[3].rNP.c == 0) {
-
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
-                                                    </tr>`;
-                                            
-                                            } else {
-        
-                                                dataHTML += `
-                                                    <tr>
-                                                        <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
-                                                    </tr>`;
-        
-                                                for (let nbr = 0; nbr < obj[3].rNP.c; nbr++) {
-        
-                                                    if(obj[3].rNP.ns[nbr] != null) {
-
-                                                        dataHTML += `
-                                                            <tr>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${obj[0].rN.ns[nbr].ad}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rk},</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].lM}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[1].rNR.ns[nbr].rkN}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">--</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${obj[2].rNV.ns[nbr].fr}</td>
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">`;
-
-                                                        if(obj[2].rNV.ns[nbr].r == true) {
-
-                                                            dataHTML += `r `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].b == true) {
-
-                                                            dataHTML += `b `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].a == true) {
-
-                                                            dataHTML += `a `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].f == true) {
-
-                                                            dataHTML += `f `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        if(obj[2].rNV.ns[nbr].p == true) {
-
-                                                            dataHTML += `p `;
-
-                                                        } else {
-
-                                                            dataHTML += `- `;
-                                                        };
-
-                                                        dataHTML += `
-                                                                </td>`;
-
-                                                        dataHTML += `<td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">(</td>`;
-
-                                                        if(obj[3].rNP.ns[nbr].lTx > 0) {
-
-                                                            dataHTML += `
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">last tx ${obj[3].rNP.ns[nbr].lTx} min ago</td>`;
-                                                        
-                                                        } else {
-
-                                                            dataHTML += `
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">no tx</td>`;
-                                                        }
-
-                                                        if(obj[3].rNP.ns[nbr].bS > 0) {
-
-                                                            dataHTML += `
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">, better since ${obj[3].rNP.ns[nbr].bS} min</td>`;
-                                                        
-                                                        } else {
-
-                                                            dataHTML += `
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0"></td>`;
-                                                        }
-
-                                                        dataHTML += `
-                                                                <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">)</td>`;
-                                                        
-                                                        dataHTML += `
-                                                            </tr>`;
-                                                    };
-                                                };
-                                            };
-                                        };
-                                    };
-
-                                    dataHTML += `
-                                            </tbody>
-                                        </table>`;
-                                            
-                                    consoleData.innerHTML = dataHTML;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
-                                    storeButtonSave.addEventListener('click', () => {
-                                
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-
-                                } else {
-
-                                    createErrorTable(obj[3]);
-    
-                                    tHTML += `
-                                        <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
-                                            <td class="text-warning">ERROR</td>
-                                            <td class="text-warning">${obj[3].id.sT}</td>
-                                        </tr>`;
-
-                                    storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
-                                    storeButtonSave.addEventListener('click', () => {
-                            
-                                        cargoSave(nodesAddr[consoleSelectNode.value], obj);
-                                    });
-                                };
-
-                                legendDiv.classList.replace('d-none', 'd-show');
-                                constructLegend(`
-                                    <br>
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[1], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[2], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                            <div class="col border">
-                                                <pre> 
-                                                    ${JSON.stringify(elaborate(obj[3], checksum(decryptedText)), null, 2)} 
-                                                </pre>
-                                            </div>
-                                        </div>
-                                    </div>`, undefined);
-
-                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-                            })
-
-                        .catch((error) => {
-
-                            tHTML += `
-                                <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
-                                    <td class="text-warning">INVALID</td>
-                                    <td class="text-danger">${error}</td>
-                                </tr>`;
-
-                            consoleTableQuery.classList.replace('d-none', 'd-block');
-                            consoleTableQueryTbody.innerHTML = tHTML;
-
-                            consoleOutputQuery.classList.replace('d-none', 'd-block');
-                            consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
-                            consoleOutputQuery.innerText = 'FAIL';
-
-                            consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
-
-                            console.log(error);
-                        });
-
-                }, 7000);
 
                 break;
         };
@@ -6634,8 +7319,9 @@ function demoRun() {
             demoTableDumpTbody.innerHTML += `
                 <tr>
                     <td>/cargo/system</td>
-                    <td class="text-light bg-success text-center">OK</td>
-                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[0].length}</td>
+                    <td class="text-dark bg-success text-center">OK</td>
+                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                    <td class="text-left text-light">${datarray[0].length}</td>
                 </tr>`;
 
             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/devices`)
@@ -6648,8 +7334,9 @@ function demoRun() {
                 demoTableDumpTbody.innerHTML += `
                     <tr>
                         <td>/cargo/devices</td>
-                        <td class="text-light bg-success text-center">OK</td>
-                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[1].length}</td>
+                        <td class="text-dark bg-success text-center">OK</td>
+                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                        <td class="text-left text-light">${datarray[1].length}</td>
                     </tr>`;
 
                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/energy`)
@@ -6662,8 +7349,9 @@ function demoRun() {
                     demoTableDumpTbody.innerHTML += `
                         <tr>
                             <td>/cargo/energy</td>
-                            <td class="text-light bg-success text-center">OK</td>
-                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[2].length}</td>
+                            <td class="text-dark bg-success text-center">OK</td>
+                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                            <td class="text-left text-light">${datarray[2].length}</td>
                         </tr>`;
 
                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/network/ip`)
@@ -6676,8 +7364,9 @@ function demoRun() {
                         demoTableDumpTbody.innerHTML += `
                             <tr>
                                 <td>/cargo/stats/network/ip</td>
-                                <td class="text-light bg-success text-center">OK</td>
-                                <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[3].length}</td>
+                                <td class="text-dark bg-success text-center">OK</td>
+                                <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                <td class="text-left text-light">${datarray[3].length}</td>
                             </tr>`;
 
                         fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/network/icmp`)
@@ -6690,8 +7379,9 @@ function demoRun() {
                             demoTableDumpTbody.innerHTML += `
                                 <tr>
                                     <td>/cargo/stats/network/icmp</td>
-                                    <td class="text-light bg-success text-center">OK</td>
-                                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[4].length}</td>
+                                    <td class="text-dark bg-success text-center">OK</td>
+                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                    <td class="text-left text-light">${datarray[4].length}</td>
                                 </tr>`;
 
                             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/transport`)
@@ -6704,8 +7394,9 @@ function demoRun() {
                                 demoTableDumpTbody.innerHTML += `
                                     <tr>
                                         <td>/cargo/stats/transport</td>
-                                        <td class="text-light bg-success text-center">OK</td>
-                                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[5].length}</td>
+                                        <td class="text-dark bg-success text-center">OK</td>
+                                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                        <td class="text-left text-light">${datarray[5].length}</td>
                                     </tr>`;
     
                                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/stats/discovery`)
@@ -6718,8 +7409,9 @@ function demoRun() {
                                     demoTableDumpTbody.innerHTML += `
                                         <tr>
                                             <td>/cargo/stats/discovery</td>
-                                            <td class="text-light bg-success text-center">OK</td>
-                                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[6].length}</td>
+                                            <td class="text-dark bg-success text-center">OK</td>
+                                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                            <td class="text-left text-light">${datarray[6].length}</td>
                                         </tr>`;
         
                                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipaddr`)
@@ -6732,8 +7424,9 @@ function demoRun() {
                                         demoTableDumpTbody.innerHTML += `
                                             <tr>
                                                 <td>/cargo/cmd/ipaddr</td>
-                                                <td class="text-light bg-success text-center">OK</td>
-                                                <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[7].length}</td>
+                                                <td class="text-dark bg-success text-center">OK</td>
+                                                <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                <td class="text-left text-light">${datarray[7].length}</td>
                                             </tr>`;
             
                                         fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/ipaddr`)
@@ -6746,8 +7439,9 @@ function demoRun() {
                                             demoTableDumpTbody.innerHTML += `
                                                 <tr>
                                                     <td>/cargo/cmd/ipnbr/ipaddrr</td>
-                                                    <td class="text-light bg-success text-center">OK</td>
-                                                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[8].length}</td>
+                                                    <td class="text-dark bg-success text-center">OK</td>
+                                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                    <td class="text-left text-light">${datarray[8].length}</td>
                                                 </tr>`;
                 
                                             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/lladdr`)
@@ -6760,8 +7454,9 @@ function demoRun() {
                                                 demoTableDumpTbody.innerHTML += `
                                                     <tr>
                                                         <td>/cargo/cmd/ipnbr/lladdr</td>
-                                                        <td class="text-light bg-success text-center">OK</td>
-                                                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[9].length}</td>
+                                                        <td class="text-dark bg-success text-center">OK</td>
+                                                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                        <td class="text-left text-light">${datarray[9].length}</td>
                                                     </tr>`;
                     
                                                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/info`)
@@ -6774,8 +7469,9 @@ function demoRun() {
                                                     demoTableDumpTbody.innerHTML += `
                                                         <tr>
                                                             <td>/cargo/cmd/ipnbr/info</td>
-                                                            <td class="text-light bg-success text-center">OK</td>
-                                                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[10].length}</td>
+                                                            <td class="text-dark bg-success text-center">OK</td>
+                                                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                            <td class="text-left text-light">${datarray[10].length}</td>
                                                         </tr>`;
                         
                                                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/default`)
@@ -6788,8 +7484,9 @@ function demoRun() {
                                                         demoTableDumpTbody.innerHTML += `
                                                             <tr>
                                                                 <td>/cargo/cmd/routes/default</td>
-                                                                <td class="text-light bg-success text-center">OK</td>
-                                                                <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[11].length}</td>
+                                                                <td class="text-dark bg-success text-center">OK</td>
+                                                                <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                <td class="text-left text-light">${datarray[11].length}</td>
                                                             </tr>`;
                             
                                                         fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/sources`)
@@ -6802,8 +7499,9 @@ function demoRun() {
                                                             demoTableDumpTbody.innerHTML += `
                                                                 <tr>
                                                                     <td>/cargo/cmd/routes/links/sources</td>
-                                                                    <td class="text-light bg-success text-center">OK</td>
-                                                                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[12].length}</td>
+                                                                    <td class="text-dark bg-success text-center">OK</td>
+                                                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                    <td class="text-left text-light">${datarray[12].length}</td>
                                                                 </tr>`;
                                 
                                                             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/destinations`)
@@ -6816,8 +7514,9 @@ function demoRun() {
                                                                 demoTableDumpTbody.innerHTML += `
                                                                     <tr>
                                                                         <td>/cargo/cmd/routes/links/destinations</td>
-                                                                        <td class="text-light bg-success text-center">OK</td>
-                                                                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[13].length}</td>
+                                                                        <td class="text-dark bg-success text-center">OK</td>
+                                                                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                        <td class="text-left text-light">${datarray[13].length}</td>
                                                                     </tr>`;
                                     
                                                                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/routes`)
@@ -6830,8 +7529,9 @@ function demoRun() {
                                                                     demoTableDumpTbody.innerHTML += `
                                                                         <tr>
                                                                             <td>/cargo/cmd/routes/entries/routes</td>
-                                                                            <td class="text-light bg-success text-center">OK</td>
-                                                                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[14].length}</td>
+                                                                            <td class="text-dark bg-success text-center">OK</td>
+                                                                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                            <td class="text-left text-light">${datarray[14].length}</td>
                                                                         </tr>`;
                                         
                                                                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/vias`)
@@ -6844,8 +7544,9 @@ function demoRun() {
                                                                         demoTableDumpTbody.innerHTML += `
                                                                             <tr>
                                                                                 <td>/cargo/cmd/routes/entries/vias</td>
-                                                                                <td class="text-light bg-success text-center">OK</td>
-                                                                                <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[15].length}</td>
+                                                                                <td class="text-dark bg-success text-center">OK</td>
+                                                                                <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                <td class="text-left text-light">${datarray[15].length}</td>
                                                                             </tr>`;
                                                                         
                                                                         fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/id`)
@@ -6858,8 +7559,9 @@ function demoRun() {
                                                                             demoTableDumpTbody.innerHTML += `
                                                                                 <tr>
                                                                                     <td>/cargo/cmd/rplstatus/id</td>
-                                                                                    <td class="text-light bg-success text-center">OK</td>
-                                                                                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[16].length}</td>
+                                                                                    <td class="text-dark bg-success text-center">OK</td>
+                                                                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                    <td class="text-left text-light">${datarray[16].length}</td>
                                                                                 </tr>`;
                                                 
                                                                             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/dag`)
@@ -6872,8 +7574,9 @@ function demoRun() {
                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                     <tr>
                                                                                         <td>/cargo/cmd/rplstatus/dag</td>
-                                                                                        <td class="text-light bg-success text-center">OK</td>
-                                                                                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[17].length}</td>
+                                                                                        <td class="text-dark bg-success text-center">OK</td>
+                                                                                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                        <td class="text-left text-light">${datarray[17].length}</td>
                                                                                     </tr>`;
                                                     
                                                                                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/time`)
@@ -6886,8 +7589,9 @@ function demoRun() {
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                         <tr>
                                                                                             <td>/cargo/cmd/rplstatus/time</td>
-                                                                                            <td class="text-light bg-success text-center">OK</td>
-                                                                                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[18].length}</td>
+                                                                                            <td class="text-dark bg-success text-center">OK</td>
+                                                                                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                            <td class="text-left text-light">${datarray[18].length}</td>
                                                                                         </tr>`;
                                                         
                                                                                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/addr`)
@@ -6900,8 +7604,9 @@ function demoRun() {
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                             <tr>
                                                                                                 <td>/cargo/cmd/rplnbr/addr</td>
-                                                                                                <td class="text-light bg-success text-center">OK</td>
-                                                                                                <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[19].length}</td>
+                                                                                                <td class="text-dark bg-success text-center">OK</td>
+                                                                                                <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                                <td class="text-left text-light">${datarray[19].length}</td>
                                                                                             </tr>`;
                                                             
                                                                                         fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/ranks`)
@@ -6914,8 +7619,9 @@ function demoRun() {
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
                                                                                                     <td>/cargo/cmd/rplnbr/ranks</td>
-                                                                                                    <td class="text-light bg-success text-center">OK</td>
-                                                                                                    <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[20].length}</td>
+                                                                                                    <td class="text-dark bg-success text-center">OK</td>
+                                                                                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                                    <td class="text-left text-light">${datarray[20].length}</td>
                                                                                                 </tr>`;
                                                                 
                                                                                             fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/values`)
@@ -6928,8 +7634,9 @@ function demoRun() {
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
                                                                                                         <td>/cargo/cmd/rplnbr/values</td>
-                                                                                                        <td class="text-light bg-success text-center">OK</td>
-                                                                                                        <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[21].length}</td>
+                                                                                                        <td class="text-dark bg-success text-center">OK</td>
+                                                                                                        <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                                        <td class="text-left text-light">${datarray[21].length}</td>
                                                                                                     </tr>`;
                                                                     
                                                                                                 fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/parens`)
@@ -6942,8 +7649,9 @@ function demoRun() {
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
                                                                                                             <td>/cargo/cmd/rplnbr/parens</td>
-                                                                                                            <td class="text-light bg-success text-center">OK</td>
-                                                                                                            <td class="text-right"><span class="text-secondary"> docs: </span>${datarray[22].length}</td>
+                                                                                                            <td class="text-dark bg-success text-center">OK</td>
+                                                                                                            <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                                            <td class="text-left text-light">${datarray[22].length}</td>
                                                                                                         </tr>`;
                                                                         
                                                                                                     fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/errors`)
@@ -6956,8 +7664,9 @@ function demoRun() {
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
                                                                                                                 <td>/cargo/errors</td>
-                                                                                                                <td class="text-light bg-success text-center">OK</td>
-                                                                                                                <td class="text-right text-warning"><span class="text-secondary"> errors: </span>${datarray[23].length}</td>
+                                                                                                                <td class="text-dark bg-success text-center">OK</td>
+                                                                                                                <td class="text-right text-warning"><span class="text-secondary"> errors: </span></td>
+                                                                                                                <td class="text-left text-warning">${datarray[23].length}</td>
                                                                                                             </tr>`;
                                                                             
                                                                                                         endFetch(datarray);
@@ -6974,7 +7683,7 @@ function demoRun() {
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                                     <tr>
                                                                                                                         <td>/cargo/errors</td>
-                                                                                                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                                                     </tr>`;
                                                                                                     })
@@ -6990,7 +7699,7 @@ function demoRun() {
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                                 <tr>
                                                                                                                     <td>/cargo/cmd/rplnbr/parens</td>
-                                                                                                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                                                 </tr>`;
                                                                                                 })
@@ -7006,7 +7715,7 @@ function demoRun() {
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
                                                                                                                 <td>/cargo/cmd/rplnbr/values</td>
-                                                                                                                <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                                <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                 <td class="text-danger text-center">${err}</td>
                                                                                                             </tr>`;
                                                                                             })
@@ -7022,7 +7731,7 @@ function demoRun() {
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
                                                                                                             <td>/cargo/cmd/rplnbr/ranks</td>
-                                                                                                            <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                            <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                             <td class="text-danger text-center">${err}</td>
                                                                                                         </tr>`;
                                                                                         })
@@ -7038,7 +7747,7 @@ function demoRun() {
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
                                                                                                         <td>/cargo/cmd/rplnbr/addr</td>
-                                                                                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                                     </tr>`;
                                                                                     })
@@ -7054,7 +7763,7 @@ function demoRun() {
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
                                                                                                     <td>/cargo/cmd/rplstatus/time</td>
-                                                                                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                     <td class="text-danger">${err}</td>
                                                                                                 </tr>`;
                                                                                 })
@@ -7070,7 +7779,7 @@ function demoRun() {
                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                             <tr>
                                                                                                 <td>/cargo/cmd/rplstatus/dag</td>
-                                                                                                <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                                <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                 <td class="text-danger text-center">${err}</td>
                                                                                             </tr>`;
                                                                             })
@@ -7086,7 +7795,7 @@ function demoRun() {
                                                                             demoTableDumpTbody.innerHTML += `
                                                                                         <tr>
                                                                                             <td>/cargo/cmd/rplstatus/id</td>
-                                                                                            <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                            <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                             <td class="text-danger text-center">${err}</td>
                                                                                         </tr>`;
                                                                         })
@@ -7102,7 +7811,7 @@ function demoRun() {
                                                                         demoTableDumpTbody.innerHTML += `
                                                                                     <tr>
                                                                                         <td>/cargo/cmd/routes/entries/vias</td>
-                                                                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                     </tr>`;
                                                                     })
@@ -7118,7 +7827,7 @@ function demoRun() {
                                                                     demoTableDumpTbody.innerHTML += `
                                                                                 <tr>
                                                                                     <td>/cargo/cmd/routes/entries/routes</td>
-                                                                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                 </tr>`;
                                                                 })
@@ -7134,7 +7843,7 @@ function demoRun() {
                                                                 demoTableDumpTbody.innerHTML += `
                                                                             <tr>
                                                                                 <td>/cargo/cmd/routes/links/destinations</td>
-                                                                                <td class="text-light bg-danger text-center">FAIL</td>
+                                                                                <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                 <td class="text-danger text-center">${err}</td>
                                                                             </tr>`;
                                                             })
@@ -7150,7 +7859,7 @@ function demoRun() {
                                                             demoTableDumpTbody.innerHTML += `
                                                                         <tr>
                                                                             <td>/cargo/cmd/routes/links/sources</td>
-                                                                            <td class="text-light bg-danger text-center">FAIL</td>
+                                                                            <td class="text-dark bg-danger text-center">FAIL</td>
                                                                             <td class="text-danger text-center">${err}</td>
                                                                         </tr>`;
                                                         })
@@ -7166,7 +7875,7 @@ function demoRun() {
                                                         demoTableDumpTbody.innerHTML += `
                                                                     <tr>
                                                                         <td>/cargo/cmd/routes/default</td>
-                                                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                                                         <td class="text-danger text-center">${err}</td>
                                                                     </tr>`;
                                                     })
@@ -7182,7 +7891,7 @@ function demoRun() {
                                                     demoTableDumpTbody.innerHTML += `
                                                                 <tr>
                                                                     <td>/cargo/cmd/ipnbr/info</td>
-                                                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                                                     <td class="text-danger text-center">${err}</td>
                                                                 </tr>`;
                                                 })
@@ -7198,7 +7907,7 @@ function demoRun() {
                                                 demoTableDumpTbody.innerHTML += `
                                                             <tr>
                                                                 <td>/cargo/cmd/ipnbr/lladdr'</td>
-                                                                <td class="text-light bg-danger text-center">FAIL</td>
+                                                                <td class="text-dark bg-danger text-center">FAIL</td>
                                                                 <td class="text-danger text-center">${err}</td>
                                                             </tr>`;
                                             })
@@ -7214,7 +7923,7 @@ function demoRun() {
                                             demoTableDumpTbody.innerHTML += `
                                                         <tr>
                                                             <td>/cargo/cmd/ipnbr/ipaddr</td>
-                                                            <td class="text-light bg-danger text-center">FAIL</td>
+                                                            <td class="text-dark bg-danger text-center">FAIL</td>
                                                             <td class="text-danger text-center">${err}</td>
                                                         </tr>`;
                                         })
@@ -7230,7 +7939,7 @@ function demoRun() {
                                         demoTableDumpTbody.innerHTML += `
                                                     <tr>
                                                         <td>/cargo/cmd/ipaddr</td>
-                                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                                         <td class="text-danger text-center">${err}</td>
                                                     </tr>`;
                                     })
@@ -7246,7 +7955,7 @@ function demoRun() {
                                     demoTableDumpTbody.innerHTML += `
                                                 <tr>
                                                     <td>/cargo/stats/discovery</td>
-                                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                                     <td class="text-danger text-center">${err}</td>
                                                 </tr>`;
                                 })
@@ -7262,7 +7971,7 @@ function demoRun() {
                                 demoTableDumpTbody.innerHTML += `
                                             <tr>
                                                 <td>/cargo/stats/transport</td>
-                                                <td class="text-light bg-danger text-center">FAIL</td>
+                                                <td class="text-dark bg-danger text-center">FAIL</td>
                                                 <td class="text-danger text-center">${err}</td>
                                             </tr>`;
                             })
@@ -7278,7 +7987,7 @@ function demoRun() {
                             demoTableDumpTbody.innerHTML += `
                                         <tr>
                                             <td>/cargo/stats/network/icmp</td>
-                                            <td class="text-light bg-danger text-center">FAIL</td>
+                                            <td class="text-dark bg-danger text-center">FAIL</td>
                                             <td class="text-danger text-center">${err}</td>
                                         </tr>`;
                         })
@@ -7294,7 +8003,7 @@ function demoRun() {
                         demoTableDumpTbody.innerHTML += `
                                     <tr>
                                         <td>/cargo/stats/network/ip</td>
-                                        <td class="text-light bg-danger text-center">FAIL</td>
+                                        <td class="text-dark bg-danger text-center">FAIL</td>
                                         <td class="text-danger text-center">${err}</td>
                                     </tr>`;
                     })
@@ -7310,7 +8019,7 @@ function demoRun() {
                     demoTableDumpTbody.innerHTML += `
                                 <tr>
                                     <td>/cargo/energy</td>
-                                    <td class="text-light bg-danger text-center">FAIL</td>
+                                    <td class="text-dark bg-danger text-center">FAIL</td>
                                     <td class="text-danger text-center">${err}</td>
                                 </tr>`;
                 })
@@ -7326,7 +8035,7 @@ function demoRun() {
                 demoTableDumpTbody.innerHTML += `
                             <tr>
                                 <td>/cargo/devices</td>
-                                <td class="text-light bg-danger text-center">FAIL</td>
+                                <td class="text-dark bg-danger text-center">FAIL</td>
                                 <td class="text-danger text-center">${err}</td>
                             </tr>`;
             })
@@ -7342,7 +8051,7 @@ function demoRun() {
             demoTableDumpTbody.innerHTML += `
                         <tr>
                             <td>/cargo/system</td>
-                            <td class="text-light bg-danger text-center">FAIL</td>
+                            <td class="text-dark bg-danger text-center">FAIL</td>
                             <td class="text-danger text-center">${err}</td>
                         </tr>`;
         })

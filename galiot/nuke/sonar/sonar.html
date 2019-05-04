@@ -355,9 +355,9 @@
 
         <div class="container justify-content-center m-auto p-auto d-none" id="store-div-save">
                 
-            <div class="row">
+            <div class="row justify-content-center">
                 
-                <div class="col-8 input-group" id="store-input">
+                <div class="col-12 input-group" id="store-input">
                     <div class="input-group-prepend">
                         <button class="btn btn-primary" type="button" id="store-button-post">POST</button>  
                     </div>
@@ -373,11 +373,17 @@
                         <span class="input-group-text">/</span>  
                     </div>
                     <input type="text" class="form-control" value='api/cargo' id="store-input-path"></input>
+                    <select class="text-center custom-select bg-secondary text-light" id="store-select"></select>
+                    <div class="input-group-append"> 
+                            <span class="input-group-text text-center border-0 text-light bg-dark">OR</span>  
+                        </div>
+                        <button class="btn btn-warning text-center justify-content-center" type="button" id="store-button-save-all">save all</button>  
+                    
                 </div>
 
-                <div class="col-4"> 
-                    <select class="text-center custom-select  bg-dark text-light" id="store-select"></select> 
-                </div>
+                <!-- <div class="col-2"> 
+                    
+                </div> -->
             
             </div>
             
@@ -409,6 +415,16 @@
 
             </div>
         </div>
+
+        <div class="row">
+                <div class="col-4 d-none container m-auto p-auto" id="store-table">
+                    <table class="table table-sm table-striped table-dark">
+                        <tbody id="store-table-tbody">
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
         <br>
         <br>
