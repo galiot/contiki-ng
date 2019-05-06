@@ -1324,7 +1324,6 @@ storeButtonClear.addEventListener('click', () => {
 
     storeTable.classList.replace('d-block', 'd-none');
     storeTableTbody.innerHTML = '';
-
 });
 
 // DATABASE
@@ -1338,6 +1337,20 @@ databaseButtonClear.addEventListener('click', () => {
     databaseResponse.innerHTML = '';
 
     databaseButtonDrop.classList.replace('d-block', 'd-none');
+});
+
+// DEMO
+
+demoButtonClear.addEventListener('click', () => {
+
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success'); databaseDiv.classList.add('border-primary');
+
+    demoButtonDump.classList.replace('d-none', 'd-block');
+
+    demoOutputDump.classList.replace('d-block', 'd-none');
+
+    demoTableDump.classList.replace('d-block', 'd-none');
+    demoTableDumpTbody.innerHTML = '';
 });
 
 
