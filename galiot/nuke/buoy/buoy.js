@@ -4719,7 +4719,7 @@ router.route('/cargo/cmd/routes/:cmd_routes_id')
 router.route('/cargo/cmd/routes/links/sources')
     .get(tug.cmd_routes_routingLinks_sources.index)
     .delete(tug.cmd_routes_routingLinks_sources.drop);
-router.route('/cargo/cmd/routes/links/:cmd_routes_routingLinks_sources_id')
+router.route('/cargo/cmd/routes/links/sources/:cmd_routes_routingLinks_sources_id')
     .get(tug.cmd_routes_routingLinks_sources.view)
     .delete(tug.cmd_routes_routingLinks_sources.erase);
 
