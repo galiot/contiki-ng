@@ -1455,8 +1455,6 @@ function checksum(decryptedResponse) {
         let intact = false;
         return intact;
     }
-
-   
 }
 
 function constructIntactness() {
@@ -7285,7 +7283,7 @@ function demoRun() {
         demoTableDumpTbody.innerHTML = '';
 
         // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/system', datarray, 0, demoTableDumpTbody, 
-        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/devices', datarray, 1, demoTableDumpTbody, 
+        // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/device', datarray, 1, demoTableDumpTbody, 
         // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/energy', datarray, 2, demoTableDumpTbody,
         // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/network/ip', datarray, 3, demoTableDumpTbody, 
         // cargoFetch(databaseInputAddress.value, databaseInputPort.value, '/cargo/stats/network/icmp', datarray, 4, demoTableDumpTbody,
@@ -7324,7 +7322,7 @@ function demoRun() {
                     <td class="text-left text-light">${datarray[0].length}</td>
                 </tr>`;
 
-            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/devices`)
+            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/device`)
 
             .then(res => res.json())
             .then(data => {
@@ -7333,7 +7331,7 @@ function demoRun() {
 
                 demoTableDumpTbody.innerHTML += `
                     <tr>
-                        <td>/cargo/devices</td>
+                        <td>/cargo/device</td>
                         <td class="text-dark bg-success text-center">OK</td>
                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                         <td class="text-left text-light">${datarray[1].length}</td>
@@ -8034,7 +8032,7 @@ function demoRun() {
     
                 demoTableDumpTbody.innerHTML += `
                             <tr>
-                                <td>/cargo/devices</td>
+                                <td>/cargo/device</td>
                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                 <td class="text-danger text-center">${err}</td>
                             </tr>`;

@@ -2521,6 +2521,9 @@ db.once('open', function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var tug = {
+
+
+
     system: {
         index: function (req, res) {
             System.find(function (err, system) {
@@ -2559,8 +2562,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            System.findById(req.params.system_id, function(err, system) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: system 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            System.deleteOne({_id: req.params.system_id}, function(err, system) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     device: {
         index: function (req, res) {
             Device.find(function (err, device) {
@@ -2599,8 +2643,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Device.findById(req.params.device_id, function(err, device) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: device 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Device.deleteOne({_id: req.params.device_id}, function(err, device) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     energest: {
         index: function (req, res) {
             Energest.find(function (err, energest) {
@@ -2639,8 +2724,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Energest.findById(req.params.energest_id, function(err, energest) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: energest 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Energest.deleteOne({_id: req.params.energest_id}, function(err, energest) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     stats_network_ip: {
         index: function (req, res) {
             Stats_network_ip.find(function (err, stats_network_ip) {
@@ -2679,8 +2805,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Stats_network_ip.findById(req.params.stats_network_ip_id, function(err, stats_network_ip) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_network_ip 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Stats_network_ip.deleteOne({_id: req.params.stats_network_ip_id}, function(err, stats_network_ip) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+    
     stats_network_icmp: {
         index: function (req, res) {
             Stats_network_icmp.find(function (err, stats_network_icmp) {
@@ -2719,8 +2886,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Stats_network_icmp.findById(req.params.stats_network_icmp_id, function(err, stats_network_icmp) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_network_icmp 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Stats_network_icmp.deleteOne({_id: req.params.stats_network_icmp_id}, function(err, stats_network_icmp) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     stats_transport: {
         index: function (req, res) {
             Stats_transport.find(function (err, stats_transport) {
@@ -2759,8 +2967,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Stats_transport.findById(req.params.stats_transport_id, function(err, stats_transport) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_transport 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Stats_transport.deleteOne({_id: req.params.stats_transport_id}, function(err, stats_transport) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     stats_discovery: {
         index: function (req, res) {
             Stats_discovery.find(function (err, stats_discovery) {
@@ -2799,8 +3048,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Stats_discovery.findById(req.params.stats_discovery_id, function(err, stats_discovery) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: stats_discovery 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Stats_discovery.deleteOne({_id: req.params.stats_discovery_id}, function(err, stats_discovery) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_ipAddr: {
         index: function (req, res) {
             Cmd_ipAddr.find(function (err, cmd_ipAddr) {
@@ -2839,8 +3129,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_ipAddr.findById(req.params.cmd_ipAddr_id, function(err, cmd_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_ipAddr 
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_ipAddr.deleteOne({_id: req.params.cmd_ipAddr_id}, function(err, cmd_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_IpNeighbors_ipAddr: {
         index: function (req, res) {
             Cmd_IpNeighbors_ipAddr.find(function (err, cmd_IpNeighbors_ipAddr) {
@@ -2879,8 +3210,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_IpNeighbors_ipAddr.findById(req.params.cmd_IpNeighbors_ipAddr_id, function(err, cmd_IpNeighbors_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_ipAddr
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_IpNeighbors_ipAddr.deleteOne({_id: cmd_IpNeighbors_ipAddr_id}, function(err, cmd_IpNeighbors_ipAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_IpNeighbors_llAddr: {
         index: function (req, res) {
             Cmd_ipNeighbors_llAddr.find(function (err, cmd_IpNeighbors_llAddr) {
@@ -2919,8 +3291,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_ipNeighbors_llAddr.findById(req.params.cmd_IpNeighbors_llAddr_id, function(err, cmd_IpNeighbors_llAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_llAddr
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_ipNeighbors_llAddr.deleteOne({_id: req.params.cmd_IpNeighbors_llAddr_id}, function(err, cmd_IpNeighbors_llAddr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_IpNeighbors_info: {
         index: function (req, res) {
             Cmd_ipNeighbors_info.find(function (err, cmd_IpNeighbors_info) {
@@ -2959,8 +3372,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_ipNeighbors_info.findById(req.params.cmd_IpNeighbors_info_id, function(err, cmd_IpNeighbors_info) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_IpNeighbors_info
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_ipNeighbors_info.deleteOne({_id: req.params.cmd_IpNeighbors_info_id}, function(err, cmd_IpNeighbors_info) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_routes: {
         index: function (req, res) {
             Cmd_routes.find(function (err, cmd_routes) {
@@ -2999,8 +3453,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_routes.findById(req.params.cmd_routes_id, function(err, cmd_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_routes.deleteOne({_id: req.params.cmd_routes_id}, function(err, cmd_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_routes_routingLinks_sources: {
         index: function (req, res) {
             Cmd_routes_routingLinks_sources.find(function (err, cmd_routes_routingLinks_sources) {
@@ -3039,8 +3534,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_routes_routingLinks_sources.findById(req.params.cmd_routes_routingLinks_sources_id, function(err, cmd_routes_routingLinks_sources) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingLinks_sources
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_routes_routingLinks_sources.deleteOne({_id: req.params.cmd_routes_routingLinks_sources_id}, function(err, cmd_routes_routingLinks_sources) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_routes_routingLinks_destinations: {
         index: function (req, res) {
             Cmd_routes_routingLinks_destinations.find(function (err, cmd_routes_routingLinks_destinations) {
@@ -3079,8 +3615,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_routes_routingLinks_destinations.findById(req.params.cmd_routes_routingLinks_destinations_id, function(err, cmd_routes_routingLinks_destinations) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingLinks_destinations
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_routes_routingLinks_destinations.deleteOne({_id: req.params.cmd_routes_routingLinks_destinations_id}, function(err, cmd_routes_routingLinks_destinations) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_routes_routingEntries_routes: {
         index: function (req, res) {
             Cmd_routes_routingEntries_routes.find(function (err, cmd_routes_routingEntries_routes) {
@@ -3119,8 +3696,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_routes_routingEntries_routes.findById(req.params.cmd_routes_routingEntries_routes_id, function(err, cmd_routes_routingEntries_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingEntries_routes
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_routes_routingEntries_routes.deleteOne({_id: req.params.cmd_routes_routingEntries_routes_id}, function(err, cmd_routes_routingEntries_routes) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_routes_routingEntries_vias: {
         index: function (req, res) {
             Cmd_routes_routingEntries_vias.find(function (err, cmd_routes_routingEntries_vias) {
@@ -3159,8 +3777,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_routes_routingEntries_vias.findById(req.params.cmd_routes_routingEntries_vias_id, function(err, cmd_routes_routingEntries_vias) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_routes_routingEntries_vias
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_routes_routingEntries_vias.deleteOne({_id: req.params.cmd_routes_routingEntries_vias_id}, function(err, cmd_routes_routingEntries_vias) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplStatus: {
         index: function (req, res) {
             Cmd_rplStatus.find(function (err, cmd_rplStatus) {
@@ -3199,8 +3858,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplStatus.findById(req.params.cmd_rplStatus_id, function(err, cmd_rplStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplStatus
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplStatus.deleteOne({_id: req.params.cmd_rplStatus_id}, function(err, cmd_rplStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplStatus_dag: {
         index: function (req, res) {
             Cmd_rplStatus_dag.find(function (err, cmd_rplStatus_dag) {
@@ -3239,8 +3939,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplStatus_dag.findById(req.params.cmd_rplStatus_dag_id, function(err, cmd_rplStatus_dag) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplStatus_dag
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplStatus_dag.deleteOne({_id: req.params.cmd_rplStatus_dag_id}, function(err, cmd_rplStatus_dag) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplStatus_trickleTimer: {
         index: function (req, res) {
             Cmd_rplStatus_trickleTimer.find(function (err, cmd_rplStatus_trickleTimer) {
@@ -3279,8 +4020,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplStatus_trickleTimer.findById(req.params.cmd_rplStatus_trickleTimer_id, function(err, cmd_rplStatus_trickleTimer) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplStatus_trickleTimer
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplStatus_trickleTimer.deleteOne({_id: req.params.cmd_rplStatus_trickleTimer_id}, function(err, cmd_rplStatus_trickleTimer) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplNbr_addr: {
         index: function (req, res) {
             Cmd_rplNbr_addr.find(function (err, cmd_rplNbr_addr) {
@@ -3319,8 +4101,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplNbr_addr.findById(req.params.cmd_rplNbr_addr_id, function(err, cmd_rplNbr_addr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_addr
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplNbr_addr.deleteOne({_id: req.params.cmd_rplNbr_addr_id}, function(err, cmd_rplNbr_addr) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplNbr_ranks: {
         index: function (req, res) {
             Cmd_rplNbr_ranks.find(function (err, cmd_rplNbr_ranks) {
@@ -3359,8 +4182,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplNbr_ranks.findById(req.params.cmd_rplNbr_ranks_id, function(err, cmd_rplNbr_ranks) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_ranks
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplNbr_ranks.deleteOne({_id: req.params.cmd_rplNbr_ranks_id}, function(err, cmd_rplNbr_ranks) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplNbr_values: {
         index: function (req, res) {
             Cmd_rplNbr_values.find(function (err, cmd_rplNbr_values) {
@@ -3399,8 +4263,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplNbr_values.findById(req.params.cmd_rplNbr_values_id, function(err, cmd_rplNbr_values) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_values
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplNbr_values.deleteOne({_id: req.params.cmd_rplNbr_values_id}, function(err, cmd_rplNbr_values) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     cmd_rplNbr_parens: {
         index: function (req, res) {
             Cmd_rplNbr_parens.find(function (err, cmd_rplNbr_parens) {
@@ -3439,8 +4344,49 @@ var tug = {
                     });
                 };
             });
+        },
+        view: function (req, res) {
+            Cmd_rplNbr_parens.findById(req.params.cmd_rplNbr_parens_id, function(err, cmd_rplNbr_parens) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_rplNbr_parens
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_rplNbr_parens.deleteOne({_id: req.params.cmd_rplNbr_parens_id}, function(err, cmd_rplNbr_parens) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
         }
     },
+
+
+
     errorReport: {
         index: function (req, res) {
             ErrorReport.find(function (err, errorReport) {
@@ -3463,6 +4409,44 @@ var tug = {
         },
         drop: function (req, res) {
             ErrorReport.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
+        },
+        view: function (req, res) {
+            ErrorReport.findById(req.params.errorReport_id, function(err, errorReport) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: errorReport
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            ErrorReport.deleteOne({_id: req.params.errorReport_id}, function(err, errorReport) {
                 if (err) {
                     res.json({
                         status: 'error',  
@@ -3551,7 +4535,7 @@ router.get('/cargo', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/system', '/devices', '/energy', '/stats', '/cmd', '/errors'],
+        goto: ['/system', '/device', '/energy', '/stats', '/cmd', '/errors'],
         data: null
     });
 });
@@ -3647,104 +4631,176 @@ router.get('/cargo/cmd/rplnbr', function (req, res) {
 router.route('/cargo/system')
     .get(tug.system.index)
     .delete(tug.system.drop);
+router.route('/cargo/system/:system_id')
+    .get(tug.system.view)
+    .delete(tug.system.erase);
 
-router.route('/cargo/devices')
+router.route('/cargo/device')
     .get(tug.device.index)
     .delete(tug.device.drop);
+router.route('/cargo/device/:device_id')
+    .get(tug.device.view)
+    .delete(tug.device.erase);
 
 router.route('/cargo/energy')
     .get(tug.energest.index)
     .delete(tug.energest.drop);
+router.route('/cargo/energy/:energest_id')
+    .get(tug.energest.view)
+    .delete(tug.energest.erase);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
 router.route('/cargo/stats/network/ip')
     .get(tug.stats_network_ip.index)
     .delete(tug.stats_network_ip.drop);
+router.route('/cargo/stats/network/ip/:stats_network_ip_id')
+    .get(tug.stats_network_ip.view)
+    .delete(tug.stats_network_ip.erase);
 
 router.route('/cargo/stats/network/icmp')
     .get(tug.stats_network_icmp.index)
     .delete(tug.stats_network_icmp.drop);
+router.route('/cargo/stats/network/icmp/:stats_network_icmp_id')
+    .get(tug.stats_network_icmp.view)
+    .delete(tug.stats_network_icmp.erase);
 
 router.route('/cargo/stats/transport')
     .get(tug.stats_transport.index)
     .delete(tug.stats_transport.drop);
+router.route('/cargo/stats/transport/:stats_transport_id')
+    .get(tug.stats_transport.view)
+    .delete(tug.stats_transport.erase);
 
 router.route('/cargo/stats/discovery')
     .get(tug.stats_discovery.index)
     .delete(tug.stats_discovery.drop);
+router.route('/cargo/stats/discovery/:stats_discovery_id')
+    .get(tug.stats_discovery.view)
+    .delete(tug.stats_discovery.erase);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
 router.route('/cargo/cmd/ipaddr')
     .get(tug.cmd_ipAddr.index)
     .delete(tug.cmd_ipAddr.drop);
+router.route('/cargo/cmd/ipaddr/:cmd_ipAddr_id')
+    .get(tug.cmd_ipAddr.view)
+    .delete(tug.cmd_ipAddr.erase);
 
 router.route('/cargo/cmd/ipnbr/ipaddr')
     .get(tug.cmd_IpNeighbors_ipAddr.index)
     .delete(tug.cmd_IpNeighbors_ipAddr.drop);
+router.route('/cargo/cmd/ipnbr/ipaddr/:cmd_IpNeighbors_ipAddr_id')
+    .get(tug.cmd_IpNeighbors_ipAddr.view)
+    .delete(tug.cmd_IpNeighbors_ipAddr.erase);
 
 router.route('/cargo/cmd/ipnbr/lladdr')
     .get(tug.cmd_IpNeighbors_llAddr.index)
     .delete(tug.cmd_IpNeighbors_llAddr.drop);
+router.route('/cargo/cmd/ipnbr/lladdr/:cmd_IpNeighbors_llAddr_id')
+    .get(tug.cmd_IpNeighbors_llAddr.view)
+    .delete(tug.cmd_IpNeighbors_llAddr.erase);
 
 router.route('/cargo/cmd/ipnbr/info')
     .get(tug.cmd_IpNeighbors_info.index)
     .delete(tug.cmd_IpNeighbors_info.drop);
+router.route('/cargo/cmd/ipnbr/info/:cmd_IpNeighbors_info_id')
+    .get(tug.cmd_IpNeighbors_info.view)
+    .delete(tug.cmd_IpNeighbors_info.erase);
 
 router.route('/cargo/cmd/routes/default')
     .get(tug.cmd_routes.index)
     .delete(tug.cmd_routes.drop);
+router.route('/cargo/cmd/routes/:cmd_routes_id')
+    .get(tug.cmd_routes.view)
+    .delete(tug.cmd_routes.erase);
 
 router.route('/cargo/cmd/routes/links/sources')
     .get(tug.cmd_routes_routingLinks_sources.index)
     .delete(tug.cmd_routes_routingLinks_sources.drop);
+router.route('/cargo/cmd/routes/links/:cmd_routes_routingLinks_sources_id')
+    .get(tug.cmd_routes_routingLinks_sources.view)
+    .delete(tug.cmd_routes_routingLinks_sources.erase);
 
 router.route('/cargo/cmd/routes/links/destinations')
     .get(tug.cmd_routes_routingLinks_destinations.index)
     .delete(tug.cmd_routes_routingLinks_destinations.drop);
+router.route('/cargo/cmd/routes/links/destinations/:cmd_routes_routingLinks_destinations_id')
+    .get(tug.cmd_routes_routingLinks_destinations.view)
+    .delete(tug.cmd_routes_routingLinks_destinations.erase);
 
 router.route('/cargo/cmd/routes/entries/routes')
     .get(tug.cmd_routes_routingEntries_routes.index)
     .delete(tug.cmd_routes_routingEntries_routes.drop);
+router.route('/cargo/cmd/routes/entries/routes/:cmd_routes_routingEntries_routes_id')
+    .get(tug.cmd_routes_routingEntries_routes.view)
+    .delete(tug.cmd_routes_routingEntries_routes.erase);
 
 router.route('/cargo/cmd/routes/entries/vias')
     .get(tug.cmd_routes_routingEntries_vias.index)
     .delete(tug.cmd_routes_routingEntries_vias.drop);
+router.route('/cargo/cmd/routes/entries/vias/:cmd_routes_routingEntries_vias_id')
+    .get(tug.cmd_routes_routingEntries_vias.view)
+    .delete(tug.cmd_routes_routingEntries_vias.erase);
 
 router.route('/cargo/cmd/rplstatus/id')
     .get(tug.cmd_rplStatus.index)
     .delete(tug.cmd_rplStatus.drop);
+router.route('/cargo/cmd/rplstatus/id/:cmd_rplStatus_id')
+    .get(tug.cmd_rplStatus.view)
+    .delete(tug.cmd_rplStatus.erase);
 
 router.route('/cargo/cmd/rplstatus/dag')
     .get(tug.cmd_rplStatus_dag.index)
     .delete(tug.cmd_rplStatus_dag.drop);
+router.route('/cargo/cmd/rplstatus/dag/:cmd_rplStatus_dag_id')
+    .get(tug.cmd_rplStatus_dag.view)
+    .delete(tug.cmd_rplStatus_dag.erase);
 
 router.route('/cargo/cmd/rplstatus/time')
     .get(tug.cmd_rplStatus_trickleTimer.index)
     .delete(tug.cmd_rplStatus_trickleTimer.drop);
+router.route('/cargo/cmd/rplstatus/time/:cmd_rplStatus_trickleTimer_id')
+    .get(tug.cmd_rplStatus_trickleTimer.view)
+    .delete(tug.cmd_rplStatus_trickleTimer.erase);
 
 router.route('/cargo/cmd/rplnbr/addr')
     .get(tug.cmd_rplNbr_addr.index)
     .delete(tug.cmd_rplNbr_addr.drop);
+router.route('/cargo/cmd/rplnbr/addr/:cmd_rplNbr_addr_id')
+    .get(tug.cmd_rplNbr_addr.view)
+    .delete(tug.cmd_rplNbr_addr.erase);
 
 router.route('/cargo/cmd/rplnbr/ranks')
     .get(tug.cmd_rplNbr_ranks.index)
     .delete(tug.cmd_rplNbr_ranks.drop);
+router.route('/cargo/cmd/rplnbr/ranks/:cmd_rplNbr_ranks_id')
+    .get(tug.cmd_rplNbr_ranks.view)
+    .delete(tug.cmd_rplNbr_ranks.erase);
 
 router.route('/cargo/cmd/rplnbr/values')
     .get(tug.cmd_rplNbr_values.index)
     .delete(tug.cmd_rplNbr_values.drop);
+router.route('/cargo/cmd/rplnbr/values/:cmd_rplNbr_values_id')
+    .get(tug.cmd_rplNbr_values.view)
+    .delete(tug.cmd_rplNbr_values.erase);
 
 router.route('/cargo/cmd/rplnbr/parens')
     .get(tug.cmd_rplNbr_parens.index)
     .delete(tug.cmd_rplNbr_parens.drop);
+router.route('/cargo/cmd/rplnbr/parens/:cmd_rplNbr_parens_id')
+    .get(tug.cmd_rplNbr_parens.view)
+    .delete(tug.cmd_rplNbr_parens.erase);
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
 router.route('/cargo/errors')
     .get(tug.errorReport.index)
     .delete(tug.errorReport.drop);
+router.route('/cargo/errors/:errorReport_id')
+    .get(tug.errorReport.view)
+    .delete(tug.errorReport.erase);
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -3819,16 +4875,17 @@ app.listen(PORT, function() {
 
 
 
-// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
-// POST /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
-
-
 // https://stackoverflow.com/questions/9177049/express-js-req-body-undefined
 // https://stackoverflow.com/a/13779626
 
 // https://stackoverflow.com/questions/43227729/express-js-req-body-returns-empty
 // https://stackoverflow.com/questions/43227729/express-js-req-body-returns-empty#comment73525765_43227729
+
+// {"pckt":{"vld":true,"err":null},"rcrd":2,"ndx":0,"id":{"sT":7886,"adr":"0012.4b00.0f82.da03","cd":"BLUE"},"sys":{"cV":"Contiki-NG-release/v4.2-335-ga95cf54ef-dirty","rt":"RPL Lite","net":"sicslowpan","pId":"0xabcd","mac":{"t":"CSMA","tDhS":null,"dCh":26},"nId":55811,"tIad":"fe80::212:4b00:f82:da03"},"hash":392888623}
+
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+// POST /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
 
 app.post("/api/cargo", function(req, res) {
     
@@ -3862,14 +4919,1076 @@ app.post("/api/cargo", function(req, res) {
 
 });
 
-// {"pckt":{"vld":true,"err":null},"rcrd":2,"ndx":0,"id":{"sT":7886,"adr":"0012.4b00.0f82.da03","cd":"BLUE"},"sys":{"cV":"Contiki-NG-release/v4.2-335-ga95cf54ef-dirty","rt":"RPL Lite","net":"sicslowpan","pId":"0xabcd","mac":{"t":"CSMA","tDhS":null,"dCh":26},"nId":55811,"tIad":"fe80::212:4b00:f82:da03"},"hash":392888623}
-
 // $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
 // POST /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+// REPLACE //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+
+app.put("/api/cargo/:obj_id", function(req, res) {
+    
+    console.log('UPDATE: _id = '+ req.params.obj_id + ' obj = ' + req.body);
+
+    const obj = checkProcessSaveReturn(req.body, true);
+
+    console.log('passed obj: ' + req.body);
+    console.log('object updated version is: ' + obj);
+
+    function getCollection(obj) {
+
+        if(obj.packet.valid == true) {
+
+            switch(obj.index) {
+
+                case 0:
+                    return System;
+                case 1:
+                    return Device;
+                case 2:
+                    return Energest;
+                case 3:
+                    return Stats_network_ip;
+                case 4:
+                    return Stats_network_icmp;
+                case 5:
+                    return Stats_transport;
+                case 6:
+                    return Stats_discovery;
+                case 7:
+                    return Cmd_ipAddr;
+                case 8:
+                    return Cmd_IpNeighbors_ipAddr;
+                case 9:
+                    return Cmd_ipNeighbors_llAddr;
+                case 10:
+                    return Cmd_ipNeighbors_info;
+                case 11:
+                    return Cmd_routes;
+                case 12:
+                    return Cmd_routes_routingLinks_sources;
+                case 13:
+                    return Cmd_routes_routingLinks_destinations;
+                case 14:
+                    return Cmd_routes_routingEntries_routes;
+                case 15:
+                    return Cmd_routes_routingEntries_vias;
+                case 16:
+                    return Cmd_rplStatus;
+                case 17:
+                    return Cmd_rplStatus_dag;
+                case 18:
+                    return Cmd_rplStatus_trickleTimer;
+                case 19:
+                    return Cmd_rplNbr_addr;
+                case 20:
+                    return Cmd_rplNbr_ranks;
+                case 21:
+                    return Cmd_rplNbr_values;
+                case 21:
+                    return Cmd_rplNbr_parens;
+            };
+        
+        } else {
+
+            return ErrorReport;
+        }         
+        
+    };
+        
+    getCollection(obj).deleteOne({_id: req.params.obj_id}, function(err) {
+        if (err) {
+            res.json({
+                status: 'error',  
+                text: err, 
+                goto: null, 
+                data: null
+            })
+        } else {
+            
+            obj.save()
+            .then(data => {
+                
+                res.send({
+                    
+                    status: 'ok', 
+                    text: null,
+                    goto: null,
+                    data: data 
+                });
+            })
+            .catch(err => {
+                
+                res.send({
+                    
+                    status: 'error', 
+                    text: err,
+                    goto: null,
+                    data: null 
+                });
+            })
+        };
+    })
+});
+
+// $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+// REPLACE /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+app.patch("/api/cargo/:obj_id", function(req, res) {
+    
+    console.log('UPDATE: _id = '+ req.params.obj_id + ' obj = ' + req.body);
 
+    const raw = req.body;
+
+    function getCollection(raw) {
+
+        if(raw.pckt.vld == true) {
+
+            switch(raw.ndx) {
+
+                case 0:
+                    return System;
+                case 1:
+                    return Device;
+                case 2:
+                    return Energest;
+                case 3:
+                    return Stats_network_ip;
+                case 4:
+                    return Stats_network_icmp;
+                case 5:
+                    return Stats_transport;
+                case 6:
+                    return Stats_discovery;
+                case 7:
+                    return Cmd_ipAddr;
+                case 8:
+                    return Cmd_IpNeighbors_ipAddr;
+                case 9:
+                    return Cmd_ipNeighbors_llAddr;
+                case 10:
+                    return Cmd_ipNeighbors_info;
+                case 11:
+                    return Cmd_routes;
+                case 12:
+                    return Cmd_routes_routingLinks_sources;
+                case 13:
+                    return Cmd_routes_routingLinks_destinations;
+                case 14:
+                    return Cmd_routes_routingEntries_routes;
+                case 15:
+                    return Cmd_routes_routingEntries_vias;
+                case 16:
+                    return Cmd_rplStatus;
+                case 17:
+                    return Cmd_rplStatus_dag;
+                case 18:
+                    return Cmd_rplStatus_trickleTimer;
+                case 19:
+                    return Cmd_rplNbr_addr;
+                case 20:
+                    return Cmd_rplNbr_ranks;
+                case 21:
+                    return Cmd_rplNbr_values;
+                case 21:
+                    return Cmd_rplNbr_parens;
+            };
+        
+        } else {
+
+            return ErrorReport;
+        }         
+        
+    };
+
+    function checksum(obj) {
+
+        try{
+            
+            let payloadHash = obj.hash;
+            let goa = obj;
+            delete goa.hash;
+            goa = JSON.stringify(goa);
+            let intact = sdbm(goa.substr(0, goa.length -1) + "," ) == payloadHash ? true : false;
+            return intact;
+        }
+        catch(error) {
+            console.log(error);
+            let intact = false;
+            return intact;
+        }
+    }
+
+    function replace(obj, raw) {
+
+        if(raw.pckt.vld === true) {
+    
+            switch(raw.ndx) {
+    
+                case 0: 
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.system = {
+                        contikiVersion: raw.sys.cV,
+                        networkStackRouting: raw.sys.rt,
+                        networkStackNetwork: raw.sys.net,
+                        ieee802154PANID: raw.sys.pId,
+            
+                        networkStackMac: {
+                            name: raw.sys.mac.t,
+                            tschDefaultHoppingSequence: raw.sys.mac.tDhS,
+                            defaultChannel: raw.sys.mac.dCh
+                        },
+                        nodeId: raw.sys.nId,
+                        tentaticeLinkLocalIPv6address: raw.sys.tIad
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                
+                    return obj;
+    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 1:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.device = {
+                        temperatureSensor: raw.dev.tp,
+                        humiditySensor: raw.dev.hd
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                
+                case 2:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.energest = {
+                        energest: raw.nrg.en,
+                        cpu: raw.nrg.cp,
+                        lpm: raw.nrg.lp,
+                        deepLpm: raw.nrg.dL,
+                        totalTime: raw.nrg.tT,
+                        radioListening: raw.nrg.rL,
+                        radioTransmiting: raw.nrg.rT,
+                        radioOff: raw.nrg.rO
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+                   
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 3:
+                
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.stats_network_ip = {
+                        uipStatistics: raw.ipSt.uS,
+                        ip: {
+                            ipRecv: raw.ipSt.ip.rx,
+                            ipSent: raw.ipSt.ip.tx,
+                            ipForwarded: raw.ipSt.ip.fw,
+                            ipDrop: raw.ipSt.ip.dr,    
+                            ipVhlerr: raw.ipSt.ip.vE,  
+                            ipHblenerr: raw.ipSt.ip.hE,
+                            ipLblenerr: raw.ipSt.ip.lE,
+                            ipFragerr: raw.ipSt.ip.fE, 
+                            ipChkerr: raw.ipSt.ip.cE, 
+                            ipProtoerr: raw.ipSt.ip.pE
+                        }
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+                   
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 4:
+
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj. mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.stats_network_icmp = {
+                        uipStatistics: raw.icSt.uS,
+                        icmp: {
+                            icmpRecv: raw.icSt.ic.rx,    
+                            icmpSent: raw.icSt.ic.tx,     
+                            icmpDrop: raw.icSt.ic.dr,
+                            icmpTypeerr: raw.icSt.ic.tE,     
+                            icmpChkerr: raw.icSt.ic.cE  
+                        } 
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 5:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.stats_transport = {
+                        uipStatistics: raw.tSt.uS,
+                        tcp: {
+                            tcp: raw.tSt.tcp.use,        
+                            tcpRecv: raw.tSt.tcp.rx,    
+                            tcpSent: raw.tSt.tcp.tx,    
+                            tcpDrop: raw.tSt.tcp.dr,    
+                            tcpChkerr: raw.tSt.tcp.cE,  
+                            tcpAckerr: raw.tSt.tcp.aA,  
+                            tcpRst: raw.tSt.tcp.rst,     
+                            tcpRexmit: raw.tSt.tcp.rM,  
+                            tcpSyndrop: raw.tSt.tcp.sD, 
+                            tcpSynrst: raw.tSt.tcp.sR  
+                        },
+                        udp: {
+                            udp: raw.tSt.udp.use,  
+                            udpDrop: raw.tSt.udp.dr,
+                            udpRecv: raw.tSt.udp.rx,  
+                            udpSent: raw.tSt.udp.tx,  
+                            udpChkerr: raw.tSt.udp.cE
+                        } 
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+
+                    return obj;
+                   
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 6:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.stats_discovery = {
+                        uipStatistics: raw.dSt.uS,
+                        nd6: {
+                            nd6drop: raw.dSt.nd6.dr,
+                            nd6recv: raw.dSt.nd6.rx,
+                            nd6sent: raw.dSt.nd6.tx
+                        } 
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 7:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    },
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_ipAddr = {
+                        ipv6: raw.addr.IPv6,
+                        nodeIPv6addresses: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+    
+                    raw.addr.ad.forEach((address, index) => obj.cmd_ipAddr.nodeIPv6addresses[index] = {nodeIPv6address: address});
+                    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 8:
+
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_IpNeighbors_ipAddr = {
+                        ipv6: raw.nsIP.IPv6,
+                        nodeIPv6neighborIpAddresses: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                   
+                    raw.nsIP.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = {nodeIPv6neighborIpAddress: neighbor.cmd_ipAddr}
+                        } else {
+                            obj.cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 9:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_ipNeighbors_llAddr = {
+                        ipv6: raw.nsLL.IPv6,
+                        nodeIPv6neighborLlAddresses: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    raw.nsLL.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = {nodeIPv6neighborLlAddress: neighbor.llAddr}
+                        } else {
+                            obj.cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 10:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_ipNeighbors_info = {
+                        ipv6: raw.nsSt.IPv6,
+                        nodeIPv6neighborInfo: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    raw.nsSt.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                           obj.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = {nodeIPv6neighborRouter: neighbor.router, nodeIPv6neighborState: neighbor.state}
+                        } else {
+                            obj.cmd_ipNeighbors_info.nodeIPv6neighborInfo[index] = null
+                        }
+                    });
+                    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 11:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_routes = {
+                        ipv6: raw.rt.IPv6,
+                        defaultRoute: raw.rt.df,
+                        lifetime: raw.rt.lt
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                   
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 12:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_routes_routingLinks_sources = {
+                        ipv6: raw.rtLS.IPv6,
+                        rpl: raw.rtLS.rpl,
+                        totalRoutingLinks: raw.rtLS.totLs,
+                        routeSources: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+    
+                    raw.rtLS.ls.forEach(function(link, index) {
+                        if (link != null) {
+                            obj.cmd_routes_routingLinks_sources.routeSources[index] = {linkSourceAddr: link.from, dodagRoot: link.dodagRoot}
+                        } else {
+                            obj.cmd_routes_routingLinks_sources.routeSources[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 13:
+                    
+                        obj.packet = {
+                            valid: raw.pckt.vld,
+                            error: null
+                        }
+                        obj.record = raw.rcrd
+                        obj.index = raw.ndx
+                        obj.mote = {
+                            systemTime: raw.id.sT,
+                            linkLayerAddress: raw.id.adr,
+                            moteCode: raw.id.cd
+                        }
+                        obj.cmd_routes_routingLinks_destinations = {
+                            ipv6: raw.rtLD.IPv6,
+                            rpl: raw.rtLD.rpl,
+                            totalRoutingLinks: raw.rtLD.totLs,
+                            routeDestinations: [null]
+                        }
+                        obj.checksum = {
+                            hash: raw.hash,
+                            check: checksum(raw)
+                        }
+                        obj.update = new Date
+                    
+    
+                    raw.rtLD.ls.forEach(function(link, index) {
+                        if (link != null) {
+                            obj.cmd_routes_routingLinks_destinations.routeDestinations[index] = {linkDestinationAddr: link.to, lifetime: link.lf}
+                        } else {
+                            obj.cmd_routes_routingLinks_destinations.routeDestinations[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 14:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_routes_routingEntries_routes = {
+                        ipv6: raw.rtERt.IPv6,
+                        maxRoutesNon0: raw.rtERt.maxRtsN0,
+                        totalRoutingEntries: raw.rtERt.totEs,
+                        routes: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                
+                    raw.rtERt.es.forEach(function(entry, index) {
+                        if (entry != null) {
+                            obj.cmd_routes_routingEntries_routes.routes[index] = {entryRouteAddr: entry.rt}
+                        } else {
+                            obj.cmd_routes_routingEntries_routes.routes[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 15:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_routes_routingEntries_vias = {
+                        ipv6: raw.rtEVia.IPv6,
+                        maxRoutesNon0: raw.rtEVia.maxRtsN0,
+                        totalRoutingEntries: raw.rtEVia.totEs,
+                        vias: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+    
+                    raw.rtEVia.es.forEach(function(entry, index) {
+                        if (entry != null) {
+                            obj.cmd_routes_routingEntries_vias.vias[index] = {entryViaAddr: entry.via, lifetime: entry.lf}
+                        } else {
+                            obj.cmd_routes_routingEntries_vias.vias[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 16:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplStatus = {
+                        rplLite: raw.rSt.rL,
+                        instance: raw.rSt.iId,
+                        modeOfOperation: raw.rSt.mop,
+                        rawectiveCodePoint: raw.rSt.of,
+                        hopRankIncrement: raw.rSt.hRkI,
+                        defaultLifetime: raw.rSt.dLt,
+                        dtsnOut: raw.rSt.dtsnO
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 17:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplStatus_dag = {
+                        rplLite: raw.rStDag.rL,
+                        instance: raw.rStDag.iId,
+                        dagRole: raw.rStDag.dT,
+                        dagId: raw.rStDag.dId,
+                        dagVersion: raw.rStDag.dVer,
+                        dagPrefix: raw.rStDag.dPf,
+                        dagPrefixLength: raw.rStDag.dPfL,
+                        dagState: raw.rStDag.st,
+                        dagPreferedParent: raw.rStDag.pP,
+                        dagPreferedParentLastDTSN: raw.rStDag.lD,
+                        dagRank: raw.rStDag.rk,
+                        dagLowestRank: raw.rStDag.lRk,
+                        maxRankIncrement: raw.rStDag.mRkI,
+                        dao: {
+                            daoSequenceLastSent: raw.rStDag.dao.lS,
+                            daoSequenceLastAcked: raw.rStDag.dao.lA
+                        }
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                   
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 18:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplStatus_trickleTimer = {
+                        rplLite: raw.rStTt.rL,
+                        instance: raw.rStTt.iId,
+                        current: raw.rStTt.cur,
+                        min: raw.rStTt.min, 
+                        max: raw.rStTt.max,
+                        redundancy: raw.rStTt.red
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 19:
+                    
+                        obj.packet = {
+                            valid: raw.pckt.vld,
+                            error: null
+                        }
+                        obj.record = raw.rcrd
+                        obj.index = raw.ndx
+                        obj.mote = {
+                            systemTime: raw.id.sT,
+                            linkLayerAddress: raw.id.adr,
+                            moteCode: raw.id.cd
+                        }
+                        obj.cmd_rplNbr_addr = {
+                            rplLite: raw.rN.rL,
+                            instance: raw.rN.iId,
+                            rplNeighborCount: raw.rN.c,
+                            addresses: [null]
+                        }
+                        obj.checksum = {
+                            hash: raw.hash,
+                            check: checksum(raw)
+                        }
+                        obj.update = new Date
+                    
+    
+                    raw.rN.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_rplNbr_addr.addresses[index] = {rplAddress: neighbor.ad}
+                        } else {
+                            obj.cmd_rplNbr_addr.addresses[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 20:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplNbr_ranks = {
+                        rplLite: raw.rNR.rL,
+                        instance: raw.rNR.iId,
+                        rplNeighborCount: raw.rNR.c,
+                        ranks: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    raw.rNR.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_rplNbr_ranks.ranks[index] = {rplNeighborRank: neighbor.rk, rplNeighborLinkMetric: neighbor.lM, rplNeighborRankViaNeighbor: neighbor.rkN}
+                        } else {
+                            obj.cmd_rplNbr_ranks.ranks[index] = null
+                        }
+                    });
+    
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 21:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplNbr_values = {
+                        rplLite: raw.rNV.rL,
+                        instance: raw.rNV.iId,
+                        rplNeighborCount: raw.rNV.c,
+                        values: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    raw.rNV.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_rplNbr_values.values[index] = {rplNeighborStatsFreshness: neighbor.fr, rplNeighborRootRank: neighbor.r, rplNeighborBest: neighbor.b, rplNeighborAcceptableRankParent: neighbor.a, rplNeighborLinkStatsFresh: neighbor.f, rplNeighborDagPreferredParent: neighbor.p}
+                        } else {
+                            obj.cmd_rplNbr_values.values[index] = null
+                        }
+                    });
+    
+                    return obj;
+                   
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    
+                case 22:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.cmd_rplNbr_parens = {
+                        rplLite: raw.rNP.rL,
+                        instance: raw.rNP.iId,
+                        rplNeighborCount: raw.rNP.c,
+                        parens: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                    
+                    raw.rNP.ns.forEach(function(neighbor, index) {
+                        if (neighbor != null) {
+                            obj.cmd_rplNbr_parens.parens[index] = {rplNeighborLastTXtimeSeconds: neighbor.lTx, rplNeighborBetterParentSinceSeconds: neighbor.bS}
+                        } else {
+                            obj.cmd_rplNbr_parens.parens[index] = null
+                        }
+                    });
+    
+                    return obj;              
+            }
+        } else {
+    
+            
+                obj.packet = {
+                    valid: raw.pckt.vld,
+                    error: {
+                        text: raw.err.txt,
+                        code: raw.err.cd
+                    }
+                }
+                obj.mote = {
+                    systemTime: raw.id.sT,
+                    linkLayerAddress: raw.id.adr,
+                    moteCode: raw.id.cd
+                }
+                obj.checksum = {
+                    hash: raw.hash,
+                    check: checksum(raw)
+                }
+                obj.update = new Date
+            
+            return obj;
+        }
+    
+    }
+        
+    getCollection(raw).findById(req.params.obj_id, function(err, obj) {
+        if (err) {
+            res.json({
+                status: 'error',  
+                text: err, 
+                goto: null, 
+                data: null
+            })
+        } else {
+            replace(obj, raw).save(function(err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: obj 
+                    });
+                };
+            })
+        }
+    })
+});
 
 
 
