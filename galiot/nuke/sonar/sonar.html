@@ -25,10 +25,6 @@
     
     <!--BORDER ROUTER DIVISION //////////////////////////////////////////////////////////// -->
     <div class="p-3 my-5 mx-auto container bg-dark border border-info rounded" id="br-div">
-
-
-
-        
         
         <h1 class="text-center text-light">border router</h1> 
         
@@ -62,50 +58,78 @@
             </div>
 
         </div>
-       
-
-
-
 
         <!-- BORDER ROUTER OUTPUT ///////////////////////////////////////////////////////// -->
-        <div class="d-none row text-center mt-0" id="br-output"></div>
+        <div class="d-none row text-center mt-0 mb-3" id="br-output"></div>
 
 
 
         <br>
 
+        <div class="container d-none mb-1" id="br-div-doc">
+            <div class="row justify-content-center">
+                <div class="col-6 bg-light test-dark" id="br-div-doc-content">
 
+                </div>
+            </div>
+        </div>
 
-        <!-- BORDER ROUTER HEADING 2 NEIGHBORS //////////////////////////////////////////// -->
-        <!-- BORDER ROUTER NEIGHBORS/////////////////////////////////////////////////////// -->
+        <div class="container d-none mt-1 mb-5 text-center" id="br-div-doc-parse">   
+            <button class="btn btn-muted m-auto" id="br-button-parse">parse</button>
+        </div>
+        
+        
+        
+        
+        <div class="row justify-content-center" id="br-div-results">
 
-        <!-- neighbors unordered list -->
-        <h2 class="d-none text-center text-muted" id="br-h2-neighbors">neighbors</h2>
-        <div class="row">
-            <!-- list of link-local neighbor addresses -->
-            <ul class="list-group d-none m-auto p-auto" id="neighbors">
-            </ul>
+            <!-- BORDER ROUTER HEADING 2 NEIGHBORS //////////////////////////////////////////// -->
+            <!-- BORDER ROUTER NEIGHBORS/////////////////////////////////////////////////////// -->
+
+            <!-- neighbors unordered list -->
+            
+            <div class="col-6">
+                <h2 class="d-none text-center text-muted" id="br-h2-neighbors">neighbors</h2>
+                <!-- list of link-local neighbor addresses -->
+                <ul class="list-group d-none m-auto p-auto" id="neighbors"></ul>
+            </div>
+
+            <!-- BORDER ROUTER HEADING 2 ROUTING LINKS //////////////////////////////////////// -->
+            <!-- BORDER ROUTER ROUTING LINKS ////////////////////////////////////////////////// -->
+
+            <!-- routing links unordered list -->
+
+            <div class="col-6">
+                <h2 class="d-none text-center text-muted" id="br-h2-routing-links">routing links</h2>
+                <!-- list of link-local neighbor addresses -->
+                <ul class="list-group d-none  m-auto" id="routing-links"></ul>
+            </div>
+
+        </div>
+
+        <div class="container d-none mt-1 mb-5 text-center" id="br-div-doc-regexp">   
+            <button class="btn btn-muted m-auto" id="br-button-regexp">regexp</button>
+        </div>
+
+        <div class="container d-none" id="br-div-table">
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    <table class="table table-striped table-dark table-bordered border-light">
+                        <tbody id="br-table-tbody">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
 
 
-        <br>
         
 
 
-        <!-- BORDER ROUTER HEADING 2 ROUTING LINKS //////////////////////////////////////// -->
-        <!-- BORDER ROUTER ROUTING LINKS ////////////////////////////////////////////////// -->
 
-        <!-- routing links unordered list -->
-        <h2 class="d-none text-center text-muted" id="br-h2-routing-links">routing links</h2>
-        <div class="row">
-            <!-- list of link-local neighbor addresses -->
-            <ul class="list-group d-none p-auto m-auto" id="routing-links">
-            </ul>
-        </div>
-
-
-
+        <br>
         <br>
 
 
@@ -319,7 +343,7 @@
 
         </div>
 
-        <br>
+        
         <br>
 
         <div class="container text-center m-auto p-auto">
@@ -426,8 +450,8 @@
                 </div>
             </div>
 
-        <br>
-        <br>
+        
+        
         <br>
 
         <div class="container text-center m-auto p-auto">
@@ -985,7 +1009,7 @@
         </div>
 
         
-        <br>
+        
         <br>
 
         <div class="container text-center m-auto p-auto">

@@ -1018,8 +1018,22 @@ const brButton = document.getElementById('br-button');
 const brInput = document.getElementById('br-input');
 const brOutput = document.getElementById('br-output');
 
+const brDivDoc = document.getElementById('br-div-doc');
+const brDivDocContent = document.getElementById('br-div-doc-content');
+
+const brDivResults = document.getElementById('br-div-results');
+
+const brDivDocParse = document.getElementById('br-div-doc-parse');
+const brDivDocRegexp = document.getElementById('br-div-doc-regexp');
+
+const brButtonParse = document.getElementById('br-button-parse');
+const brButtonRegexp = document.getElementById('br-button-regexp');
+
 const neighborsElement = document.getElementById('neighbors');
 const routingLinksElement = document.getElementById('routing-links');
+
+const brDivTable = document.getElementById('br-div-table');
+const brTableTbody = document.getElementById('br-table-tbody');
 
 const brButtonReload = document.getElementById('br-button-reload');
 const brButtonClear = document.getElementById('br-button-clear');
@@ -1322,12 +1336,31 @@ brButtonClear.addEventListener('click', () => {
                         
     brDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary');
     brDiv.classList.add('border-info');
+
+    brDivDoc.classList.add('d-none');
+    brDivDocParse.classList.add('d-none');
+
+    // brButtonParse.classList.add('d-none');
     
+    document.getElementById('br-h2-neighbors').classList.replace('d-block', 'd-none');
+    document.getElementById('br-h2-routing-links').classList.replace('d-block', 'd-none');
+
+    neighborsElement.classList.replace('d-block', 'd-none');
+    routingLinksElement.classList.replace('d-block', 'd-none');
     neighborsElement.innerHTML = '';
     routingLinksElement.innerHTML = '';
     
     brOutput.classList.replace('d-block', 'd-none');
     nodesEncodedResponseDiv.innerText = ''
+
+    brDivDocRegexp.classList.add('d-none');
+    brDivTable.classList.add('d-none');
+
+    brButtonRegexp.classList.remove('btn-outline-primary', 'btn-outline-success'); brButtonRegexp.classList.add('btn-muted');
+
+    brDivResults.classList.add('d-none');
+
+    brDivDocContent.classList.remove('bg-light', 'text-dark', 'bg-dark', 'text-secondary'); brDivDocContent.classList.add('bg-light', 'text-dark');
 });
 
 // NODES
@@ -1662,13 +1695,224 @@ function constructParse_FAIL(error) {
     nodesButtonParse.classList.replace('btn-primary', 'btn-outline-danger');
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// NODES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function runNodes(nodesAddr) {
+    
+    nodesDiv.classList.remove('border-secondary', 'border-success', 'border-warning', 'border-danger');
+    nodesDiv.classList.add('border-info');
+    nodesH1.classList.replace('text-muted', 'text-light');
+    nodesButtonIndex.classList.replace('btn-muted', 'btn-outline-primary');
+    
+    // nodesButtonIndex.classList.replace('d-none', 'd-block');
+    nodesButtonIndex.addEventListener('click', () => {
+        
+        nodesButtonIndex.classList.replace('d-block', 'd-none')
+        nodesInput.innerHTML = nodesInputHTML(nodesAddr);
+
+        nodesAddr.forEach((node, index) => {
+
+            document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
+
+                console.log('getgetget');
+                let addr = document.getElementById(`nodes-addr-input-${index}`).value;
+                let path = document.getElementById(`nodes-path-input-${index}`).value;
+                
+                fetch(`http://[${addr}]/${path}`)
+                    
+                    .then(function(response) {
+                        
+                        return response.text()
+                    })
+                        
+                        .then(function(text) {
+                            
+                            nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
+                            
+                            document.getElementById(`nodes-output-${index}`).innerText = 'OK';
+
+                            document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger', 'bg-warning'); document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
+                            document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+                            
+                            
+                            
+                            
+                            document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
+
+                            nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
+                            nodesEncodedResponseDiv.innerText = text;
+                            
+
+
+                            nodesButtonDecode.classList.replace('btn-muted', 'btn-primary');
+                            nodesButtonDecode.classList.replace('d-none', 'd-block')
+                            nodesButtonDecode.addEventListener('click', () => {
+                                
+                                let decodedResponse = constructDecoding(text);
+                                
+                                // nodesKeySpan.classList.replace('d-none', 'd-block');
+                                nodesKeyInput.classList.replace('d-none', 'd-block');
+
+                                nodesButtonDecrypt.classList.replace('btn-muted', 'btn-primary');
+                                nodesButtonDecrypt.classList.replace('d-none', 'd-block')
+                                nodesButtonDecrypt.addEventListener('click', () => {
+
+                                    let decryptedResponse = constructDecryption(decodedResponse);
+                                    let intact = checksum(decryptedResponse);
+
+                                    
+
+                                    nodesButtonChecksum.classList.replace('btn-muted', 'btn-primary');
+                                    nodesButtonChecksum.classList.replace('d-none', 'd-block');
+                                    nodesButtonChecksum.addEventListener('click', () => {
+
+                                        if(intact) {
+                                            constructIntactness(); 
+                                        } else {
+                                            constructCorruptness();
+                                        }
+                                    })
+                                    
+                                    nodesButtonParse.classList.replace('btn-muted', 'btn-primary');
+                                    nodesButtonParse.classList.replace('d-none', 'd-block');
+                                    nodesButtonParse.addEventListener('click', () => {
+                                        
+                                        try{
+                                            
+                                            let parsedResponse = JSON.parse(decryptedResponse);
+
+                                            constructParse_OK(parsedResponse);
+                                            legendDiv.classList.replace('d-none', 'd-show');
+
+                                            console.log(JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2));
+                                            
+                                            constructLegend('<pre>' + JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2) + '</pre>', undefined);
+
+                                            switch(parsedResponse.ndx) {
+                                                case 1:
+                                                    document.getElementById('legend-table-device').classList.replace('d-none', 'd-show');
+                                                    break;
+                                                case 2:
+                                                    document.getElementById('legend-table-energest').classList.replace('d-none', 'd-show');
+                                                    break;
+                                                case 3:
+                                                    document.getElementById('legend-table-stats_network_ip').classList.replace('d-none', 'd-show');
+                                                    break;
+                                                case 4:
+                                                    document.getElementById('legend-table-stats_network_icmp').classList.replace('d-none', 'd-show');
+                                                    break;
+                                                case 5:
+                                                    document.getElementById('legend-table-stats_transport').classList.replace('d-none', 'd-show');
+                                                    break;
+                                                case 6:
+                                                    document.getElementById('legend-table-stats_discovery').classList.replace('d-none', 'd-show');
+                                                    break;
+
+
+                                            }
+
+                                            
+
+                                        } 
+                                        catch(error) {
+                                            
+                                            constructParse_FAIL(error);
+
+                                        }
+                                    })
+                                })
+                            })
+                        })
+                    
+                    .catch(function(error) {
+
+                        nodesDiv.classList.remove('border-warning', 'border-success', 'border-info'); nodesDiv.classList.add('border-danger');
+                    
+                        document.getElementById(`nodes-output-${index}`).innerText = error;
+
+                        document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning', 'bg-success'); document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
+                        document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
+                        
+                        console.log(error);
+                    }
+                )  
+            })
+        })
+    })
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BORDER ROUTER ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+brButton.addEventListener('click', () => {
+
+    brDivDocContent.classList.remove('bg-light', 'text-dark', 'bg-dark', 'text-secondary'); brDivDocContent.classList.add('bg-light', 'text-dark');
+    brButtonParse.classList.remove('btn-outline-success', 'btn-outline-primary'); brButtonParse.classList.add('btn-muted');
+
+    document.getElementById('br-h2-neighbors').classList.replace('d-block', 'd-none');
+    document.getElementById('br-h2-routing-links').classList.replace('d-block', 'd-none');
+    
+    brDivDocContent.innerHTML = `<code style="font-size: 1rem"> scraping... </code>`
+
+    neighborsElement.classList.replace('d-block', 'd-none');
+    routingLinksElement.classList.replace('d-block', 'd-none');
+
+    brDivDocRegexp.classList.add('d-none');
+    brDivTable.classList.add('d-none');
+
+    brButtonRegexp.classList.remove('btn-outline-primary', 'btn-outline-success'); brButtonRegexp.classList.add('btn-muted');
+
+    brDivResults.classList.add('d-none');
+
+    brButtonContinue.classList.replace('btn-outline-primary', 'btn-outline-secondary')
+    
+    scrap();
+});
 
 
 
 
-brButton.addEventListener('click', scrap);
 
-// BUTTON RELOAD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1684,7 +1928,7 @@ function scrap() {
     fetch(`http://${brInput.value}/`)
         
         .then(function(response) {
-            // console.log(response);
+            console.log(response);
             return response.text()
         })
             
@@ -1694,6 +1938,13 @@ function scrap() {
 
                 // Parse the text
                 var br_doc = parser.parseFromString(text, "text/html");
+
+                console.log(br_doc);
+
+                brDivDoc.classList.remove('d-none');
+                brDivDocContent.innerHTML = `${text}`
+
+                brDivDocParse.classList.remove('d-none');
 
                 const uls = br_doc.querySelectorAll('ul');
                 console.log(uls);
@@ -1714,29 +1965,35 @@ function scrap() {
                     brOutput.innerText = 'OK';
                     brOutput.classList.remove('bg-info', 'bg-warning', 'bg-danger'); brOutput.classList.add('bg-success');
                     brOutput.classList.replace('d-none', 'd-block')
-
-                    document.getElementById('br-h2-neighbors').classList.replace('d-none', 'd-block')
-                    document.getElementById('br-h2-routing-links').classList.replace('d-none', 'd-block')
                     
-                    
+                    brButtonParse.classList.replace('btn-muted', 'btn-outline-primary');
+                    brButtonParse.addEventListener('click', () => {
 
-                    neighborsElement.classList.replace('d-none', 'd-block');
-                    routingLinksElement.classList.replace('d-none', 'd-block');
+                        brDivResults.classList.remove('d-none');
+
+                        brDivDocContent.classList.remove('bg-light', 'text-dark'); brDivDocContent.classList.add('bg-secondary', 'text-light');
+                        brButtonParse.classList.replace('btn-outline-primary', 'btn-outline-success');
+
+                        document.getElementById('br-h2-neighbors').classList.replace('d-none', 'd-block');
+                        document.getElementById('br-h2-routing-links').classList.replace('d-none', 'd-block');
+                        
+                        neighborsElement.classList.replace('d-none', 'd-block');
+                        routingLinksElement.classList.replace('d-none', 'd-block');
+
+                        brDivDocRegexp.classList.remove('d-none');
+                    })
+                    
 
                     let neighborsListHTML = '';
                     let routingLinksListHTML = '';
 
-                    neighborsArray.forEach((neighbor, index) => neighborsListHTML += `<li class="list-group-item text-center bg-dark text-light border-secondary rounded"> ${neighbor.innerText} </li>`);
+                    neighborsArray.forEach((neighbor, index) => neighborsListHTML += `<li class="list-group-item text-center bg-dark text-light "> <code style="font-size: 1rem">${neighbor.innerText} </code></li>`);
                     neighborsElement.innerHTML = neighborsListHTML;
 
-                    routingLinksArray.forEach((routingLink, index) => routingLinksListHTML += `<li class="list-group-item text-center bg-dark text-light border-secondary rounded""> ${routingLink.innerText} </li>`);
+                    routingLinksArray.forEach((routingLink, index) => routingLinksListHTML += `<li class="list-group-item text-center bg-dark text-light ""><code style="font-size: 1rem"> ${routingLink.innerText} </code></li>`);
                     routingLinksElement.innerHTML = routingLinksListHTML;
-                    
-                    brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
-                    
-
-                    const nodesRegExp = /fd\S*\s/gi
+                    const nodesRegExp = /fd\S*\s/gi // TRICKY SORCERY //
                     var nodesAddr = [];
                     let regExpResults = text.match(nodesRegExp);
 
@@ -1748,161 +2005,55 @@ function scrap() {
                             }
                         })
                         console.log(nodesAddr);
-                    }
-
+                    };
                     
-                    simConsole(nodesAddr);
-                    activateStore(nodesAddr);
-
-
-                    
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // NODES ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    
-                    nodesDiv.classList.remove('border-secondary', 'border-success', 'border-warning', 'border-danger');
-                    nodesDiv.classList.add('border-info');
-                    nodesH1.classList.replace('text-muted', 'text-light');
-                    nodesButtonIndex.classList.replace('btn-muted', 'btn-outline-primary');
-                    
-                    
-                    
-                    
-                    nodesButtonIndex.classList.replace('d-none', 'd-block');
-                    nodesButtonIndex.addEventListener('click', () => {
+                    if(neighborsArray.length == routingLinksArray.length) {
                         
-                        nodesButtonIndex.classList.replace('d-block', 'd-none')
-                        nodesInput.innerHTML = nodesInputHTML(nodesAddr);
+                        brButtonRegexp.classList.replace('btn-muted', 'btn-outline-primary');
 
-                        nodesAddr.forEach((node, index) => {
+                        brButtonRegexp.addEventListener('click', () => {
 
-                            document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
-    
-                                console.log('getgetget');
-                                let addr = document.getElementById(`nodes-addr-input-${index}`).value;
-                                let path = document.getElementById(`nodes-path-input-${index}`).value;
-                                
-                                fetch(`http://[${addr}]/${path}`)
-                                    
-                                    .then(function(response) {
-                                        
-                                        return response.text()
-                                    })
-                                        
-                                        .then(function(text) {
-                                            
-                                            nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
-                                            
-                                            document.getElementById(`nodes-output-${index}`).innerText = 'OK';
+                            brButtonRegexp.classList.replace('btn-outline-primary', 'btn-outline-success');
+                            brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
-                                            document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger', 'bg-warning'); document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
-                                            document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                            
-                                            
-                                            
-                                            
-                                            document.getElementById('nodes-h2-encoded-response').classList.replace('d-none', 'd-block')
-    
-                                            nodesEncodedResponseDiv.classList.replace('d-none', 'd-block')
-                                            nodesEncodedResponseDiv.innerText = text;
-                                            
+                            brDivResults.classList.add('d-none');
+                            
+                            brDivDocRegexp.classList.add('d-none');
 
+                            brDivTable.classList.remove('d-none');
+                            brTableTbody.innerHTML = '';
 
-                                            nodesButtonDecode.classList.replace('btn-muted', 'btn-primary');
-                                            nodesButtonDecode.classList.replace('d-none', 'd-block')
-                                            nodesButtonDecode.addEventListener('click', () => {
-                                                
-                                                let decodedResponse = constructDecoding(text);
-                                                
-                                                // nodesKeySpan.classList.replace('d-none', 'd-block');
-                                                nodesKeyInput.classList.replace('d-none', 'd-block');
+                            brDivDocContent.classList.replace('bg-secondary', 'bg-dark');
+                            brDivDocContent.classList.replace('text-light', 'text-secondary');
 
-                                                nodesButtonDecrypt.classList.replace('btn-muted', 'btn-primary');
-                                                nodesButtonDecrypt.classList.replace('d-none', 'd-block')
-                                                nodesButtonDecrypt.addEventListener('click', () => {
-    
-                                                    let decryptedResponse = constructDecryption(decodedResponse);
-                                                    let intact = checksum(decryptedResponse);
-    
-                                                    
+                            nodesAddr.forEach((address, index) => {
 
-                                                    nodesButtonChecksum.classList.replace('btn-muted', 'btn-primary');
-                                                    nodesButtonChecksum.classList.replace('d-none', 'd-block');
-                                                    nodesButtonChecksum.addEventListener('click', () => {
-    
-                                                        if(intact) {
-                                                            constructIntactness(); 
-                                                        } else {
-                                                            constructCorruptness();
-                                                        }
-                                                    })
-                                                    
-                                                    nodesButtonParse.classList.replace('btn-muted', 'btn-primary');
-                                                    nodesButtonParse.classList.replace('d-none', 'd-block');
-                                                    nodesButtonParse.addEventListener('click', () => {
-                                                        
-                                                        try{
-                                                            
-                                                            let parsedResponse = JSON.parse(decryptedResponse);
-
-                                                            constructParse_OK(parsedResponse);
-                                                            legendDiv.classList.replace('d-none', 'd-show');
-
-                                                            console.log(JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2));
-                                                            
-                                                            constructLegend('<pre>' + JSON.stringify(elaborate(parsedResponse, checksum(decryptedResponse)), null, 2) + '</pre>', undefined);
-
-                                                            switch(parsedResponse.ndx) {
-                                                                case 1:
-                                                                    document.getElementById('legend-table-device').classList.replace('d-none', 'd-show');
-                                                                    break;
-                                                                case 2:
-                                                                    document.getElementById('legend-table-energest').classList.replace('d-none', 'd-show');
-                                                                    break;
-                                                                case 3:
-                                                                    document.getElementById('legend-table-stats_network_ip').classList.replace('d-none', 'd-show');
-                                                                    break;
-                                                                case 4:
-                                                                    document.getElementById('legend-table-stats_network_icmp').classList.replace('d-none', 'd-show');
-                                                                    break;
-                                                                case 5:
-                                                                    document.getElementById('legend-table-stats_transport').classList.replace('d-none', 'd-show');
-                                                                    break;
-                                                                case 6:
-                                                                    document.getElementById('legend-table-stats_discovery').classList.replace('d-none', 'd-show');
-                                                                    break;
-
-
-                                                            }
-
-                                                            
-    
-                                                        } 
-                                                        catch(error) {
-                                                            
-                                                            constructParse_FAIL(error);
-
-                                                        }
-                                                    })
-                                                })
-                                            })
-                                        })
-                                    
-                                    .catch(function(error) {
-
-                                        nodesDiv.classList.remove('border-warning', 'border-success', 'border-info'); nodesDiv.classList.add('border-danger');
-                                    
-                                        document.getElementById(`nodes-output-${index}`).innerText = error;
-
-                                        document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning', 'bg-success'); document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
-                                        document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                                        
-                                        console.log(error);
-                                    }
-                                )  
+                                brTableTbody.innerHTML += `
+                                <tr>
+                                    <td colspan="1" class="text-light text-center">${address}</td>
+                                </tr>`;
                             })
-                        })
-                    })
+
+                        });
+                        
+                        runNodes(nodesAddr);
+                        simConsole(nodesAddr);
+                        activateStore(nodesAddr);
+                    
+                    } else {
+
+                        brDiv.classList.remove('border-info');
+                        brDiv.classList.remove('border-success');
+                        brDiv.classList.remove('border-danger');
+                        brDiv.classList.add('border-warning');
+
+                        brOutput.innerText = 'incomplete';
+
+                        brOutput.classList.remove('bg-danger');
+                        brOutput.classList.remove('bg-success');
+                        brOutput.classList.add('bg-warning');
+                        brOutput.classList.replace('d-none', 'd-block')
+                    };
                     
                 } catch {
                     
@@ -1919,10 +2070,7 @@ function scrap() {
                         brOutput.classList.remove('bg-success');
                         brOutput.classList.add('bg-warning');
                         brOutput.classList.replace('d-none', 'd-block')
-
-                        brButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-muted');
-
-                    }
+                    };
                 }
             })
 
@@ -1942,6 +2090,34 @@ function scrap() {
             console.log(error);
         })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
