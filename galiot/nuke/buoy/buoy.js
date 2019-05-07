@@ -4888,14 +4888,16 @@ app.listen(PORT, function() {
 // $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
 
 app.post("/api/cargo", function(req, res) {
-    
-    console.log('POST: ' + req.body);
 
     const obj = checkProcessSaveReturn(req.body, true);
 
     obj.save()
 
         .then(data => {
+
+            console.log();
+            console.log('<<< POST: raw = ' + req.body);
+            console.log('<<< POST: obj = ' + data);
             
             res.send({
                 
@@ -4907,6 +4909,10 @@ app.post("/api/cargo", function(req, res) {
     })
         
         .catch(err => {
+
+            console.log();
+            console.log('<<< POST: raw = ' + req.body);
+            console.log('<<< POST: err = ' + err);
             
             res.send({
                 
@@ -4927,13 +4933,8 @@ app.post("/api/cargo", function(req, res) {
 // $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
 
 app.put("/api/cargo/:obj_id", function(req, res) {
-    
-    console.log('UPDATE: _id = '+ req.params.obj_id + ' obj = ' + req.body);
 
     const obj = checkProcessSaveReturn(req.body, true);
-
-    console.log('passed obj: ' + req.body);
-    console.log('object updated version is: ' + obj);
 
     function getCollection(obj) {
 
@@ -4996,37 +4997,80 @@ app.put("/api/cargo/:obj_id", function(req, res) {
         
     };
         
-    getCollection(obj).deleteOne({_id: req.params.obj_id}, function(err) {
+    getCollection(obj).deleteOne({_id: req.params.obj_id}, function(err, reply) {
+        
         if (err) {
+
+            console.log();
+            console.log('<<< PUT: _id = '+ req.params.obj_id);
+            console.log('<<< PUT: raw = '+ req.body);
+            console.log('<<< PUT: obj = '+ obj);
+            console.log('<<< PUT: err = '+ err);
+
             res.json({
                 status: 'error',  
                 text: err, 
                 goto: null, 
                 data: null
             })
+
         } else {
             
-            obj.save()
-            .then(data => {
+            if(reply.deletedCount == 0) {
+
+                console.log();
+                console.log('<<< PUT: _id = '+ req.params.obj_id);
+                console.log('<<< PUT: raw = '+ req.body);
+                console.log('<<< PUT: obj = '+ obj);
+                console.log('<<< PUT: res = '+ reply);
+                console.log('<<< PUT: err = '+ '_id unavailable');
+
+                res.json({
+                    status: 'error',  
+                    text: '_id unavailable', 
+                    goto: null, 
+                    data: null
+                })
+
+            } else {
+
+                obj.save()
                 
-                res.send({
+                .then(data => {
+
+                    console.log();
+                    console.log('<<< PUT: _id = '+ req.params.obj_id);
+                    console.log('<<< PUT: raw = '+ req.body);
+                    console.log('<<< PUT: obj = '+ obj);
+                    console.log('<<< PUT: res = '+ reply);
+                    console.log('<<< PUT: dat = '+ data);
                     
-                    status: 'ok', 
-                    text: null,
-                    goto: null,
-                    data: data 
-                });
-            })
-            .catch(err => {
-                
-                res.send({
+                    res.send({
+                        
+                        status: 'ok', 
+                        text: null,
+                        goto: null,
+                        data: data 
+                    });
+                })
+                .catch(err => {
+
+                    console.log();
+                    console.log('<<< PUT: _id = '+ req.params.obj_id);
+                    console.log('<<< PUT: raw = '+ req.body);
+                    console.log('<<< PUT: obj = '+ obj);
+                    console.log('<<< PUT: res = '+ reply);
+                    console.log('<<< PUT: err = '+ err);
                     
-                    status: 'error', 
-                    text: err,
-                    goto: null,
-                    data: null 
-                });
-            })
+                    res.send({
+                        
+                        status: 'error', 
+                        text: err,
+                        goto: null,
+                        data: null 
+                    });
+                })
+            };
         };
     })
 });
@@ -5036,8 +5080,6 @@ app.put("/api/cargo/:obj_id", function(req, res) {
 
 
 app.patch("/api/cargo/:obj_id", function(req, res) {
-    
-    console.log('UPDATE: _id = '+ req.params.obj_id + ' obj = ' + req.body);
 
     const raw = req.body;
 
@@ -5962,6 +6004,14 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
         
     getCollection(raw).findById(req.params.obj_id, function(err, obj) {
         if (err) {
+
+            console.log();
+            console.log('<<< PATCH: _id = '+ req.params.obj_id);
+            console.log('<<< PATCH: raw = '+ req.body);
+            console.log('<<< PATCH: chk = '+ checksum(raw));
+            console.log('<<< PATCH: col = '+ getCollection(raw));
+            console.log('<<< PATCH: err = '+ err);
+
             res.json({
                 status: 'error',  
                 text: err, 
@@ -5969,23 +6019,41 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                 data: null
             })
         } else {
-            replace(obj, raw).save(function(err) {
-                if (err) {
-                    res.json({
-                        status: 'error',  
-                        text: err, 
-                        goto: null, 
-                        data: null
-                    })
-                } else {
-                    res.json({
-                        status: 'ok',     
-                        text: null, 
-                        goto: null, 
-                        data: obj 
-                    });
-                };
-            })
+            
+            console.log();
+            console.log('<<< PATCH: _id = '+ req.params.obj_id);
+            console.log('<<< PATCH: raw = '+ req.body);
+            console.log('<<< PATCH: chk = '+ checksum(raw));
+            console.log('<<< PATCH: col = '+ getCollection(raw));
+            console.log('<<< PATCH: obj = '+ obj);
+
+            if(obj == null) {
+                res.json({
+                    status: 'error',  
+                    text: '_id unavailable', 
+                    goto: null, 
+                    data: null
+                })
+            } else {
+
+                replace(obj, raw).save(function(err) {
+                    if (err) {
+                        res.json({
+                            status: 'error',  
+                            text: err, 
+                            goto: null, 
+                            data: null
+                        })
+                    } else {
+                        res.json({
+                            status: 'ok',     
+                            text: null, 
+                            goto: null, 
+                            data: obj 
+                        });
+                    };
+                })
+            }
         }
     })
 });
@@ -6411,7 +6479,7 @@ if(process.env.auto) {
 
         console.log();
         console.log('[!][!][!][!][!][!][!][!][!][!][!][!]');
-        console.log('[!][!][!] AUTO:   DISABLED [!][!][!]');
+        console.log('[!][!][!] AUTO: DISABLED   [!][!][!]');
         console.log('[!][!][!][!][!][!][!][!][!][!][!][!]');
     }
 }

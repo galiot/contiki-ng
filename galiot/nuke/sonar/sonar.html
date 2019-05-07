@@ -471,7 +471,10 @@
                 </div>
                 <input type="number" class="form-control" value=8080 id="database-input-port"></input>
                 <div class="input-group-prepend"> 
-                    <span class="input-group-text">/api/cargo/</span>  
+                    <span class="input-group-text">/api/cargo</span>  
+                </div>
+                <div class="input-group-prepend"> 
+                    <span class="input-group-text">/</span>  
                 </div>
                 <select class="custom-select" id="database-select">
                     <option value="system">system</option>
@@ -498,7 +501,6 @@
                     <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
                     <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
                     <option value="errors">errors</option>
-
                 </select> 
             </div>
     
@@ -532,20 +534,431 @@
 
 
 
-    <!--DEMO DIVISDION ================================================================= -->
-    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
 
-            <h1 class="text-center text-secondary" id="demo-h1">demo</h1>
-        
+
+
+
+
+    <!--CRUD DIVISDION ================================================================= -->
+
+    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="control-div">
+
+        <h1 class="text-center text-secondary" id="control-h1">control</h1>
+    
+        <br>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-muted" id="control-crud-button">crud</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="contaitner d-none" id="control-crud-div-input">
+
+            <h2 class="text-center text-secondary m-3" id="control-crud-h2-create">create</h2>
+
+            <div class="row m-1">
+                <div class="col-6">
+                    <div class="input-group" id="control-crud-input-group-post">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-success" type="button" id="control-crud-button-post">POST</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-post"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-post"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                    </div>
+                </div>
+                        
+                <div class="col-6">
+                    <input type="text" class="form-control text-light bg-secondary" placeholder='body' id="control-crud-input-body-post"></input>
+                </div>
+            </div>
+
+            <div class="d-none row text-center mt-2" id="control-crud-output-create"></div>
+
             <br>
 
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-auto">
-                        <button class="btn btn-muted" id="demo-button-dump">dump</button>
+            <h2 class="text-center text-secondary m-3" id="control-crud-h2-read">read</h2>
+
+            <div class="row m-1">
+                    <div class="col">
+                        <div class="input-group" id="control-crud-input-group-get-path">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-primary" type="button" id="control-crud-button-get-path">GET</button>  
+                            </div>
+                            <div class="input-group-prepend"> 
+                                <span class="input-group-text">http://</span>  
+                            </div>
+                            <input type="text" class="form-control" value='localhost' id="control-crud-input-address-get-path"></input>
+                            <div class="input-group-prepend"> 
+                                <span class="input-group-text">:</span>  
+                            </div>
+                            <input type="number" class="form-control" value=8080 id="control-crud-input-port-get-path"></input>
+                            <div class="input-group-prepend"> 
+                                <span class="input-group-text">/api</span>  
+                            </div>
+                            <div class="input-group-prepend"> 
+                                    <span class="input-group-text">/</span>  
+                                </div>
+                            <input type="text" class="form-control" value='' id="control-crud-input-path"></input>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="row m-1">
+                <div class="col">
+                    <div class="input-group" id="control-crud-input-group-get-one">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-primary" type="button" id="control-crud-button-get-one">GET</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-get-one"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-get-one"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <select class="custom-select" id="control-crud-select-get-one">
+                            <option value="system">system</option>
+                            <option value="devices">devices</option>
+                            <option value="energy">energy</option>
+                            <option value="stats/network/ip">stats/network/ip</option>
+                            <option value="stats/network/icmp">stats/network/icmp</option>
+                            <option value="stats/transport">stats/transport</option>
+                            <option value="stats/discovery">stats/discovery</option>
+                            <option value="cmd/ipaddr/">cmd/ipaddr</option>
+                            <option value="cmd/ipnbr/ipaddr">cmd/ipnbr/ipaddr</option>
+                            <option value="cmd/ipnbr/lladdr">cmd/ipnbr/lladdr</option>
+                            <option value="cmd/ipnbr/info">cmd/ipnbr/info</option>
+                            <option value="cmd/routes/default">cmd/routes/default</option>
+                            <option value="cmd/routes/links/sources">cmd/routes/links/sources</option>
+                            <option value="cmd/routes/links/destinations">cmd/routes/links/destinations</option>
+                            <option value="cmd/routes/entries/routes">cmd/routes/entries/routes</option>
+                            <option value="cmd/routes/entries/vias">cmd/routes/entries/vias</option>
+                            <option value="cmd/rplstatus/id">cmd/rplstatus/id</option>
+                            <option value="cmd/rplstatus/dag">cmd/rplstatus/dag</option>
+                            <option value="cmd/rplstatus/time">cmd/rplstatus/time</option>
+                            <option value="cmd/rplnbr/addr">cmd/rplnbr/addr</option>
+                            <option value="cmd/rplnbr/ranks">cmd/rplnbr/ranks</option>
+                            <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
+                            <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
+                            <option value="errors">errors</option>
+                        </select> 
+                        <div class="input-group-append"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control" placeholder='_id' id="control-crud-input-id-get-one"></input>
                     </div>
                 </div>
             </div>
+
+            <div class="row m-1">
+                <div class="col">
+                    <div class="input-group" id="control-crud-input-group-get-all">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-primary" type="button" id="control-crud-button-get-all">GET</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-get-all"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-get-all"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <select class="custom-select" id="control-crud-select-get-all">
+                            <option value="system">system</option>
+                            <option value="devices">devices</option>
+                            <option value="energy">energy</option>
+                            <option value="stats/network/ip">stats/network/ip</option>
+                            <option value="stats/network/icmp">stats/network/icmp</option>
+                            <option value="stats/transport">stats/transport</option>
+                            <option value="stats/discovery">stats/discovery</option>
+                            <option value="cmd/ipaddr/">cmd/ipaddr</option>
+                            <option value="cmd/ipnbr/ipaddr">cmd/ipnbr/ipaddr</option>
+                            <option value="cmd/ipnbr/lladdr">cmd/ipnbr/lladdr</option>
+                            <option value="cmd/ipnbr/info">cmd/ipnbr/info</option>
+                            <option value="cmd/routes/default">cmd/routes/default</option>
+                            <option value="cmd/routes/links/sources">cmd/routes/links/sources</option>
+                            <option value="cmd/routes/links/destinations">cmd/routes/links/destinations</option>
+                            <option value="cmd/routes/entries/routes">cmd/routes/entries/routes</option>
+                            <option value="cmd/routes/entries/vias">cmd/routes/entries/vias</option>
+                            <option value="cmd/rplstatus/id">cmd/rplstatus/id</option>
+                            <option value="cmd/rplstatus/dag">cmd/rplstatus/dag</option>
+                            <option value="cmd/rplstatus/time">cmd/rplstatus/time</option>
+                            <option value="cmd/rplnbr/addr">cmd/rplnbr/addr</option>
+                            <option value="cmd/rplnbr/ranks">cmd/rplnbr/ranks</option>
+                            <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
+                            <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
+                            <option value="errors">errors</option>
+                        </select> 
+                        <div class="input-group-append"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control bg-dark border-dark" id="control-crud-input-id-get-all" disabled></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-none row text-center mt-2" id="control-crud-output-read"></div>
+
+            <br>
+
+            <h2 class="text-center text-secondary m-3" id="control-crud-h2-update">update</h2>
+
+            <div class="row m-1">
+                <div class="col-9">
+                    <div class="input-group" id="control-crud-input-group-patch">
+                        <div class="input-group-prepend">
+                            <button style="width:80px" class="btn btn-warning" type="button" id="control-crud-button-patch">PATCH</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-patch"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-patch"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control" placeholder='_id' id="control-crud-input-id-patch"></input>
+                    </div>
+                </div>
+                        
+                <div class="col-3">
+                    <input type="text" class="form-control text-light bg-secondary" placeholder='body' id="control-crud-input-body-patch"></input>
+                </div>
+            </div>
+
+            <div class="row m-1">
+                <div class="col-9">
+                    <div class="input-group" id="control-crud-input-group-put">
+                        <div class="input-group-prepend">
+                            <button style="width:80px" class="btn btn-warning" type="button" id="control-crud-button-put">PUT</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-put"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-put"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control" placeholder='_id' id="control-crud-input-id-put"></input>
+                    </div>
+                </div>
+                        
+                <div class="col-3">
+                    <input type="text" class="form-control text-light bg-secondary" placeholder='body' id="control-crud-input-body-put"></input>
+                </div>
+            </div>
+
+            <div class="d-none row text-center mt-2" id="control-crud-output-update"></div>
+
+            <br>
+
+            <h2 class="text-center text-secondary m-3" id="control-crud-h2-delete">delete</h2>
+
+            <div class="row m-1">
+                <div class="col">
+                    <div class="input-group" id="control-crud-input-group-delete-one">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-danger" type="button" id="control-crud-button-delete-one">DELETE</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-delete-one"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-delete-one"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <select class="custom-select" id="control-crud-select-delete-one">
+                            <option value="system">system</option>
+                            <option value="devices">devices</option>
+                            <option value="energy">energy</option>
+                            <option value="stats/network/ip">stats/network/ip</option>
+                            <option value="stats/network/icmp">stats/network/icmp</option>
+                            <option value="stats/transport">stats/transport</option>
+                            <option value="stats/discovery">stats/discovery</option>
+                            <option value="cmd/ipaddr/">cmd/ipaddr</option>
+                            <option value="cmd/ipnbr/ipaddr">cmd/ipnbr/ipaddr</option>
+                            <option value="cmd/ipnbr/lladdr">cmd/ipnbr/lladdr</option>
+                            <option value="cmd/ipnbr/info">cmd/ipnbr/info</option>
+                            <option value="cmd/routes/default">cmd/routes/default</option>
+                            <option value="cmd/routes/links/sources">cmd/routes/links/sources</option>
+                            <option value="cmd/routes/links/destinations">cmd/routes/links/destinations</option>
+                            <option value="cmd/routes/entries/routes">cmd/routes/entries/routes</option>
+                            <option value="cmd/routes/entries/vias">cmd/routes/entries/vias</option>
+                            <option value="cmd/rplstatus/id">cmd/rplstatus/id</option>
+                            <option value="cmd/rplstatus/dag">cmd/rplstatus/dag</option>
+                            <option value="cmd/rplstatus/time">cmd/rplstatus/time</option>
+                            <option value="cmd/rplnbr/addr">cmd/rplnbr/addr</option>
+                            <option value="cmd/rplnbr/ranks">cmd/rplnbr/ranks</option>
+                            <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
+                            <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
+                            <option value="errors">errors</option>
+                        </select> 
+                        <div class="input-group-append"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control" placeholder='_id' id="control-crud-input-id-delete-one" ></input>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row m-1">
+                <div class="col">
+                    <div class="input-group" id="control-crud-input-group-delete-all">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-danger" type="button" id="control-crud-button-delete-all">DELETE</button>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">http://</span>  
+                        </div>
+                        <input type="text" class="form-control" value='localhost' id="control-crud-input-address-delete-all"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">:</span>  
+                        </div>
+                        <input type="number" class="form-control" value=8080 id="control-crud-input-port-delete-all"></input>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/api/cargo</span>  
+                        </div>
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <select class="custom-select" id="control-crud-select-delete-all">
+                            <option value="system">system</option>
+                            <option value="devices">devices</option>
+                            <option value="energy">energy</option>
+                            <option value="stats/network/ip">stats/network/ip</option>
+                            <option value="stats/network/icmp">stats/network/icmp</option>
+                            <option value="stats/transport">stats/transport</option>
+                            <option value="stats/discovery">stats/discovery</option>
+                            <option value="cmd/ipaddr/">cmd/ipaddr</option>
+                            <option value="cmd/ipnbr/ipaddr">cmd/ipnbr/ipaddr</option>
+                            <option value="cmd/ipnbr/lladdr">cmd/ipnbr/lladdr</option>
+                            <option value="cmd/ipnbr/info">cmd/ipnbr/info</option>
+                            <option value="cmd/routes/default">cmd/routes/default</option>
+                            <option value="cmd/routes/links/sources">cmd/routes/links/sources</option>
+                            <option value="cmd/routes/links/destinations">cmd/routes/links/destinations</option>
+                            <option value="cmd/routes/entries/routes">cmd/routes/entries/routes</option>
+                            <option value="cmd/routes/entries/vias">cmd/routes/entries/vias</option>
+                            <option value="cmd/rplstatus/id">cmd/rplstatus/id</option>
+                            <option value="cmd/rplstatus/dag">cmd/rplstatus/dag</option>
+                            <option value="cmd/rplstatus/time">cmd/rplstatus/time</option>
+                            <option value="cmd/rplnbr/addr">cmd/rplnbr/addr</option>
+                            <option value="cmd/rplnbr/ranks">cmd/rplnbr/ranks</option>
+                            <option value="cmd/rplnbr/values">cmd/rplnbr/values</option>
+                            <option value="cmd/rplnbr/parens">cmd/rplnbr/parens</option>
+                            <option value="errors">errors</option>
+                        </select> 
+                        <div class="input-group-append"> 
+                            <span class="input-group-text">/</span>  
+                        </div>
+                        <input type="text" class="form-control bg-dark border-dark" placeholder='' id="control-crud-input-id-delete-all" disabled></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-none row text-center mt-2" id="control-crud-output-delete"></div>
+            
+        </div>
+
+        <div class="container mt-5 mb-auto mx-auto p-auto text-center" id="control-crud-div-response">
+
+            <h1 class="text-light m-3" id="control-crud-h2-response">response</h1>
+            
+            <div class="container m-1 p-auto text-light text-left bg-dark " id="control-crud-div-response-content">dfsdffds</div>
+
+        </div>
+
+        <br>
+        <br>
+
+            <div class="container text-center m-auto p-auto">
+                <!-- BUTTONS -->
+                <button class="btn btn-outline-danger" id="control-button-reload">reload</button>
+                <button class="btn btn-outline-warning" id="control-button-clear">clear</button>
+                <button class="btn btn-outline-secondary" id="control-button-continue">continue</button>
+            </div>
+
+    
+    </div>
+
+    
+
+
+
+
+
+
+
+
+    <!--DEMO DIVISDION ================================================================= -->
+    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
+
+        <h1 class="text-center text-secondary" id="demo-h1">demo</h1>
+    
+        <br>
+
+        
+
+
+
+
+        <br>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-muted" id="demo-button-dump">dump</button>
+                </div>
+            </div>
+        </div>
 
         <div class="d-none bg-success row text-center justify-content-center mt-2" id="demo-output-dump"></div>
 

@@ -1139,6 +1139,88 @@ const databaseButtonReload = document.getElementById('database-button-reload');
 const databaseButtonClear = document.getElementById('database-button-clear');
 const databaseButtonContinue = document.getElementById('database-button-continue');
 
+//CONTROL
+
+const controlDiv = document.getElementById('control-div');
+const controlH1 = document.getElementById('control-h1');
+
+const controlCrudDivInput =  document.getElementById('control-crud-div-input');
+const controlCrudButton = document.getElementById('control-crud-button');
+
+const controlCrudH2Create = document.getElementById('control-crud-h2-create');
+const controlCrudH2Read = document.getElementById('control-crud-h2-read');
+const controlCrudH2Update = document.getElementById('control-crud-h2-update');
+const controlCrudH2Delete = document.getElementById('control-crud-h2-delete');
+
+const controlCrudInputGroupPost = document.getElementById('control-crud-input-group-post');
+const controlCrudInputGroupGetPath = document.getElementById('control-crud-input-group-get-path');
+const controlCrudInputGroupGetOne = document.getElementById('control-crud-input-group-get-one');
+const controlCrudInputGroupGetAll = document.getElementById('control-crud-input-group-get-all');
+const controlCrudInputGroupPatch = document.getElementById('control-crud-input-group-patch');
+const controlCrudInputGroupPut = document.getElementById('control-crud-input-group-put');
+const controlCrudInputGroupDeleteOne = document.getElementById('control-crud-input-group-delete-one');
+const controlCrudInputGroupDeleteAll = document.getElementById('control-crud-input-group-delete-all');
+
+const controlCrudButtonPost = document.getElementById('control-crud-button-post');
+const controlCrudButtonGetPath = document.getElementById('control-crud-button-get-path');
+const controlCrudButtonGetOne = document.getElementById('control-crud-button-get-one');
+const controlCrudButtonGetAll = document.getElementById('control-crud-button-get-all');
+const controlCrudButtonPatch = document.getElementById('control-crud-button-patch');
+const controlCrudButtonPut = document.getElementById('control-crud-button-put');
+const controlCrudButtonDeleteOne = document.getElementById('control-crud-button-delete-one');
+const controlCrudButtonDeleteAll = document.getElementById('control-crud-button-delete-all');
+
+const controlCrudInputAddressPost = document.getElementById('control-crud-input-address-post');
+const controlCrudInputAddressGetPath = document.getElementById('control-crud-input-address-get-path');
+const controlCrudInputAddressGetOne = document.getElementById('control-crud-input-address-get-one');
+const controlCrudInputAddressGetAll = document.getElementById('control-crud-input-address-get-all');
+const controlCrudInputAddressPatch = document.getElementById('control-crud-input-address-patch');
+const controlCrudInputAddressPut = document.getElementById('control-crud-input-address-put');
+const controlCrudInputAddressDeleteOne = document.getElementById('control-crud-input-address-delete-one');
+const controlCrudInputAddressDeleteAll = document.getElementById('control-crud-input-address-delete-all');
+
+const controlCrudInputPortPost = document.getElementById('control-crud-input-port-post');
+const controlCrudInputPortGetPath = document.getElementById('control-crud-input-port-get-path');
+const controlCrudInputPortGetOne = document.getElementById('control-crud-input-port-get-one');
+const controlCrudInputPortGetAll = document.getElementById('control-crud-input-port-get-all');
+const controlCrudInputPortPatch = document.getElementById('control-crud-input-port-patch');
+const controlCrudInputPortPut = document.getElementById('control-crud-input-port-put');
+const controlCrudInputPortDeleteOne = document.getElementById('control-crud-input-port-delete-one');
+const controlCrudInputPortDeleteAll = document.getElementById('control-crud-input-port-delete-all');
+
+const controlCrudInputIdPost = document.getElementById('control-crud-input-id-post');
+const controlCrudInputIdGetOne = document.getElementById('control-crud-input-id-get-one');
+const controlCrudInputIdGetAll = document.getElementById('control-crud-input-id-get-all');
+const controlCrudInputIdPatch = document.getElementById('control-crud-input-id-patch');
+const controlCrudInputIdPut = document.getElementById('control-crud-input-id-put');
+const controlCrudInputIdDeleteOne = document.getElementById('control-crud-input-id-delete-one');
+const controlCrudInputIdDeleteAll = document.getElementById('control-crud-input-id-delete-all');
+
+const controlCrudSelectGetOne = document.getElementById('control-crud-select-get-one');
+const controlCrudSelectGetAll = document.getElementById('control-crud-select-get-all');
+const controlCrudSelectDeleteOne = document.getElementById('control-crud-select-delete-one');
+const controlCrudSelectDeleteAll = document.getElementById('control-crud-select-delete-all');
+
+const controlCrudInputBodyPost = document.getElementById('control-crud-input-body-post');
+const controlCrudInputBodyPatch = document.getElementById('control-crud-input-body-patch');
+const controlCrudInputBodyPut = document.getElementById('control-crud-input-body-put');
+
+const controlCrudInputPath = document.getElementById('control-crud-input-path');
+
+const controlCrudOutputCreate = document.getElementById('control-crud-output-create');
+const controlCrudOutputRead = document.getElementById('control-crud-output-read');
+const controlCrudOutputUpdate = document.getElementById('control-crud-output-update');
+const controlCrudOutputDelete = document.getElementById('control-crud-output-delete');
+
+const controlCrudDivResponse = document.getElementById('control-crud-div-response');
+
+const controlCrudH2Response = document.getElementById('control-crud-h2-response');
+const controlCrudDivResponseContent = document.getElementById('control-crud-div-response-content');
+
+const controlButtonReload = document.getElementById('control-button-reload');
+const controlButtonClear = document.getElementById('control-button-clear');
+const controlButtonContinue = document.getElementById('control-button-continue');
+
 // DEMO
 
 const demoDiv = document.getElementById('demo-div');
@@ -1208,6 +1290,13 @@ databaseButtonReload.addEventListener('click', () => {
     window.location.reload(true);
 });
 
+// CONTROL
+
+controlButtonReload.addEventListener('click', () => {
+    event.preventDefault();
+    window.location.reload(true);
+});
+
 // DEMO
 
 demoButtonReload.addEventListener('click', () => {
@@ -1224,7 +1313,7 @@ demoButtonReload.addEventListener('click', () => {
 
 brButtonClear.addEventListener('click', () => {
                         
-    brDiv.classList.remove('border-danger', 'border-warning', 'border-success');
+    brDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary');
     brDiv.classList.add('border-info');
     
     neighborsElement.innerHTML = '';
@@ -1238,8 +1327,8 @@ brButtonClear.addEventListener('click', () => {
 
 nodesButtonClear.addEventListener('click', () => {
 
-    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-success');
-    nodesDiv.classList.add('border-primary');
+    nodesDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary');
+    nodesDiv.classList.add('border-info');
 
     nodesButtonIndex.classList.replace('d-none', 'd-block');
 
@@ -1294,7 +1383,7 @@ nodesButtonClear.addEventListener('click', () => {
 
 consoleButtonClear.addEventListener('click', () => {
 
-    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-success'); consoleDiv.classList.add('border-primary');
+    consoleDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-info');
 
     consoleOutputQuery.classList.replace('d-block', 'd-none');
     consoleTableQuery.classList.replace('d-block', 'd-none');
@@ -1310,7 +1399,7 @@ consoleButtonClear.addEventListener('click', () => {
 
 storeButtonClear.addEventListener('click', () => {
 
-    storeDiv.classList.remove('border-danger', 'border-warning', 'border-success'); storeDiv.classList.add('border-primary');
+    storeDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); storeDiv.classList.add('border-info');
 
     storeButtonSave.classList.remove('d-none');
 
@@ -1330,7 +1419,7 @@ storeButtonClear.addEventListener('click', () => {
 
 databaseButtonClear.addEventListener('click', () => {
 
-    databaseDiv.classList.remove('border-danger', 'border-warning', 'border-success'); databaseDiv.classList.add('border-primary');
+    databaseDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-info');
 
     databaseOutput.classList.replace('d-block', 'd-none');
 
@@ -1339,11 +1428,35 @@ databaseButtonClear.addEventListener('click', () => {
     databaseButtonDrop.classList.replace('d-block', 'd-none');
 });
 
+// CONTROL
+
+controlButtonClear.addEventListener('click', () => {
+
+    controlDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); controlDiv.classList.add('border-info');
+
+    controlCrudButton.classList.replace('d-block', 'd-none');
+
+    controlCrudDiv.classList.replace('d-block', 'd-none');
+
+    controlCrudOutputCreate.classList.replace('d-block', 'd-none');
+    controlCrudOutputCreate.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-info', 'bg-secondary');
+    controlCrudOutputCreate.innerText = '';
+    controlCrudOutputRead.classList.replace('d-block', 'd-none');
+    controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-info', 'bg-secondary');
+    controlCrudOutputRead.innerText = '';
+    controlCrudOutputUpdate.classList.replace('d-block', 'd-none');
+    controlCrudOutputUpdate.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-info', 'bg-secondary');
+    controlCrudOutputUpdate.innerText = '';
+    controlCrudOutputDelete.classList.replace('d-block', 'd-none');
+    controlCrudOutputDelete.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-info', 'bg-secondary');
+    controlCrudOutputDelete.innerText = '';
+});
+
 // DEMO
 
 demoButtonClear.addEventListener('click', () => {
 
-    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success'); databaseDiv.classList.add('border-primary');
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-info');
 
     demoButtonDump.classList.replace('d-none', 'd-block');
 
@@ -1377,7 +1490,11 @@ storeButtonContinue.addEventListener('click', () => {
     legendDiv.classList.replace('d-show', 'd-none');
 });
 databaseButtonContinue.addEventListener('click', () => {
-    demoDiv.classList.replace('d-none', 'd-block');
+    controlDiv.classList.replace('d-none', 'd-block');
+    legendDiv.classList.replace('d-show', 'd-none');
+});
+controlButtonContinue.addEventListener('click', () => {
+    demolDiv.classList.replace('d-none', 'd-block');
     legendDiv.classList.replace('d-show', 'd-none');
 });
 
@@ -7134,7 +7251,7 @@ function simConsole(nodesAddr) {
 
 function simDatabase(nodesAddr) {
 
-    storeDiv.classList.replace('border-secondary', 'border-primary');
+    storeDiv.classList.replace('border-secondary', 'border-info');
     storeH1.classList.replace('text-secondary', 'text-light');
 };
 
@@ -7153,7 +7270,7 @@ databaseButtonGet.addEventListener('click', () => {
             databaseOutput.classList.remove('bg-danger', 'bg-warning'); databaseOutput.classList.add('bg-success');
             databaseOutput.innerText = 'OK';
 
-            databaseDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-success');
+            databaseDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-success');
             
             databaseH2Response.classList.replace('d-none', 'd-block');
             databaseResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
@@ -7161,6 +7278,7 @@ databaseButtonGet.addEventListener('click', () => {
             databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             
             demoRun();
+            controlRun();
 
             databaseButtonDrop.classList.replace('d-none', 'd-block');
             databaseButtonDrop.addEventListener('click', () => {
@@ -7176,16 +7294,16 @@ databaseButtonGet.addEventListener('click', () => {
                         if(data.status == 'error') {
 
                             databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
-                            databaseOutput.innerText = data.text.errmsg;
+                            databaseOutput.innerText = 'already null';
 
-                            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+                            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
 
                         } else {
                             
                             databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-warning');
-                            databaseOutput.innerText = 'DROPPED';
+                            databaseOutput.innerText = 'dropped';
 
-                            databaseDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-warning');
+                            databaseDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-warning');
 
                         }
                         
@@ -7214,9 +7332,586 @@ databaseButtonGet.addEventListener('click', () => {
             databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-danger');
             databaseOutput.innerText = err;
 
-            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
         })
 });
+
+
+
+
+
+
+
+
+
+
+// {"pckt":{"vld":true,"err":null},"rcrd":2,"ndx":0,"id":{"sT":7886,"adr":"0012.4b00.0f82.da03","cd":"BLUE"},"sys":{"cV":"Contiki-NG-release/v4.2-335-ga95cf54ef-dirty","rt":"RPL Lite","net":"sicslowpan","pId":"0xabcd","mac":{"t":"CSMA","tDhS":null,"dCh":26},"nId":55811,"tIad":"fe80::212:4b00:f82:da03"},"hash":392888623}
+
+function crud() {
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // CREATE ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    controlCrudButtonPost.addEventListener('click', () => {
+
+        fetch(`http://${controlCrudInputAddressPost.value}:${controlCrudInputPortPost.value}/api/cargo/`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: controlCrudInputBodyPost.value
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.status == 'ok') {
+                
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputCreate.classList.replace('d-none', 'd-block');
+                controlCrudOutputCreate.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputCreate.classList.add('bg-success')
+                controlCrudOutputCreate.innerText = 'ok'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+            } else {
+                
+                controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+
+                controlCrudOutputCreate.classList.replace('d-none', 'd-block');
+                controlCrudOutputCreate.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputCreate.classList.add('bg-warning')
+                controlCrudOutputCreate.innerText = 'error'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputCreate.classList.replace('d-none', 'd-block');
+            controlCrudOutputCreate.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputCreate.classList.add('bg-danger')
+            controlCrudOutputCreate.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // READ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    controlCrudButtonGetPath.addEventListener('click', () => {
+
+        console.log(`http://${controlCrudInputAddressGetPath.value}:${controlCrudInputPortGetPath.value}/api/${controlCrudInputPath.value}`);
+
+        fetch(`http://${controlCrudInputAddressGetPath.value}:${controlCrudInputPortGetPath.value}/api/${controlCrudInputPath.value}`)
+
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.goto != null) {
+
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-info')
+                controlCrudOutputRead.innerText = 'goto'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+            
+            } else {
+
+                if(data.status == 'ok') {
+                
+                    controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                    
+                    controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                    controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-success')
+                    controlCrudOutputRead.innerText = 'ok'
+
+                    controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                    controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                    controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+    
+                } else {
+                    
+                    controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+    
+                    controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                    controlCrudOutputRead.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-warning')
+                    controlCrudOutputRead.innerText = 'error'
+
+                    controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                    controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                    controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+                };
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputRead.classList.replace('d-none', 'd-block');
+            controlCrudOutputRead.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-danger')
+            controlCrudOutputRead.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    controlCrudButtonGetOne.addEventListener('click', () => {
+
+        console.log(`http://${controlCrudInputAddressGetOne.value}:${controlCrudInputPortGetOne.value}/api/cargo/${controlCrudSelectGetOne.value}/${controlCrudInputIdGetOne.value}`);
+
+        fetch(`http://${controlCrudInputAddressGetOne.value}:${controlCrudInputPortGetOne.value}/api/cargo/${controlCrudSelectGetOne.value}/${controlCrudInputIdGetOne.value}`)
+
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.goto != null) {
+
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-info')
+                controlCrudOutputRead.innerText = 'goto'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+            
+            } else {
+
+                if(data.status == 'ok') {
+                
+                    controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                    
+                    controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                    controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-success')
+                    controlCrudOutputRead.innerText = 'ok'
+
+                    controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                    controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                    controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+    
+                } else {
+                    
+                    controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+    
+                    controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                    controlCrudOutputRead.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-warning')
+                    controlCrudOutputRead.innerText = 'error'
+
+                    controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                    controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                    controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+                };
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputRead.classList.replace('d-none', 'd-block');
+            controlCrudOutputRead.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-danger')
+            controlCrudOutputRead.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    controlCrudButtonGetAll.addEventListener('click', () => {
+
+        console.log(`http://${controlCrudInputAddressGetAll.value}:${controlCrudInputPortGetAll.value}/api/cargo/${controlCrudSelectGetAll.value}/`);
+
+        fetch(`http://${controlCrudInputAddressGetAll.value}:${controlCrudInputPortGetAll.value}/api/cargo/${controlCrudSelectGetAll.value}/`)
+
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.goto != null) {
+
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-info')
+                controlCrudOutputRead.innerText = 'goto'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+            
+            } else {
+
+                if(data.status == 'ok') {
+
+                    if(data.data.length == 0) {
+
+                        controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-success', 'border-info'); controlDiv.classList.add('border-secondary');
+                        
+                        controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                        controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-success'); controlCrudOutputRead.classList.add('bg-secondary')
+                        controlCrudOutputRead.innerText = 'empty'
+
+                        controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                        controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                        controlCrudDivResponseContent.innerHTML = `<pre class="text-secondary">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    } else {
+
+                        controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                        
+                        controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                        controlCrudOutputRead.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-success')
+                        controlCrudOutputRead.innerText = 'ok'
+
+                        controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                        controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                        controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+                    };
+                
+                    
+    
+                } else {
+                    
+                    controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+    
+                    controlCrudOutputRead.classList.replace('d-none', 'd-block');
+                    controlCrudOutputRead.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputRead.classList.add('bg-warning')
+                    controlCrudOutputRead.innerText = 'error'
+
+                    controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                    controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                    controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+                };
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputRead.classList.replace('d-none', 'd-block');
+            controlCrudOutputRead.classList.remove('bg-warning', 'bg-success', 'bg-info'); controlCrudOutputRead.classList.add('bg-danger')
+            controlCrudOutputRead.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // UPDATE ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    controlCrudButtonPatch.addEventListener('click', () => {
+
+        fetch(`http://${controlCrudInputAddressPatch.value}:${controlCrudInputPortPatch.value}/api/cargo/${controlCrudInputIdPatch.value}`,{
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: controlCrudInputBodyPatch.value
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.status == 'ok') {
+                
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+                controlCrudOutputUpdate.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-success')
+                controlCrudOutputUpdate.innerText = 'ok'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+            } else {
+                
+                controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+
+                controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+                controlCrudOutputUpdate.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-warning')
+                controlCrudOutputUpdate.innerText = 'error'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+            controlCrudOutputUpdate.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-danger')
+            controlCrudOutputUpdate.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    controlCrudButtonPut.addEventListener('click', () => {
+
+        fetch(`http://${controlCrudInputAddressPut.value}:${controlCrudInputPortPut.value}/api/cargo/${controlCrudInputIdPut.value}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: controlCrudInputBodyPut.value
+        })
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.status == 'ok') {
+                
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+                controlCrudOutputUpdate.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-success')
+                controlCrudOutputUpdate.innerText = 'ok'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+            } else {
+                
+                controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+
+                controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+                controlCrudOutputUpdate.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-warning')
+                controlCrudOutputUpdate.innerText = 'error'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputUpdate.classList.replace('d-none', 'd-block');
+            controlCrudOutputUpdate.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputUpdate.classList.add('bg-danger')
+            controlCrudOutputUpdate.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // DELETE ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    controlCrudButtonDeleteOne.addEventListener('click', () => {
+
+        console.log(`http://${controlCrudInputAddressDeleteOne.value}:${controlCrudInputPortDeleteOne.value}/api/cargo/${controlCrudSelectDeleteOne.value}/${controlCrudInputIdDeleteOne.value}`);
+
+        fetch(`http://${controlCrudInputAddressDeleteOne.value}:${controlCrudInputPortDeleteOne.value}/api/cargo/${controlCrudSelectDeleteOne.value}/${controlCrudInputIdDeleteOne.value}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.status == 'ok') {
+            
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputDelete.classList.replace('d-none', 'd-block');
+                controlCrudOutputDelete.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputDelete.classList.add('bg-success')
+                controlCrudOutputDelete.innerText = 'ok'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+            } else {
+                
+                controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+
+                controlCrudOutputDelete.classList.replace('d-none', 'd-block');
+                controlCrudOutputDelete.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputDelete.classList.add('bg-warning')
+                controlCrudOutputDelete.innerText = 'error'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputDelete.classList.replace('d-none', 'd-block');
+            controlCrudOutputDelete.classList.remove('bg-warning', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputDelete.classList.add('bg-danger')
+            controlCrudOutputDelete.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    controlCrudButtonDeleteAll.addEventListener('click', () => {
+
+        console.log(`http://${controlCrudInputAddressDeleteAll.value}:${controlCrudInputPortDeleteAll.value}/api/cargo/${controlCrudSelectDeleteAll.value}/`);
+
+        fetch(`http://${controlCrudInputAddressDeleteAll.value}:${controlCrudInputPortDeleteAll.value}/api/cargo/${controlCrudSelectDeleteAll.value}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        .then(res => res.json())
+        .then(data => {
+            
+            console.log(data);
+
+            if(data.status == 'ok') {
+
+                controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
+                
+                controlCrudOutputDelete.classList.replace('d-none', 'd-block');
+                controlCrudOutputDelete.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); controlCrudOutputDelete.classList.add('bg-success')
+                controlCrudOutputDelete.innerText = 'ok'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+            } else {
+                
+                controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
+
+                controlCrudOutputDelete.classList.replace('d-none', 'd-block');
+                controlCrudOutputDelete.classList.remove('bg-danger', 'bg-success', 'bg-info', 'bg-secondary'); controlCrudOutputDelete.classList.add('bg-warning')
+                controlCrudOutputDelete.innerText = 'already null'
+
+                controlCrudDivResponse.classList.replace('d-none', 'd-block');
+                controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
+                controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+            };
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            controlDiv.classList.remove('border-success', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-danger');
+
+            controlCrudOutputRead.classList.replace('d-none', 'd-block');
+            controlCrudOutputRead.classList.remove('bg-warning', 'bg-success', 'bg-info'); controlCrudOutputRead.classList.add('bg-danger')
+            controlCrudOutputRead.innerText = err;
+            
+            controlCrudDivResponse.classList.replace('d-none', 'd-block');
+            controlCrudDivResponseContent.classList.remove('text-left'); controlCrudDivResponseContent.classList.add('text-center')
+            controlCrudDivResponseContent.innerHTML = `<pre class="text-danger">${err}</pre>`;
+        })
+    });
+};
+
+
+function activateCrud() {
+
+    controlCrudDivInput.classList.replace('d-none', 'd-block');
+
+    crud();
+};
+
+function controlRun() {
+
+    controlDiv.classList.replace('border-secondary', 'border-info');
+    controlH1.classList.replace('text-secondary', 'text-light');
+    controlCrudButton.classList.replace('btn-muted', 'btn-outline-primary');
+
+    controlCrudButton.addEventListener('click', () => {
+
+        controlCrudButton.classList.add('d-none');
+        activateCrud();
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // function cargoFetch(address, port, path, array, index, tbody, callback) {
 
