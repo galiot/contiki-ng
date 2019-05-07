@@ -1120,6 +1120,8 @@ const storeButtonContinue = document.getElementById('store-button-continue');
 const databaseDiv = document.getElementById('database-div');
 const databaseH1 = document.getElementById('database-h1');
 
+const databaseButton = document.getElementById('database-button');
+
 const databaseInputGroup = document.getElementById('database-input-group');
 
 const databaseSelect = document.getElementById('database-select');
@@ -1231,6 +1233,11 @@ const demoButtonDump = document.getElementById('demo-button-dump');
 const demoOutputDump = document.getElementById('demo-output-dump');
 const demoTableDump = document.getElementById('demo-table-dump');
 const demoTableDumpTbody = document.getElementById('demo-table-dump-tbody');
+
+const demoDivProcessBridge = document.getElementById('demo-div-process-bridge');
+const demoDivProcessContent = document.getElementById('demo-div-process-content');
+
+const demoButtonProcess = document.getElementById('demo-button-process');
 
 const demoButtonReload = document.getElementById('demo-button-reload');
 const demoButtonClear = document.getElementById('demo-button-clear');
@@ -1456,14 +1463,17 @@ controlButtonClear.addEventListener('click', () => {
 
 demoButtonClear.addEventListener('click', () => {
 
-    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-info');
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary'); demoDiv.classList.add('border-info');
 
-    demoButtonDump.classList.replace('d-none', 'd-block');
+    demoButtonDump.classList.remove('d-none');
 
     demoOutputDump.classList.replace('d-block', 'd-none');
 
     demoTableDump.classList.replace('d-block', 'd-none');
     demoTableDumpTbody.innerHTML = '';
+
+    demoDivProcessBridge.classList.add('d-none');
+    demoDivProcessContent.classList.add('d-none');
 });
 
 
@@ -1494,7 +1504,7 @@ databaseButtonContinue.addEventListener('click', () => {
     legendDiv.classList.replace('d-show', 'd-none');
 });
 controlButtonContinue.addEventListener('click', () => {
-    demolDiv.classList.replace('d-none', 'd-block');
+    demoDiv.classList.replace('d-none', 'd-block');
     legendDiv.classList.replace('d-show', 'd-none');
 });
 
@@ -1742,7 +1752,7 @@ function scrap() {
 
                     
                     simConsole(nodesAddr);
-                    simDatabase(nodesAddr);
+                    activateStore(nodesAddr);
 
 
                     
@@ -1903,7 +1913,7 @@ function scrap() {
                         brDiv.classList.remove('border-danger');
                         brDiv.classList.add('border-warning');
 
-                        brOutput.innerText = 'INCOMPLETE';
+                        brOutput.innerText = 'incomplete';
 
                         brOutput.classList.remove('bg-danger');
                         brOutput.classList.remove('bg-success');
@@ -7249,92 +7259,162 @@ function simConsole(nodesAddr) {
     })
 };
 
-function simDatabase(nodesAddr) {
+function activateStore(nodesAddr) {
 
     storeDiv.classList.replace('border-secondary', 'border-info');
     storeH1.classList.replace('text-secondary', 'text-light');
+
+    
+};
+
+
+databaseButton.addEventListener('click', () => {
+
+    databaseButton.classList.add('d-none');
+    databaseInputGroup.classList.remove('d-none');
+
+    runDatabase();
+});
+
+
+function runDatabase() {
+
+    databaseButtonGet.addEventListener('click', () => {
+
+        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`)
+    
+            .then(res => res.json())
+            .then(data => {
+                    
+                console.log(data);
+                
+                databaseOutput.classList.replace('d-none', 'd-block');
+                databaseOutput.classList.remove('bg-danger', 'bg-warning'); databaseOutput.classList.add('bg-success');
+                databaseOutput.innerText = 'OK';
+    
+                databaseDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-success');
+                
+                databaseH2Response.classList.replace('d-none', 'd-block');
+                databaseResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
+    
+                databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                
+                controlRun();
+    
+                databaseButtonDrop.classList.replace('d-none', 'd-block');
+                databaseButtonDrop.addEventListener('click', () => {
+    
+                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`, {
+                        method: 'DELETE'
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            
+                            console.log(data);
+                            
+                            if(data.status == 'error') {
+    
+                                databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
+                                databaseOutput.innerText = 'already null';
+    
+                                databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
+    
+                            } else {
+                                
+                                databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-warning');
+                                databaseOutput.innerText = 'dropped';
+    
+                                databaseDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-warning');
+    
+                            }
+                            
+                            databaseResponse.innerHTML = '';
+            
+                            databaseButtonDrop.classList.replace('d-block', 'd-none');
+    
+                        })
+                        
+                        // .catch(err => {
+    
+                        //     console.log(err);
+    
+                        //     databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
+                        //     databaseOutput.innerText = err;
+    
+                        //     databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
+                        // })
+                });
+            })
+            .catch(err => {
+    
+                console.log(err);
+    
+                databaseOutput.classList.replace('d-none', 'd-block');
+                databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-danger');
+                databaseOutput.innerText = err;
+    
+                databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
+            })
+    });
 };
 
 
 
-databaseButtonGet.addEventListener('click', () => {
 
-    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`)
 
-        .then(res => res.json())
-        .then(data => {
-                
-            console.log(data);
-            
-            databaseOutput.classList.replace('d-none', 'd-block');
-            databaseOutput.classList.remove('bg-danger', 'bg-warning'); databaseOutput.classList.add('bg-success');
-            databaseOutput.innerText = 'OK';
 
-            databaseDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-success');
-            
-            databaseH2Response.classList.replace('d-none', 'd-block');
-            databaseResponse.innerHTML = `<pre class="text-light">${JSON.stringify(data, null, 2)}</pre>`;
 
-            databaseButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
-            
-            demoRun();
-            controlRun();
 
-            databaseButtonDrop.classList.replace('d-none', 'd-block');
-            databaseButtonDrop.addEventListener('click', () => {
 
-                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/${databaseSelect.value}`, {
-                    method: 'DELETE'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        
-                        console.log(data);
-                        
-                        if(data.status == 'error') {
 
-                            databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
-                            databaseOutput.innerText = 'already null';
 
-                            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
 
-                        } else {
-                            
-                            databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-warning');
-                            databaseOutput.innerText = 'dropped';
 
-                            databaseDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-warning');
 
-                        }
-                        
-                        databaseResponse.innerHTML = '';
-        
-                        databaseButtonDrop.classList.replace('d-block', 'd-none');
 
-                    })
-                    
-                    // .catch(err => {
 
-                    //     console.log(err);
 
-                    //     databaseOutput.classList.remove('bg-warning', 'bg-success'); databaseOutput.classList.add('bg-danger');
-                    //     databaseOutput.innerText = err;
 
-                    //     databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); databaseDiv.classList.add('border-danger');
-                    // })
-            });
-        })
-        .catch(err => {
 
-            console.log(err);
 
-            databaseOutput.classList.replace('d-none', 'd-block');
-            databaseOutput.classList.remove('bg-danger', 'bg-success'); databaseOutput.classList.add('bg-danger');
-            databaseOutput.innerText = err;
 
-            databaseDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); databaseDiv.classList.add('border-danger');
-        })
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7913,6 +7993,58 @@ function controlRun() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // function cargoFetch(address, port, path, array, index, tbody, callback) {
 
 //     fetch(`http://${address}:${port}/api${path}`)
@@ -7949,9 +8081,90 @@ function controlRun() {
 //         callback;
 // };
 
+demoDiv.classList.remove('d-none');
+
 function demoProcess(array) {
 
+    demoDivProcessBridge.classList.remove('d-none');
+    demoButtonProcess.addEventListener('click', () => {
+
+        demoDivProcessBridge.classList.add('d-none');
+        demoDivProcessContent.classList.remove('d-none');
+
+        demoTableDump.classList.replace('d-block', 'd-none');
+
+        console.log('lfkdlkjkffkjl');
+
+    })
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8371,7 +8584,7 @@ function demoRun() {
                                                                                                             <tr>
                                                                                                                 <td>/cargo/errors</td>
                                                                                                                 <td class="text-dark bg-success text-center">OK</td>
-                                                                                                                <td class="text-right text-warning"><span class="text-secondary"> errors: </span></td>
+                                                                                                                <td class="text-right text-warning"><span class="text-secondary"> docs: </span></td>
                                                                                                                 <td class="text-left text-warning">${datarray[23].length}</td>
                                                                                                             </tr>`;
                                                                             
@@ -8764,6 +8977,6 @@ function demoRun() {
     })
 };
 
-
+demoRun();
 
 

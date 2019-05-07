@@ -448,17 +448,21 @@
     
     
     <!--DATABASE DIVISDION ================================================================= -->
-    <div class=" p-3 my-5 mx-auto container bg-dark border border-primary rounded" id="database-div">
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-info rounded" id="database-div">
 
             <h1 class="text-center text-light" id="database-h1">database</h1>
         
             <br>
 
-            
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button class="btn btn-outline-primary" id="database-button">db</button>
+                    </div>
+                </div>
+            </div>
                 
-                
-                    
-            <div class="input-group" id="database-input-group">
+            <div class="d-none input-group" id="database-input-group">
                 <div class="input-group-prepend">
                     <button class="btn btn-primary" type="button" id="database-button-get">GET</button>  
                 </div>
@@ -541,7 +545,7 @@
 
     <!--CRUD DIVISDION ================================================================= -->
 
-    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="control-div">
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="control-div">
 
         <h1 class="text-center text-secondary" id="control-h1">control</h1>
     
@@ -908,11 +912,11 @@
             
         </div>
 
-        <div class="container mt-5 mb-auto mx-auto p-auto text-center" id="control-crud-div-response">
+        <div class="d-none container mt-5 mb-auto mx-auto p-auto text-center" id="control-crud-div-response">
 
             <h1 class="text-light m-3" id="control-crud-h2-response">response</h1>
             
-            <div class="container m-1 p-auto text-light text-left bg-dark " id="control-crud-div-response-content">dfsdffds</div>
+            <div class="container m-1 p-auto text-light text-left bg-dark " id="control-crud-div-response-content"></div>
 
         </div>
 
@@ -939,23 +943,16 @@
 
 
     <!--DEMO DIVISDION ================================================================= -->
-    <div class="p-3 my-5 mx-auto container bg-dark border border-secondary rounded" id="demo-div">
+    <div class="d-none p-3 my-5 mx-auto container bg-dark border border-info rounded" id="demo-div">
 
-        <h1 class="text-center text-secondary" id="demo-h1">demo</h1>
+        <h1 class="text-center text-light" id="demo-h1">demo</h1>
     
-        <br>
-
-        
-
-
-
-
         <br>
 
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-auto">
-                    <button class="btn btn-muted" id="demo-button-dump">dump</button>
+                    <button class="btn btn-outline-primary" id="demo-button-dump">dump</button>
                 </div>
             </div>
         </div>
@@ -972,6 +969,22 @@
             </div>
         </div>
 
+        <br>
+
+        <div class="d-none container" id='demo-div-process-bridge'>
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <button class="btn btn-outline-primary" id="demo-button-process">process</button>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <div class="d-none container" id="demo-div-process-content">
+
+        </div>
+
+        
         <br>
         <br>
 
