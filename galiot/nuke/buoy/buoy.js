@@ -3429,7 +3429,7 @@ var tug = {
                     res.json({
                         status: 'ok',     
                         text: null, 
-                        goto: ['/routinglinks', '/routingentries'], 
+                        goto: null, 
                         data: cmd_routes       
                     })
                 }
@@ -3834,7 +3834,7 @@ var tug = {
                     res.json({
                         status: 'ok',     
                         text: null, 
-                        goto: ['/dag', '/trickletimer'], 
+                        goto: null, 
                         data: cmd_rplStatus       
                     })
                 }
@@ -4712,7 +4712,7 @@ router.route('/cargo/cmd/ipnbr/info/:cmd_IpNeighbors_info_id')
 router.route('/cargo/cmd/routes/default')
     .get(tug.cmd_routes.index)
     .delete(tug.cmd_routes.drop);
-router.route('/cargo/cmd/routes/:cmd_routes_id')
+router.route('/cargo/cmd/routes/default/:cmd_routes_id')
     .get(tug.cmd_routes.view)
     .delete(tug.cmd_routes.erase);
 

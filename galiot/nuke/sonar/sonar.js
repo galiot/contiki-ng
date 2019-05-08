@@ -1253,6 +1253,13 @@ const demoDivProcessContent = document.getElementById('demo-div-process-content'
 
 const demoButtonProcess = document.getElementById('demo-button-process');
 
+const demoButtonProcessDistinctNodes = document.getElementById('demo-button-process-distict-nodes');
+const demoOutputProcessDistinctNodes = document.getElementById('demo-output-process-distict-nodes');
+const demoTableProcessDistinctNodes = document.getElementById('demo-table-process-distict-nodes');
+
+const demoButtonProcessRecords = document.getElementById('demo-button-process-records');
+const demoTableProcessRecords = document.getElementById('demo-table-process-records');
+
 const demoButtonReload = document.getElementById('demo-button-reload');
 const demoButtonClear = document.getElementById('demo-button-clear');
 const demoButtonContinue = document.getElementById('demo-button-continue');
@@ -7635,6 +7642,8 @@ function crud() {
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
 
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
             } else {
                 
                 controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
@@ -7646,6 +7655,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             };
         })
 
@@ -7691,6 +7702,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             
             } else {
 
@@ -7705,6 +7718,8 @@ function crud() {
                     controlCrudDivResponse.classList.replace('d-none', 'd-block');
                     controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                     controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
     
                 } else {
                     
@@ -7717,6 +7732,8 @@ function crud() {
                     controlCrudDivResponse.classList.replace('d-none', 'd-block');
                     controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                     controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                 };
             };
         })
@@ -7761,6 +7778,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             
             } else {
 
@@ -7775,6 +7794,8 @@ function crud() {
                     controlCrudDivResponse.classList.replace('d-none', 'd-block');
                     controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                     controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
     
                 } else {
                     
@@ -7787,6 +7808,8 @@ function crud() {
                     controlCrudDivResponse.classList.replace('d-none', 'd-block');
                     controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                     controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                 };
             };
         })
@@ -7831,6 +7854,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-info">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             
             } else {
 
@@ -7848,6 +7873,8 @@ function crud() {
                         controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                         controlCrudDivResponseContent.innerHTML = `<pre class="text-secondary">${JSON.stringify(data, null, 2)}</pre>`;
 
+                        controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
                     } else {
 
                         controlDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-success');
@@ -7859,6 +7886,8 @@ function crud() {
                         controlCrudDivResponse.classList.replace('d-none', 'd-block');
                         controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                         controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
+
+                        controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                     };
                 
                     
@@ -7874,6 +7903,8 @@ function crud() {
                     controlCrudDivResponse.classList.replace('d-none', 'd-block');
                     controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                     controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                    controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                 };
             };
         })
@@ -7924,6 +7955,8 @@ function crud() {
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
 
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
             } else {
                 
                 controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
@@ -7935,6 +7968,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             };
         })
 
@@ -7982,6 +8017,8 @@ function crud() {
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
 
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
             } else {
                 
                 controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
@@ -7993,6 +8030,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             };
         })
 
@@ -8044,6 +8083,8 @@ function crud() {
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
 
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
             } else {
                 
                 controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
@@ -8055,6 +8096,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             };
         })
 
@@ -8104,6 +8147,8 @@ function crud() {
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-success">${JSON.stringify(data, null, 2)}</pre>`;
 
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
             } else {
                 
                 controlDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); controlDiv.classList.add('border-warning');
@@ -8115,6 +8160,8 @@ function crud() {
                 controlCrudDivResponse.classList.replace('d-none', 'd-block');
                 controlCrudDivResponseContent.classList.replace('text-center', 'text-left');
                 controlCrudDivResponseContent.innerHTML = `<pre class="text-warning">${JSON.stringify(data, null, 2)}</pre>`;
+
+                controlButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
             };
         })
 
@@ -8259,20 +8306,247 @@ function controlRun() {
 
 demoDiv.classList.remove('d-none');
 
-function demoProcess(array) {
+function findRecords(objarray, nodesarray) {
 
-    demoDivProcessBridge.classList.remove('d-none');
-    demoButtonProcess.addEventListener('click', () => {
+    demoButtonProcessRecords.classList.replace('btn-muted', 'btn-outline-primary');
 
-        demoDivProcessBridge.classList.add('d-none');
-        demoDivProcessContent.classList.remove('d-none');
+    demoButtonProcessRecords.addEventListener('click', () => {
 
-        demoTableDump.classList.replace('d-block', 'd-none');
+        let datearray = [];
+        let indexarray = [];
+        let recordsarray = [];
 
-        console.log('lfkdlkjkffkjl');
+        
+        nodesarray.addrs.forEach((addr, addrindex) => {
 
+            objarray.forEach((collarray, collindex) => {
+
+                collarray.forEach((doc, docindex) => {
+
+                    if(doc.mote.linkLayerAddress == addr) {
+                        datearray.push(doc.update);
+                    }
+                })
+
+                indexarray[collindex] = datearray;
+
+                console.log('addrindex: ' +addrindex);
+                console.log('collindex: ' +collindex);
+                console.log(indexarray[collindex]);
+
+                datearray = [];
+            })
+
+            recordsarray[addrindex] = indexarray;
+            indexarray = [];
+        });
+
+        // objarray.forEach((docarray, colindex) => {
+        //     docarray.forEach((doc, docindex) => {
+
+        //         nodesarray.addrs.forEach((addr, addrindex) => {
+        //             if(doc.mote.linkLayerAddress == addr) {
+        //                 datearray[addrindex].push(doc.update);
+        //             }
+        //         })
+        //     })
+
+
+
+        //     recordsarray[collindex] = 'address[date[]]'
+        // })
+
+        console.log(recordsarray);
+
+        let rechtml = ''
+
+       rechtml = `
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">#</th>`;
+
+        nodesarray.addrs.forEach((addr, addrindex) => {
+
+            rechtml += `
+            <th scope="col" class="text-center">${addr}</th>`;
+        })
+
+        rechtml += `
+            </tr>
+        </thead>
+        <tbody>`;
+
+        let paths = [
+            "system",
+            "device",
+            "energy",
+            "stats/network/ip",
+            "stats/network/icmp",
+            "stats/transport",
+            "stats/discovery",
+            "cmd/ipaddr",
+            "cmd/ipnbr/ipaddr",
+            "cmd/ipnbr/lladdr",
+            "cmd/ipnbr/info",
+            "cmd/routes/default",
+            "cmd/routes/links/sources",
+            "cmd/routes/links/destinations",
+            "cmd/routes/entries/routes",
+            "cmd/routes/entries/vias",
+            "cmd/rplstatus/id",
+            "cmd/rplstatus/dag",
+            "cmd/rplstatus/time",
+            "cmd/rplnbr/addr",
+            "cmd/rplnbr/ranks",
+            "cmd/rplnbr/values",
+            "cmd/rplnbr/parens",
+            "errors"
+        ];
+
+        objarray.forEach((coll, collindex) => {
+
+            rechtml += `
+            <tr>
+                <th  scope="row" class="text-left align-middle">${paths[collindex]}</th>`;
+
+            nodesarray.addrs.forEach((addr, addrindex) => {
+
+                rechtml += `<td class="text-center justify-content-center align-middle">`;
+
+                rechtml += `
+                    <table class="align-middle m-auto p-auto ">    
+                        <tbody>`;
+
+                recordsarray[addrindex][collindex].forEach((date, dateindex) => {
+
+                    rechtml += `
+                    <tr class="align-middle"><td class="text-center"> ${date}</td></tr>`;
+                })
+
+                rechtml += `
+                    </tbody>
+                </table>`;
+
+                rechtml += `${recordsarray[addrindex][collindex].length}`
+                
+                rechtml += `</td>`;
+            })
+            
+            rechtml += `
+            </tr>`;
+        })
+
+        rechtml += `
+        </tbody>`;
+
+        console.log(rechtml);
+
+        // console.log(recordsarray[0][0]);
+
+        demoTableProcessRecords.innerHTML = rechtml;
+        demoTableProcessRecords.classList.remove('d-none');
+
+        console.log(demoTableProcessRecords);
+    })
+}
+
+
+
+
+
+
+function findDistictNodes(objarray) {
+
+    let nodesarray = {
+        addrs: [],
+        codes: []
+    };
+
+    console.log(objarray);
+
+    objarray.forEach((object, index) => {
+        object.forEach((document, index) => {
+            nodesarray.addrs.push(document.mote.linkLayerAddress)
+            nodesarray.codes.push(document.mote.moteCode)
+        })
     })
 
+    console.log('all nodes addresses: ' + nodesarray);
+
+    nodesarray.addrs = [...new Set(nodesarray.addrs)]; 
+    nodesarray.codes = [...new Set(nodesarray.codes)]; 
+
+    console.log('unique nodes addrs: ' + nodesarray.addrs);
+    console.log('unique nodes codes: ' + nodesarray.codes);
+    console.log('count of unique nodes addrs: ' + nodesarray.addrs.length);
+    console.log('count of unique nodes codes: ' + nodesarray.codes.length);
+
+    if(nodesarray.addrs.length === nodesarray.codes.length) {
+        
+        demoButtonProcessDistinctNodes.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-secondary');
+        demoButtonProcessDistinctNodes.classList.add('btn-outline-success');
+
+        // demoOutputDump.classList.remove('bg-danger', 'bg-warning', 'bg-info', 'bg-secondary'); 
+        // demoOutputDump.classList.add('bg-success');
+        // demoOutputDump.innerText = 'OK';
+
+        demoTableProcessDistinctNodes.innerHTML = `
+        <thead>
+            <tr>
+                <th class="text-center">addr</th>
+                <th class="text-center">code</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+        nodesarray.addrs.forEach((addr, index) => {
+            
+            demoTableProcessDistinctNodes.innerHTML += `
+            <tr>
+                <td colspan="1" class="text-center">${nodesarray.addrs[index]}</td>
+                <td colspan="1" class="text-center">${nodesarray.codes[index]}</td>
+            </tr>`;
+        })
+
+        demoTableProcessDistinctNodes.innerHTML += `
+        </tbody>`;
+
+        demoTableProcessDistinctNodes.classList.remove('d-none');
+
+        findRecords(objarray, nodesarray);
+
+    } else {
+
+        demoButtonProcessDistinctNodes.classList.remove('btn-outline-warning', 'btn-outline-primary', 'btn-outline-secondart');
+        demoButtonProcessDistinctNodes.classList.add('btn-outline-danger');
+
+        demoOutputDump.classList.remove('bg-success', 'bg-warning', 'bg-info', 'bg-secondary'); 
+        demoOutputDump.classList.add('bg-danger');
+        demoOutputDump.innerText = 'inconsistency detected (between distinct nodes: addrs.length =! codes.lenght';
+
+    };
+
+    
+
+    // console.log(demoTableProcessDistinctNodes);
+};
+
+
+
+function demoProcess(objarray) {
+
+    // demoDivProcessBridge.classList.remove('d-none');
+
+    // demoDivProcessBridge.classList.add('d-none');
+    demoDivProcessContent.classList.remove('d-none');
+
+    demoDiv.classList.replace('border-success', 'border-primary');
+    // demoOutputDump.classList.replace('d-block', 'd-none');
+
+    demoButtonProcessDistinctNodes.addEventListener('click', () => {
+
+        findDistictNodes(objarray);
+    })
 };
 
 

@@ -506,7 +506,7 @@
                 </div>
                 <select class="custom-select" id="database-select">
                     <option value="system">system</option>
-                    <option value="devices">devices</option>
+                    <option value="device">device</option>
                     <option value="energy">energy</option>
                     <option value="stats/network/ip">stats/network/ip</option>
                     <option value="stats/network/icmp">stats/network/icmp</option>
@@ -668,7 +668,7 @@
                         </div>
                         <select class="custom-select" id="control-crud-select-get-one">
                             <option value="system">system</option>
-                            <option value="devices">devices</option>
+                            <option value="device">device</option>
                             <option value="energy">energy</option>
                             <option value="stats/network/ip">stats/network/ip</option>
                             <option value="stats/network/icmp">stats/network/icmp</option>
@@ -722,7 +722,7 @@
                         </div>
                         <select class="custom-select" id="control-crud-select-get-all">
                             <option value="system">system</option>
-                            <option value="devices">devices</option>
+                            <option value="device">device</option>
                             <option value="energy">energy</option>
                             <option value="stats/network/ip">stats/network/ip</option>
                             <option value="stats/network/icmp">stats/network/icmp</option>
@@ -846,7 +846,7 @@
                         </div>
                         <select class="custom-select" id="control-crud-select-delete-one">
                             <option value="system">system</option>
-                            <option value="devices">devices</option>
+                            <option value="device">device</option>
                             <option value="energy">energy</option>
                             <option value="stats/network/ip">stats/network/ip</option>
                             <option value="stats/network/icmp">stats/network/icmp</option>
@@ -900,7 +900,7 @@
                         </div>
                         <select class="custom-select" id="control-crud-select-delete-all">
                             <option value="system">system</option>
-                            <option value="devices">devices</option>
+                            <option value="device">device</option>
                             <option value="energy">energy</option>
                             <option value="stats/network/ip">stats/network/ip</option>
                             <option value="stats/network/icmp">stats/network/icmp</option>
@@ -995,18 +995,52 @@
 
         <br>
 
-        <div class="d-none container" id='demo-div-process-bridge'>
+        <!-- <div class="d-none container" id='demo-div-process-bridge'>
             <div class="row justify-content-center">
                 <div class="col-auto">
                     <button class="btn btn-outline-primary" id="demo-button-process">process</button>
                 </div>
             </div>
             <br>
-        </div>
+        </div> -->
 
         <div class="d-none container" id="demo-div-process-content">
 
+            <div class="row justify-content-center m-3 p-auto ">
+                <div class="col-auto">
+                    <button class="btn btn-outline-primary" id="demo-button-process-distict-nodes">distinct</button>
+                </div>
+            </div>
+
+            <div class="d-none bg-success row text-center justify-content-center mt-2" id="demo-output-process-distict-nodes"></div>
+
+            <div class="row justify-content-center m-3 p-auto">
+                <div class="col-4">
+                    <table class="d-none table table-sm table-bordered table-dark table-striped" id="demo-table-process-distict-nodes">
+                        
+                    </table>
+                </div>
+            </div>
+
+            <div class="row justify-content-center m-3 p-auto ">
+                <div class="col-auto">
+                    <button class="btn btn-muted" id="demo-button-process-records">records</button>
+                </div>
+            </div>
+
+            <div class="row justify-content-center m-3 p-auto">
+                <div class="col-12">
+                    <table style="vertical-align: middle" class="d-none table table-sm table-bordered table-dark table-striped" id="demo-table-process-records">
+                        
+                    </table>
+                </div>
+            </div>
+
+            <br>
+
         </div>
+
+
 
         
         
