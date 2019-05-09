@@ -1,0 +1,219 @@
+$("#jsGrid").jsGrid({
+
+    // A boolean value specifying whether controller.loadData will be called when grid is rendered.
+    autoload: true, // (default false)
+
+    // An object or function returning an object with the following structure:
+    //
+    // {
+    //     loadData: $.noop,
+    //     insertItem: $.noop,
+    //     updateItem: $.noop,
+    //     deleteItem: $.noop
+    // }
+    //
+    // loadData     is a function returning an array of data or jQuery promise that will be resolved with an array of data (when pageLoading is true instead of object the structure { data: [items], itemsCount: [total items count] } should be returned). Accepts filter parameter including current filter options and paging parameters when pageLoading is true.
+    // insertItem   is a function returning inserted item or jQuery promise that will be resolved with inserted item. Accepts inserting item object.
+    // updateItem   is a function returning updated item or jQuery promise that will be resolved with updated item. Accepts updating item object.
+    // deleteItem   is a function deleting item. Returns jQuery promise that will be resolved when deletion is completed. Accepts deleting item object.
+    
+    controller: {
+        loadData: function (filter) {
+            console.log(filter);
+            return $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/cargo/read/system",
+                data: filter,
+                dataType: "json"
+            }).then(function (result) {
+                return result.data;
+            });
+        }
+    },
+
+
+
+
+
+    // Specifies the overall width of the grid. Accepts all value types accepting by jQuery.width.
+    width: "100%", // (default: "auto")
+
+    // Specifies the overall height of the grid including the pager. Accepts all value types accepting by jQuery.height.
+    height: "auto", // (default: "auto")
+
+    // A boolean value specifies whether to show grid header or not.
+    heading: true, // (default: true)
+
+    // A boolean value specifies whether to show filter row or not.
+    filtering: false, // (default: false)
+
+    // A boolean value specifies whether to show inserting row or not.
+    inserting: false, // (default: false)
+
+    // A boolean value specifies whether editing is allowed.
+    editing: false, // (default: false)
+    
+    // A boolean value specifies whether to highlight grid rows on hover.
+    selecting: false, // (default: true)
+    
+    // A boolean value specifies whether sorting is allowed.
+    sorting: false, // (default: false)
+
+
+
+
+
+    // A boolean value specifies whether data is displayed by pages.
+    paging: true, // (default: false)
+
+        // An integer value specifying current page index. Applied only when paging is true.
+        pageIndex: 1, // (default 1)
+
+        // An integer value specifying the amount of items on the page. Applied only when paging is true.
+        pageSize: 15, // (default 20)
+
+    // A boolean value specifies whether to load data by page. When pageLoading is true the loadData method of controller accepts filter parameter with two additional properties pageSize and pageIndex.
+    pageLoading: false, // (default: false)
+
+
+
+
+
+    // A string or a function specifying row css classes. A string contains classes separated with spaces. A function has signature function(item, itemIndex). It accepts the data item and index of the item. It should returns a string containing classes separated with spaces.
+    // rowClass:
+
+    // A function handling row click. Accepts single argument with following structure:
+    // {
+    //     item       // data item
+    //     itemIndex  // data item index
+    //     event      // jQuery event
+    // }
+
+    // rowClick:
+    
+    // A string or a function returning a markup, jQueryElement or DomNode specifying the content to be displayed when data is an empty array.
+    noDataContent: "Not found", // (default "Not found")
+
+    // A boolean value specifying whether to ask user to confirm item deletion.
+    confirmDeleting: true, // (default true)
+
+    // A string or a function returning string specifying delete confirmation message to be displayed to the user. A function has the signature function(item) and accepts item to be deleted.
+    deleteConfirm: "Are you sure?", // (default "Are you sure?")
+
+    // A jQueryElement or DomNode to specify where to render a pager. Used for external pager rendering. When it is equal to null, the pager is rendered at the bottom of the grid.
+    pagerContainer: null, // (default null)
+    
+    
+
+    
+
+    // An integer value specifying the maximum amount of page buttons to be displayed in the pager.
+    pageButtonCount: 15, // (default 15)
+
+    // A string specifying pager format. The default value is "Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"
+    
+    // There are placeholders that can be used in the format:
+    // {first}     // link to first page
+    // {prev}      // link to previous page
+    // {pages}     // page links
+    // {next}      // link to next page
+    // {last}      // link to last page
+    // {pageIndex} // current page index
+    // {pageCount} // total amount of pages
+    // {itemCount} // total amount of items
+
+    // pagerFormat
+
+    // pageNextText (default "Next")
+    // A string specifying the text of the link to the next page.
+
+    // pagePrevText (default "Prev")
+    // A string specifying the text of the link to the previous page.
+
+    // pageFirstText (default "First")
+    // A string specifying the text of the link to the first page.
+
+    // pageLastText (default "Last")
+    // A string specifying the text of the link to the last page.
+
+    // pageNavigatorNextText (default "...")
+    // A string specifying the text of the link to move to next set of page links, when total amount of pages more than pageButtonCount.
+
+    // pageNavigatorPrevText (default "...")
+    // A string specifying the text of the link to move to previous set of page links, when total amount of pages more than pageButtonCount.
+
+    // invalidMessage (default "Invalid data entered!")
+    // A string specifying the text of the alert message, when invalid data was entered.
+
+    // invalidNotify
+    // A function triggered, when invalid data was entered. By default all violated validators messages are alerted. The behavior can be customized by providing custom function.
+    // The function accepts a single argument with the following structure:
+    // {
+    //     item                // inserting/editing item
+    //     itemIndex           // inserting/editing item index
+    //     errors              // array of validation violations in format { field: "fieldName", message: "validator message" }
+    // }
+
+    // loadIndication (default true)
+    // A boolean value specifying whether to show loading indication during controller operations execution.
+
+    // loadIndicationDelay (default 500)
+    // An integer value specifying the delay in ms before showing load indication. Applied only when loadIndication is true.
+
+    // loadMessage (default "Please, wait...")
+    // A string specifying the text of loading indication panel. Applied only when loadIndication is true.
+
+    // loadShading (default true)
+    // A boolean value specifying whether to show overlay (shader) over grid content during loading indication. Applied only when loadIndication is true.
+
+    // updateOnResize (default true)
+    // A boolean value specifying whether to refresh grid on window resize event.
+
+    // rowRenderer (default null)
+    // A function to customize row rendering. The function signature is function(item, itemIndex), where item is row data item, and itemIndex is the item index. The function should return markup as a string, jQueryElement or DomNode representing table row tr.
+
+    // headerRowRenderer (default null)
+    // A function to customize grid header row. The function should return markup as a string, jQueryElement or DomNode representing table row tr.
+
+    // filterRowRenderer (default null)
+    // A function to customize grid filter row. The function should return markup as a string, jQueryElement or DomNode representing table row tr.
+
+    // insertRowRenderer (default null)
+    // A function to customize grid inserting row. The function should return markup as a string, jQueryElement or DomNode representing table row tr.
+
+    // editRowRenderer (default null)
+    // A function to customize editing row rendering. The function signature is function(item, itemIndex), where item is row data item, and itemIndex is the item index. The function should return markup as a string, jQueryElement or DomNode representing table row tr.
+
+    // pagerRenderer (default null)
+    // version added: 1.2
+
+    // A function to customize pager rendering. The function accepts a single argument with the following structure:
+
+    // {
+    //     pageIndex,      // index of the currently opened page
+    //     pageCount       // total amount of grid pages
+    // }
+    // The function should return markup as a string, jQueryElement or DomNode representing the pager. If pagerRenderer is specified, then pagerFormat option will be ignored.
+
+    
+
+    
+    fields: [
+        // {name: "record", width: 100}
+        // {name: "name", width: 50},
+        // {name: "full_name", width: 100},
+        // {name: "owner.id", width: 100}
+        { name: "mote.systemTime", width: 100, filtering: false, sorting: false, autosearch: true  },
+        { name: "record", width: 100, filtering: false, sorting: false, autosearch: true  }
+    ],
+});
+
+$("#sort").click(function () {
+    var field = $("#sortingField").val();
+    $("#jsGrid").jsGrid("sort", field);
+});
+
+$(".config-panel input[type=checkbox]").on("click", function() {
+    var $cb = $(this);
+    $("#jsGrid").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+});
