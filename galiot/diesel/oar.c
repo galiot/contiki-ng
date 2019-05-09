@@ -252,8 +252,8 @@ PROCESS(webserver_process,  "webserver process" );
 
     #if (OAR_CONF_JSON == 1) 
 
-            int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 22 parts, indexed by index (see declaration below).
-            int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 22 inclusive.
+            int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 23 parts, indexed by index (see declaration below).
+            int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 23 inclusive.
   
     #endif
 
@@ -263,8 +263,8 @@ PROCESS(webserver_process,  "webserver process" );
 
 #if (OAR_CONF_BUOY_FUNCTIONALITY)
 
-    int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 22 parts, indexed by index (see declaration below).
-    int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 22 inclusive.
+    int rcrd = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the record. Every record has 23 parts, indexed by index (see declaration below).
+    int ndx = 0; // type 0 json is quantized, it's structured to be sent in pieces (so that they fit inside a tcp/ip packet). This variable is the index. It takes values from 0 to 23 inclusive.
     
     int tcpip_event_counter = 0; // counts the number of TCP/IP events listened by the process (prints as "iteration"). record and index values are calculated by this variable.
 
@@ -501,7 +501,7 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
 
                 #if (OAR_CONF_NUKE)
 
-                    if (uri < 0 || uri > 22)
+                    if (uri < 0 || uri > 23)
                     {
                         oar_json_error_construct(error_json, 0, "NUKE RESOURCE NOT AVAILABLE", 900);
 
@@ -974,10 +974,10 @@ static PT_THREAD(generate_routes(struct httpd_state *s))
     }
 
     tcpip_event_counter++; // icrease the tcpip_event_counter by one, as there must have been a TCP/IP arrived for generate_routes() to run
-    tcpip_event_counter %= 22999; // reset the counter, protect from overflow, 1000 records of 22 indexed seem enough for monitoring
+    tcpip_event_counter %= 23999; // reset the counter, protect from overflow, 1000 records of 23 indexed seem enough for monitoring
 
-    if (tcpip_event_counter % 23 == 0) { rcrd++; } // every 22 TCP/IP events, increase the record by one (22 parts, the complete json, must have been sent)
-    ndx = tcpip_event_counter % 23; // reset index every 22 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
+    if (tcpip_event_counter % 24 == 0) { rcrd++; } // every 23 TCP/IP events, increase the record by one (23 parts, the complete json, must have been sent)
+    ndx = tcpip_event_counter % 24; // reset index every 23 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
 
     #if (OAR_CONF_DEV)
 
@@ -1230,10 +1230,10 @@ PROCESS_THREAD(oar_debug_process, ev, data)
                             printf("\n"); printf("length of quantized json: %d\n", strlen(oar_json_buf));
 
                             tcpip_event_counter++; // icrease the tcpip_event_counter by one, as there must have been a TCP/IP arrived for generate_routes() to run
-                            tcpip_event_counter %= 22999; // reset the counter, protect from overflow, 1000 records of 22 indexed seem enough for monitoring
+                            tcpip_event_counter %= 23999; // reset the counter, protect from overflow, 1000 records of 23 indexed seem enough for monitoring
 
-                            if (tcpip_event_counter % 23 == 0) { rcrd++; } // every 22 TCP/IP events, increase the record by one (22 parts, the complete json, must have been sent)
-                            ndx = tcpip_event_counter % 23; // reset index every 22 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
+                            if (tcpip_event_counter % 24 == 0) { rcrd++; } // every 23 TCP/IP events, increase the record by one (23 parts, the complete json, must have been sent)
+                            ndx = tcpip_event_counter % 24; // reset index every 23 TCP/IP events. Send a unique part in every iteration of the tcpip_event_counter.
 
 
                             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

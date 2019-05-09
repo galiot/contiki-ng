@@ -569,6 +569,39 @@ var cmd_ipNeighbors_infoSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+var cmd_tschStatusSchema = new mongoose.Schema({
+    packet: {
+        valid: Boolean,
+        error: String
+    },
+    record: Number,
+    index: Number,
+    mote: {
+        systemTime: Number,
+        linkLayerAddress: String,
+        moteCode: String
+    },
+    cmd_tschStatus: {
+        tsch: Boolean,
+        isCoordinator: Boolean,
+        isAssociated: Boolean,
+        panID: String,
+        panSecured: Boolean,
+        joinPriority: Number,
+        timeSource: String,
+        lastSynchronized: Number,
+        driftWRTCoordinator: Number,
+        networkUptime: Number
+    },
+    checksum: {
+        hash: Number,
+        check: Boolean
+    },
+    update: { type: Date, default: Date.now }
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var cmd_routesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -1033,6 +1066,8 @@ var Cmd_ipNeighbors_llAddr                  = mongoose.model('Cmd_ipNeighbors_ll
 
 var NodeIPv6neighborInfo                    = mongoose.model('NodeIPv6neighborInfo',                    nodeIPv6neighborInfoSchema);
 var Cmd_ipNeighbors_info                    = mongoose.model('Cmd_ipNeighbors_info',                    cmd_ipNeighbors_infoSchema);
+
+var Cmd_tschStatus                          = mongoose.model('Cmd_tschStatus',                          cmd_tschStatusSchema);
 
 var Cmd_routes                              = mongoose.model('Cmd_routes',                              cmd_routesSchema);
 
@@ -1727,6 +1762,61 @@ function checkProcessSaveReturn(obj, doReturn) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             case 11:
+                var cmd_tschStatus = new Cmd_tschStatus({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_tschStatus: {
+                        tsch: obj.tsch.tsch,
+                        isCoordinator: obj.tsch.coo,
+                        isAssociated: obj.tsch.ass,
+                        panID: obj.tsch.panid,
+                        panSecured: obj.tsch.pansec,
+                        joinPriority: obj.tsch.joinp,
+                        timeSource: obj.tsch.tsrc,
+                        lastSynchronized: obj.tsch.lsyn,
+                        driftWRTCoordinator: obj.tsch.drift,
+                        networkUptime: obj.tsch.netup
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                console.log("");
+                console.log(cmd_tschStatus);
+
+                if(doReturn) {
+
+                    return(cmd_tschStatus);
+                
+                } else {
+
+                    cmd_tschStatus.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_tschStatus COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 12:
                 var cmd_routes = new Cmd_routes({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1774,7 +1864,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 12:
+            case 13:
                 var cmd_routes_routingLinks_sources = new Cmd_routes_routingLinks_sources({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1831,7 +1921,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 13:
+            case 14:
                 var cmd_routes_routingLinks_destinations = new Cmd_routes_routingLinks_destinations({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1888,7 +1978,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 14:
+            case 15:
                 var cmd_routes_routingEntries_routes = new Cmd_routes_routingEntries_routes({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1945,7 +2035,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 15:
+            case 16:
                 var cmd_routes_routingEntries_vias = new Cmd_routes_routingEntries_vias({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2002,7 +2092,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 16:
+            case 17:
                 var cmd_rplStatus = new Cmd_rplStatus({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2054,7 +2144,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 17:
+            case 18:
                 var cmd_rplStatus_dag = new Cmd_rplStatus_dag({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2116,7 +2206,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 18:
+            case 19:
                 var cmd_rplStatus_trickleTimer = new Cmd_rplStatus_trickleTimer({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2167,7 +2257,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 19:
+            case 20:
                 var cmd_rplNbr_addr = new Cmd_rplNbr_addr({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2224,7 +2314,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 20:
+            case 21:
                 var cmd_rplNbr_ranks = new Cmd_rplNbr_ranks({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2281,7 +2371,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 21:
+            case 22:
                 var cmd_rplNbr_values = new Cmd_rplNbr_values({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2338,7 +2428,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 22:
+            case 23:
                 var cmd_rplNbr_parens = new Cmd_rplNbr_parens({
                     packet: {
                         valid: obj.pckt.vld,
@@ -3413,7 +3503,84 @@ var tug = {
         }
     },
 
-
+    cmd_tschStatus: {
+        index: function (req, res) {
+            Cmd_tschStatus.find(function (err, cmd_tschStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_tschStatus       
+                    })
+                }
+            })
+        },
+        drop: function (req, res) {
+            Cmd_tschStatus.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
+        },
+        view: function (req, res) {
+            Cmd_tschStatus.findById(req.params.cmd_tschStatus_id, function(err, cmd_tschStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_tschStatus
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_tschStatus.deleteOne({_id: req.params.cmd_tschStatus_id}, function(err, cmd_tschStatus) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
+        }
+    },
 
     cmd_routes: {
         index: function (req, res) {
@@ -4564,7 +4731,7 @@ router.get('/cargo/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/ipaddr', '/ipnbr', '/routes', '/rplstatus', '/rplnbr'], 
+        goto: ['/ipaddr', '/ipnbr', '/tschstatus', '/routes', '/rplstatus', '/rplnbr'], 
         data: null
     });
 });
@@ -4708,6 +4875,13 @@ router.route('/cargo/cmd/ipnbr/info')
 router.route('/cargo/cmd/ipnbr/info/:cmd_IpNeighbors_info_id')
     .get(tug.cmd_IpNeighbors_info.view)
     .delete(tug.cmd_IpNeighbors_info.erase);
+
+router.route('/cargo/cmd/tschstatus')
+    .get(tug.cmd_tschStatus.index)
+    .delete(tug.cmd_tschStatus.drop);
+router.route('/cargo/cmd/tschstatus/:cmd_tschStatus_id')
+    .get(tug.cmd_tschStatus.view)
+    .delete(tug.cmd_tschStatus.erase);
 
 router.route('/cargo/cmd/routes/default')
     .get(tug.cmd_routes.index)
@@ -4965,28 +5139,30 @@ app.put("/api/cargo/:obj_id", function(req, res) {
                 case 10:
                     return Cmd_ipNeighbors_info;
                 case 11:
-                    return Cmd_routes;
+                    return Cmd_tschStatus;
                 case 12:
-                    return Cmd_routes_routingLinks_sources;
+                    return Cmd_routes;
                 case 13:
-                    return Cmd_routes_routingLinks_destinations;
+                    return Cmd_routes_routingLinks_sources;
                 case 14:
-                    return Cmd_routes_routingEntries_routes;
+                    return Cmd_routes_routingLinks_destinations;
                 case 15:
-                    return Cmd_routes_routingEntries_vias;
+                    return Cmd_routes_routingEntries_routes;
                 case 16:
-                    return Cmd_rplStatus;
+                    return Cmd_routes_routingEntries_vias;
                 case 17:
-                    return Cmd_rplStatus_dag;
+                    return Cmd_rplStatus;
                 case 18:
-                    return Cmd_rplStatus_trickleTimer;
+                    return Cmd_rplStatus_dag;
                 case 19:
-                    return Cmd_rplNbr_addr;
+                    return Cmd_rplStatus_trickleTimer;
                 case 20:
+                    return Cmd_rplNbr_addr;
+                case 21:
                     return Cmd_rplNbr_ranks;
-                case 21:
+                case 22:
                     return Cmd_rplNbr_values;
-                case 21:
+                case 23:
                     return Cmd_rplNbr_parens;
             };
         
@@ -5112,28 +5288,30 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                 case 10:
                     return Cmd_ipNeighbors_info;
                 case 11:
-                    return Cmd_routes;
+                    return Cmd_tschStatus;
                 case 12:
-                    return Cmd_routes_routingLinks_sources;
+                    return Cmd_routes;
                 case 13:
-                    return Cmd_routes_routingLinks_destinations;
+                    return Cmd_routes_routingLinks_sources;
                 case 14:
-                    return Cmd_routes_routingEntries_routes;
+                    return Cmd_routes_routingLinks_destinations;
                 case 15:
-                    return Cmd_routes_routingEntries_vias;
+                    return Cmd_routes_routingEntries_routes;
                 case 16:
-                    return Cmd_rplStatus;
+                    return Cmd_routes_routingEntries_vias;
                 case 17:
-                    return Cmd_rplStatus_dag;
+                    return Cmd_rplStatus;
                 case 18:
-                    return Cmd_rplStatus_trickleTimer;
+                    return Cmd_rplStatus_dag;
                 case 19:
-                    return Cmd_rplNbr_addr;
+                    return Cmd_rplStatus_trickleTimer;
                 case 20:
+                    return Cmd_rplNbr_addr;
+                case 21:
                     return Cmd_rplNbr_ranks;
-                case 21:
+                case 22:
                     return Cmd_rplNbr_values;
-                case 21:
+                case 23:
                     return Cmd_rplNbr_parens;
             };
         
@@ -5559,6 +5737,41 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                         linkLayerAddress: raw.id.adr,
                         moteCode: raw.id.cd
                     }
+                    obj.cmd_tschStatus = {
+                        tsch: obj.tsch.tsch,
+                        isCoordinator: obj.tsch.coo,
+                        isAssociated: obj.tsch.ass,
+                        panID: obj.tsch.panid,
+                        panSecured: obj.tsch.pansec,
+                        joinPriority: obj.tsch.joinp,
+                        timeSource: obj.tsch.tsrc,
+                        lastSynchronized: obj.tsch.lsyn,
+                        driftWRTCoordinator: obj.tsch.drift,
+                        networkUptime: obj.tsch.netup
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+                   
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                
+                case 12:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
                     obj.cmd_routes = {
                         ipv6: raw.rt.IPv6,
                         defaultRoute: raw.rt.df,
@@ -5574,7 +5787,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 12:
+                case 13:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5612,7 +5825,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 13:
+                case 14:
                     
                         obj.packet = {
                             valid: raw.pckt.vld,
@@ -5650,7 +5863,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 14:
+                case 15:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5687,7 +5900,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 15:
+                case 16:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5724,7 +5937,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 16:
+                case 17:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5756,7 +5969,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 17:
+                case 18:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5798,7 +6011,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 18:
+                case 19:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5829,7 +6042,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 19:
+                case 20:
                     
                         obj.packet = {
                             valid: raw.pckt.vld,
@@ -5867,7 +6080,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 20:
+                case 21:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5904,7 +6117,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 21:
+                case 22:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5941,7 +6154,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                    
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 22:
+                case 23:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6387,7 +6600,7 @@ function activateScrap(borderRouter, interval) {
             activeNodeIndex = activeNodeIndex % nodeHosts.length; // incerement the active node index
             
             nodePaths[activeNodeIndex]++;   
-            nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 23;
+            nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 24;
         
             console.log();
             console.log('</> </> </> </> </> </> </> </> </>');
