@@ -1978,7 +1978,7 @@ static int oar_json_append_ipv6_nbrs_ip(char * buf)
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                 if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
@@ -2170,7 +2170,7 @@ static int oar_json_append_ipv6_nbrs_ll(char * buf)
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                 if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
@@ -2365,7 +2365,7 @@ static int oar_json_append_ipv6_nbrs_states(char * buf)
 
             for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
             {
-                sprintf(str, "\"" "null" "\""); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                sprintf(str, "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
                 if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
@@ -2555,6 +2555,313 @@ static int oar_json_append_tsch_status(char * buf)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ####################################################################################################################
+// MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
+// ####################################################################################################################
+
+// ----------------------------------------------------------------------------
+// function that appends TSCH SCHEDULE section to the json string ///////////////
+// ----------------------------------------------------------------------------
+
+static int oar_json_append_tsch_schedule(char * buf)
+{
+    char str[128];
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION START tschSch{} /////////////////////////////////////////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "\"" "tschSch" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); /// 
+    sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); ///
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)########
+    #if (MAC_CONF_WITH_TSCH)
+
+        struct tsch_slotframe *sf;
+        
+        sprintf(str,            "\"" "tsch" "\"" ":"        "true"  ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+        // ???????????????????????????????????????????????????????????????????
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+        // ??????????????????????????????????????????????????????????????????? 
+
+        if (tsch_is_locked())
+        {
+            sprintf(str,        "\"" "lock" "\"" ":"        "true"  ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            sprintf(str,        "\"" "sch"  "\"" ":"        "null"  ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+        }
+        else
+        {
+            sprintf(str,        "\"" "lock" "\"" ":"        "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+            if (sf == NULL) 
+            {
+                sprintf(str,    "\"" "sch"  "\"" ":"        "false" ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                // SUBARRAY START tschSch{} > slts[] ////////////////////////////////////////////////////////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                sprintf(str, "\"" "slts" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+                    {
+                        sprintf(str, "null"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            
+                        if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                    }
+
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                // ::::::::::::::::::::::::::::::::
+                // SUBARRAY END  tschSch{} > slts[]
+                // ::::::::::::::::::::::::::::::::
+            
+            }
+            else
+            {
+                int oar_json_tsch_status_slot_count = 0;
+                
+                sprintf(str,                        "\""    "sch"   "\"" ":"        "true"                                  ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                // SUBARRAY START tschSch{} > slts[] ////////////////////////////////////////////////////////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                sprintf(str, "\"" "slts" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////
+                // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        
+                    // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                    sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                    while (sf != NULL)
+                    {
+                        oar_json_tsch_status_slot_count++;
+
+                        struct tsch_link *l = list_head(sf->links_list);
+
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                        sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        
+                            sprintf(str,            "\""    "hdl"   "\"" ":"        "%u"            ,sf->handle             ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str,            "\""    "sz"    "\"" ":"        "%u"            ,sf->size.val           ); if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        
+                            int oar_json_tsch_status_slot_link_count = 0;
+                            
+                            // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                            // SUBARRAY START tschSch{} > slts[] > lnks[] ////////////////////////////////////////////////////////
+                            // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                            sprintf(str, "\"" "lnks" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////
+                            // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+                                // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+                                sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                                while(l != NULL) 
+                                {
+                                    oar_json_tsch_status_slot_link_count++;
+                                
+                                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+                                    sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                                        sprintf(str,    "\""    "opt"   "\"" ":" "\""   "%02x"  "\""    ,l->link_options    ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                        sprintf(str,    "\""    "tp"    "\"" ":"        "%u"            ,l->link_type       ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                        sprintf(str,    "\""    "tslt"  "\"" ":"        "%u"            ,l->timeslot        ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                        sprintf(str,    "\""    "chOf"  "\"" ":"        "%u"            ,l->channel_offset  ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+                                        oar_json_lladdr_to_str(oar_json_lladdr, &l->addr);
+                                        sprintf(str,    "\""    "ad"    "\"" ":" "\""   "%s"    "\""    ,oar_json_lladd     ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                
+                                    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                    // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+
+                                    if (oar_json_tsch_status_slot_link_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+
+                                    l = list_item_next(l);
+                                }
+
+                                for (int j = oar_json_tsch_status_slot_link_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                                {
+                                    sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                    
+                                    if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
+                                }
+
+                                sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                                // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                            // :::::::::::::::::::::::::::::::::::::::::
+                            // SUBARRAY END  tschSch{} > slts[] > lnks[]
+                            // :::::::::::::::::::::::::::::::::::::::::
+
+                        sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
+           
+                        if (oar_json_ip_neighbor_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                        
+                        sf = tsch_schedule_slotframe_next(sf);
+
+                    }
+
+                    for (int j = oar_json_tsch_status_slot_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    {
+                        sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                        
+                        if (j != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); } 
+                    }
+
+                    sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+                // ::::::::::::::::::::::::::::::::
+                // SUBARRAY END  tschSch{} > slts[]
+                // ::::::::::::::::::::::::::::::::
+            
+            }
+            
+        }
+        
+    // ######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)######## MAC_CONF_WITH_TSCH)######## (MAC_CONF_WITH_TSCH)########
+    // ########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!
+    #else
+
+        sprintf(str,        "\"" "tsch"     "\"" ":"        "false"                                                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+        // ???????????????????????????????????????????????????????????????????
+        sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+        // ??????????????????????????????????????????????????????????????????? 
+
+        sprintf(str,        "\"" "lock"     "\"" ":"        "null"                                                                              ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\"" "sch"      "\"" ":"        "null"                                                                              ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        // SUBARRAY START tschSch{} > slts[] ////////////////////////////////////////////////////////
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        sprintf(str, "\"" "slts" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); //////
+        // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+            // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
+            sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
+
+            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+            {
+                sprintf(str, "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
+                    
+                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+            }
+
+            sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
+            // [[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]
+
+        // ::::::::::::::::::::::::::::::::
+        // SUBARRAY END  tschSch{} > slts[]
+        // ::::::::::::::::::::::::::::::::
+
+    #endif
+    // ########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str); ///
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SECTION END tschSch{} ////////////////////////////////////////////////
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5499,7 +5806,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_routing(buf))                                                        {return;}
+            if(oar_json_append_tsch_schedule(buf))                                                    {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5524,7 +5831,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_routing_link_sources(buf))                                           {return;}
+            if(oar_json_append_routing(buf))                                                        {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5549,7 +5856,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_routing_link_destinations(buf))                                      {return;}
+            if(oar_json_append_routing_link_sources(buf))                                           {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5574,7 +5881,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_routing_entry_routes(buf))                                           {return;}
+            if(oar_json_append_routing_link_destinations(buf))                                      {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5599,7 +5906,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_routing_entry_vias(buf))                                             {return;}
+            if(oar_json_append_routing_entry_routes(buf))                                           {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5624,7 +5931,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_status(buf))                                                     {return;}
+            if(oar_json_append_routing_entry_vias(buf))                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5649,7 +5956,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_status_dag(buf))                                                 {return;}
+            if(oar_json_append_rpl_status(buf))                                                     {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5674,7 +5981,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_status_trickle_timer(buf))                                       {return;}
+            if(oar_json_append_rpl_status_dag(buf))                                                 {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5699,7 +6006,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_neighbor(buf))                                                   {return;}
+            if(oar_json_append_rpl_status_trickle_timer(buf))                                       {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5724,7 +6031,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_neighbor_ranks(buf))                                             {return;}
+            if(oar_json_append_rpl_neighbor(buf))                                                   {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5749,7 +6056,7 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             if(oar_json_append_id(buf))                                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
-            if(oar_json_append_rpl_neighbor_values(buf))                                            {return;}
+            if(oar_json_append_rpl_neighbor_ranks(buf))                                             {return;}
 
             if(oar_json_bridge(buf))                                                                {return;}
             sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
@@ -5759,6 +6066,31 @@ void oar_json_construct(char * buf, int rcrd, int ndx)
             break;
 
         case 23:
+            oar_json_init(buf);
+            if(oar_json_enter(buf))                                                                 {return;}
+
+            oar_json_append_pckt(buf, 1, NULL, 0);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "rcrd"    "\"" ":" "%d", rcrd             ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "ndx"     "\"" ":" "%d", ndx              ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_id(buf))                                                             {return;}
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            if(oar_json_append_rpl_neighbor_values(buf))                                            {return;}
+
+            if(oar_json_bridge(buf))                                                                {return;}
+            sprintf(str, "\"" "hash"    "\"" ":" "%u", oar_sdbm(buf)    ); if(seguard(buf, str))    {return;} strcat(buf, str);
+
+            if(oar_json_exit(buf))                                                                  {return;}
+            
+            break;
+
+        case 24:
             oar_json_init(buf);
             if(oar_json_enter(buf))                                                                 {return;}
 
