@@ -2571,46 +2571,43 @@ static int oar_json_append_tsch_status(char * buf)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ####################################################################################################################
 // MAIN FUNCTIONS >>>>> CONTINUE <<<<< ////////////////////////////////////////////////////////////////////////////////
 // ####################################################################################################################
 
 // ----------------------------------------------------------------------------
-// function that appends TSCH SCHEDULE section to the json string ///////////////
+// function that appends TSCH SCHEDULE section to the json string /////////////
 // ----------------------------------------------------------------------------
+
+// {
+// 	"pckt": {
+// 		"vld": true,
+// 		"err": null
+// 	},
+// 	"rcrd": 0,
+// 	"ndx": 12,
+// 	"id": {
+// 		"sT": 89,
+// 		"adr": "0012.4b00.0f83.b601",
+// 		"cd": "RED"
+// 	},
+// 	"tschSch": {
+// 		"tsch": false,
+// 		"lock": null,
+// 		"sch": null,
+// 		"slts": [null, null, null]
+// 	},
+// 	"hash": 3100911209
+// }
 
 static int oar_json_append_tsch_schedule(char * buf)
 {
     char str[128];
     
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // SECTION START tschSch{} /////////////////////////////////////////////////////////////////////
+    // SECTION START tschSch{} //////////////////////////////////////////////////////////////////
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    sprintf(str, "\"" "tschSch" "\"" ":"   ); if(seguard(buf, str)){return 1;} strcat(buf, str); /// 
+    sprintf(str, "\"" "tschSch" "\"" ":"); if(seguard(buf, str)){return 1;} strcat(buf, str); /// 
     sprintf(str, "{"                    ); if(seguard(buf, str)){return 1;} strcat(buf, str); ///
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -2665,7 +2662,7 @@ static int oar_json_append_tsch_schedule(char * buf)
             }
             else
             {
-                int oar_json_tsch_status_slot_count = 0;
+                int oar_json_tsch_schedule_slot_count = 0;
                 
                 sprintf(str,                        "\""    "sch"   "\"" ":"        "true"                                  ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
             
@@ -2680,17 +2677,17 @@ static int oar_json_append_tsch_schedule(char * buf)
 
                     while (sf != NULL)
                     {
-                        oar_json_tsch_status_slot_count++;
+                        oar_json_tsch_schedule_slot_count++;
 
                         struct tsch_link *l = list_head(sf->links_list);
 
                         // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                         sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                            sprintf(str,            "\""    "hdl"   "\"" ":"        "%u"            ,sf->handle             ); if(seguard(buf, str)){return 1;} strcat(buf, str);    sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
+                            sprintf(str,            "\""    "hdl"   "\"" ":"        "%u"            ,sf->handle             ); if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                             sprintf(str,            "\""    "sz"    "\"" ":"        "%u"            ,sf->size.val           ); if(seguard(buf, str)){return 1;} strcat(buf, str);   sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
-                            int oar_json_tsch_status_slot_link_count = 0;
+                            int oar_json_tsch_schedule_slot_link_count = 0;
                             
                             // ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
                             // SUBARRAY START tschSch{} > slts[] > lnks[] ////////////////////////////////////////////////////////
@@ -2703,7 +2700,7 @@ static int oar_json_append_tsch_schedule(char * buf)
 
                                 while(l != NULL) 
                                 {
-                                    oar_json_tsch_status_slot_link_count++;
+                                    oar_json_tsch_schedule_slot_link_count++;
                                 
                                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
                                     sprintf(str, "{"); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -2719,12 +2716,12 @@ static int oar_json_append_tsch_schedule(char * buf)
                                     sprintf(str, "}"); if(seguard(buf, str)){return 1;} strcat(buf, str);
                                     // {{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
 
-                                    if (oar_json_tsch_status_slot_link_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                                    if (oar_json_tsch_schedule_slot_link_count != NBR_TABLE_CONF_MAX_NEIGHBORS) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
 
                                     l = list_item_next(l);
                                 }
 
-                                for (int j = oar_json_tsch_status_slot_link_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                                for (int j = oar_json_tsch_schedule_slot_link_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                                 {
                                     sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                                     
@@ -2747,7 +2744,7 @@ static int oar_json_append_tsch_schedule(char * buf)
 
                     }
 
-                    for (int j = oar_json_tsch_status_slot_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
+                    for (int j = oar_json_tsch_schedule_slot_count; j < NBR_TABLE_CONF_MAX_NEIGHBORS; j++)
                     {
                         sprintf(str,    "null"  );  if(seguard(buf, str)){return 1;} strcat(buf, str);
                         
@@ -2769,7 +2766,7 @@ static int oar_json_append_tsch_schedule(char * buf)
     // ########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!(MAC_CONF_WITH_TSCH)########!
     #else
 
-        sprintf(str,        "\"" "tsch"     "\"" ":"        "false"                                                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ","); if(seguard(buf, str)){return 1;} strcat(buf, str);
+        sprintf(str,        "\"" "tsch"     "\"" ":"        "false"                                                                             ); if(seguard(buf, str)){return 1;} strcat(buf, str); sprintf(str, ",");
 
         // ???????????????????????????????????????????????????????????????????
         sprintf(str, ",");  if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -2787,11 +2784,11 @@ static int oar_json_append_tsch_schedule(char * buf)
             // [[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]
             sprintf(str,"["); if(seguard(buf, str)){return 1;} strcat(buf, str);
 
-            for(int i = 0; i < UIP_DS6_ADDR_NB; i++) 
+            for(int i = 0; i < NBR_TABLE_CONF_MAX_NEIGHBORS; i++) 
             {
                 sprintf(str, "null" ); if(seguard(buf, str)){return 1;} strcat(buf, str);
                     
-                if (i != (UIP_DS6_ADDR_NB - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
+                if (i != (NBR_TABLE_CONF_MAX_NEIGHBORS - 1)) { sprintf(str, "," );  if(seguard(buf, str)){return 1;} strcat(buf, str); }
             }
 
             sprintf(str, "]"); if(seguard(buf, str)){return 1;} strcat(buf, str);
@@ -2812,56 +2809,6 @@ static int oar_json_append_tsch_schedule(char * buf)
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

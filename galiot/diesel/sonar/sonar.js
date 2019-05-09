@@ -576,6 +576,51 @@ function elaborate(obj, intact) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             
             case 12:
+                var cmd_tschSchedule = {
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_tschSchedule: {
+                        tsch: obj.tschSch.tsch,
+                        isLocked: obj.tschSch.lock,
+                        schedule: obj.tschSch.sch,
+                        slotframes: [null]
+                    },
+                    checksum: {
+                        hash: obj.hash,
+                        check: intact
+                    },
+                    update: new Date
+                };
+
+                obj.tschSch.slts.forEach(function(slotframe, index) {
+                    if (slotframe != null) {
+                        cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = {handle: slotframe.hdl, size: neighbor.sz, links: [null]}
+                        obj.tschSch.slts.lnks.forEach(function(link, linkindex) {
+                            if (link != null) {
+                                cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = {options: link.opt, type: link.tp, timeslot: link.tslt, channelOffset: link.chOf, address: link.ad}
+                            } else {
+                                cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = null
+                            }
+                        }) 
+                    } else {
+                        cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = null
+                    }
+                });
+
+                return cmd_tschSchedule;
+                
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+            
+            case 13:
                 var cmd_routes = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -604,7 +649,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 13:
+            case 14:
                 var cmd_routes_routingLinks_sources = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -642,7 +687,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 14:
+            case 15:
                 var cmd_routes_routingLinks_destinations = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -680,7 +725,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 15:
+            case 16:
                 var cmd_routes_routingEntries_routes = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -718,7 +763,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 16:
+            case 17:
                 var cmd_routes_routingEntries_vias = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -756,7 +801,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 17:
+            case 18:
                 var cmd_rplStatus = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -789,7 +834,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 18:
+            case 19:
                 var cmd_rplStatus_dag = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -832,7 +877,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 19:
+            case 20:
                 var cmd_rplStatus_trickleTimer = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -864,7 +909,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 20:
+            case 21:
                 var cmd_rplNbr_addr = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -902,7 +947,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 21:
+            case 22:
                 var cmd_rplNbr_ranks = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -940,7 +985,7 @@ function elaborate(obj, intact) {
                 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 22:
+            case 23:
                 var cmd_rplNbr_values = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -978,7 +1023,7 @@ function elaborate(obj, intact) {
                
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 23:
+            case 24:
                 var cmd_rplNbr_parens = {
                     packet: {
                         valid: obj.pckt.vld,
@@ -1852,17 +1897,11 @@ function runNodes(nodesAddr) {
                                                 case 6:
                                                     document.getElementById('legend-table-stats_discovery').classList.replace('d-none', 'd-show');
                                                     break;
-
-
                                             }
-
-                                            
-
                                         } 
                                         catch(error) {
                                             
                                             constructParse_FAIL(error);
-
                                         }
                                     })
                                 })
@@ -2322,7 +2361,7 @@ function cargoSave (node, obj) {
         storeTable.classList.replace('d-none', 'd-block');
         storeTableTbody.innerHTML = '';
         
-        if(obj[0].ndx == 0 || obj[0].ndx == 1 || obj[0].ndx == 2 || obj[0].ndx == 5 || obj[0].ndx == 6 || obj[0].ndx == 7 || obj[0].ndx == 11)
+        if(obj[0].ndx == 0 || obj[0].ndx == 1 || obj[0].ndx == 2 || obj[0].ndx == 5 || obj[0].ndx == 6 || obj[0].ndx == 7 || obj[0].ndx == 11  || obj[0].ndx == 12)
         {
             fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
                 method: 'POST',
@@ -2549,7 +2588,7 @@ function cargoSave (node, obj) {
             })
         };
 
-        if(obj[0].ndx == 12) {
+        if(obj[0].ndx == 13) {
 
             fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
                 method: 'POST',
@@ -2739,7 +2778,7 @@ function cargoSave (node, obj) {
             })
         };
 
-        if(obj[0].ndx == 17) {
+        if(obj[0].ndx == 18) {
 
             fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
                 method: 'POST',
@@ -2854,7 +2893,7 @@ function cargoSave (node, obj) {
             })
         };
 
-        if(obj[0].ndx == 20) {
+        if(obj[0].ndx == 21) {
 
             fetch(`http://${storeInputAddress.value}:${storeInputPort.value}/${storeInputPath.value}`,{
                 method: 'POST',
@@ -5240,7 +5279,187 @@ function simConsole(nodesAddr) {
 
                         tHTML += `
                             <tr>
-                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>0</b></td>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>11</b></td>
+                                <td class="text-warning">INVALID</td>
+                                <td class="text-danger">${error}</td>
+                            </tr>`;
+
+                        consoleTableQuery.classList.replace('d-none', 'd-block');
+                        consoleTableQueryTbody.innerHTML = tHTML;
+
+                        consoleOutputQuery.classList.replace('d-none', 'd-block');
+                        consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-danger');
+                        consoleOutputQuery.innerText = 'FAIL';
+
+                        consoleDiv.classList.remove('border-warning', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-danger');
+
+                        console.log(error);
+                    })
+                
+                break;
+
+                case 'shell-tschschedule':
+
+                obj = [];
+                tHTML = '';
+                dataHTML = '';
+
+                fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/12`)
+
+                    .then((response) => response.text())
+                        .then((text) => {
+                            
+                            console.log(text);
+                            let decodedText = atob(text);
+
+                            console.log(decodedText);
+                            console.log(consoleInputKey.value);
+
+                            let decryptedText = oarCrypt(decodedText, consoleInputKey.value);
+            
+                            console.log(decryptedText);
+                            
+                            obj[0] = JSON.parse(decryptedText);
+                            
+                            if(checksum(decryptedText)) {
+
+                                tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                        <td class="text-success">INTACT</td>
+                                        <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-danger', 'bg-warning'); consoleOutputQuery.classList.add('bg-success');
+                                consoleOutputQuery.innerText = 'OK';
+
+                                consoleDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-primary');
+
+                            } else {
+
+                                tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                        <td class="text-warning">CORRUPTED</td>
+                                        <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
+                                    </tr>`;
+
+                                consoleOutputQuery.classList.replace('d-none', 'd-block');
+                                consoleOutputQuery.classList.remove('bg-warning', 'bg-success'); consoleOutputQuery.classList.add('bg-warning');
+                                consoleOutputQuery.innerText = 'CORRUPTED';
+
+                                consoleDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary'); consoleDiv.classList.add('border-warning');
+                            };
+                            
+                            consoleTableQuery.classList.replace('d-none', 'd-block');
+                            consoleTableQueryTbody.innerHTML = tHTML;
+
+                            consoleH2.classList.replace('d-none', 'd-block');
+
+                            if(obj[0].pckt.vld) {
+
+                                dataHTML = `
+                                    <table class="table table-sm table-striped table-bordered bg-light" id="legend-table-system">
+                                        <tbody class="">
+                                            <tr>
+                                                <td colspan="1" class="text-center text-light bg-secondary">command</td>
+                                                <td colspan="1" class="text-center">tsch-status</td>
+                                            </tr>`;
+                                
+                                if (obj[0].tschSch.tsch == true) {
+
+                                    if (obj[0].tschSch.lock == true) {
+
+
+                                    } else {
+
+                                        if(obj[0].tschSch.sch == false) {
+
+                                            dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule: no slotframe</td>
+                                                </tr>`;
+                                        } else {
+
+                                            dataHTML += `
+                                                <tr>
+                                                    <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule:</td>
+                                                </tr>`;
+
+                                            obj[0].tschSch.slts.forEach((slot, slotindex) => {
+
+                                                dataHTML += `
+                                                    <tr>
+                                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Slotframe: handle ${slot.hdl}, size ${slot.sz}, links:</td>
+                                                    </tr>`;
+
+                                                slot.lnks.forEach((link, linkindex) => {
+
+                                                    dataHTML += `
+                                                        <tr>
+                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.opt}, type ${link.tp}, timeslot ${link.tslt}, channel offset ${chOf}, address ${link.ad}</td>
+                                                        </tr>`;
+                                                })
+                                            });
+                                        };
+                                    };
+
+                                } else {
+
+                                    dataHTML += `
+                                        <tr>
+                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">Command not found. Type 'help' for a list of commands</td>
+                                        </tr>`;
+                                };
+
+                                
+                                dataHTML += `
+                                    </tbody>
+                                        </table>`;
+
+                                consoleData.innerHTML = dataHTML;
+
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-warning'); storeButtonSave.classList.add('btn-outline-primary');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
+
+                            } else {
+
+                                createErrorTable(obj[0]);
+
+                                tHTML += `
+                                    <tr>
+                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                        <td class="text-warning">ERROR</td>
+                                        <td class="text-warning">${obj[0].id.sT}</td>
+                                    </tr>`;
+                                
+                                storeButtonSave.classList.remove('d-none', 'btn-muted', 'btn-primary'); storeButtonSave.classList.add('btn-outline-warning');
+                                storeButtonSave.addEventListener('click', () => {
+                                
+                                    cargoSave(nodesAddr[consoleSelectNode.value], obj);
+                                });
+                            };
+
+                            legendDiv.classList.replace('d-none', 'd-show');
+                            constructLegend(`
+                                <br>  
+                                <pre> 
+                                    ${JSON.stringify(elaborate(obj[0], checksum(decryptedText)), null, 2)} 
+                                </pre>`, undefined);
+
+                                consoleButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+
+                        })
+
+                    .catch((error) => {
+
+                        tHTML += `
+                            <tr>
+                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
                                 <td class="text-warning">INVALID</td>
                                 <td class="text-danger">${error}</td>
                             </tr>`;
@@ -5267,7 +5486,7 @@ function simConsole(nodesAddr) {
 
                 window.setTimeout(() => {
 
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/12`)
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/13`)
 
                         .then((response) => response.text())
                             .then((text) => {
@@ -5288,7 +5507,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
                                             <td class="text-success">INTACT</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -5303,7 +5522,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
                                             <td class="text-warning">CORRUPTED</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -5361,7 +5580,7 @@ function simConsole(nodesAddr) {
     
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
                                             <td class="text-warning">ERROR</td>
                                             <td class="text-warning">${obj[0].id.sT}</td>
                                         </tr>`;
@@ -5384,7 +5603,7 @@ function simConsole(nodesAddr) {
 
                                     window.setTimeout(() => {
 
-                                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/13`)
+                                        fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/14`)
                     
                                             .then((response) => response.text())
                                                 .then((text) => {
@@ -5405,7 +5624,7 @@ function simConsole(nodesAddr) {
                     
                                                         tHTML += `
                                                             <tr>
-                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
                                                                 <td class="text-success">INTACT</td>
                                                                 <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                             </tr>`;
@@ -5420,7 +5639,7 @@ function simConsole(nodesAddr) {
                     
                                                         tHTML += `
                                                             <tr>
-                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
                                                                 <td class="text-warning">CORRUPTED</td>
                                                                 <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                             </tr>`;
@@ -5513,7 +5732,7 @@ function simConsole(nodesAddr) {
                         
                                                         tHTML += `
                                                             <tr>
-                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                                <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
                                                                 <td class="text-warning">ERROR</td>
                                                                 <td class="text-warning">${obj[1].id.sT}</td>
                                                             </tr>`;
@@ -5541,7 +5760,7 @@ function simConsole(nodesAddr) {
 
                                                         window.setTimeout(() => {
 
-                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/14`)
+                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/15`)
                                         
                                                                 .then((response) => response.text())
                                                                     .then((text) => {
@@ -5562,7 +5781,7 @@ function simConsole(nodesAddr) {
                                         
                                                                             tHTML += `
                                                                                 <tr>
-                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
                                                                                     <td class="text-success">INTACT</td>
                                                                                     <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                                 </tr>`;
@@ -5577,7 +5796,7 @@ function simConsole(nodesAddr) {
                                         
                                                                             tHTML += `
                                                                                 <tr>
-                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
                                                                                     <td class="text-warning">CORRUPTED</td>
                                                                                     <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                                 </tr>`;
@@ -5670,7 +5889,7 @@ function simConsole(nodesAddr) {
                                             
                                                                             tHTML += `
                                                                                 <tr>
-                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
                                                                                     <td class="text-warning">ERROR</td>
                                                                                     <td class="text-warning">${obj[2].id.sT}</td>
                                                                                 </tr>`;
@@ -5703,7 +5922,7 @@ function simConsole(nodesAddr) {
 
                                                                         window.setTimeout(() => {
 
-                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/15`)
+                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/16`)
                                                         
                                                                                 .then((response) => response.text())
                                                                                     .then((text) => {
@@ -5724,7 +5943,7 @@ function simConsole(nodesAddr) {
                                                         
                                                                                             tHTML += `
                                                                                                 <tr>
-                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
                                                                                                     <td class="text-success">INTACT</td>
                                                                                                     <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
                                                                                                 </tr>`;
@@ -5739,7 +5958,7 @@ function simConsole(nodesAddr) {
                                                         
                                                                                             tHTML += `
                                                                                                 <tr>
-                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
                                                                                                     <td class="text-warning">CORRUPTED</td>
                                                                                                     <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
                                                                                                 </tr>`;
@@ -5869,7 +6088,7 @@ function simConsole(nodesAddr) {
                                                             
                                                                                             tHTML += `
                                                                                                 <tr>
-                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
                                                                                                     <td class="text-warning">ERROR</td>
                                                                                                     <td class="text-warning">${obj[3].id.sT}</td>
                                                                                                 </tr>`;
@@ -5907,7 +6126,7 @@ function simConsole(nodesAddr) {
 
                                                                                         window.setTimeout(() => {
 
-                                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/16`)
+                                                                                            fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/17`)
                                                                         
                                                                                                 .then((response) => response.text())
                                                                                                     .then((text) => {
@@ -5928,7 +6147,7 @@ function simConsole(nodesAddr) {
                                                                         
                                                                                                             tHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
                                                                                                                     <td class="text-success">INTACT</td>
                                                                                                                     <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
                                                                                                                 </tr>`;
@@ -5943,7 +6162,7 @@ function simConsole(nodesAddr) {
                                                                         
                                                                                                             tHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
                                                                                                                     <td class="text-warning">CORRUPTED</td>
                                                                                                                     <td class="">systemTime: <b>${obj[4].id.sT}</b>s</td>
                                                                                                                 </tr>`;
@@ -6079,7 +6298,7 @@ function simConsole(nodesAddr) {
                                                                             
                                                                                                             tHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
+                                                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
                                                                                                                     <td class="text-warning">ERROR</td>
                                                                                                                     <td class="text-warning">${obj[4].id.sT}</td>
                                                                                                                 </tr>`;
@@ -6131,7 +6350,7 @@ function simConsole(nodesAddr) {
                                                                         
                                                                                                     tHTML += `
                                                                                                         <tr>
-                                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
+                                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
                                                                                                             <td class="text-warning">INVALID</td>
                                                                                                             <td class="text-danger">${error}</td>
                                                                                                         </tr>`;
@@ -6155,7 +6374,7 @@ function simConsole(nodesAddr) {
                                                         
                                                                                     tHTML += `
                                                                                         <tr>
-                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>16</b></td>
                                                                                             <td class="text-warning">INVALID</td>
                                                                                             <td class="text-danger">${error}</td>
                                                                                         </tr>`;
@@ -6179,7 +6398,7 @@ function simConsole(nodesAddr) {
                                         
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>15</b></td>
                                                                             <td class="text-warning">INVALID</td>
                                                                             <td class="text-danger">${error}</td>
                                                                         </tr>`;
@@ -6203,7 +6422,7 @@ function simConsole(nodesAddr) {
                     
                                                 tHTML += `
                                                     <tr>
-                                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
+                                                        <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>14</b></td>
                                                         <td class="text-warning">INVALID</td>
                                                         <td class="text-danger">${error}</td>
                                                     </tr>`;
@@ -6227,7 +6446,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                                 <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>12</b></td>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>13</b></td>
                                     <td class="text-warning">INVALID</td>
                                     <td class="text-danger">${error}</td>
                                 </tr>`;
@@ -6256,7 +6475,7 @@ function simConsole(nodesAddr) {
 
                 window.setTimeout(() => {
 
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/17`)
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/18`)
 
                         .then((response) => response.text())
                             .then((text) => {
@@ -6277,7 +6496,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
                                             <td class="text-success">INTACT</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -6292,7 +6511,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
                                             <td class="text-warning">CORRUPTED</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -6375,7 +6594,7 @@ function simConsole(nodesAddr) {
     
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
                                             <td class="text-warning">ERROR</td>
                                             <td class="text-warning">${obj[0].id.sT}</td>
                                         </tr>`;
@@ -6398,7 +6617,7 @@ function simConsole(nodesAddr) {
 
                                 window.setTimeout(() => {
 
-                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/18`)
+                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/19`)
                 
                                         .then((response) => response.text())
                                             .then((text) => {
@@ -6419,7 +6638,7 @@ function simConsole(nodesAddr) {
                 
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
                                                             <td class="text-success">INTACT</td>
                                                             <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                         </tr>`;
@@ -6434,7 +6653,7 @@ function simConsole(nodesAddr) {
                 
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
                                                             <td class="text-warning">CORRUPTED</td>
                                                             <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                         </tr>`;
@@ -6567,7 +6786,7 @@ function simConsole(nodesAddr) {
                     
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
                                                             <td class="text-warning">ERROR</td>
                                                             <td class="text-warning">${obj[1].id.sT}</td>
                                                         </tr>`;
@@ -6595,7 +6814,7 @@ function simConsole(nodesAddr) {
 
                                                 window.setTimeout(() => {
 
-                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/19`)
+                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/20`)
                                 
                                                         .then((response) => response.text())
                                                             .then((text) => {
@@ -6616,7 +6835,7 @@ function simConsole(nodesAddr) {
                                 
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
                                                                             <td class="text-success">INTACT</td>
                                                                             <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                         </tr>`;
@@ -6631,7 +6850,7 @@ function simConsole(nodesAddr) {
                                 
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
                                                                             <td class="text-warning">CORRUPTED</td>
                                                                             <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                         </tr>`;
@@ -6775,7 +6994,7 @@ function simConsole(nodesAddr) {
                                     
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
                                                                             <td class="text-warning">ERROR</td>
                                                                             <td class="text-warning">${obj[2].id.sT}</td>
                                                                         </tr>`;
@@ -6817,7 +7036,7 @@ function simConsole(nodesAddr) {
                                 
                                                             tHTML += `
                                                                 <tr>
-                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
+                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
                                                                     <td class="text-warning">INVALID</td>
                                                                     <td class="text-danger">${error}</td>
                                                                 </tr>`;
@@ -6841,7 +7060,7 @@ function simConsole(nodesAddr) {
                 
                                             tHTML += `
                                                 <tr>
-                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>19</b></td>
                                                     <td class="text-warning">INVALID</td>
                                                     <td class="text-danger">${error}</td>
                                                 </tr>`;
@@ -6865,7 +7084,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                                 <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>17</b></td>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>18</b></td>
                                     <td class="text-warning">INVALID</td>
                                     <td class="text-danger">${error}</td>
                                 </tr>`;
@@ -6894,7 +7113,7 @@ function simConsole(nodesAddr) {
 
                 window.setTimeout(() => {
 
-                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/20`)
+                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/21`)
 
                         .then((response) => response.text())
                             .then((text) => {
@@ -6915,7 +7134,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
                                             <td class="text-success">INTACT</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -6930,7 +7149,7 @@ function simConsole(nodesAddr) {
 
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
                                             <td class="text-warning">CORRUPTED</td>
                                             <td class="">systemTime: <b>${obj[0].id.sT}</b>s</td>
                                         </tr>`;
@@ -7002,7 +7221,7 @@ function simConsole(nodesAddr) {
     
                                     tHTML += `
                                         <tr>
-                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
                                             <td class="text-warning">ERROR</td>
                                             <td class="text-warning">${obj[0].id.sT}</td>
                                         </tr>`;
@@ -7025,7 +7244,7 @@ function simConsole(nodesAddr) {
 
                                 window.setTimeout(() => {
 
-                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/21`)
+                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/22`)
                 
                                         .then((response) => response.text())
                                             .then((text) => {
@@ -7046,7 +7265,7 @@ function simConsole(nodesAddr) {
                 
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
                                                             <td class="text-success">INTACT</td>
                                                             <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                         </tr>`;
@@ -7061,7 +7280,7 @@ function simConsole(nodesAddr) {
                 
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
                                                             <td class="text-warning">CORRUPTED</td>
                                                             <td class="">systemTime: <b>${obj[1].id.sT}</b>s</td>
                                                         </tr>`;
@@ -7137,7 +7356,7 @@ function simConsole(nodesAddr) {
                     
                                                     tHTML += `
                                                         <tr>
-                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
                                                             <td class="text-warning">ERROR</td>
                                                             <td class="text-warning">${obj[1].id.sT}</td>
                                                         </tr>`;
@@ -7165,7 +7384,7 @@ function simConsole(nodesAddr) {
 
                                                 window.setTimeout(() => {
 
-                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/22`)
+                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/23`)
                                 
                                                         .then((response) => response.text())
                                                             .then((text) => {
@@ -7186,7 +7405,7 @@ function simConsole(nodesAddr) {
                                 
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
                                                                             <td class="text-success">INTACT</td>
                                                                             <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                         </tr>`;
@@ -7201,7 +7420,7 @@ function simConsole(nodesAddr) {
                                 
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
                                                                             <td class="text-warning">CORRUPTED</td>
                                                                             <td class="">systemTime: <b>${obj[2].id.sT}</b>s</td>
                                                                         </tr>`;
@@ -7327,7 +7546,7 @@ function simConsole(nodesAddr) {
                                     
                                                                     tHTML += `
                                                                         <tr>
-                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
                                                                             <td class="text-warning">ERROR</td>
                                                                             <td class="text-warning">${obj[2].id.sT}</td>
                                                                         </tr>`;
@@ -7360,7 +7579,7 @@ function simConsole(nodesAddr) {
 
                                                                 window.setTimeout(() => {
 
-                                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/23`)
+                                                                    fetch(`http://[${nodesAddr[consoleSelectNode.value]}]/24`)
                                                 
                                                                         .then((response) => response.text())
                                                                             .then((text) => {
@@ -7381,7 +7600,7 @@ function simConsole(nodesAddr) {
                                                 
                                                                                     tHTML += `
                                                                                         <tr>
-                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>24</b></td>
                                                                                             <td class="text-success">INTACT</td>
                                                                                             <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
                                                                                         </tr>`;
@@ -7396,7 +7615,7 @@ function simConsole(nodesAddr) {
                                                 
                                                                                     tHTML += `
                                                                                         <tr>
-                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>24</b></td>
                                                                                             <td class="text-warning">CORRUPTED</td>
                                                                                             <td class="">systemTime: <b>${obj[3].id.sT}</b>s</td>
                                                                                         </tr>`;
@@ -7557,7 +7776,7 @@ function simConsole(nodesAddr) {
                                                     
                                                                                     tHTML += `
                                                                                         <tr>
-                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
+                                                                                            <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>24</b></td>
                                                                                             <td class="text-warning">ERROR</td>
                                                                                             <td class="text-warning">${obj[3].id.sT}</td>
                                                                                         </tr>`;
@@ -7604,7 +7823,7 @@ function simConsole(nodesAddr) {
                                                 
                                                                             tHTML += `
                                                                                 <tr>
-                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
+                                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>24</b></td>
                                                                                     <td class="text-warning">INVALID</td>
                                                                                     <td class="text-danger">${error}</td>
                                                                                 </tr>`;
@@ -7628,7 +7847,7 @@ function simConsole(nodesAddr) {
                                 
                                                             tHTML += `
                                                                 <tr>
-                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
+                                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>23</b></td>
                                                                     <td class="text-warning">INVALID</td>
                                                                     <td class="text-danger">${error}</td>
                                                                 </tr>`;
@@ -7652,7 +7871,7 @@ function simConsole(nodesAddr) {
                 
                                             tHTML += `
                                                 <tr>
-                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
+                                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>22</b></td>
                                                     <td class="text-warning">INVALID</td>
                                                     <td class="text-danger">${error}</td>
                                                 </tr>`;
@@ -7676,7 +7895,7 @@ function simConsole(nodesAddr) {
 
                             tHTML += `
                                 <tr>
-                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>20</b></td>
+                                    <td>http://[${nodesAddr[consoleSelectNode.value]}]/<b>21</b></td>
                                     <td class="text-warning">INVALID</td>
                                     <td class="text-danger">${error}</td>
                                 </tr>`;
@@ -8650,6 +8869,7 @@ function findRecords(objarray, nodesarray) {
             "cmd/ipnbr/lladdr",
             "cmd/ipnbr/info",
             "cmd/tschstatus",
+            "cmd/tschschedule",
             "cmd/routes/default",
             "cmd/routes/links/sources",
             "cmd/routes/links/destinations",
@@ -9119,10 +9339,8 @@ function demoRun() {
                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                 <td class="text-left text-light">${datarray[11].length}</td>
                                                             </tr>`;
-                                                    
-                                                        // =========================================================================================================================================================
-                                                        
-                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/default`)
+
+                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/tschschedule`)
 
                                                         .then(res => res.json())
                                                         .then(data => {
@@ -9131,13 +9349,15 @@ function demoRun() {
                                     
                                                             demoTableDumpTbody.innerHTML += `
                                                                 <tr>
-                                                                    <td>/cargo/cmd/routes/default</td>
+                                                                    <td>/cargo/cmd/tschschedule</td>
                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                     <td class="text-left text-light">${datarray[12].length}</td>
                                                                 </tr>`;
-                                
-                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/sources`)
+                                                        
+                                                            // ================================================================================================================================
+                                                            
+                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/default`)
 
                                                             .then(res => res.json())
                                                             .then(data => {
@@ -9146,13 +9366,13 @@ function demoRun() {
                                         
                                                                 demoTableDumpTbody.innerHTML += `
                                                                     <tr>
-                                                                        <td>/cargo/cmd/routes/links/sources</td>
+                                                                        <td>/cargo/cmd/routes/default</td>
                                                                         <td class="text-dark bg-success text-center">OK</td>
                                                                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                         <td class="text-left text-light">${datarray[13].length}</td>
                                                                     </tr>`;
                                     
-                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/destinations`)
+                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/sources`)
 
                                                                 .then(res => res.json())
                                                                 .then(data => {
@@ -9161,13 +9381,13 @@ function demoRun() {
                                             
                                                                     demoTableDumpTbody.innerHTML += `
                                                                         <tr>
-                                                                            <td>/cargo/cmd/routes/links/destinations</td>
+                                                                            <td>/cargo/cmd/routes/links/sources</td>
                                                                             <td class="text-dark bg-success text-center">OK</td>
                                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                             <td class="text-left text-light">${datarray[14].length}</td>
                                                                         </tr>`;
                                         
-                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/routes`)
+                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/links/destinations`)
 
                                                                     .then(res => res.json())
                                                                     .then(data => {
@@ -9176,13 +9396,13 @@ function demoRun() {
                                                 
                                                                         demoTableDumpTbody.innerHTML += `
                                                                             <tr>
-                                                                                <td>/cargo/cmd/routes/entries/routes</td>
+                                                                                <td>/cargo/cmd/routes/links/destinations</td>
                                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                 <td class="text-left text-light">${datarray[15].length}</td>
                                                                             </tr>`;
                                             
-                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/vias`)
+                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/routes`)
 
                                                                         .then(res => res.json())
                                                                         .then(data => {
@@ -9191,13 +9411,13 @@ function demoRun() {
                                                     
                                                                             demoTableDumpTbody.innerHTML += `
                                                                                 <tr>
-                                                                                    <td>/cargo/cmd/routes/entries/vias</td>
+                                                                                    <td>/cargo/cmd/routes/entries/routes</td>
                                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                     <td class="text-left text-light">${datarray[16].length}</td>
                                                                                 </tr>`;
-                                                                            
-                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/id`)
+                                                
+                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/routes/entries/vias`)
 
                                                                             .then(res => res.json())
                                                                             .then(data => {
@@ -9206,13 +9426,13 @@ function demoRun() {
                                                         
                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                     <tr>
-                                                                                        <td>/cargo/cmd/rplstatus/id</td>
+                                                                                        <td>/cargo/cmd/routes/entries/vias</td>
                                                                                         <td class="text-dark bg-success text-center">OK</td>
                                                                                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                         <td class="text-left text-light">${datarray[17].length}</td>
                                                                                     </tr>`;
-                                                    
-                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/dag`)
+                                                                                
+                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/id`)
 
                                                                                 .then(res => res.json())
                                                                                 .then(data => {
@@ -9221,13 +9441,13 @@ function demoRun() {
                                                             
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                         <tr>
-                                                                                            <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                            <td>/cargo/cmd/rplstatus/id</td>
                                                                                             <td class="text-dark bg-success text-center">OK</td>
                                                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                             <td class="text-left text-light">${datarray[18].length}</td>
                                                                                         </tr>`;
                                                         
-                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/time`)
+                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/dag`)
 
                                                                                     .then(res => res.json())
                                                                                     .then(data => {
@@ -9236,13 +9456,13 @@ function demoRun() {
                                                                 
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                             <tr>
-                                                                                                <td>/cargo/cmd/rplstatus/time</td>
+                                                                                                <td>/cargo/cmd/rplstatus/dag</td>
                                                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                 <td class="text-left text-light">${datarray[19].length}</td>
                                                                                             </tr>`;
                                                             
-                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/addr`)
+                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/time`)
 
                                                                                         .then(res => res.json())
                                                                                         .then(data => {
@@ -9251,13 +9471,13 @@ function demoRun() {
                                                                     
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
-                                                                                                    <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                    <td>/cargo/cmd/rplstatus/time</td>
                                                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                     <td class="text-left text-light">${datarray[20].length}</td>
                                                                                                 </tr>`;
                                                                 
-                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/ranks`)
+                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/addr`)
 
                                                                                             .then(res => res.json())
                                                                                             .then(data => {
@@ -9266,13 +9486,13 @@ function demoRun() {
                                                                         
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
-                                                                                                        <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                        <td>/cargo/cmd/rplnbr/addr</td>
                                                                                                         <td class="text-dark bg-success text-center">OK</td>
                                                                                                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                         <td class="text-left text-light">${datarray[21].length}</td>
                                                                                                     </tr>`;
                                                                     
-                                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/values`)
+                                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/ranks`)
 
                                                                                                 .then(res => res.json())
                                                                                                 .then(data => {
@@ -9281,13 +9501,13 @@ function demoRun() {
                                                                             
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
-                                                                                                            <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                            <td>/cargo/cmd/rplnbr/ranks</td>
                                                                                                             <td class="text-dark bg-success text-center">OK</td>
                                                                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                             <td class="text-left text-light">${datarray[22].length}</td>
                                                                                                         </tr>`;
                                                                         
-                                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/parens`)
+                                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/values`)
 
                                                                                                     .then(res => res.json())
                                                                                                     .then(data => {
@@ -9296,13 +9516,13 @@ function demoRun() {
                                                                                 
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
-                                                                                                                <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                                <td>/cargo/cmd/rplnbr/values</td>
                                                                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                                 <td class="text-left text-light">${datarray[23].length}</td>
                                                                                                             </tr>`;
                                                                             
-                                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/errors`)
+                                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/parens`)
 
                                                                                                         .then(res => res.json())
                                                                                                         .then(data => {
@@ -9311,14 +9531,45 @@ function demoRun() {
                                                                                     
                                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>/cargo/errors</td>
+                                                                                                                    <td>/cargo/cmd/rplnbr/parens</td>
                                                                                                                     <td class="text-dark bg-success text-center">OK</td>
-                                                                                                                    <td class="text-right text-warning"><span class="text-secondary"> docs: </span></td>
-                                                                                                                    <td class="text-left text-warning">${datarray[24].length}</td>
+                                                                                                                    <td class="text-right"><span class="text-secondary"> docs: </span></td>
+                                                                                                                    <td class="text-left text-light">${datarray[24].length}</td>
                                                                                                                 </tr>`;
                                                                                 
-                                                                                                            endFetch(datarray);
-                                                                                                            demoProcess(datarray);
+                                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/errors`)
+
+                                                                                                            .then(res => res.json())
+                                                                                                            .then(data => {
+                                                                                        
+                                                                                                                datarray[25] = data.data;
+                                                                                        
+                                                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                                                    <tr>
+                                                                                                                        <td>/cargo/errors</td>
+                                                                                                                        <td class="text-dark bg-success text-center">OK</td>
+                                                                                                                        <td class="text-right text-warning"><span class="text-secondary"> docs: </span></td>
+                                                                                                                        <td class="text-left text-warning">${datarray[25].length}</td>
+                                                                                                                    </tr>`;
+                                                                                    
+                                                                                                                endFetch(datarray);
+                                                                                                                demoProcess(datarray);
+                                                                                                            })
+
+                                                                                                            .catch(err => {
+
+                                                                                                                demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
+                                                                                                                demoOutputDump.innerText = 'STOPPED';
+
+                                                                                                                demoTableDump.classList.replace('col-6', 'col-12');
+                                                                                                    
+                                                                                                                demoTableDumpTbody.innerHTML += `
+                                                                                                                            <tr>
+                                                                                                                                <td>/cargo/errors</td>
+                                                                                                                                <td class="text-dark bg-danger text-center">FAIL</td>
+                                                                                                                                <td class="text-danger text-center">${err}</td>
+                                                                                                                            </tr>`;
+                                                                                                            })
                                                                                                         })
 
                                                                                                         .catch(err => {
@@ -9330,7 +9581,7 @@ function demoRun() {
                                                                                                 
                                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                                         <tr>
-                                                                                                                            <td>/cargo/errors</td>
+                                                                                                                            <td>/cargo/cmd/rplnbr/parens</td>
                                                                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                             <td class="text-danger text-center">${err}</td>
                                                                                                                         </tr>`;
@@ -9346,7 +9597,7 @@ function demoRun() {
                                                                                             
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                                     <tr>
-                                                                                                                        <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                                        <td>/cargo/cmd/rplnbr/values</td>
                                                                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                                                     </tr>`;
@@ -9362,7 +9613,7 @@ function demoRun() {
                                                                                         
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                                    <td>/cargo/cmd/rplnbr/ranks</td>
                                                                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                                                 </tr>`;
@@ -9378,7 +9629,7 @@ function demoRun() {
                                                                                     
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
-                                                                                                                <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                                <td>/cargo/cmd/rplnbr/addr</td>
                                                                                                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                 <td class="text-danger text-center">${err}</td>
                                                                                                             </tr>`;
@@ -9389,14 +9640,14 @@ function demoRun() {
 
                                                                                             demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
                                                                                             demoOutputDump.innerText = 'STOPPED';
-
+                                                                                            
                                                                                             demoTableDump.classList.replace('col-6', 'col-12');
-                                                                                
+
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
-                                                                                                            <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                            <td>/cargo/cmd/rplstatus/time</td>
                                                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
-                                                                                                            <td class="text-danger text-center">${err}</td>
+                                                                                                            <td class="text-danger">${err}</td>
                                                                                                         </tr>`;
                                                                                         })
                                                                                     })
@@ -9405,14 +9656,14 @@ function demoRun() {
 
                                                                                         demoOutputDump.classList.remove('bg-info', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary'); demoOutputDump.classList.add('bg-danger');
                                                                                         demoOutputDump.innerText = 'STOPPED';
-                                                                                        
-                                                                                        demoTableDump.classList.replace('col-6', 'col-12');
 
+                                                                                        demoTableDump.classList.replace('col-6', 'col-12');
+                                                                            
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
-                                                                                                        <td>/cargo/cmd/rplstatus/time</td>
+                                                                                                        <td>/cargo/cmd/rplstatus/dag</td>
                                                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
-                                                                                                        <td class="text-danger">${err}</td>
+                                                                                                        <td class="text-danger text-center">${err}</td>
                                                                                                     </tr>`;
                                                                                     })
                                                                                 })
@@ -9426,7 +9677,7 @@ function demoRun() {
                                                                         
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
-                                                                                                    <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                                    <td>/cargo/cmd/rplstatus/id</td>
                                                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                                 </tr>`;
@@ -9442,7 +9693,7 @@ function demoRun() {
                                                                     
                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                             <tr>
-                                                                                                <td>/cargo/cmd/rplstatus/id</td>
+                                                                                                <td>/cargo/cmd/routes/entries/vias</td>
                                                                                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                 <td class="text-danger text-center">${err}</td>
                                                                                             </tr>`;
@@ -9458,7 +9709,7 @@ function demoRun() {
                                                                 
                                                                             demoTableDumpTbody.innerHTML += `
                                                                                         <tr>
-                                                                                            <td>/cargo/cmd/routes/entries/vias</td>
+                                                                                            <td>/cargo/cmd/routes/entries/routes</td>
                                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                             <td class="text-danger text-center">${err}</td>
                                                                                         </tr>`;
@@ -9474,7 +9725,7 @@ function demoRun() {
                                                             
                                                                         demoTableDumpTbody.innerHTML += `
                                                                                     <tr>
-                                                                                        <td>/cargo/cmd/routes/entries/routes</td>
+                                                                                        <td>/cargo/cmd/routes/links/destinations</td>
                                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                     </tr>`;
@@ -9490,7 +9741,7 @@ function demoRun() {
                                                         
                                                                     demoTableDumpTbody.innerHTML += `
                                                                                 <tr>
-                                                                                    <td>/cargo/cmd/routes/links/destinations</td>
+                                                                                    <td>/cargo/cmd/routes/links/sources</td>
                                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                 </tr>`;
@@ -9506,11 +9757,13 @@ function demoRun() {
                                                     
                                                                 demoTableDumpTbody.innerHTML += `
                                                                             <tr>
-                                                                                <td>/cargo/cmd/routes/links/sources</td>
+                                                                                <td>/cargo/cmd/routes/default</td>
                                                                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                 <td class="text-danger text-center">${err}</td>
                                                                             </tr>`;
                                                             })
+
+                                                            // ============================================================================================================
                                                         })
 
                                                         .catch(err => {
@@ -9522,13 +9775,11 @@ function demoRun() {
                                                 
                                                             demoTableDumpTbody.innerHTML += `
                                                                         <tr>
-                                                                            <td>/cargo/cmd/routes/default</td>
+                                                                            <td>/cargo/cmd/tschschedule</td>
                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                             <td class="text-danger text-center">${err}</td>
                                                                         </tr>`;
                                                         })
-
-                                                        // ========================================================================================================================================================
 
                                                     })
 
@@ -9541,7 +9792,7 @@ function demoRun() {
                                             
                                                         demoTableDumpTbody.innerHTML += `
                                                                     <tr>
-                                                                        <td>/cargo/cmd/routes/default</td>
+                                                                        <td>/cargo/cmd/tschstatus</td>
                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                         <td class="text-danger text-center">${err}</td>
                                                                     </tr>`;

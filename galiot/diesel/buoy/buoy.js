@@ -602,6 +602,51 @@ var cmd_tschStatusSchema = new mongoose.Schema({
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+var tschScheduleSlotframeLinkSchema = new mongoose.Schema({
+    options: String,
+    type: Number,
+    timeslot: Number,
+    channelOffest: Number,
+    address: String
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+var tschScheduleSlotframeSchema = new mongoose.Schema({
+    handle: Number,
+    size: Number,
+    links: [tschScheduleSlotframeLinkSchema]
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+var cmd_tschScheduleSchema = new mongoose.Schema({
+    packet: {
+        valid: Boolean,
+        error: String
+    },
+    record: Number,
+    index: Number,
+    mote: {
+        systemTime: Number,
+        linkLayerAddress: String,
+        moteCode: String
+    },
+    cmd_tschSchedule: {
+        tsch: Boolean,
+        isLocked: Boolean,
+        schedule: Boolean,
+        slotframes: [tschScheduleSlotframeSchema]
+    },
+    checksum: {
+        hash: Number,
+        check: Boolean
+    },
+    update: { type: Date, default: Date.now }
+});
+
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 var cmd_routesSchema = new mongoose.Schema({
     packet: {
         valid: Boolean,
@@ -1068,6 +1113,10 @@ var NodeIPv6neighborInfo                    = mongoose.model('NodeIPv6neighborIn
 var Cmd_ipNeighbors_info                    = mongoose.model('Cmd_ipNeighbors_info',                    cmd_ipNeighbors_infoSchema);
 
 var Cmd_tschStatus                          = mongoose.model('Cmd_tschStatus',                          cmd_tschStatusSchema);
+
+var TschScheduleSlotframeLink               = mongoose.model('TschScheduleSlotframeLink',               tschScheduleSlotframeLinkSchema);
+var TschScheduleSlotframe                   = mongoose.model('TschScheduleSlotframe',                   tschScheduleSlotframeSchema);
+var Cmd_tschSchedule                        = mongoose.model('Cmd_tschSchedule',                        cmd_tschScheduleSchema);
 
 var Cmd_routes                              = mongoose.model('Cmd_routes',                              cmd_routesSchema);
 
@@ -1817,6 +1866,70 @@ function checkProcessSaveReturn(obj, doReturn) {
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             case 12:
+                var cmd_tschSchedule = new Cmd_tschSchedule({
+                    packet: {
+                        valid: obj.pckt.vld,
+                        error: null
+                    },
+                    record: obj.rcrd,
+                    index: obj.ndx,
+                    mote: {
+                        systemTime: obj.id.sT,
+                        linkLayerAddress: obj.id.adr,
+                        moteCode: obj.id.cd
+                    },
+                    cmd_tschSchedule: {
+                        tsch: obj.tschSch.tsch,
+                        isLocked: obj.tschSch.lock,
+                        schedule: obj.tschSch.sch,
+                        slotframes: [null]
+                    },
+                    checksum: {
+                        hash: payloadHash,
+                        check: (sdbm(goa.substr(0, goa.length -1) + "," )) == payloadHash ? true : false
+                    },
+                    update: new Date
+                });
+
+                obj.tschSch.slts.forEach(function(slotframe, index) {
+                    if (slotframe != null) {
+                        cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = new TschScheduleSlotframe({handle: slotframe.hdl, size: neighbor.sz, links: [null]})
+                        obj.tschSch.slts.lnks.forEach(function(link, linkindex) {
+                            if (link != null) {
+                                cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = new TschScheduleSlotframeLink({options: link.opt, type: link.tp, timeslot: link.tslt, channelOffset: link.chOf, address: link.ad});
+                            } else {
+                                cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = null
+                            }
+                        }) 
+                    } else {
+                        cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = null
+                    }
+                });
+
+                console.log("");
+                console.log(cmd_tschSchedule);
+
+                if(doReturn) {
+
+                    return(cmd_tschSchedule);
+                
+                } else {
+
+                    cmd_tschSchedule.save(function (err) {
+                        if (err) console.log(err);
+                        
+                        // saved!
+                        
+                        console.log("");
+                        console.log(`<--- <--- <--- cargo DATABASE <--- cmd_tschSchedule COLLECTION <--- (record: ${obj.rcrd} / index: ${obj.ndx}) DOCUMENT <--- <--- <---`);
+                    });
+
+                    break;
+                };
+
+            // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+            case 13:
                 var cmd_routes = new Cmd_routes({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1864,7 +1977,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 13:
+            case 14:
                 var cmd_routes_routingLinks_sources = new Cmd_routes_routingLinks_sources({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1921,7 +2034,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 14:
+            case 15:
                 var cmd_routes_routingLinks_destinations = new Cmd_routes_routingLinks_destinations({
                     packet: {
                         valid: obj.pckt.vld,
@@ -1978,7 +2091,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 15:
+            case 16:
                 var cmd_routes_routingEntries_routes = new Cmd_routes_routingEntries_routes({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2035,7 +2148,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 16:
+            case 17:
                 var cmd_routes_routingEntries_vias = new Cmd_routes_routingEntries_vias({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2092,7 +2205,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 17:
+            case 18:
                 var cmd_rplStatus = new Cmd_rplStatus({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2144,7 +2257,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 18:
+            case 19:
                 var cmd_rplStatus_dag = new Cmd_rplStatus_dag({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2206,7 +2319,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 19:
+            case 20:
                 var cmd_rplStatus_trickleTimer = new Cmd_rplStatus_trickleTimer({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2257,7 +2370,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 20:
+            case 21:
                 var cmd_rplNbr_addr = new Cmd_rplNbr_addr({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2314,7 +2427,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 21:
+            case 22:
                 var cmd_rplNbr_ranks = new Cmd_rplNbr_ranks({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2371,7 +2484,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 22:
+            case 23:
                 var cmd_rplNbr_values = new Cmd_rplNbr_values({
                     packet: {
                         valid: obj.pckt.vld,
@@ -2428,7 +2541,7 @@ function checkProcessSaveReturn(obj, doReturn) {
 
             // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            case 23:
+            case 24:
                 var cmd_rplNbr_parens = new Cmd_rplNbr_parens({
                     packet: {
                         valid: obj.pckt.vld,
@@ -3582,6 +3695,85 @@ var tug = {
         }
     },
 
+    cmd_tschSchedule: {
+        index: function (req, res) {
+            Cmd_tschSchedule.find(function (err, cmd_tschSchedule) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null,  
+                        data: null                  
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_tschSchedule       
+                    })
+                }
+            })
+        },
+        drop: function (req, res) {
+            Cmd_tschSchedule.collection.drop(function (err) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
+        },
+        view: function (req, res) {
+            Cmd_tschSchedule.findById(req.params.cmd_tschSchedule_id, function(err, cmd_tschSchedule) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: cmd_tschSchedule
+                    });
+                };
+            });
+        },
+        erase: function (req, res) {
+            Cmd_tschSchedule.deleteOne({_id: req.params.cmd_tschSchedule_id}, function(err, cmd_tschSchedule) {
+                if (err) {
+                    res.json({
+                        status: 'error',  
+                        text: err, 
+                        goto: null, 
+                        data: null
+                    })
+                } else {
+                    res.json({
+                        status: 'ok',     
+                        text: null, 
+                        goto: null, 
+                        data: null 
+                    });
+                };
+            });
+        }
+    },
+
     cmd_routes: {
         index: function (req, res) {
             Cmd_routes.find(function (err, cmd_routes) {
@@ -3660,8 +3852,6 @@ var tug = {
             });
         }
     },
-
-
 
     cmd_routes_routingLinks_sources: {
         index: function (req, res) {
@@ -3984,8 +4174,6 @@ var tug = {
             });
         }
     },
-
-
 
     cmd_rplStatus: {
         index: function (req, res) {
@@ -4731,7 +4919,7 @@ router.get('/cargo/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/ipaddr', '/ipnbr', '/tschstatus', '/routes', '/rplstatus', '/rplnbr'], 
+        goto: ['/ipaddr', '/ipnbr', '/tschstatus', '/tschschedule', '/routes', '/rplstatus', '/rplnbr'], 
         data: null
     });
 });
@@ -4882,6 +5070,13 @@ router.route('/cargo/cmd/tschstatus')
 router.route('/cargo/cmd/tschstatus/:cmd_tschStatus_id')
     .get(tug.cmd_tschStatus.view)
     .delete(tug.cmd_tschStatus.erase);
+
+router.route('/cargo/cmd/tschschedule')
+    .get(tug.cmd_tschSchedule.index)
+    .delete(tug.cmd_tschSchedule.drop);
+router.route('/cargo/cmd/tschdchedule/:cmd_tschdchedule_id')
+    .get(tug.cmd_tschSchedule.view)
+    .delete(tug.cmd_tschSchedule.erase);
 
 router.route('/cargo/cmd/routes/default')
     .get(tug.cmd_routes.index)
@@ -5141,28 +5336,30 @@ app.put("/api/cargo/:obj_id", function(req, res) {
                 case 11:
                     return Cmd_tschStatus;
                 case 12:
-                    return Cmd_routes;
+                    return Cmd_tschSchedule;
                 case 13:
-                    return Cmd_routes_routingLinks_sources;
+                    return Cmd_routes;
                 case 14:
-                    return Cmd_routes_routingLinks_destinations;
+                    return Cmd_routes_routingLinks_sources;
                 case 15:
-                    return Cmd_routes_routingEntries_routes;
+                    return Cmd_routes_routingLinks_destinations;
                 case 16:
-                    return Cmd_routes_routingEntries_vias;
+                    return Cmd_routes_routingEntries_routes;
                 case 17:
-                    return Cmd_rplStatus;
+                    return Cmd_routes_routingEntries_vias;
                 case 18:
-                    return Cmd_rplStatus_dag;
+                    return Cmd_rplStatus;
                 case 19:
-                    return Cmd_rplStatus_trickleTimer;
+                    return Cmd_rplStatus_dag;
                 case 20:
-                    return Cmd_rplNbr_addr;
+                    return Cmd_rplStatus_trickleTimer;
                 case 21:
-                    return Cmd_rplNbr_ranks;
+                    return Cmd_rplNbr_addr;
                 case 22:
-                    return Cmd_rplNbr_values;
+                    return Cmd_rplNbr_ranks;
                 case 23:
+                    return Cmd_rplNbr_values;
+                case 24:
                     return Cmd_rplNbr_parens;
             };
         
@@ -5290,28 +5487,30 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                 case 11:
                     return Cmd_tschStatus;
                 case 12:
-                    return Cmd_routes;
+                    return Cmd_tschSchedule;
                 case 13:
-                    return Cmd_routes_routingLinks_sources;
+                    return Cmd_routes;
                 case 14:
-                    return Cmd_routes_routingLinks_destinations;
+                    return Cmd_routes_routingLinks_sources;
                 case 15:
-                    return Cmd_routes_routingEntries_routes;
+                    return Cmd_routes_routingLinks_destinations;
                 case 16:
-                    return Cmd_routes_routingEntries_vias;
+                    return Cmd_routes_routingEntries_routes;
                 case 17:
-                    return Cmd_rplStatus;
+                    return Cmd_routes_routingEntries_vias;
                 case 18:
-                    return Cmd_rplStatus_dag;
+                    return Cmd_rplStatus;
                 case 19:
-                    return Cmd_rplStatus_trickleTimer;
+                    return Cmd_rplStatus_dag;
                 case 20:
-                    return Cmd_rplNbr_addr;
+                    return Cmd_rplStatus_trickleTimer;
                 case 21:
-                    return Cmd_rplNbr_ranks;
+                    return Cmd_rplNbr_addr;
                 case 22:
-                    return Cmd_rplNbr_values;
+                    return Cmd_rplNbr_ranks;
                 case 23:
+                    return Cmd_rplNbr_values;
+                case 24:
                     return Cmd_rplNbr_parens;
             };
         
@@ -5758,8 +5957,52 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     return obj;
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                
+
                 case 12:
+                    
+                    obj.packet = {
+                        valid: raw.pckt.vld,
+                        error: null
+                    }
+                    obj.record = raw.rcrd
+                    obj.index = raw.ndx
+                    obj.mote = {
+                        systemTime: raw.id.sT,
+                        linkLayerAddress: raw.id.adr,
+                        moteCode: raw.id.cd
+                    }
+                    obj.tschSchedule = {
+                        tsch: obj.tschSch.tsch,
+                        isLocked: obj.tschSch.lock,
+                        schedule: obj.tschSch.sch,
+                        slotframes: [null]
+                    }
+                    obj.checksum = {
+                        hash: raw.hash,
+                        check: checksum(raw)
+                    }
+                    obj.update = new Date
+
+                    obj.tschSch.slts.forEach(function(slotframe, index) {
+                        if (slotframe != null) {
+                            cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = {handle: slotframe.hdl, size: neighbor.sz, links: [null]}
+                            obj.tschSch.slts.lnks.forEach(function(link, linkindex) {
+                                if (link != null) {
+                                    cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = {options: link.opt, type: link.tp, timeslot: link.tslt, channelOffset: link.chOf, address: link.ad}
+                                } else {
+                                    cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = null
+                                }
+                            }) 
+                        } else {
+                            cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = null
+                        }
+                    });
+                   
+                    return obj;
+                    
+                // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                
+                case 13:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5787,7 +6030,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 13:
+                case 14:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5825,7 +6068,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 14:
+                case 15:
                     
                         obj.packet = {
                             valid: raw.pckt.vld,
@@ -5863,7 +6106,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 15:
+                case 16:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5900,7 +6143,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 16:
+                case 17:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5937,7 +6180,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 17:
+                case 18:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -5969,7 +6212,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 18:
+                case 19:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6011,7 +6254,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 19:
+                case 20:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6042,7 +6285,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 20:
+                case 21:
                     
                         obj.packet = {
                             valid: raw.pckt.vld,
@@ -6080,7 +6323,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 21:
+                case 22:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6117,7 +6360,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 22:
+                case 23:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6154,7 +6397,7 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                    
                 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-                case 23:
+                case 24:
                     
                     obj.packet = {
                         valid: raw.pckt.vld,
@@ -6600,7 +6843,7 @@ function activateScrap(borderRouter, interval) {
             activeNodeIndex = activeNodeIndex % nodeHosts.length; // incerement the active node index
             
             nodePaths[activeNodeIndex]++;   
-            nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 24;
+            nodePaths[activeNodeIndex] = nodePaths[activeNodeIndex] % 25;
         
             console.log();
             console.log('</> </> </> </> </> </> </> </> </>');
