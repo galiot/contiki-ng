@@ -4919,16 +4919,34 @@ router.get('/cargo/cmd', function (req, res) {
     res.json({
         status: null, 
         text: null,
-        goto: ['/ipaddr', '/ipnbr', '/tschstatus', '/tschschedule', '/routes', '/rplstatus', '/rplnbr'], 
+        goto: ['/ipaddr', '/ipnbr', '/tschstatus', '/tschschedule', '/routes', '/rpl'], 
         data: null
     });
 });
 
-router.get('/cargo/cmd/ipnbr', function (req, res) {
+router.get('/cargo/cmd/ip', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/addr', '/nbr'], 
+        data: null
+    });
+});
+
+router.get('/cargo/cmd/ip/nbr', function (req, res) {
     res.json({
         status: null, 
         text: null,
         goto: ['/ipaddr', '/lladdr', '/info'], 
+        data: null
+    });
+});
+
+router.get('/cargo/cmd/tsch', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['status', '/schedule'], 
         data: null
     });
 });
@@ -4960,7 +4978,16 @@ router.get('/cargo/cmd/routes/entries', function (req, res) {
     });
 });
 
-router.get('/cargo/cmd/rplstatus', function (req, res) {
+router.get('/cargo/cmd/rpl', function (req, res) {
+    res.json({
+        status: null, 
+        text: null,
+        goto: ['/status', '/nbr'],
+        data: null
+    });
+});
+
+router.get('/cargo/cmd/rpl/status', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -4969,7 +4996,7 @@ router.get('/cargo/cmd/rplstatus', function (req, res) {
     });
 });
 
-router.get('/cargo/cmd/rplnbr', function (req, res) {
+router.get('/cargo/cmd/rpl/nbr', function (req, res) {
     res.json({
         status: null, 
         text: null,
@@ -5036,45 +5063,45 @@ router.route('/cargo/stats/discovery/:stats_discovery_id')
 
 // <><><><><><><><><><><><><><><><><><><><><><><>
 
-router.route('/cargo/cmd/ipaddr')
+router.route('/cargo/cmd/ip/addr')
     .get(tug.cmd_ipAddr.index)
     .delete(tug.cmd_ipAddr.drop);
-router.route('/cargo/cmd/ipaddr/:cmd_ipAddr_id')
+router.route('/cargo/cmd/ip/addr/:cmd_ipAddr_id')
     .get(tug.cmd_ipAddr.view)
     .delete(tug.cmd_ipAddr.erase);
 
-router.route('/cargo/cmd/ipnbr/ipaddr')
+router.route('/cargo/cmd/ip/nbr/ipaddr')
     .get(tug.cmd_IpNeighbors_ipAddr.index)
     .delete(tug.cmd_IpNeighbors_ipAddr.drop);
-router.route('/cargo/cmd/ipnbr/ipaddr/:cmd_IpNeighbors_ipAddr_id')
+router.route('/cargo/cmd/ip/nbr/ipaddr/:cmd_IpNeighbors_ipAddr_id')
     .get(tug.cmd_IpNeighbors_ipAddr.view)
     .delete(tug.cmd_IpNeighbors_ipAddr.erase);
 
-router.route('/cargo/cmd/ipnbr/lladdr')
+router.route('/cargo/cmd/ip/nbr/lladdr')
     .get(tug.cmd_IpNeighbors_llAddr.index)
     .delete(tug.cmd_IpNeighbors_llAddr.drop);
-router.route('/cargo/cmd/ipnbr/lladdr/:cmd_IpNeighbors_llAddr_id')
+router.route('/cargo/cmd/ip/nbr/lladdr/:cmd_IpNeighbors_llAddr_id')
     .get(tug.cmd_IpNeighbors_llAddr.view)
     .delete(tug.cmd_IpNeighbors_llAddr.erase);
 
-router.route('/cargo/cmd/ipnbr/info')
+router.route('/cargo/cmd/ip/nbr/info')
     .get(tug.cmd_IpNeighbors_info.index)
     .delete(tug.cmd_IpNeighbors_info.drop);
-router.route('/cargo/cmd/ipnbr/info/:cmd_IpNeighbors_info_id')
+router.route('/cargo/cmd/ip/nbr/info/:cmd_IpNeighbors_info_id')
     .get(tug.cmd_IpNeighbors_info.view)
     .delete(tug.cmd_IpNeighbors_info.erase);
 
-router.route('/cargo/cmd/tschstatus')
+router.route('/cargo/cmd/tsch/status')
     .get(tug.cmd_tschStatus.index)
     .delete(tug.cmd_tschStatus.drop);
-router.route('/cargo/cmd/tschstatus/:cmd_tschStatus_id')
+router.route('/cargo/cmd/tsch/status/:cmd_tschStatus_id')
     .get(tug.cmd_tschStatus.view)
     .delete(tug.cmd_tschStatus.erase);
 
-router.route('/cargo/cmd/tschschedule')
+router.route('/cargo/cmd/tsch/schedule')
     .get(tug.cmd_tschSchedule.index)
     .delete(tug.cmd_tschSchedule.drop);
-router.route('/cargo/cmd/tschdchedule/:cmd_tschdchedule_id')
+router.route('/cargo/cmd/tsch/schedule/:cmd_tschSchedule_id')
     .get(tug.cmd_tschSchedule.view)
     .delete(tug.cmd_tschSchedule.erase);
 
@@ -5113,52 +5140,52 @@ router.route('/cargo/cmd/routes/entries/vias/:cmd_routes_routingEntries_vias_id'
     .get(tug.cmd_routes_routingEntries_vias.view)
     .delete(tug.cmd_routes_routingEntries_vias.erase);
 
-router.route('/cargo/cmd/rplstatus/id')
+router.route('/cargo/cmd/rpl/status/id')
     .get(tug.cmd_rplStatus.index)
     .delete(tug.cmd_rplStatus.drop);
-router.route('/cargo/cmd/rplstatus/id/:cmd_rplStatus_id')
+router.route('/cargo/cmd/rpl/status/id/:cmd_rplStatus_id')
     .get(tug.cmd_rplStatus.view)
     .delete(tug.cmd_rplStatus.erase);
 
-router.route('/cargo/cmd/rplstatus/dag')
+router.route('/cargo/cmd/rpl/status/dag')
     .get(tug.cmd_rplStatus_dag.index)
     .delete(tug.cmd_rplStatus_dag.drop);
-router.route('/cargo/cmd/rplstatus/dag/:cmd_rplStatus_dag_id')
+router.route('/cargo/cmd/rpl/status/dag/:cmd_rplStatus_dag_id')
     .get(tug.cmd_rplStatus_dag.view)
     .delete(tug.cmd_rplStatus_dag.erase);
 
-router.route('/cargo/cmd/rplstatus/time')
+router.route('/cargo/cmd/rpl/status/time')
     .get(tug.cmd_rplStatus_trickleTimer.index)
     .delete(tug.cmd_rplStatus_trickleTimer.drop);
-router.route('/cargo/cmd/rplstatus/time/:cmd_rplStatus_trickleTimer_id')
+router.route('/cargo/cmd/rpl/status/time/:cmd_rplStatus_trickleTimer_id')
     .get(tug.cmd_rplStatus_trickleTimer.view)
     .delete(tug.cmd_rplStatus_trickleTimer.erase);
 
-router.route('/cargo/cmd/rplnbr/addr')
+router.route('/cargo/cmd/rpl/nbr/addr')
     .get(tug.cmd_rplNbr_addr.index)
     .delete(tug.cmd_rplNbr_addr.drop);
-router.route('/cargo/cmd/rplnbr/addr/:cmd_rplNbr_addr_id')
+router.route('/cargo/cmd/rpl/nbr/addr/:cmd_rplNbr_addr_id')
     .get(tug.cmd_rplNbr_addr.view)
     .delete(tug.cmd_rplNbr_addr.erase);
 
-router.route('/cargo/cmd/rplnbr/ranks')
+router.route('/cargo/cmd/rpl/nbr/ranks')
     .get(tug.cmd_rplNbr_ranks.index)
     .delete(tug.cmd_rplNbr_ranks.drop);
-router.route('/cargo/cmd/rplnbr/ranks/:cmd_rplNbr_ranks_id')
+router.route('/cargo/cmd/rpl/nbr/ranks/:cmd_rplNbr_ranks_id')
     .get(tug.cmd_rplNbr_ranks.view)
     .delete(tug.cmd_rplNbr_ranks.erase);
 
-router.route('/cargo/cmd/rplnbr/values')
+router.route('/cargo/cmd/rpl/nbr/values')
     .get(tug.cmd_rplNbr_values.index)
     .delete(tug.cmd_rplNbr_values.drop);
-router.route('/cargo/cmd/rplnbr/values/:cmd_rplNbr_values_id')
+router.route('/cargo/cmd/rpl/nbr/values/:cmd_rplNbr_values_id')
     .get(tug.cmd_rplNbr_values.view)
     .delete(tug.cmd_rplNbr_values.erase);
 
-router.route('/cargo/cmd/rplnbr/parens')
+router.route('/cargo/cmd/rpl/nbr/parens')
     .get(tug.cmd_rplNbr_parens.index)
     .delete(tug.cmd_rplNbr_parens.drop);
-router.route('/cargo/cmd/rplnbr/parens/:cmd_rplNbr_parens_id')
+router.route('/cargo/cmd/rpl/nbr/parens/:cmd_rplNbr_parens_id')
     .get(tug.cmd_rplNbr_parens.view)
     .delete(tug.cmd_rplNbr_parens.erase);
 
@@ -5541,6 +5568,11 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
 
     function replace(obj, raw) {
 
+        console.log('%%%%%%%%%%%%%%%%%%%%%%%%%');
+        console.log(obj);
+        console.log('%%%%%%%%%%%%%%%%%%%%%%%%%');
+        console.log(raw);
+        
         if(raw.pckt.vld === true) {
     
             switch(raw.ndx) {
@@ -5937,16 +5969,16 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                         moteCode: raw.id.cd
                     }
                     obj.cmd_tschStatus = {
-                        tsch: obj.tsch.tsch,
-                        isCoordinator: obj.tsch.coo,
-                        isAssociated: obj.tsch.ass,
-                        panID: obj.tsch.panid,
-                        panSecured: obj.tsch.pansec,
-                        joinPriority: obj.tsch.joinp,
-                        timeSource: obj.tsch.tsrc,
-                        lastSynchronized: obj.tsch.lsyn,
-                        driftWRTCoordinator: obj.tsch.drift,
-                        networkUptime: obj.tsch.netup
+                        tsch: raw.tsch.tsch,
+                        isCoordinator: raw.tsch.coo,
+                        isAssociated: raw.tsch.ass,
+                        panID: raw.tsch.panid,
+                        panSecured: raw.tsch.pansec,
+                        joinPriority: raw.tsch.joinp,
+                        timeSource: raw.tsch.tsrc,
+                        lastSynchronized: raw.tsch.lsyn,
+                        driftWRTCoordinator: raw.tsch.drift,
+                        networkUptime: raw.tsch.netup
                     }
                     obj.checksum = {
                         hash: raw.hash,
@@ -5971,10 +6003,10 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                         linkLayerAddress: raw.id.adr,
                         moteCode: raw.id.cd
                     }
-                    obj.tschSchedule = {
-                        tsch: obj.tschSch.tsch,
-                        isLocked: obj.tschSch.lock,
-                        schedule: obj.tschSch.sch,
+                    obj.cmd_tschSchedule = {
+                        tsch: raw.tschSch.tsch,
+                        isLocked: raw.tschSch.lock,
+                        schedule: raw.tschSch.sch,
                         slotframes: [null]
                     }
                     obj.checksum = {
@@ -5983,18 +6015,18 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
                     }
                     obj.update = new Date
 
-                    obj.tschSch.slts.forEach(function(slotframe, index) {
+                    raw.tschSch.slts.forEach(function(slotframe, index) {
                         if (slotframe != null) {
-                            cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = {handle: slotframe.hdl, size: neighbor.sz, links: [null]}
-                            obj.tschSch.slts.lnks.forEach(function(link, linkindex) {
+                            obj.cmd_tschSchedule.slotframes[index] = {handle: slotframe.hdl, size: neighbor.sz, links: [null]}
+                            raw.tschSch.slts.lnks.forEach(function(link, linkindex) {
                                 if (link != null) {
-                                    cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = {options: link.opt, type: link.tp, timeslot: link.tslt, channelOffset: link.chOf, address: link.ad}
+                                    obj.cmd_tschSchedule.slotframes[index].links[linkindex] = {options: link.opt, type: link.tp, timeslot: link.tslt, channelOffset: link.chOf, address: link.ad}
                                 } else {
-                                    cmd_tschSchedule.cmd_tschSchedule.slotframes[index].links[linkindex] = null
+                                    obj.cmd_tschSchedule.slotframes[index].links[linkindex] = null
                                 }
                             }) 
                         } else {
-                            cmd_tschSchedule.cmd_tschSchedule.slotframes[index] = null
+                            obj.cmd_tschSchedule.slotframes[index] = null
                         }
                     });
                    
@@ -6477,6 +6509,11 @@ app.patch("/api/cargo/:obj_id", function(req, res) {
         } else {
             
             console.log();
+            console.log('===========================');
+            console.log(raw);
+            console.log('===========================');
+            console.log(obj);
+            console.log('===========================');
             console.log('<<< PATCH: _id = '+ req.params.obj_id);
             console.log('<<< PATCH: raw = '+ req.body);
             console.log('<<< PATCH: chk = '+ checksum(raw));

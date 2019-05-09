@@ -8864,24 +8864,24 @@ function findRecords(objarray, nodesarray) {
             "stats/network/icmp",
             "stats/transport",
             "stats/discovery",
-            "cmd/ipaddr",
-            "cmd/ipnbr/ipaddr",
-            "cmd/ipnbr/lladdr",
-            "cmd/ipnbr/info",
-            "cmd/tschstatus",
-            "cmd/tschschedule",
+            "cmd/ip/addr",
+            "cmd/ip/nbr/ipaddr",
+            "cmd/ip/nbr/lladdr",
+            "cmd/ip/nbr/info",
+            "cmd/tsch/status",
+            "cmd/tsch/schedule",
             "cmd/routes/default",
             "cmd/routes/links/sources",
             "cmd/routes/links/destinations",
             "cmd/routes/entries/routes",
             "cmd/routes/entries/vias",
-            "cmd/rplstatus/id",
-            "cmd/rplstatus/dag",
-            "cmd/rplstatus/time",
-            "cmd/rplnbr/addr",
-            "cmd/rplnbr/ranks",
-            "cmd/rplnbr/values",
-            "cmd/rplnbr/parens",
+            "cmd/rpl/status/id",
+            "cmd/rpl/status/dag",
+            "cmd/rpl/status/time",
+            "cmd/rpl/nbr/addr",
+            "cmd/rpl/nbr/ranks",
+            "cmd/rpl/nbr/values",
+            "cmd/rpl/nbr/parens",
             "errors"
         ];
 
@@ -9265,7 +9265,7 @@ function demoRun() {
                                             <td class="text-left text-light">${datarray[6].length}</td>
                                         </tr>`;
         
-                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipaddr`)
+                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ip/addr`)
 
                                     .then(res => res.json())
                                     .then(data => {
@@ -9274,13 +9274,13 @@ function demoRun() {
                 
                                         demoTableDumpTbody.innerHTML += `
                                             <tr>
-                                                <td>/cargo/cmd/ipaddr</td>
+                                                <td>/cargo/cmd/ip/addr</td>
                                                 <td class="text-dark bg-success text-center">OK</td>
                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                 <td class="text-left text-light">${datarray[7].length}</td>
                                             </tr>`;
             
-                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/ipaddr`)
+                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ip/nbr/ipaddr`)
 
                                         .then(res => res.json())
                                         .then(data => {
@@ -9289,13 +9289,13 @@ function demoRun() {
                     
                                             demoTableDumpTbody.innerHTML += `
                                                 <tr>
-                                                    <td>/cargo/cmd/ipnbr/ipaddrr</td>
+                                                    <td>/cargo/cmd/ip/nbr/ipaddrr</td>
                                                     <td class="text-dark bg-success text-center">OK</td>
                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                     <td class="text-left text-light">${datarray[8].length}</td>
                                                 </tr>`;
                 
-                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/lladdr`)
+                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ip/nbr/lladdr`)
 
                                             .then(res => res.json())
                                             .then(data => {
@@ -9304,13 +9304,13 @@ function demoRun() {
                         
                                                 demoTableDumpTbody.innerHTML += `
                                                     <tr>
-                                                        <td>/cargo/cmd/ipnbr/lladdr</td>
+                                                        <td>/cargo/cmd/ip/nbr/lladdr</td>
                                                         <td class="text-dark bg-success text-center">OK</td>
                                                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                         <td class="text-left text-light">${datarray[9].length}</td>
                                                     </tr>`;
                     
-                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ipnbr/info`)
+                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/ip/nbr/info`)
 
                                                 .then(res => res.json())
                                                 .then(data => {
@@ -9319,13 +9319,13 @@ function demoRun() {
                             
                                                     demoTableDumpTbody.innerHTML += `
                                                         <tr>
-                                                            <td>/cargo/cmd/ipnbr/info</td>
+                                                            <td>/cargo/cmd/ip/nbr/info</td>
                                                             <td class="text-dark bg-success text-center">OK</td>
                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                             <td class="text-left text-light">${datarray[10].length}</td>
                                                         </tr>`;
                         
-                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/tschstatus`)
+                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/tsch/status`)
 
                                                     .then(res => res.json())
                                                     .then(data => {
@@ -9334,13 +9334,13 @@ function demoRun() {
                                 
                                                         demoTableDumpTbody.innerHTML += `
                                                             <tr>
-                                                                <td>/cargo/cmd/tschstatus</td>
+                                                                <td>/cargo/cmd/tsch/status</td>
                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                 <td class="text-left text-light">${datarray[11].length}</td>
                                                             </tr>`;
 
-                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/tschschedule`)
+                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/tsch/schedule`)
 
                                                         .then(res => res.json())
                                                         .then(data => {
@@ -9349,7 +9349,7 @@ function demoRun() {
                                     
                                                             demoTableDumpTbody.innerHTML += `
                                                                 <tr>
-                                                                    <td>/cargo/cmd/tschschedule</td>
+                                                                    <td>/cargo/cmd/tsch/schedule</td>
                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                     <td class="text-left text-light">${datarray[12].length}</td>
@@ -9432,7 +9432,7 @@ function demoRun() {
                                                                                         <td class="text-left text-light">${datarray[17].length}</td>
                                                                                     </tr>`;
                                                                                 
-                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/id`)
+                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/status/id`)
 
                                                                                 .then(res => res.json())
                                                                                 .then(data => {
@@ -9441,13 +9441,13 @@ function demoRun() {
                                                             
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                         <tr>
-                                                                                            <td>/cargo/cmd/rplstatus/id</td>
+                                                                                            <td>/cargo/cmd/rpl/status/id</td>
                                                                                             <td class="text-dark bg-success text-center">OK</td>
                                                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                             <td class="text-left text-light">${datarray[18].length}</td>
                                                                                         </tr>`;
                                                         
-                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/dag`)
+                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/status/dag`)
 
                                                                                     .then(res => res.json())
                                                                                     .then(data => {
@@ -9456,13 +9456,13 @@ function demoRun() {
                                                                 
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                             <tr>
-                                                                                                <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                                <td>/cargo/cmd/rpl/status/dag</td>
                                                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                 <td class="text-left text-light">${datarray[19].length}</td>
                                                                                             </tr>`;
                                                             
-                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplstatus/time`)
+                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/status/time`)
 
                                                                                         .then(res => res.json())
                                                                                         .then(data => {
@@ -9471,13 +9471,13 @@ function demoRun() {
                                                                     
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
-                                                                                                    <td>/cargo/cmd/rplstatus/time</td>
+                                                                                                    <td>/cargo/cmd/rpl/status/time</td>
                                                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                     <td class="text-left text-light">${datarray[20].length}</td>
                                                                                                 </tr>`;
                                                                 
-                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/addr`)
+                                                                                            fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/nbr/addr`)
 
                                                                                             .then(res => res.json())
                                                                                             .then(data => {
@@ -9486,13 +9486,13 @@ function demoRun() {
                                                                         
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
-                                                                                                        <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                        <td>/cargo/cmd/rpl/nbr/addr</td>
                                                                                                         <td class="text-dark bg-success text-center">OK</td>
                                                                                                         <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                         <td class="text-left text-light">${datarray[21].length}</td>
                                                                                                     </tr>`;
                                                                     
-                                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/ranks`)
+                                                                                                fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/nbr/ranks`)
 
                                                                                                 .then(res => res.json())
                                                                                                 .then(data => {
@@ -9501,13 +9501,13 @@ function demoRun() {
                                                                             
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
-                                                                                                            <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                            <td>/cargo/cmd/rpl/nbr/ranks</td>
                                                                                                             <td class="text-dark bg-success text-center">OK</td>
                                                                                                             <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                             <td class="text-left text-light">${datarray[22].length}</td>
                                                                                                         </tr>`;
                                                                         
-                                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/values`)
+                                                                                                    fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/nbr/values`)
 
                                                                                                     .then(res => res.json())
                                                                                                     .then(data => {
@@ -9516,13 +9516,13 @@ function demoRun() {
                                                                                 
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
-                                                                                                                <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                                <td>/cargo/cmd/rpl/nbr/values</td>
                                                                                                                 <td class="text-dark bg-success text-center">OK</td>
                                                                                                                 <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                                 <td class="text-left text-light">${datarray[23].length}</td>
                                                                                                             </tr>`;
                                                                             
-                                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rplnbr/parens`)
+                                                                                                        fetch(`http://${databaseInputAddress.value}:${databaseInputPort.value}/api/cargo/cmd/rpl/nbr/parens`)
 
                                                                                                         .then(res => res.json())
                                                                                                         .then(data => {
@@ -9531,7 +9531,7 @@ function demoRun() {
                                                                                     
                                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                                    <td>/cargo/cmd/rpl/nbr/parens</td>
                                                                                                                     <td class="text-dark bg-success text-center">OK</td>
                                                                                                                     <td class="text-right"><span class="text-secondary"> docs: </span></td>
                                                                                                                     <td class="text-left text-light">${datarray[24].length}</td>
@@ -9581,7 +9581,7 @@ function demoRun() {
                                                                                                 
                                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                                         <tr>
-                                                                                                                            <td>/cargo/cmd/rplnbr/parens</td>
+                                                                                                                            <td>/cargo/cmd/rpl/nbr/parens</td>
                                                                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                             <td class="text-danger text-center">${err}</td>
                                                                                                                         </tr>`;
@@ -9597,7 +9597,7 @@ function demoRun() {
                                                                                             
                                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                                     <tr>
-                                                                                                                        <td>/cargo/cmd/rplnbr/values</td>
+                                                                                                                        <td>/cargo/cmd/rpl/nbr/values</td>
                                                                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                                                     </tr>`;
@@ -9613,7 +9613,7 @@ function demoRun() {
                                                                                         
                                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                                 <tr>
-                                                                                                                    <td>/cargo/cmd/rplnbr/ranks</td>
+                                                                                                                    <td>/cargo/cmd/rpl/nbr/ranks</td>
                                                                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                                                 </tr>`;
@@ -9629,7 +9629,7 @@ function demoRun() {
                                                                                     
                                                                                                 demoTableDumpTbody.innerHTML += `
                                                                                                             <tr>
-                                                                                                                <td>/cargo/cmd/rplnbr/addr</td>
+                                                                                                                <td>/cargo/cmd/rpl/nbr/addr</td>
                                                                                                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                                 <td class="text-danger text-center">${err}</td>
                                                                                                             </tr>`;
@@ -9645,7 +9645,7 @@ function demoRun() {
 
                                                                                             demoTableDumpTbody.innerHTML += `
                                                                                                         <tr>
-                                                                                                            <td>/cargo/cmd/rplstatus/time</td>
+                                                                                                            <td>/cargo/cmd/rpl/status/time</td>
                                                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                             <td class="text-danger">${err}</td>
                                                                                                         </tr>`;
@@ -9661,7 +9661,7 @@ function demoRun() {
                                                                             
                                                                                         demoTableDumpTbody.innerHTML += `
                                                                                                     <tr>
-                                                                                                        <td>/cargo/cmd/rplstatus/dag</td>
+                                                                                                        <td>/cargo/cmd/rpl/status/dag</td>
                                                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                         <td class="text-danger text-center">${err}</td>
                                                                                                     </tr>`;
@@ -9677,7 +9677,7 @@ function demoRun() {
                                                                         
                                                                                     demoTableDumpTbody.innerHTML += `
                                                                                                 <tr>
-                                                                                                    <td>/cargo/cmd/rplstatus/id</td>
+                                                                                                    <td>/cargo/cmd/rpl/status/id</td>
                                                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                                                     <td class="text-danger text-center">${err}</td>
                                                                                                 </tr>`;
@@ -9775,7 +9775,7 @@ function demoRun() {
                                                 
                                                             demoTableDumpTbody.innerHTML += `
                                                                         <tr>
-                                                                            <td>/cargo/cmd/tschschedule</td>
+                                                                            <td>/cargo/cmd/tsch/schedule</td>
                                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                                             <td class="text-danger text-center">${err}</td>
                                                                         </tr>`;
@@ -9792,7 +9792,7 @@ function demoRun() {
                                             
                                                         demoTableDumpTbody.innerHTML += `
                                                                     <tr>
-                                                                        <td>/cargo/cmd/tschstatus</td>
+                                                                        <td>/cargo/cmd/tsch/status</td>
                                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                                         <td class="text-danger text-center">${err}</td>
                                                                     </tr>`;
@@ -9808,7 +9808,7 @@ function demoRun() {
                                         
                                                     demoTableDumpTbody.innerHTML += `
                                                                 <tr>
-                                                                    <td>/cargo/cmd/ipnbr/info</td>
+                                                                    <td>/cargo/cmd/ip/nbr/info</td>
                                                                     <td class="text-dark bg-danger text-center">FAIL</td>
                                                                     <td class="text-danger text-center">${err}</td>
                                                                 </tr>`;
@@ -9824,7 +9824,7 @@ function demoRun() {
                                     
                                                 demoTableDumpTbody.innerHTML += `
                                                             <tr>
-                                                                <td>/cargo/cmd/ipnbr/lladdr'</td>
+                                                                <td>/cargo/cmd/ip/nbr/lladdr'</td>
                                                                 <td class="text-dark bg-danger text-center">FAIL</td>
                                                                 <td class="text-danger text-center">${err}</td>
                                                             </tr>`;
@@ -9840,7 +9840,7 @@ function demoRun() {
                                 
                                             demoTableDumpTbody.innerHTML += `
                                                         <tr>
-                                                            <td>/cargo/cmd/ipnbr/ipaddr</td>
+                                                            <td>/cargo/cmd/ip/nbr/ipaddr</td>
                                                             <td class="text-dark bg-danger text-center">FAIL</td>
                                                             <td class="text-danger text-center">${err}</td>
                                                         </tr>`;
@@ -9856,7 +9856,7 @@ function demoRun() {
                             
                                         demoTableDumpTbody.innerHTML += `
                                                     <tr>
-                                                        <td>/cargo/cmd/ipaddr</td>
+                                                        <td>/cargo/cmd/ip/addr</td>
                                                         <td class="text-dark bg-danger text-center">FAIL</td>
                                                         <td class="text-danger text-center">${err}</td>
                                                     </tr>`;
