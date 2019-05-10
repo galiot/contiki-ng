@@ -361,7 +361,7 @@ var stats_network_icmpSchema = new mongoose.Schema({
             icmpRecv: Number,    
             icmpSent: Number,     
             icmpDrop: Number,
-            icmTypeerr: Number,     
+            icmpTypeerr: Number,     
             icmpChkerr: Number  
         } 
     },

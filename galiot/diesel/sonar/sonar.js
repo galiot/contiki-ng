@@ -1353,8 +1353,12 @@ const demoOutputRetrieve = document.getElementById('demo-output-retrieve');
 const demoButtonBrowse = document.getElementById('demo-button-browse');
 const demoButtonBrowseExtra = document.getElementById('demo-button-browse-extra');
 
-const demoContentRetrived = document.getElementById('demo-content-retrieved');
-const demoTableRetrieved = document.getElementById('demo-table-retrieved')
+const demoContentRetrieved = document.getElementById('demo-content-retrieved');
+const demoTableRetrieved = document.getElementById('demo-table-retrieved');
+
+const demoSpanNode = document.getElementById('demo-span-node');
+const demoSpanRecord = document.getElementById('demo-span-record');
+const demoSpanInterval = document.getElementById('demo-span-node');
 
 
 const demoButtonReload = document.getElementById('demo-button-reload');
@@ -1616,12 +1620,44 @@ demoButtonClear.addEventListener('click', () => {
     demoTableProcessDistinctNodes.innerHTML = '';
     demoTableProcessDistinctNodes.classList.add('d-none');
 
-
     demoButtonProcessRecords.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonProcessRecords.classList.add('btn-muted');
     demoTableProcessRecords.innerHTML = '';
     demoTableProcessRecords.classList.add('d-none');
 
     demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonRetrieve.classList.add('btn-muted');
+
+    demoInputGroupRetrieve.classList.remove('d-none');
+    demoOutputRetrieve.classList.remove('d-none');
+    
+    demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+    demoOutputRetrieve.classList.add('bg-secondary');
+    
+    demoOutputRetrieve.innerText = `awaiting instructions`
+    demoOutputRetrieve.classList.add('d-none');
+    
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+    demoDiv.classList.add('border-info');
+    
+    demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+    demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+    demoButtonBrowse.classList.add('btn-primary');
+
+    demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+    demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+    demoButtonBrowseExtra.classList.add('btn-primary');
+
+    demoSpanNode.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoSelectNode.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+    demoSpanRecord.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoSelectRecord.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+                    
+    demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+    demoButtonRetrieve.classList.add('btn-muted');
+
+    demoInputGroupExtra.classList.add('d-none');
+    demoInputGroupRetrieve.classList.add('d-none');
+
+    demoTableRetrieved.innerHTML = '';
 
 });
 
@@ -8857,10 +8893,37 @@ demoDiv.classList.remove('d-none');
 
 function retrieveData(objarray, nodesarray, recordsarray) {
 
-    demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonRetrieve.classList.add('btn-outline-success');
     demoInputGroupRetrieve.classList.remove('d-none');
     demoOutputRetrieve.classList.remove('d-none');
+    
+    demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+    demoOutputRetrieve.classList.add('bg-secondary');
+    
+    demoOutputRetrieve.innerText = `awaiting instructions`
+    
+    demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+    demoDiv.classList.add('border-info');
+    
+    demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+    demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+    demoButtonBrowse.classList.add('btn-primary');
 
+    demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+    demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+    demoButtonBrowseExtra.classList.add('btn-primary');
+
+    demoSpanNode.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoSelectNode.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+    demoSpanRecord.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoSelectRecord.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+                    
+    demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+    demoButtonRetrieve.classList.add('btn-outline-success');
+
+    demoInputGroupExtra.classList.add('d-none');
+
+    demoTableRetrieved.innerHTML = '';
+    
     console.log(objarray);
 
     demoSelectNode.innerHTML = '';
@@ -8901,23 +8964,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9004,23 +9091,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark');
+                        demoSelectNode.classList.add('bg-dark', 'text-light');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark');
+                        demoSelectRecord.classList.add('bg-dark', 'text-light');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9085,23 +9196,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9195,23 +9330,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9285,23 +9444,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
-                    
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
+
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark');
+                        demoSelectNode.classList.add('bg-dark', 'text-light');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark');
+                        demoSelectRecord.classList.add('bg-dark', 'text-light');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9430,23 +9613,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9508,24 +9715,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                     
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
 
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
                         tablebuffer += `
                         <tbody>`;
 
@@ -9597,23 +9827,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
-                    
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
+
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9763,23 +10017,47 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                     if(retrievedarray.length == 0) {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-warning');
+                        
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) available for node ${demoSelectNode.value}`
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-warning');
                         
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-warning');
-                    
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
+
                     } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        demoOutputRetrieve.classList.add('bg-success');
+                        
                         demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                        
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                        demoDiv.classList.add('border-success');
 
                         demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                         demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                         demoButtonBrowse.classList.add('btn-outline-success');
+
+                        demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                        demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+                        
+                        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+                        demoButtonRetrieve.classList.add('btn-outline-primary');
 
                         tablebuffer += `
                         <tbody>`;
@@ -9874,149 +10152,321 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
         } else {
 
-            let temparray = [];
+            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+            demoOutputRetrieve.classList.add('bg-info');
+            
+            demoOutputRetrieve.innerText = `filter ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}: select acceptable interval between parts`
+            
+            // demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+            // demoDiv.classList.add('border-success');
 
-            switch(demoSelectRecord.value) {
+            demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+            demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+            demoButtonBrowse.classList.add('btn-outline-secondary');
 
-                case 'network-internet':
+            demoSpanNode.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+            demoSelectNode.classList.add('bg-dark', 'text-secondary', 'border-secondary');
+            demoSpanRecord.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+            demoSelectRecord.classList.add('bg-dark', 'text-secondary', 'border-secondary');
 
-                    let maxLength = Math.max(objarray[3].lenght, objarray[4].lenght);
-                    
+            demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
+            demoButtonRetrieve.classList.add('btn-outline-primary');
+            
+            demoInputGroupExtra.classList.remove('d-none');
+
+            demoButtonBrowseExtra.addEventListener('click', () => {
 
 
 
+                let temparray = [];
+                let inconsistency = false;
+                let overrideOutput = false;
+                let updateTime = [];
 
+                switch(demoSelectRecord.value) {
+    
+                    case 'network-internet':
+    
+                        // let maxLength = Math.max(objarray[3].lenght, objarray[4].lenght);
 
+                        for (let i = 0; i < objarray[3].length; i++) {
 
+                            if(objarray[3][i].mote.linkLayerAddress == demoSelectNode.value) {
 
+                                temparray.push(objarray[3][i]);
+                            }
+                        };
 
-                    objarray[12].forEach((document, index) => {
+                        retrievedarray[0] = temparray;
+                        temparray = [];
 
-                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+                        for (let i = 0; i < objarray[4].length; i++) {
 
-                            retrievedarray.push(document);
-                        }
-                    });
+                            if(objarray[4][i].mote.linkLayerAddress == demoSelectNode.value) {
 
-                    console.log(retrievedarray.length);
-                    console.log(retrievedarray);
+                                temparray.push(objarray[4][i]);
+                            }
+                        };
 
-                    if(retrievedarray.length == 0) {
+                        retrievedarray[1] = temparray;
+                        temparray = [];
+    
+                        if(retrievedarray[0].lenght != retrievedarray[1].lenght) {
+    
+                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                            demoOutputRetrieve.classList.add('bg-danger');
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
-                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                            demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: collections length unequal`;
+                            
+                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                            demoDiv.classList.add('border-danger');
+
+                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                            demoButtonBrowseExtra.classList.add('btn-outline-danger');
                         
-                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
-                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
-                        demoButtonBrowse.classList.add('btn-outline-warning');
-                    
-                    } else {
+                        } else {
 
-                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
-                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
-                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+                            for(let i = 0; i < retrievedarray[0].length; i++) {
 
-                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
-                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
-                        demoButtonBrowse.classList.add('btn-outline-success');
+                                if(retrievedarray[0][i].record != retrievedarray[1][i].record) {
 
-                        tablebuffer += `
-                        <tbody>`;
-
-                        retrievedarray.forEach((obj, index) => {
-
-                            tablebuffer += `
-                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
-                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
-                            <tr class="bg-dark text-light text-center">
-                                <td colspan="1">record ${index}</td>`;
-
-                            if(obj.checksum.check == true) {
-
-                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
-
-                            } else {
-
-                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    inconsistency = true  
+                                };
                             };
 
-                            tablebuffer += `
-                                <td colspan="1">${obj.update}</td>
-                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
-                            </tr>`; 
+                            if(inconsistency) {
+
+                                demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                demoOutputRetrieve.classList.add('bg-danger');
+
+                                demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: documents correspondence invalid`;
                                 
-                            tablebuffer += `
-                            <tr>
-                                <td colspan="2" class="text-center text-light bg-secondary">command</td>
-                                <td colspan="2" class="text-center">tsch-schedule</td>
-                            </tr>`;
+                                demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                demoDiv.classList.add('border-danger');
 
-                            if (obj.cmd_tschSchedule.tsch == true) {
+                                demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                            
+                            } else {
+                                
+                                tablebuffer += `
+                                <tbody>`;
+                                
+                                for(let i = 0; i < retrievedarray[0].length; i++) {
 
-                                if (obj[0].tschSch.isLocked == true) {
+                                    
+                                    updateTime[0] = new Date(retrievedarray[0][i].update);
+                                    updateTime[1] = new Date(retrievedarray[1][i].update);
 
+                                    console.log(updateTime[0]);
+                                    console.log(updateTime[1]);
+                                    console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    console.log(demoInputRecordInterval.value);
+                                    console.log(typeof(demoInputRecordInterval.value));
+                                    
+                                    tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>`;
 
-                                } else {
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1">record ${i}</td>`;
 
-                                    if(obj.cmd_tschSchedule.schedule == false) {
+                                    if(retrievedarray[0][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[0][i].update}</td>
+                                        <td colspan="1" class="text-dark">-</td>
+                                    </tr>`;
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="text-dark">-</td>`;
+
+                                    if(retrievedarray[1][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[1][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[1][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[1] - updateTime[0]) > demoInputRecordInterval.value) {
 
                                         tablebuffer += `
-                                            <tr>
-                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule: no slotframe</td>
-                                            </tr>`;
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                            inconsistency = true
+
                                     } else {
 
                                         tablebuffer += `
-                                            <tr>
-                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule:</td>
-                                            </tr>`;
-
-                                        obj.cmd_tschSchedule.slotframes.forEach((slot, slotindex) => {
-
-                                            tablebuffer += `
-                                                <tr>
-                                                    <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Slotframe: handle ${slot.handle}, size ${slot.size}, links:</td>
-                                                </tr>`;
-
-                                            slot.links.forEach((link, linkindex) => {
-
-                                                tablebuffer += `
-                                                    <tr>
-                                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.options}, type ${link.type}, timeslot ${link.timeslot}, channel offset ${link.channelOffset}, address ${link.address}</td>
-                                                    </tr>`;
-                                            })
-                                        });
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
                                     };
-                                };
 
-                            } else {
+                                    tablebuffer += `</tr>`;
+
+                                    if(inconsistency) {
+
+                                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                        demoOutputRetrieve.classList.add('bg-danger');
+
+                                        demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: unacceptable interval`;
+                                        
+                                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                        demoDiv.classList.add('border-danger');
+
+                                        demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                        demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                        demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                        inconsistency = false;
+                                        overrideOutput = true;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="5" class="text-light bg-secondary">IP</td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="3" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.uipStatistics}</td>
+                                        </tr> -->
+                                       <tr>
+                                            <td colspan="3" class="text-secondary">received packets at the IP layer</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipRecv}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">sent packets at the IP layer</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipSent}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">forwarded packets at the IP layer</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipForwarded}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">dropped packets at the IP layer</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipDrop}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">packets dropped due to wrong IP version or header length</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipVhlerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">high byte</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipHblenerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-secondary">packets dropped due to wrong IP length</td>
+                                            <td colspan="1" class="text-secondary">low byte</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipLblenerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">packets dropped because they were IP fragments</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipFragerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">packets dropped due to IP checksum errors</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipChkerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">packets dropped because they were neither ICMP, UDP nor TCP</td>
+                                            <td colspan="2" class="">${retrievedarray[0][i].stats_network_ip.ip.ipProtoerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" class="text-light bg-secondary">ICMP</td>
+                                        </tr>
+                                        <!-- <tr>
+                                            <td colspan="3" class="text-secondary">network statistics collection active</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.uipStatistics}</td>
+                                        </tr> -->
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">received ICMP packets</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpRecv}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">sent ICMP packets</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpSent}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">dropped ICMP packets</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpDrop}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">ICMP packets with a wrong type</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpTypeerr}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-secondary">ICMP packets with a bad checksum</td>
+                                            <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpChkerr}</td>
+                                        </tr>`;
+
+                                        demoTableRetrieved.innerHTML = tablebuffer;
+
+                                        if(overrideOutput == false) {
+
+                                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                            demoOutputRetrieve.classList.add('bg-success');
+            
+                                            demoOutputRetrieve.innerHTML = `retrieved ${retrievedarray[0].length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`;
+                                            
+                                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                            demoDiv.classList.add('border-success');
+            
+                                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                            demoButtonBrowseExtra.classList.add('btn-outline-success');
+                                        };
+                                    };
+                                }
 
                                 tablebuffer += `
-                                    <tr>
-                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 ">Command not found. Type 'help' for a list of commands</td>
-                                    </tr>`;
-                            };
-                        });
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                </tbody>`;
 
-                        tablebuffer += `
-                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
-                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
-                        </tbody>`;
+                            }
+                        };
 
-                        demoTableRetrieved.innerHTML = tablebuffer;
-                    };
-                    
-                break;
-            }
+                        console.log(retrievedarray);         
+                    break;
+                };
+
+            });
         };  
     })
-   
-
-
-
-    console.log(nodesarray);
 }
+
+
+
+
+
+
+
+
+
+
+                            
+                
+            
+        
 
 // ==============================================================================================================================================
 // ==============================================================================================================================================
