@@ -1048,11 +1048,93 @@
                 </div>
             </div>
 
-            <br>
+            <div class="row justify-content-center m-3 p-auto ">
+                <div class="col-auto">
+                    <button class="btn btn-muted" id="demo-button-retrieve">retrieve</button>
+                </div>
+            </div>
 
         </div>
 
+        <div class="d-none bg-secondary row text-center justify-content-center mt-3" id="demo-output-retrieve">awaiting instructions</div>
+        
+       
 
+                
+
+                <div class="d-none row justify-content-center mt-1 p-auto" id="demo-input-group-retrieve">
+                    <div class="col-4 input-group justify-content-center">
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text ">node:</span>  
+                        </div>
+                        
+                        <select class="custom-select " id="demo-select-node">
+                                
+                        </select>
+                    </div>
+                    
+                    <div class="col-7 input-group justify-content-center">
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text ">record:</span>  
+                        </div>
+                        <select class="custom-select " id="demo-select-record">
+                            <option value="device-system">device: system information</option>
+                            <option value="device-sensor">device: sensor readings</option>
+                            <option value="device-energy">device: energy consumption</option>
+                            <option value="network-link">network: link layer</option>
+                            <option value="network-internet">network: internet layer</option>
+                            <option value="network-transport">network: transport layer</option>
+                            <option value="shell-macaddr">simulated shell: mac-addr</option>
+                            <option value="shell-ipaddr">simulated shell: ip-addr</option>
+                            <option value="shell-ipnbr">simulated shell: ip-nbr</option>
+                            <option value="shell-tschstatus">simulated shell: tsch-status</option>
+                            <option value="shell-tschschedule">simulated shell: tsch-schedule</option>
+                            <option value="shell-routes">simulated shell: routes</option>
+                            <option value="shell-rplstatus">simulated shell: rpl-status</option>
+                            <option value="shell-rplnbr">simulated shell: rpl-nbr</option>
+                        </select>
+                    </div>
+
+                    <div class="col-1 input-group justify-content-center">
+                        <button class="btn btn-primary" id="demo-button-browse">browse</button>
+                    </div>
+                
+                </div>
+
+                <div class=" row justify-content-center mt-0 mb-3" id="demo-input-group-extra">
+                    
+                        <div class="col-7 input-group justify-content-center" >
+                        </div>
+                    
+                    <div class="col-4 input-group justify-content-center" >
+                        <div class="input-group-prepend"> 
+                            <span class="input-group-text ">acceptable interval (ms):</span>  
+                        </div>
+                        <input type="number" class="form-control " placeholder='' id="demo-input-record-interval" ></input>
+                    </div>
+
+                    <div class="col-1 input-group justify-content-center">
+                        <button class="btn btn-primary" id="demo-button-browse-extra">browse</button>
+                    </div>   
+
+                </div>
+
+                <br>
+
+                <div class=" row justify-content-center m-auto" id="demo-content-retrieved">
+
+                    <div class="col-12">
+                        <table style="vertical-align: middle" class="table table-sm table-striped table-bordered border-0 bg-light" id="demo-table-retrieved">
+                                    
+                        </table>
+                    </div>
+
+                </div>
+
+
+    
+                <br>
+       
 
         
         

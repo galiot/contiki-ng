@@ -1065,8 +1065,8 @@ function elaborate(obj, intact) {
             packet: {
                 valid: obj.pckt.vld,
                 error: {
-                    text: obj.err.txt,
-                    code: obj.err.cd
+                    text: obj.pckt.err.txt,
+                    code: obj.pckt.err.cd
                 }
             },
             mote: {
@@ -1341,6 +1341,22 @@ const demoTableProcessDistinctNodes = document.getElementById('demo-table-proces
 const demoButtonProcessRecords = document.getElementById('demo-button-process-records');
 const demoTableProcessRecords = document.getElementById('demo-table-process-records');
 
+const demoButtonRetrieve = document.getElementById('demo-button-retrieve');
+const demoInputGroupRetrieve = document.getElementById('demo-input-group-retrieve');
+
+const demoSelectNode = document.getElementById('demo-select-node');
+const demoSelectRecord = document.getElementById('demo-select-record');
+const demoInputRecordInterval = document.getElementById('demo-input-record-interval');
+const demoInputGroupExtra = document.getElementById('demo-input-group-extra');
+const demoOutputRetrieve = document.getElementById('demo-output-retrieve');
+
+const demoButtonBrowse = document.getElementById('demo-button-browse');
+const demoButtonBrowseExtra = document.getElementById('demo-button-browse-extra');
+
+const demoContentRetrived = document.getElementById('demo-content-retrieved');
+const demoTableRetrieved = document.getElementById('demo-table-retrieved')
+
+
 const demoButtonReload = document.getElementById('demo-button-reload');
 const demoButtonClear = document.getElementById('demo-button-clear');
 const demoButtonContinue = document.getElementById('demo-button-continue');
@@ -1593,8 +1609,20 @@ demoButtonClear.addEventListener('click', () => {
     demoTableDump.classList.replace('d-block', 'd-none');
     demoTableDumpTbody.innerHTML = '';
 
-    demoDivProcessBridge.classList.add('d-none');
+    // demoDivProcessBridge.classList.add('d-none');
     demoDivProcessContent.classList.add('d-none');
+
+    demoButtonProcessDistinctNodes.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-secondary'); demoButtonProcessDistinctNodes.classList.add('btn-outline-primary');
+    demoTableProcessDistinctNodes.innerHTML = '';
+    demoTableProcessDistinctNodes.classList.add('d-none');
+
+
+    demoButtonProcessRecords.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonProcessRecords.classList.add('btn-muted');
+    demoTableProcessRecords.innerHTML = '';
+    demoTableProcessRecords.classList.add('d-none');
+
+    demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonRetrieve.classList.add('btn-muted');
+
 });
 
 
@@ -5176,7 +5204,7 @@ function simConsole(nodesAddr) {
                                                 <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj[0].tsch.panid}</td>
                                             </tr>`;
 
-                                        if(obj[0].tsch.panSecured == true) {
+                                        if(obj[0].tsch.pansec == true) {
 
                                             dataHTML += `
                                                 <tr>
@@ -5364,7 +5392,7 @@ function simConsole(nodesAddr) {
                                         <tbody class="">
                                             <tr>
                                                 <td colspan="1" class="text-center text-light bg-secondary">command</td>
-                                                <td colspan="1" class="text-center">tsch-status</td>
+                                                <td colspan="1" class="text-center">tsch-schedule</td>
                                             </tr>`;
                                 
                                 if (obj[0].tschSch.tsch == true) {
@@ -5398,7 +5426,7 @@ function simConsole(nodesAddr) {
 
                                                     dataHTML += `
                                                         <tr>
-                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.opt}, type ${link.tp}, timeslot ${link.tslt}, channel offset ${chOf}, address ${link.ad}</td>
+                                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.opt}, type ${link.tp}, timeslot ${link.tslt}, channel offset ${link.chOf}, address ${link.ad}</td>
                                                         </tr>`;
                                                 })
                                             });
@@ -8784,7 +8812,1293 @@ function controlRun() {
 //         callback;
 // };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+
 demoDiv.classList.remove('d-none');
+
+function retrieveData(objarray, nodesarray, recordsarray) {
+
+    demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); demoButtonRetrieve.classList.add('btn-outline-success');
+    demoInputGroupRetrieve.classList.remove('d-none');
+    demoOutputRetrieve.classList.remove('d-none');
+
+    console.log(objarray);
+
+    demoSelectNode.innerHTML = '';
+    nodesarray.addrs.forEach((address, index) => {
+        
+        demoSelectNode.innerHTML = `<option value=${address}>${address}</option>`
+    });
+        
+    demoButtonBrowse.addEventListener('click', () => {
+
+        let retrievedarray = [];
+        let tablebuffer = '';
+
+        if( demoSelectRecord.value == 'device-system'       ||
+            demoSelectRecord.value == 'device-sensor'       ||
+            demoSelectRecord.value == "device-energy"       ||
+            demoSelectRecord.value == "network-link"        ||
+            demoSelectRecord.value == 'network-transport'   ||
+            demoSelectRecord.value == 'shell-macaddr'       ||
+            demoSelectRecord.value == 'shell-ipaddr'        ||
+            demoSelectRecord.value == 'shell-tschstatus'    ||
+            demoSelectRecord.value == 'shell-tschschedule'    ) {
+
+            switch(demoSelectRecord.value) {
+
+                case 'device-system':
+
+                    objarray[0].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">contiki version</td>
+                                        <td colspan="2" class="">${obj.system.contikiVersion}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">routing protocol</td>
+                                        <td colspan="2" class="">${obj.system.networkStackRouting}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">network technology</td>
+                                        <td colspan="2" class="">${obj.system.networkStackNetwork}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">IEEE 802.15.4 PAN ID</td>
+                                        <td colspan="2" class="">${obj.system.ieee802154PANID}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">mac technology</td>
+                                        <td colspan="2" class="">${obj.system.networkStackMac.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">IEEE 802.15.4 default channel</td>
+                                        <td colspan="2" class="">${obj.system.networkStackMac.defaultChannel}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">node ID</td>
+                                        <td colspan="2" class="">${obj.system.nodeId}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-secondary">tentative link-local IPv6 address</td>
+                                        <td colspan="2" class="">${obj.system.tentaticeLinkLocalIPv6address}</td>
+                                    </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'device-sensor':
+
+                    objarray[1].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="1" class="text-secondary">simulated temperature sensor</td>
+                                <td colspan="1" class="text-secondary "> = 15 + rand( ) % 30</td>
+                                <td colspan="2" class="">${obj.device.temperatureSensor}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">simulated humidity sensor</td>
+                                <td colspan="1" class="text-secondary"> = 80 + rand( ) % 17</td>
+                                <td colspan="2" class="">${obj.device.humiditySensor}</td>
+                            </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                    case 'device-energy':
+
+                    objarray[2].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-secondary">energest module active</td>
+                                <td colspan="2" class="">${obj.energest.energest}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">cpu active</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.cpu}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">cpu in low power mode</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.lpm}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">cpu in deep low power mode</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.deepLpm}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">total tracking</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.totalTime}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">radio listening</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.radioListening}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">radio transmiting</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.radioTransmiting}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">radio off</td>
+                                <td colspan="1" class="text-secondary">(energest time source, seconds)</td>
+                                <td colspan="2" class="">${obj.energest.radioOff}</td>
+                            </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'network-link':
+
+                    objarray[6].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                <td colspan="2" class="">${obj.stats_discovery.uipStatistics}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">dropped</td>
+                                <td colspan="1" class="text-secondary">ND6 packets</td>
+                                <td colspan="2" class="">${obj.stats_discovery.nd6.nd6drop}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">received</td>
+                                <td colspan="1" class="text-secondary">ND6 packets</td>
+                                <td colspan="2" class="">${obj.stats_discovery.nd6.nd6recv}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">sent</td>
+                                <td colspan="1" class="text-secondary">ND6 packets</td>
+                                <td colspan="2" class="">${obj.stats_discovery.nd6.nd6sent}</td>
+                            </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'network-transport':
+
+                    objarray[5].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-secondary">network statistics collection active</td>
+                                <td colspan="2" class="">${obj.stats_transport.uipStatistics}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-light bg-secondary">TCP</td>
+                                <td colspan="2" class="text-light bg-secondary">${obj.stats_transport.tcp.tcp}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">received</td>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpRecv}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">sent</td>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpSent}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">dropped</td>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpDrop}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="1" class="text-secondary">with a bad checksum</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpChkerr}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="1" class="text-secondary">with a bad ACK number</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpAckerr}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-secondary">received TCP RST (reset) segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpRst}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">retransmitted</td>
+                                <td colspan="1" class="text-secondary">TCP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpRexmit}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-secondary">dropped SYNs because too few connections were available</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpSyndrop}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-secondary">SYNs for closed ports, triggering a RST</td>
+                                <td colspan="2" class="">${obj.stats_transport.tcp.tcpSynrst}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-light bg-secondary">UDP</td>
+                                <td colspan="2" class="text-light bg-secondary">${obj.stats_transport.udp.udp}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">dropped</td>
+                                <td colspan="1" class="text-secondary">UDP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.udp.udpDrop}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">received</td>
+                                <td colspan="1" class="text-secondary">UDP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.udp.udpRecv}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">sent</td>
+                                <td colspan="1" class="text-secondary">UDP segments</td>
+                                <td colspan="2" class="">${obj.stats_transport.udp.udpSent}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" class="text-secondary">UDP segments</td>
+                                <td colspan="1" class="text-secondary">with a bad checksum</td>
+                                <td colspan="2" class="">${obj.stats_transport.udp.udpChkerr}</td>
+                            </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'shell-macaddr':
+
+                    objarray[0].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-center text-light bg-secondary">command</td>
+                                <td colspan="2" class="text-center">mac-addr</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 ">Node MAC address: ${obj.mote.linkLayerAddress}</td>
+                            </tr>`;
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'shell-ipaddr':
+
+                    objarray[7].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-center text-light bg-secondary">command:</td>
+                                <td colspan="2" class="text-center">ipaddr</td>
+                            </tr>
+                            <tr>
+                                    <td colspan="4" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">Node IPv6 addresses:</td>
+                            </tr>`;
+
+                            obj.cmd_ipAddr.nodeIPv6addresses.forEach((address, index) => {
+
+                                if(address != null) {
+
+                                    tablebuffer += `
+                                        <tr>
+                                            <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${address.nodeIPv6address}</td>
+                                        </tr>`
+                                };
+                            });
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'shell-tschstatus':
+
+                    objarray[11].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-center text-light bg-secondary">command</td>
+                                <td colspan="2" class="text-center">tsch-status</td>
+                            </tr>`;
+
+                            if (obj.cmd_tschStatus.tsch == true) {
+
+                                if (obj.cmd_tschStatus.isCoordinator == true) {
+
+                                    tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">TSCH status:</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is coordinator:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">1</td>
+                                    </tr>`;
+
+                                } else {
+
+                                    tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is coordinator:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">0</td>
+                                    </tr>`;
+                                };
+
+                                if (obj.cmd_tschStatus.isAssociated == true) {
+
+                                    tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is associated:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- PAN ID:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.panID}</td>
+                                    </tr>`;
+
+                                    if(obj.cmd_tschStatus.panSecured == true) {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is PAN secured:</td>
+                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">1</td>
+                                        </tr>`;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is PAN secured:</td>
+                                            <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">0</td>
+                                        </tr>`;
+                                    };
+
+                                    tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Join priority:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.joinPriority}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Time source:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.timeSource}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Last synchronized:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.lastSynchronized} seconds ago</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Drift w.r.t. coordinator:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.driftWRTCoordinator} ppm</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Network uptime:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">${obj.cmd_tschStatus.networkUptime} seconds</td>
+                                    </tr>`;
+
+
+                                } else {
+
+                                    tablebuffer += `
+                                    <tr>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Is associated:</td>
+                                        <td colspan="2" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">0</td>
+                                    </tr>`;
+                                };
+
+                            } else {
+
+                                tablebuffer += `
+                                    <tr>
+                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0">Command not found. Type 'help' for a list of commands</td>
+                                    </tr>`;
+                            };
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+
+                case 'shell-tschschedule':
+
+                    objarray[12].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-center text-light bg-secondary">command</td>
+                                <td colspan="2" class="text-center">tsch-schedule</td>
+                            </tr>`;
+
+                            if (obj.cmd_tschSchedule.tsch == true) {
+
+                                if (obj[0].tschSch.isLocked == true) {
+
+
+                                } else {
+
+                                    if(obj.cmd_tschSchedule.schedule == false) {
+
+                                        tablebuffer += `
+                                            <tr>
+                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule: no slotframe</td>
+                                            </tr>`;
+                                    } else {
+
+                                        tablebuffer += `
+                                            <tr>
+                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule:</td>
+                                            </tr>`;
+
+                                        obj.cmd_tschSchedule.slotframes.forEach((slot, slotindex) => {
+
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Slotframe: handle ${slot.handle}, size ${slot.size}, links:</td>
+                                                </tr>`;
+
+                                            slot.links.forEach((link, linkindex) => {
+
+                                                tablebuffer += `
+                                                    <tr>
+                                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.options}, type ${link.type}, timeslot ${link.timeslot}, channel offset ${link.channelOffset}, address ${link.address}</td>
+                                                    </tr>`;
+                                            })
+                                        });
+                                    };
+                                };
+
+                            } else {
+
+                                tablebuffer += `
+                                    <tr>
+                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 ">Command not found. Type 'help' for a list of commands</td>
+                                    </tr>`;
+                            };
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+            };
+            
+            
+
+        } else {
+
+            let temparray = [];
+
+            switch(demoSelectRecord.value) {
+
+                case 'network-internet':
+
+                    let maxLength = Math.max(objarray[3].lenght, objarray[4].lenght);
+                    
+
+
+
+
+
+
+
+
+                    objarray[12].forEach((document, index) => {
+
+                        if(document.mote.linkLayerAddress == demoSelectNode.value) {
+
+                            retrievedarray.push(document);
+                        }
+                    });
+
+                    console.log(retrievedarray.length);
+                    console.log(retrievedarray);
+
+                    if(retrievedarray.length == 0) {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-warning');
+                        demoOutputRetrieve.innerText = `no records (${demoSelectRecord.value}) retrieved for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-success', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-warning');
+                        
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-warning');
+                    
+                    } else {
+
+                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-primary', 'bg-secondary', 'bg-info'); demoOutputRetrieve.classList.add('bg-success');
+                        demoOutputRetrieve.innerText = `retrieved ${retrievedarray.length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`
+                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-primary', 'border-secondary', 'border-info'); demoDiv.classList.add('border-success');
+
+                        demoButtonBrowse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                        demoButtonBrowse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                        demoButtonBrowse.classList.add('btn-outline-success');
+
+                        tablebuffer += `
+                        <tbody>`;
+
+                        retrievedarray.forEach((obj, index) => {
+
+                            tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class="bg-dark text-light text-center">
+                                <td colspan="1">record ${index}</td>`;
+
+                            if(obj.checksum.check == true) {
+
+                                tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                            } else {
+
+                                tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                            };
+
+                            tablebuffer += `
+                                <td colspan="1">${obj.update}</td>
+                                <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${obj.mote.systemTime}</td>
+                            </tr>`; 
+                                
+                            tablebuffer += `
+                            <tr>
+                                <td colspan="2" class="text-center text-light bg-secondary">command</td>
+                                <td colspan="2" class="text-center">tsch-schedule</td>
+                            </tr>`;
+
+                            if (obj.cmd_tschSchedule.tsch == true) {
+
+                                if (obj[0].tschSch.isLocked == true) {
+
+
+                                } else {
+
+                                    if(obj.cmd_tschSchedule.schedule == false) {
+
+                                        tablebuffer += `
+                                            <tr>
+                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule: no slotframe</td>
+                                            </tr>`;
+                                    } else {
+
+                                        tablebuffer += `
+                                            <tr>
+                                                <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">TSCH schedule:</td>
+                                            </tr>`;
+
+                                        obj.cmd_tschSchedule.slotframes.forEach((slot, slotindex) => {
+
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Slotframe: handle ${slot.handle}, size ${slot.size}, links:</td>
+                                                </tr>`;
+
+                                            slot.links.forEach((link, linkindex) => {
+
+                                                tablebuffer += `
+                                                    <tr>
+                                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">---- Options ${link.options}, type ${link.type}, timeslot ${link.timeslot}, channel offset ${link.channelOffset}, address ${link.address}</td>
+                                                    </tr>`;
+                                            })
+                                        });
+                                    };
+                                };
+
+                            } else {
+
+                                tablebuffer += `
+                                    <tr>
+                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 ">Command not found. Type 'help' for a list of commands</td>
+                                    </tr>`;
+                            };
+                        });
+
+                        tablebuffer += `
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                            <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
+                        </tbody>`;
+
+                        demoTableRetrieved.innerHTML = tablebuffer;
+                    };
+                    
+                break;
+            }
+        };  
+    })
+   
+
+
+
+    console.log(nodesarray);
+}
+
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+// ==============================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function findRecords(objarray, nodesarray) {
 
@@ -8921,12 +10235,21 @@ function findRecords(objarray, nodesarray) {
         rechtml += `
         </tbody>`;
 
+        demoButtonProcessRecords.classList.replace('btn-outline-primary', 'btn-outline-success');
+
+
         console.log(rechtml);
 
         // console.log(recordsarray[0][0]);
 
         demoTableProcessRecords.innerHTML = rechtml;
         demoTableProcessRecords.classList.remove('d-none');
+
+        demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-secondary'); demoButtonRetrieve.classList.add('btn-outline-primary');
+        demoButtonRetrieve.addEventListener('click', () => {
+
+            retrieveData(objarray, nodesarray, recordsarray);
+        })
 
         console.log(demoTableProcessRecords);
     })
