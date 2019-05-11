@@ -8891,7 +8891,7 @@ function controlRun() {
 // ==============================================================================================================================================
 // ==============================================================================================================================================
 
-demoDiv.classList.remove('d-none');
+// demoDiv.classList.remove('d-none');
 
 function retrieveData(objarray, nodesarray, recordsarray) {
 
@@ -9696,6 +9696,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                         });
 
                         tablebuffer += `
+                        <tr>
+                            <td colspan="4" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                        </tr>`;
+                        
+                        tablebuffer += `
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                         </tbody>`;
@@ -9789,7 +9794,10 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                             tablebuffer += `
                             <tr>
                                 <td colspan="2" class="text-center text-light bg-secondary">command:</td>
-                                <td colspan="2" class="text-center">ipaddr</td>
+                                <td colspan="2" class="text-center">ip-addr</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="background-color: rgb(0, 0, 0); color: black;" class="border-bottom-0"></td>
                             </tr>
                             <tr>
                                     <td colspan="4" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">Node IPv6 addresses:</td>
@@ -9807,6 +9815,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                             });
                         });
 
+                        tablebuffer += `
+                        <tr>
+                            <td colspan="4" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                        </tr>`;
+                        
                         tablebuffer += `
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
@@ -9998,6 +10011,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                         });
 
                         tablebuffer += `
+                        <tr>
+                            <td colspan="4" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                        </tr>`;
+                        
+                        tablebuffer += `
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                         </tbody>`;
@@ -10137,11 +10155,16 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                 tablebuffer += `
                                     <tr>
-                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 ">Command not found. Type 'help' for a list of commands</td>
+                                        <td colspan="4" style="background-color: rgb(0, 0, 0);" class="text-light ">Command not found. Type 'help' for a list of commands</td>
                                     </tr>`;
                             };
                         });
 
+                        tablebuffer += `
+                        <tr>
+                            <td colspan="4" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                        </tr>`;
+                        
                         tablebuffer += `
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
                             <tr class=""><td colspan="4" class="bg-dark border-0 text-dark">-</td></tr>
@@ -10153,8 +10176,6 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                 break;
             };
             
-            
-
         } else {
 
             demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
@@ -10182,7 +10203,13 @@ function retrieveData(objarray, nodesarray, recordsarray) {
             demoButtonBrowseExtra.addEventListener('click', () => {
 
                 let temparray = [];
-                let inconsistency = false;
+                let inconsistency = [];
+
+                inconsistency[0] = false;
+                inconsistency[1] = false;
+                inconsistency[2] = false;
+                inconsistency[3] = false;
+
                 let overrideOutput = false;
                 let updateTime = [];
 
@@ -10216,6 +10243,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                         retrievedarray[1] = temparray;
                         temparray = [];
+
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                        // retrievearray[0] <-- /3  ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[1] <-- /4  ///////////////////////////////////////////////////////////////////////////
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
     
                         if(retrievedarray[0].lenght != retrievedarray[1].lenght) {
     
@@ -10237,11 +10269,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                 if(retrievedarray[0][i].record != retrievedarray[1][i].record) {
 
-                                    inconsistency = true  
+                                    inconsistency[0] = true  
                                 };
                             };
 
-                            if(inconsistency) {
+                            if(inconsistency[0]) {
 
                                 demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
                                 demoOutputRetrieve.classList.add('bg-danger');
@@ -10261,21 +10293,22 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                 <tbody>`;
                                 
                                 for(let i = 0; i < retrievedarray[0].length; i++) {
-
                                     
                                     updateTime[0] = new Date(retrievedarray[0][i].update);
                                     updateTime[1] = new Date(retrievedarray[1][i].update);
 
-                                    console.log(updateTime[0]);
-                                    console.log(updateTime[1]);
-                                    console.log(Math.abs(updateTime[0] - updateTime[1]));
-                                    console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
-                                    console.log(demoInputRecordInterval.value);
-                                    console.log(typeof(demoInputRecordInterval.value));
+                                    // console.log(updateTime[0]);
+                                    // console.log(updateTime[1]);
+                                    // console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    // console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    // console.log(demoInputRecordInterval.value);
+                                    // console.log(typeof(demoInputRecordInterval.value));
                                     
                                     tablebuffer += `
                                     <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
                                     <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
 
                                     tablebuffer += `
                                     <tr class="bg-dark text-light text-center">
@@ -10292,13 +10325,15 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                     tablebuffer += `
                                         <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
-                                        <td colspan="1">${retrievedarray[0][i].update}</td>
-                                        <td colspan="1" class="text-dark border-top-0">-</td>
+                                        <td colspan="1" class="">${retrievedarray[0][i].update}</td>
+                                        <td colspan="1" class="text-dark border-top-0 border-right-0">-</td>
                                     </tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
 
                                     tablebuffer += `
                                     <tr class="bg-dark text-light text-center">
-                                        <td colspan="1" class="text-dark">-</td>`;
+                                        <td colspan="1" class="text-dark border-top-0">-</td>`;
 
                                     if(retrievedarray[1][i].checksum.check == true) {
 
@@ -10317,18 +10352,24 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                         tablebuffer += `
                                             <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
-                                            inconsistency = true
+                                        
+                                        inconsistency[0] = true
 
                                     } else {
 
                                         tablebuffer += `
                                             <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                        
+                                        inconsistency[0] = false
                                     };
 
                                     tablebuffer += `</tr>`;
 
-                                    if(inconsistency) {
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+                                    // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
 
+                                    if(inconsistency[0]) {
+                                        
                                         demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
                                         demoOutputRetrieve.classList.add('bg-danger');
 
@@ -10341,7 +10382,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                         demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                                         demoButtonBrowseExtra.classList.add('btn-outline-danger');
 
-                                        inconsistency = false;
+                                        inconsistency[0] = false;
                                         overrideOutput = true;
 
                                     } else {
@@ -10424,7 +10465,9 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                             <td colspan="2" class="">${retrievedarray[1][i].stats_network_icmp.icmp.icmpChkerr}</td>
                                         </tr>`;
 
-                                        demoTableRetrieved.innerHTML = tablebuffer;
+                                        // demoTableRetrieved.innerHTML = tablebuffer;
+
+                                        // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
 
                                         if(overrideOutput == false) {
 
@@ -10447,11 +10490,13 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                     <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
                                     <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
                                 </tbody>`;
+
+                                demoTableRetrieved.innerHTML = tablebuffer;
                             }
                         };
 
                         console.log(retrievedarray);      
-                           
+
                     break;
 
                     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10517,11 +10562,12 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                 if(retrievedarray[0][i].record != retrievedarray[1][i].record || retrievedarray[1][i].record != retrievedarray[2][i].record) {
 
-                                    inconsistency = true  
+                                    inconsistency[0] = true
+                                    inconsistency[1] = true
                                 };
                             };
 
-                            if(inconsistency) {
+                            if(inconsistency[0] || inconsistency[1]) {
 
                                 demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
                                 demoOutputRetrieve.classList.add('bg-danger');
@@ -10534,6 +10580,9 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                 demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                                 demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                                 demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                inconsistency[0] = false
+                                inconsistency[1] = false
                             
                             } else {
                                 
@@ -10578,7 +10627,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                     tablebuffer += `
                                         <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
                                         <td colspan="1">${retrievedarray[0][i].update}</td>
-                                        <td colspan="1" class="text-dark">-</td>
+                                        <td colspan="1" class="text-dark border-top-0 border-right-0">-</td>
                                     </tr>`;
 
                                     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
@@ -10604,7 +10653,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                         tablebuffer += `
                                             <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
-                                            inconsistency = true
+                                            inconsistency[0] = true
 
                                     } else {
 
@@ -10637,7 +10686,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                         tablebuffer += `
                                             <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
-                                            inconsistency = true
+                                            inconsistency[1] = true
 
                                     } else {
 
@@ -10646,12 +10695,11 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                     };
 
                                     tablebuffer += `</tr>`;
-
                                     
                                     // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
                                     // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
 
-                                    if(inconsistency) {
+                                    if(inconsistency[0] == true || inconsistency[1] == true) {
 
                                         demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
                                         demoOutputRetrieve.classList.add('bg-danger');
@@ -10665,18 +10713,23 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                         demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                                         demoButtonBrowseExtra.classList.add('btn-outline-danger');
 
-                                        inconsistency = false;
+                                        inconsistency[0] = false;
+                                        inconsistency[1] = false;
+                                        
                                         overrideOutput = true;
 
                                     } else {
 
                                         tablebuffer += `
                                         <tr>
-                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
-                                            <td colspan="4" class="text-center">ip_nbr</td>
+                                            <td colspan="3" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="2" style="background-color: #f9f9f9;" class="text-center">ip-nbr</td>
                                         </tr>
                                         <tr>
-                                                <td colspan="5" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                            <td colspan="5" style="background-color: rgb(0, 0, 0); color: black;" class=" border-bottom-0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" style="background-color: rgb(41, 4, 30);" class="text-light border-top-0 border-bottom-0">Node IPv6 neighbors:</td>
                                         </tr>`;
 
                                         for(let nbr = 0; nbr < retrievedarray[0][i].cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses.length; nbr++) {
@@ -10690,7 +10743,8 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                             };
                                         };
 
-                                        demoTableRetrieved.innerHTML = tablebuffer;
+                                        inconsistency[0] = false;
+                                        inconsistency[1] = false;
 
                                         // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
 
@@ -10707,6 +10761,13 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                             demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
                                             demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
                                             demoButtonBrowseExtra.classList.add('btn-outline-success');
+
+                                            overrideOutput = false;
+
+                                            tablebuffer += `
+                                            <tr>
+                                                <td colspan="12" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                                            </tr>`;
                                         };
                                     };
                                 }
@@ -10716,10 +10777,1291 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                     <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
                                 </tbody>`;
 
+                                demoTableRetrieved.innerHTML = tablebuffer;
                             }
                         };
 
-                        console.log(retrievedarray);         
+                        console.log(retrievedarray);
+                                 
+                    break;
+
+                    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    case 'shell-routes':
+
+                        for (let i = 0; i < objarray[13].length; i++) {
+
+                            if(objarray[13][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[13][i]);
+                            }
+                        };
+
+                        retrievedarray[0] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[14].length; i++) {
+
+                            if(objarray[14][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[14][i]);
+                            }
+                        };
+
+                        retrievedarray[1] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[15].length; i++) {
+
+                            if(objarray[15][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[15][i]);
+                            }
+                        };
+
+                        retrievedarray[2] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[16].length; i++) {
+
+                            if(objarray[16][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[16][i]);
+                            }
+                        };
+
+                        retrievedarray[3] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[17].length; i++) {
+
+                            if(objarray[17][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[17][i]);
+                            }
+                        };
+
+                        retrievedarray[4] = temparray;
+                        temparray = [];
+
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                        // retrievearray[0] <-- /13  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[1] <-- /14  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[2] <-- /14 ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[3] <-- /16 ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[4] <-- /17 ///////////////////////////////////////////////////////////////////////////
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+    
+                        if(retrievedarray[0].lenght != retrievedarray[1].lenght || retrievedarray[1].lenght != retrievedarray[2].lenght || retrievedarray[2].lenght != retrievedarray[3].lenght || retrievedarray[3].lenght != retrievedarray[4].lenght) {
+    
+                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                            demoOutputRetrieve.classList.add('bg-danger');
+
+                            demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: collections length unequal`;
+                            
+                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                            demoDiv.classList.add('border-danger');
+
+                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                            demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                        
+                        } else {
+
+                            for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                if(retrievedarray[0][i].record != retrievedarray[1][i].record || retrievedarray[1][i].record != retrievedarray[2][i].record || retrievedarray[2][i].record != retrievedarray[3][i].record || retrievedarray[3][i].record != retrievedarray[4][i].record) {
+
+                                    inconsistency[0] = true
+                                    inconsistency[1] = true
+                                    inconsistency[2] = true
+                                    inconsistency[3] = true
+                                };
+                            };
+
+                            if(inconsistency[0] || inconsistency[1] || inconsistency[2] || inconsistency[3]) {
+
+                                demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                demoOutputRetrieve.classList.add('bg-danger');
+
+                                demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: documents correspondence invalid`;
+                                
+                                demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                demoDiv.classList.add('border-danger');
+
+                                demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                inconsistency[0] = false
+                                inconsistency[1] = false
+                                inconsistency[2] = false
+                                inconsistency[3] = false
+                            
+                            } else {
+                                
+                                tablebuffer += `
+                                <tbody>`;
+                                
+                                for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                    updateTime[0] = new Date(retrievedarray[0][i].update);
+                                    updateTime[1] = new Date(retrievedarray[1][i].update);
+                                    updateTime[2] = new Date(retrievedarray[2][i].update);
+                                    updateTime[3] = new Date(retrievedarray[3][i].update);
+                                    updateTime[4] = new Date(retrievedarray[4][i].update);
+
+                                    // console.log(updateTime[0]);
+                                    // console.log(updateTime[1]);
+                                    // console.log(updateTime[2]);
+                                    // console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    // console.log(Math.abs(updateTime[1] - updateTime[2]));
+                                    // console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    // console.log(typeof(Math.abs(updateTime[1] - updateTime[2])));
+                                    // console.log(demoInputRecordInterval.value);
+                                    // console.log(typeof(demoInputRecordInterval.value));
+                                    
+                                    tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="1" class="border-bottom-0 text-dark">-</td>`;
+
+                                    if(retrievedarray[0][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[0][i].update}</td>
+                                        <td colspan="1" class="text-dark border-top-0 border-right-0">-</td>
+                                    </tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="1" class="text-dark border-top-0 border-bottom-0">-</td>`;
+
+                                    if(retrievedarray[1][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[1][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[1][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[1] - updateTime[0]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                            inconsistency[0] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="border-bottom-0 border-top-0">record ${i}</td>`;
+
+                                    if(retrievedarray[2][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[2][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[2][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[2] - updateTime[1]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                            inconsistency[1] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="text-dark border-top-0 border-bottom-0">-</td>`;
+
+                                    if(retrievedarray[3][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[3][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[3][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[3] - updateTime[2]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[3] - updateTime[2])}</td>`;
+                                            inconsistency[2] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[3] - updateTime[2])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="text-dark border-top-0">-</td>`;
+
+                                    if(retrievedarray[4][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[4][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[4][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[4] - updateTime[3]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[4] - updateTime[3])}</td>`;
+                                            inconsistency[3] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[4] - updateTime[3])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+                                    
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+                                    // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                    if(inconsistency[0] == true || inconsistency[1] == true || inconsistency[2] == true || inconsistency[3] == true) {
+
+                                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                        demoOutputRetrieve.classList.add('bg-danger');
+
+                                        demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: unacceptable interval`;
+                                        
+                                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                        demoDiv.classList.add('border-danger');
+
+                                        demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                        demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                        demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                        inconsistency[0] = false
+                                        inconsistency[1] = false
+                                        inconsistency[2] = false
+                                        inconsistency[3] = false
+                                        
+                                        overrideOutput = true;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="3" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="2" style="background-color: #f9f9f9;" class="text-center">routes</td>
+                                        </tr>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0 border-bottom-0"></td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0">Default route:</td>
+                                        </tr>`;
+
+                                        if(retrievedarray[0][i].cmd_routes.lifetime == "infinite") {
+                                                                        
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${retrievedarray[0][i].cmd_routes.defaultRoute} (lifetime: ${retrievedarray[0][i].cmd_routes.lifetime})</td>
+                                                </tr>`;
+    
+                                        } else {
+    
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">-- ${retrievedarray[0][i].cmd_routes.defaultRoute} (lifetime: ${retrievedarray[0][i].cmd_routes.lifetime} seconds)</td>
+                                                </tr>`;
+                                        };
+    
+                                        let atLeast1routingLink = false;
+    
+                                        for(let destination = 0; destination < retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations.length; destination++) {
+    
+                                            if(retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations[destination] != null) {
+    
+                                                atLeast1routingLink = true;
+                                            };
+                                        };
+    
+                                        if(atLeast1routingLink) {
+    
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing links (${retrievedarray[2][i].cmd_routes_routingLinks_destinations.totalRoutingLinks} in total):</td>
+                                                </tr>`;
+    
+                                            for(destination = 0; destination < retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations.length; destination++) {
+    
+                                                if(retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations[destination] != null) {
+    
+                                                    tablebuffer += `
+                                                        <tr>
+                                                            <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${retrievedarray[1][i].cmd_routes_routingLinks_sources.routeSources[destination].linkSourceAddr} ${retrievedarray[1][i].cmd_routes_routingLinks_sources.routeSources[destination].dodagRoot ? '(DODAG root)' : ''} to ${retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations[destination].linkDestinationAddr} (lifetime: ${retrievedarray[2][i].cmd_routes_routingLinks_destinations.routeDestinations[destination].lifetime})</td>
+                                                        </tr>`
+                                                };
+                                            };
+    
+                                        } else {
+    
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing links</td>
+                                                </tr>`
+                                        };
+    
+                                        let atLeast1routingEntry = false;
+    
+                                        for(let via = 0; via < retrievedarray[4][i].cmd_routes_routingEntries_vias.vias.length; via++) {
+    
+                                            if(retrievedarray[4][i].cmd_routes_routingEntries_vias.vias[via] != null) {
+    
+                                                atLeast1routingEntry = true;
+                                            };
+                                        };
+    
+                                        if(atLeast1routingEntry) {
+    
+                                            tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">Routing entries (${retrievedarray[4][i].cmd_routes_routingEntries_vias.totalRoutingEntries} in total):</td>
+                                                </tr>`;
+    
+                                            for(via = 0; via < retrievedarray[4][i].cmd_routes_routingEntries_vias.vias.length; via++) {
+    
+                                                if(retrievedarray[4][i].cmd_routes_routingEntries_vias.vias[via] != null) {
+    
+                                                    tablebuffer += `
+                                                        <tr>
+                                                            <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${retrievedarray[3][i].cmd_routes_routingEntries_routes.routes[via].rt} via ${retrievedarray[4][i].cmd_routes_routingEntries_vias.vias[via].via} (lifetime: ${retrievedarray[4][i].cmd_routes_routingEntries_vias.vias[via].lf})} </td>
+                                                        </tr>`               
+                                                };
+                                            };
+    
+                                        } else {
+    
+                                            tablebuffer += `
+                                                    <tr>
+                                                        <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">No routing entries</td>
+                                                    </tr>`
+                                        };
+
+                                        inconsistency[0] = false
+                                        inconsistency[1] = false
+                                        inconsistency[2] = false
+                                        inconsistency[3] = false
+
+                                        // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                        if(overrideOutput == false) {
+
+                                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                            demoOutputRetrieve.classList.add('bg-success');
+            
+                                            demoOutputRetrieve.innerHTML = `retrieved ${retrievedarray[0].length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`;
+                                            
+                                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                            demoDiv.classList.add('border-success');
+            
+                                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                            demoButtonBrowseExtra.classList.add('btn-outline-success');
+
+                                            overrideOutput = false;
+
+                                            tablebuffer += `
+                                            <tr>
+                                                <td colspan="12" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                                            </tr>`;
+                                        };
+                                    };
+                                }
+
+                                tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                </tbody>`;
+
+                                demoTableRetrieved.innerHTML = tablebuffer;
+                            }
+                        };
+
+                        console.log(retrievedarray);
+                                 
+                    break;
+
+                    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    case 'shell-rplstatus':
+
+                        for (let i = 0; i < objarray[18].length; i++) {
+
+                            if(objarray[18][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[18][i]);
+                            }
+                        };
+
+                        retrievedarray[0] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[19].length; i++) {
+
+                            if(objarray[19][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[19][i]);
+                            }
+                        };
+
+                        retrievedarray[1] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[20].length; i++) {
+
+                            if(objarray[20][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[20][i]);
+                            }
+                        };
+
+                        retrievedarray[2] = temparray;
+                        temparray = [];
+
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                        // retrievearray[0] <-- /18  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[1] <-- /19  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[2] <-- /20 ///////////////////////////////////////////////////////////////////////////
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+    
+                        if(retrievedarray[0].lenght != retrievedarray[1].lenght || retrievedarray[1].lenght != retrievedarray[2].lenght) {
+    
+                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                            demoOutputRetrieve.classList.add('bg-danger');
+
+                            demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: collections length unequal`;
+                            
+                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                            demoDiv.classList.add('border-danger');
+
+                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                            demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                        
+                        } else {
+
+                            for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                if(retrievedarray[0][i].record != retrievedarray[1][i].record || retrievedarray[1][i].record != retrievedarray[2][i].record) {
+
+                                    inconsistency[0] = true
+                                    inconsistency[1] = true
+                                };
+                            };
+
+                            if(inconsistency[0] || inconsistency[1]) {
+
+                                demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                demoOutputRetrieve.classList.add('bg-danger');
+
+                                demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: documents correspondence invalid`;
+                                
+                                demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                demoDiv.classList.add('border-danger');
+
+                                demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                inconsistency[0] = false
+                                inconsistency[1] = false
+                            
+                            } else {
+                                
+                                tablebuffer += `
+                                <tbody>`;
+                                
+                                for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                    updateTime[0] = new Date(retrievedarray[0][i].update);
+                                    updateTime[1] = new Date(retrievedarray[1][i].update);
+                                    updateTime[2] = new Date(retrievedarray[2][i].update);
+
+                                    // console.log(updateTime[0]);
+                                    // console.log(updateTime[1]);
+                                    // console.log(updateTime[2]);
+                                    // console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    // console.log(Math.abs(updateTime[1] - updateTime[2]));
+                                    // console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    // console.log(typeof(Math.abs(updateTime[1] - updateTime[2])));
+                                    // console.log(demoInputRecordInterval.value);
+                                    // console.log(typeof(demoInputRecordInterval.value));
+                                    
+                                    tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="1" class="border-bottom-0 text-dark">-</td>`;
+
+                                    if(retrievedarray[0][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[0][i].update}</td>
+                                        <td colspan="1" class="text-dark border-top-0 border-right-0">-</td>
+                                    </tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="border-bottom-0 border-top-0">record ${i}</td>`;
+
+                                    if(retrievedarray[1][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[1][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[1][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[1] - updateTime[0]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                            inconsistency[0] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="text-dark border-top-0">-</td>`;
+
+                                    if(retrievedarray[2][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[2][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[2][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[2] - updateTime[1]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                            inconsistency[1] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+                                    
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+                                    // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                    if(inconsistency[0] == true || inconsistency[1] == true) {
+
+                                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                        demoOutputRetrieve.classList.add('bg-danger');
+
+                                        demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: unacceptable interval`;
+                                        
+                                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                        demoDiv.classList.add('border-danger');
+
+                                        demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                        demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                        demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                        inconsistency[0] = false;
+                                        inconsistency[1] = false;
+                                        
+                                        overrideOutput = true;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="3" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="2" style="background-color: #f9f9f9;" class="text-center">rpl-status</td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan="5" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                        </tr>`;
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="5" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0 border-bottom-0"></td>
+                                        </tr>`;
+
+                                        if(retrievedarray[2][i].cmd_rplStatus_trickleTimer.rplLite == true) {
+                                
+                                            if(retrievedarray[2][i].cmd_rplStatus_trickleTimer.instance == 'none') {
+    
+                                                tablebuffer += `
+                                                    <tr>
+                                                        <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: none</td>
+                                                    </tr>`;
+    
+                                            } else {
+    
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG ${retrievedarray[1][i].cmd_rplStatus_dag.dagRole}</td>
+                                                </tr>`;
+                                            
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAG: ${retrievedarray[1][i].cmd_rplStatus_dag.dagId}, version ${retrievedarray[1][i].cmd_rplStatus_dag.dagVersion}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefix: ${retrievedarray[1][i].cmd_rplStatus_dag.dagPrefix}/${retrievedarray[1][i].cmd_rplStatus_dag.dagPrefixLength}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Instance: ${retrievedarray[0][i].cmd_rplStatus.instance}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- MOP: ${retrievedarray[0][i].cmd_rplStatus.modeOfOperation}</td>
+                                                </tr>`;
+
+                                            
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- OF: ${retrievedarray[0][i].cmd_rplStatus.objectiveCodePoint}</td>
+                                                </tr>`;
+                                            
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Hop rank incerement: ${retrievedarray[0][i].cmd_rplStatus.hopRankIncrement}</td>
+                                                </tr>`;
+                                            
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Default lifetime: ${retrievedarray[0][i].cmd_rplStatus.defaultLifetime} seconds</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- State: ${retrievedarray[1][i].cmd_rplStatus_dag.dagState}</td>
+                                                </tr>`;
+    
+                                                if(retrievedarray[1][i].cmd_rplStatus_dag.dagPreferedParent != 'none') {
+    
+                                                    tablebuffer += `
+                                                        <tr>
+                                                            <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: ${retrievedarray[1][i].cmd_rplStatus_dag.dagPreferedParent} (last DTSN: ${retrievedarray[1][i].cmd_rplStatus_dag.dagPreferedParentLastDTSN})</td>
+                                                        </tr>`;
+    
+                                                } else {
+    
+                                                    tablebuffer += `
+                                                    <tr>
+                                                        <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Prefered parent: none</td>
+                                                    </tr>`;
+                                                }
+                                                
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Rank: ${retrievedarray[1][i].cmd_rplStatus_dag.dagRank}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Lowest rank: ${retrievedarray[1][i].cmd_rplStatus_dag.dagLowestRank} (${retrievedarray[1][i].cmd_rplStatus_dag.maxRankIncrement})</td>
+                                                </tr>`;
+                                            
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DTSN out: ${retrievedarray[0][i].cmd_rplStatus.dtsnOut}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- DAO sequence: last sent ${retrievedarray[1][i].cmd_rplStatus_dag.dao.daoSequenceLastSent}, last acked ${retrievedarray[1][i].cmd_rplStatus_dag.dao.daoSequenceLastAcked}</td>
+                                                </tr>`;
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- Trickle timer: current ${retrievedarray[2][i].cmd_rplStatus_trickleTimer.current}, min ${retrievedarray[2][i].cmd_rplStatus_trickleTimer.min}, max ${retrievedarray[2][i].cmd_rplStatus_trickleTimer.max}, redundancy ${retrievedarray[2][i].cmd_rplStatus_trickleTimer.redundancy} </td>
+                                                </tr>`;
+                                            };
+                                        };
+
+                                        inconsistency[0] = false;
+                                        inconsistency[1] = false;
+
+                                        // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                        if(overrideOutput == false) {
+
+                                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                            demoOutputRetrieve.classList.add('bg-success');
+            
+                                            demoOutputRetrieve.innerHTML = `retrieved ${retrievedarray[0].length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`;
+                                            
+                                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                            demoDiv.classList.add('border-success');
+            
+                                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                            demoButtonBrowseExtra.classList.add('btn-outline-success');
+
+                                            overrideOutput = false;
+
+                                            tablebuffer += `
+                                            <tr>
+                                                <td colspan="12" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                                            </tr>`;
+                                        };
+                                    };
+                                }
+
+                                tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                </tbody>`;
+
+                                demoTableRetrieved.innerHTML = tablebuffer;
+                            }
+                        };
+
+                        console.log(retrievedarray);
+                                 
+                    break;
+
+                    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    case 'shell-rplnbr': //21 22 23 24
+
+                        for (let i = 0; i < objarray[21].length; i++) {
+
+                            if(objarray[21][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[21][i]);
+                            }
+                        };
+
+                        retrievedarray[0] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[22].length; i++) {
+
+                            if(objarray[22][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[22][i]);
+                            }
+                        };
+
+                        retrievedarray[1] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[23].length; i++) {
+
+                            if(objarray[23][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[23][i]);
+                            }
+                        };
+
+                        retrievedarray[2] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[24].length; i++) {
+
+                            if(objarray[24][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[24][i]);
+                            }
+                        };
+
+                        retrievedarray[3] = temparray;
+                        temparray = [];
+
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                        // retrievearray[0] <-- /21  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[1] <-- /22  //////////////////////////////////////////////////////////////////////////
+                        // retrievearray[2] <-- /23 ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[3] <-- /24 ///////////////////////////////////////////////////////////////////////////
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+    
+                        if(retrievedarray[0].lenght != retrievedarray[1].lenght || retrievedarray[1].lenght != retrievedarray[2].lenght || retrievedarray[2].lenght != retrievedarray[3].lenght) {
+    
+                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                            demoOutputRetrieve.classList.add('bg-danger');
+
+                            demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: collections length unequal`;
+                            
+                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                            demoDiv.classList.add('border-danger');
+
+                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                            demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                        
+                        } else {
+
+                            for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                if(retrievedarray[0][i].record != retrievedarray[1][i].record || retrievedarray[1][i].record != retrievedarray[2][i].record || retrievedarray[2][i].record != retrievedarray[3][i].record) {
+
+                                    inconsistency[0] = true
+                                    inconsistency[1] = true
+                                    inconsistency[2] = true
+                                };
+                            };
+
+                            if(inconsistency[0] || inconsistency[1] || inconsistency[2]) {
+
+                                demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                demoOutputRetrieve.classList.add('bg-danger');
+
+                                demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: documents correspondence invalid`;
+                                
+                                demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                demoDiv.classList.add('border-danger');
+
+                                demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                inconsistency[0] = false
+                                inconsistency[1] = false
+                                inconsistency[2] = false
+                            
+                            } else {
+                                
+                                tablebuffer += `
+                                <tbody>`;
+                                
+                                for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                    updateTime[0] = new Date(retrievedarray[0][i].update);
+                                    updateTime[1] = new Date(retrievedarray[1][i].update);
+                                    updateTime[2] = new Date(retrievedarray[2][i].update);
+                                    updateTime[3] = new Date(retrievedarray[3][i].update);
+
+                                    // console.log(updateTime[0]);
+                                    // console.log(updateTime[1]);
+                                    // console.log(updateTime[2]);
+                                    // console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    // console.log(Math.abs(updateTime[1] - updateTime[2]));
+                                    // console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    // console.log(typeof(Math.abs(updateTime[1] - updateTime[2])));
+                                    // console.log(demoInputRecordInterval.value);
+                                    // console.log(typeof(demoInputRecordInterval.value));
+                                    
+                                    tablebuffer += `
+                                    <tr class=""><td colspan="12" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="12" class="bg-dark border-0 text-dark">-</td></tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="2" class="border-bottom-0 text-dark">-</td>`;
+
+                                    if(retrievedarray[0][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="2" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="2" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="2" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
+                                        <td colspan="3">${retrievedarray[0][i].update}</td>
+                                        <td colspan="3" class="text-dark border-top-0 border-right-0">-</td>
+                                    </tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="2" class="border-bottom-0 border-top-0">record ${i}</td>`;
+
+                                    if(retrievedarray[1][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="2" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="2" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="2" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[1][i].mote.systemTime}</td>
+                                        <td colspan="3">${retrievedarray[1][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[1] - updateTime[0]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                            inconsistency[0] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="2" class="text-dark border-top-0 border-bottom-0">-</td><`;
+
+                                    if(retrievedarray[2][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="2" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="2" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="2" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[2][i].mote.systemTime}</td>
+                                        <td colspan="3">${retrievedarray[2][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[2] - updateTime[1]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                            inconsistency[1] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="2" class="text-dark border-top-0">-</td>`;
+
+                                    if(retrievedarray[3][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="2" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="2" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="2" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[3][i].mote.systemTime}</td>
+                                        <td colspan="3">${retrievedarray[3][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[3] - updateTime[2]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[3] - updateTime[2])}</td>`;
+                                            inconsistency[2] = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="3" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[3] - updateTime[2])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+                                    
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+                                    // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                    if(inconsistency[0] == true || inconsistency[1] == true || inconsistency[2] == true) {
+
+                                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                        demoOutputRetrieve.classList.add('bg-danger');
+
+                                        demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: unacceptable interval`;
+                                        
+                                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                        demoDiv.classList.add('border-danger');
+
+                                        demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                        demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                        demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                        inconsistency[0] = false
+                                        inconsistency[1] = false
+                                        inconsistency[2] = false
+                                        
+                                        overrideOutput = true;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="7" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="5" style="background-color: #f9f9f9;" class="text-center">rpl-nbr</td>
+                                        </tr>`;
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="12" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0 border-bottom-0"></td>
+                                        </tr>`;
+
+                                        if(retrievedarray[3][i].cmd_rplNbr_parens.rplLite == true) {
+                                                
+                                            if(retrievedarray[3][i].cmd_rplNbr_parens.instance != 'none') {
+                                                
+                                                if(retrievedarray[3][i].cmd_rplNbr_parens.rplNeighborCount == 0) {
+    
+                                                    tablebuffer += `
+                                                        <tr>
+                                                            <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors: none</td>
+                                                        </tr>`;
+                                                
+                                                } else {
+            
+                                                    tablebuffer += `
+                                                        <tr>
+                                                            <td colspan="12" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0">RPL neighbors:</td>
+                                                        </tr>`;
+            
+                                                    for (let nbr = 0; nbr < retrievedarray[3][i].cmd_rplNbr_parens.rplNeighborCount; nbr++) {
+            
+                                                        if(retrievedarray[3][i].cmd_rplNbr_parens.parens[nbr] != null) {
+    
+                                                            tablebuffer += `
+                                                                <tr>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-right-0">${retrievedarray[0][i].cmd_rplNbr_addr.addresses[nbr].rplAddress}</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${retrievedarray[1][i].cmd_rplNbr_ranks.ranks[nbr].rplNeighborRank},</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${retrievedarray[1][i].cmd_rplNbr_ranks.ranks[nbr].rplNeighborLinkMetric}</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">=></td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${retrievedarray[1][i].cmd_rplNbr_ranks.ranks[nbr].rplNeighborRankViaNeighbor}</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">--</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">${retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborStatsFreshness}</td>
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">`;
+    
+                                                            if(retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborRootRank == true) {
+    
+                                                                tablebuffer += `r `;
+    
+                                                            } else {
+    
+                                                                tablebuffer += `- `;
+                                                            };
+    
+                                                            if(retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborBest == true) {
+    
+                                                                tablebuffer += `b `;
+    
+                                                            } else {
+    
+                                                                tablebuffer += `- `;
+                                                            };
+    
+                                                            if(retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborAcceptableRankParent == true) {
+    
+                                                                tablebuffer += `a `;
+    
+                                                            } else {
+    
+                                                                tablebuffer += `- `;
+                                                            };
+    
+                                                            if(retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborLinkStatsFresh == true) {
+    
+                                                                tablebuffer += `f `;
+    
+                                                            } else {
+    
+                                                                tablebuffer += `- `;
+                                                            };
+    
+                                                            if(retrievedarray[2][i].cmd_rplNbr_values.values[nbr].rplNeighborDagPreferredParent == true) {
+    
+                                                                tablebuffer += `p `;
+    
+                                                            } else {
+    
+                                                                tablebuffer += `- `;
+                                                            };
+    
+                                                            tablebuffer += `
+                                                                    </td>`;
+    
+                                                            tablebuffer += `<td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">(</td>`;
+    
+                                                            if(retrievedarray[3][i].cmd_rplNbr_parens.parens[nbr].rplNeighborLastTXtimeSeconds > 0) {
+    
+                                                                tablebuffer += `
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">last tx ${retrievedarray[3][i].cmd_rplNbr_parens.parens[nbr].rplNeighborLastTXtimeSeconds} min ago</td>`;
+                                                            
+                                                            } else {
+    
+                                                                tablebuffer += `
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">no tx</td>`;
+                                                            }
+    
+                                                            if(retrievedarray[3][i].cmd_rplNbr_parens.parens[nbr].rplNeighborBetterParentSinceSeconds > 0) {
+    
+                                                                tablebuffer += `
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0">, better since ${retrievedarray[3][i].cmd_rplNbr_parens.parens[nbr].rplNeighborBetterParentSinceSeconds} min</td>`;
+                                                            
+                                                            } else {
+    
+                                                                tablebuffer += `
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0 border-right-0"></td>`;
+                                                            }
+    
+                                                            tablebuffer += `
+                                                                    <td colspan="1" style="background-color: rgb(0, 0, 0);" class="text-light border-bottom-0 border-top-0 border-left-0">)</td>`;
+                                                            
+                                                            tablebuffer += `
+                                                                </tr>`;
+                                                        };
+                                                    };
+                                                };
+                                            };
+                                        };
+
+                                        inconsistency[0] = false
+                                        inconsistency[1] = false
+                                        inconsistency[2] = false
+
+                                        // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                        if(overrideOutput == false) {
+
+                                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                            demoOutputRetrieve.classList.add('bg-success');
+            
+                                            demoOutputRetrieve.innerHTML = `retrieved ${retrievedarray[0].length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`;
+                                            
+                                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                            demoDiv.classList.add('border-success');
+            
+                                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                            demoButtonBrowseExtra.classList.add('btn-outline-success');
+
+                                            overrideOutput = false;
+
+                                            tablebuffer += `
+                                            <tr>
+                                                <td colspan="12" style="background-color: rgb(0, 0, 0); color: black;" class="border-top-0"></td>
+                                            </tr>`;
+                                        };
+                                    };
+                                }
+                                
+                                tablebuffer += `
+                                    <tr class=""><td colspan="12" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="12" class="bg-dark border-0 text-dark">-</td></tr>
+                                </tbody>`;
+
+                                demoTableRetrieved.innerHTML = tablebuffer;
+                            }
+                        };
+
+                        console.log(retrievedarray);
+                                 
                     break;
                 };
 
