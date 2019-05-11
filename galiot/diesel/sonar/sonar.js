@@ -1129,6 +1129,10 @@ const nodesButtonIndex = document.getElementById('nodes-button-index');
 
 const nodesInput = document.getElementById('nodes-input');
 
+const nodesOutputMain = document.getElementById('nodes-output-main');
+
+const nodesH2EncodedResponse = document.getElementById('nodes-h2-encoded-response');
+
 const nodesEncodedResponseDiv = document.getElementById('nodes-encoded-response-div');
 const nodesButtonDecode = document.getElementById('nodes-button-decode');
 
@@ -1368,7 +1372,7 @@ const demoButtonContinue = document.getElementById('demo-button-continue');
 
 const legendDiv = document.getElementById('legend-div');
 const legendContent = document.getElementById('legend-content');
-const legendAppendix = document.getElementById('legend-appendix')
+const legendAppendix = document.getElementById('legend-appendix');
 
 
 
@@ -1481,15 +1485,17 @@ nodesButtonClear.addEventListener('click', () => {
 
     nodesInput.innerHTML = '';
 
+    nodesH2EncodedResponse.classList.replace('d-block', 'd-none');
+
     nodesEncodedResponseDiv.classList.replace('d-block', 'd-none');
     nodesEncryptedResponseDiv.classList.replace('d-block', 'd-none');
     nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none');
     
-    nodesEncodedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesEncodedResponseDiv.classList.replace('text-secondary', 'text-light');
     nodesEncodedResponseDiv.innerText = '_';
-    nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesEncryptedResponseDiv.classList.replace('text-secondary', 'text-light');
     nodesEncryptedResponseDiv.innerText = '_';
-    nodesStringifiedResponseDiv.classList.replace('text-dark', 'text-light');
+    nodesStringifiedResponseDiv.classList.replace('text-secondary', 'text-light');
     nodesStringifiedResponseDiv.innerText = '_';
 
     nodesButtonDecode.classList.replace('d-block', 'd-none');
@@ -1510,10 +1516,10 @@ nodesButtonClear.addEventListener('click', () => {
     nodesButtonParse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
     nodesButtonParse.classList.add('btn-muted');
 
-    nodesEncodedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
-    nodesEncodedResponseDiv.classList.replace('text-secondary', 'text-light');
-    nodesEncryptedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
-    nodesEncryptedResponseDiv.classList.replace('text-secondary', 'text-light');
+    // nodesEncodedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
+    // nodesEncodedResponseDiv.classList.replace('text-secondary', 'text-light');
+    // nodesEncryptedResponseDiv.classList.replace('bg-dark', 'bg-secondary');
+    // nodesEncryptedResponseDiv.classList.replace('text-secondary', 'text-light');
 
     // nodesKeySpan.classList.remove('border-success');
     nodesKeyInput.classList.remove('border-success', 'border-secondary');
@@ -1522,8 +1528,12 @@ nodesButtonClear.addEventListener('click', () => {
     // nodesKeySpan.classList.replace('d-block', 'd-none');
     nodesKeyInput.classList.replace('d-block', 'd-none');
 
+    nodesOutputMain.classList.add('d-none');
+
     nodesOutputChecksum.classList.replace('d-block', 'd-none');
-    legendDiv.classList.replace('d-show', 'd-none');
+    legendDiv.classList.replace('d-block', 'd-none');
+    legendContent.innerText = '';
+    legendAppendix.innerText = '';
 });
 
 // COSNOLE
@@ -1734,7 +1744,7 @@ function constructDecoding(text) {
 
     let decodedResponse = atob(text);
     
-    nodesEncodedResponseDiv.classList.replace('text-light', 'text-dark');
+    nodesEncodedResponseDiv.classList.replace('text-light', 'text-secondary');
     nodesButtonDecode.classList.replace('btn-primary', 'btn-outline-success');
 
     nodesEncryptedResponseDiv.classList.replace('d-none', 'd-block');
@@ -1745,7 +1755,7 @@ function constructDecoding(text) {
 
 function constructDecryption(decodedResponse) {
 
-    nodesEncryptedResponseDiv.classList.replace('text-light', 'text-dark');
+    nodesEncryptedResponseDiv.classList.replace('text-light', 'text-secondary');
     nodesButtonDecrypt.classList.replace('btn-primary', 'btn-outline-success');
 
     // nodesKeySpan.classList.add('border-success');
@@ -1811,19 +1821,19 @@ function constructParse_OK(parsedResponse) {
     nodesParsedResponseDiv.classList.replace('d-none', 'd-block');
     nodesParsedResponseDiv.innerHTML = JSON.stringify(parsedResponse, null, 2);
 
-    nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary');
-    nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
-    nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary');
+    // nodesEncodedResponseDiv.classList.replace('text-dark', 'text-secondary');
+    // nodesEncodedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
+    // nodesEncodedResponseDiv.classList.replace('border-dark', 'border-secondary');
     
-    nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary');
-    nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
-    nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary');
+    // nodesEncryptedResponseDiv.classList.replace('text-dark', 'text-secondary');
+    // nodesEncryptedResponseDiv.classList.replace('bg-secondary', 'bg-dark');
+    // nodesEncryptedResponseDiv.classList.replace('border-dark', 'border-secondary');
 
     nodesButtonContinue.classList.replace('btn-outline-secondary', 'btn-outline-primary');
 
-    nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary');
-    nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary');
-    nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary');
+    // nodesButtonDecode.classList.replace('btn-outline-success', 'btn-outline-secondary');
+    // nodesButtonDecrypt.classList.replace('btn-outline-success', 'btn-outline-secondary');
+    // nodesButtonChecksum.classList.replace('btn-outline-success', 'btn-outline-secondary');
 
     nodesKeyInput.classList.replace('border-success', 'border-secondary');
     nodesKeyInput.classList.replace('text-light', 'text-secondary');
@@ -1832,6 +1842,8 @@ function constructParse_OK(parsedResponse) {
 
     nodesOutputChecksum.classList.remove('bg-danger', 'bg-warning'); nodesOutputChecksum.classList.add('bg-success');
     nodesOutputChecksum.innerText = "OK";
+
+    nodesStringifiedResponseDiv.classList.replace('text-light', 'text-secondary');
 
     nodesDiv.classList.remove('border-danger', 'border-warning', 'border-primary'); nodesDiv.classList.add( 'border-success');
 }
@@ -1870,6 +1882,46 @@ function runNodes(nodesAddr) {
 
             document.getElementById(`nodes-button-${index}`).addEventListener('click', () => {
 
+                nodesDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary');
+                nodesDiv.classList.add('border-info');
+                nodesEncodedResponseDiv.classList.replace('d-block', 'd-none');
+                nodesEncryptedResponseDiv.classList.replace('d-block', 'd-none');
+                nodesStringifiedResponseDiv.classList.replace('d-block', 'd-none');
+                nodesEncodedResponseDiv.classList.replace('text-secondary', 'text-light');
+                nodesEncodedResponseDiv.innerText = '_';
+                nodesEncryptedResponseDiv.classList.replace('text-secondary', 'text-light');
+                nodesEncryptedResponseDiv.innerText = '_';
+                nodesStringifiedResponseDiv.classList.replace('text-secondary', 'text-light');
+                nodesStringifiedResponseDiv.innerText = '_';
+                nodesButtonDecode.classList.replace('d-block', 'd-none');
+                nodesButtonDecrypt.classList.replace('d-block', 'd-none');
+                nodesButtonChecksum.classList.replace('d-block', 'd-none');
+                nodesButtonParse.classList.replace('d-block', 'd-none');
+                nodesButtonDecode.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+                nodesButtonDecode.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+                nodesButtonDecode.classList.add('btn-muted');
+                nodesButtonDecrypt.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+                nodesButtonDecrypt.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+                nodesButtonDecrypt.classList.add('btn-muted');
+                nodesButtonChecksum.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+                nodesButtonChecksum.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+                nodesButtonChecksum.classList.add('btn-muted');
+                nodesButtonParse.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary');
+                nodesButtonParse.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary');
+                nodesButtonParse.classList.add('btn-muted');
+                nodesKeyInput.classList.remove('border-success', 'border-secondary');
+                nodesKeyInput.classList.add('border-primary');
+                nodesKeyInput.classList.replace('text-secondary', 'text-light');
+                nodesKeyInput.classList.replace('d-block', 'd-none');
+                nodesOutputMain.classList.add('d-none');
+                nodesOutputChecksum.classList.replace('d-block', 'd-none');
+                nodesParsedResponseDiv.innerHTML = '';
+                nodesH2EncodedResponse.classList.replace('d-block', 'd-none');
+                legendDiv.classList.replace('d-block', 'd-none');
+                legendContent.innerText = '';
+                legendAppendix.innerText = '';
+
+
                 console.log('getgetget');
                 let addr = document.getElementById(`nodes-addr-input-${index}`).value;
                 let path = document.getElementById(`nodes-path-input-${index}`).value;
@@ -1883,13 +1935,29 @@ function runNodes(nodesAddr) {
                         
                         .then(function(text) {
                             
-                            nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
-                            
                             document.getElementById(`nodes-output-${index}`).innerText = 'OK';
 
                             document.getElementById(`nodes-output-${index}`).classList.remove('bg-danger', 'bg-warning'); document.getElementById(`nodes-output-${index}`).classList.add('bg-success');
-                            document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
-                            
+                            document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block');
+
+                            if(path < 0 || path > 24 ) {
+                                
+                                nodesOutputMain.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                nodesOutputMain.classList.add('bg-warning');
+                                nodesOutputMain.innerText = `http://[${addr}]/${path}`
+                                nodesOutputMain.classList.remove('d-none');
+
+                                nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-warning');
+
+                            } else {
+
+                                nodesOutputMain.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                nodesOutputMain.classList.add('bg-success');
+                                nodesOutputMain.innerText = `http://[${addr}]/${path}`
+                                nodesOutputMain.classList.remove('d-none');
+
+                                nodesDiv.classList.remove('border-danger', 'border-warning', 'border-info'); nodesDiv.classList.add('border-success');
+                            }
                             
                             
                             
@@ -1983,6 +2051,11 @@ function runNodes(nodesAddr) {
                         document.getElementById(`nodes-output-${index}`).classList.remove('bg-warning', 'bg-success'); document.getElementById(`nodes-output-${index}`).classList.add('bg-danger');
                         document.getElementById(`nodes-output-${index}`).classList.replace('d-none', 'd-block')
                         
+                        nodesOutputMain.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                        nodesOutputMain.classList.add('bg-danger');
+                        nodesOutputMain.innerText = `http://[${addr}]/${path}`
+                        nodesOutputMain.classList.remove('d-none');
+                        
                         console.log(error);
                     }
                 )  
@@ -1997,7 +2070,7 @@ function runNodes(nodesAddr) {
 
 brButton.addEventListener('click', () => {
 
-    brDivDocContent.classList.remove('bg-light', 'text-dark', 'bg-dark', 'text-secondary'); brDivDocContent.classList.add('bg-light', 'text-dark');
+    brDivDocContent.classList.remove('bg-light', 'text-dark', 'bg-dark', 'text-secondary'); brDivDocContent.classList.add('bg-dark', 'text-light');
     brButtonParse.classList.remove('btn-outline-success', 'btn-outline-primary'); brButtonParse.classList.add('btn-muted');
 
     document.getElementById('br-h2-neighbors').classList.replace('d-block', 'd-none');
@@ -2119,7 +2192,7 @@ function scrap() {
 
                         brDivResults.classList.remove('d-none');
 
-                        brDivDocContent.classList.remove('bg-light', 'text-dark'); brDivDocContent.classList.add('bg-secondary', 'text-light');
+                        brDivDocContent.classList.remove('text-light'); brDivDocContent.classList.add('text-secondary');
                         brButtonParse.classList.replace('btn-outline-primary', 'btn-outline-success');
 
                         document.getElementById('br-h2-neighbors').classList.replace('d-none', 'd-block');
@@ -2135,10 +2208,10 @@ function scrap() {
                     let neighborsListHTML = '';
                     let routingLinksListHTML = '';
 
-                    neighborsArray.forEach((neighbor, index) => neighborsListHTML += `<li class="list-group-item text-center bg-dark text-light "> <code style="font-size: 1rem">${neighbor.innerText} </code></li>`);
+                    neighborsArray.forEach((neighbor, index) => neighborsListHTML += `<li class="list-group-item text-center bg-dark text-light border-0"> <code style="font-size: 1rem" class="text-light">${neighbor.innerText} </code></li>`);
                     neighborsElement.innerHTML = neighborsListHTML;
 
-                    routingLinksArray.forEach((routingLink, index) => routingLinksListHTML += `<li class="list-group-item text-center bg-dark text-light ""><code style="font-size: 1rem"> ${routingLink.innerText} </code></li>`);
+                    routingLinksArray.forEach((routingLink, index) => routingLinksListHTML += `<li class="list-group-item text-center bg-dark text-light border-0""><code style="font-size: 1rem" class="text-light"> ${routingLink.innerText} </code></li>`);
                     routingLinksElement.innerHTML = routingLinksListHTML;
 
                     const nodesRegExp = /fd\S*\s/gi // TRICKY SORCERY //
@@ -2171,7 +2244,7 @@ function scrap() {
                             brDivTable.classList.remove('d-none');
                             brTableTbody.innerHTML = '';
 
-                            brDivDocContent.classList.replace('bg-secondary', 'bg-dark');
+                            // brDivDocContent.classList.replace('bg-secondary', 'bg-dark');
                             brDivDocContent.classList.replace('text-light', 'text-secondary');
 
                             nodesAddr.forEach((address, index) => {
