@@ -1358,8 +1358,7 @@ const demoTableRetrieved = document.getElementById('demo-table-retrieved');
 
 const demoSpanNode = document.getElementById('demo-span-node');
 const demoSpanRecord = document.getElementById('demo-span-record');
-const demoSpanInterval = document.getElementById('demo-span-node');
-
+const demoSpanInterval = document.getElementById('demo-span-interval');
 
 const demoButtonReload = document.getElementById('demo-button-reload');
 const demoButtonClear = document.getElementById('demo-button-clear');
@@ -1650,6 +1649,9 @@ demoButtonClear.addEventListener('click', () => {
     demoSelectNode.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
     demoSpanRecord.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
     demoSelectRecord.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+
+    demoSpanInterval.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoInputRecordInterval.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
                     
     demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
     demoButtonRetrieve.classList.add('btn-muted');
@@ -3765,7 +3767,7 @@ function simConsole(nodesAddr) {
                                                 <td colspan="2" class="text-secondary">network statistics collection active</td>
                                                 <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
                                             </tr> -->
-        .                                   <tr>
+                                            <tr>
                                                 <td colspan="2" class="text-secondary">received packets at the IP layer</td>
                                                 <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
                                             </tr>
@@ -3904,7 +3906,7 @@ function simConsole(nodesAddr) {
                                                             <td colspan="2" class="text-secondary">network statistics collection active</td>
                                                             <td colspan="2" class="">${ obj[0].ipSt.uS}</td>
                                                         </tr> -->
-                    .                                   <tr>
+                                                        <tr>
                                                             <td colspan="2" class="text-secondary">received packets at the IP layer</td>
                                                             <td colspan="2" class="">${ obj[0].ipSt.ip.rx}</td>
                                                         </tr>
@@ -8916,6 +8918,9 @@ function retrieveData(objarray, nodesarray, recordsarray) {
     demoSelectNode.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
     demoSpanRecord.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
     demoSelectRecord.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
+
+    demoSpanInterval.classList.remove('bg-secondary', 'text-dark', 'border-secondary');
+    demoInputRecordInterval.classList.remove('bg-dark', 'text-secondary', 'border-secondary');
                     
     demoButtonRetrieve.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-muted', 'btn-outline-primary', 'btn-outline-secondary'); 
     demoButtonRetrieve.classList.add('btn-outline-success');
@@ -10176,12 +10181,13 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
             demoButtonBrowseExtra.addEventListener('click', () => {
 
-
-
                 let temparray = [];
                 let inconsistency = false;
                 let overrideOutput = false;
                 let updateTime = [];
+
+                demoSpanInterval.classList.add('bg-secondary', 'text-dark', 'border-secondary');
+                demoInputRecordInterval.classList.add('bg-dark', 'text-secondary', 'border-secondary');
 
                 switch(demoSelectRecord.value) {
     
@@ -10273,7 +10279,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                     tablebuffer += `
                                     <tr class="bg-dark text-light text-center">
-                                        <td colspan="1">record ${i}</td>`;
+                                        <td colspan="1" class="border-bottom-0">record ${i}</td>`;
 
                                     if(retrievedarray[0][i].checksum.check == true) {
 
@@ -10287,7 +10293,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                     tablebuffer += `
                                         <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
                                         <td colspan="1">${retrievedarray[0][i].update}</td>
-                                        <td colspan="1" class="text-dark">-</td>
+                                        <td colspan="1" class="text-dark border-top-0">-</td>
                                     </tr>`;
 
                                     tablebuffer += `
@@ -10419,6 +10425,274 @@ function retrieveData(objarray, nodesarray, recordsarray) {
                                         </tr>`;
 
                                         demoTableRetrieved.innerHTML = tablebuffer;
+
+                                        if(overrideOutput == false) {
+
+                                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                            demoOutputRetrieve.classList.add('bg-success');
+            
+                                            demoOutputRetrieve.innerHTML = `retrieved ${retrievedarray[0].length} records (${demoSelectRecord.value}) for node ${demoSelectNode.value}`;
+                                            
+                                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                            demoDiv.classList.add('border-success');
+            
+                                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                            demoButtonBrowseExtra.classList.add('btn-outline-success');
+                                        };
+                                    };
+                                }
+
+                                tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                </tbody>`;
+                            }
+                        };
+
+                        console.log(retrievedarray);      
+                           
+                    break;
+
+                    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    case 'shell-ipnbr':
+
+                        for (let i = 0; i < objarray[8].length; i++) {
+
+                            if(objarray[8][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[8][i]);
+                            }
+                        };
+
+                        retrievedarray[0] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[9].length; i++) {
+
+                            if(objarray[9][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[9][i]);
+                            }
+                        };
+
+                        retrievedarray[1] = temparray;
+                        temparray = [];
+
+                        for (let i = 0; i < objarray[10].length; i++) {
+
+                            if(objarray[10][i].mote.linkLayerAddress == demoSelectNode.value) {
+
+                                temparray.push(objarray[10][i]);
+                            }
+                        };
+
+                        retrievedarray[2] = temparray;
+                        temparray = [];
+
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+                        // retrievearray[0] <-- /8  ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[1] <-- /9  ///////////////////////////////////////////////////////////////////////////
+                        // retrievearray[2] <-- /10 ///////////////////////////////////////////////////////////////////////////
+                        // -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
+    
+                        if(retrievedarray[0].lenght != retrievedarray[1].lenght || retrievedarray[1].lenght != retrievedarray[2].lenght) {
+    
+                            demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                            demoOutputRetrieve.classList.add('bg-danger');
+
+                            demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: collections length unequal`;
+                            
+                            demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                            demoDiv.classList.add('border-danger');
+
+                            demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                            demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                            demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                        
+                        } else {
+
+                            for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                if(retrievedarray[0][i].record != retrievedarray[1][i].record || retrievedarray[1][i].record != retrievedarray[2][i].record) {
+
+                                    inconsistency = true  
+                                };
+                            };
+
+                            if(inconsistency) {
+
+                                demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                demoOutputRetrieve.classList.add('bg-danger');
+
+                                demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: documents correspondence invalid`;
+                                
+                                demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                demoDiv.classList.add('border-danger');
+
+                                demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                demoButtonBrowseExtra.classList.add('btn-outline-danger');
+                            
+                            } else {
+                                
+                                tablebuffer += `
+                                <tbody>`;
+                                
+                                for(let i = 0; i < retrievedarray[0].length; i++) {
+
+                                    updateTime[0] = new Date(retrievedarray[0][i].update);
+                                    updateTime[1] = new Date(retrievedarray[1][i].update);
+                                    updateTime[2] = new Date(retrievedarray[2][i].update);
+
+                                    // console.log(updateTime[0]);
+                                    // console.log(updateTime[1]);
+                                    // console.log(updateTime[2]);
+                                    // console.log(Math.abs(updateTime[0] - updateTime[1]));
+                                    // console.log(Math.abs(updateTime[1] - updateTime[2]));
+                                    // console.log(typeof(Math.abs(updateTime[0] - updateTime[1])));
+                                    // console.log(typeof(Math.abs(updateTime[1] - updateTime[2])));
+                                    // console.log(demoInputRecordInterval.value);
+                                    // console.log(typeof(demoInputRecordInterval.value));
+                                    
+                                    tablebuffer += `
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>
+                                    <tr class=""><td colspan="5" class="bg-dark border-0 text-dark">-</td></tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                    <td colspan="1" class="border-bottom-0 text-dark">-</td>`;
+
+                                    if(retrievedarray[0][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[0][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[0][i].update}</td>
+                                        <td colspan="1" class="text-dark">-</td>
+                                    </tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="border-bottom-0 border-top-0">record ${i}</td>`;
+
+                                    if(retrievedarray[1][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[1][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[1][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[1] - updateTime[0]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                            inconsistency = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[1] - updateTime[0])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+
+                                    tablebuffer += `
+                                    <tr class="bg-dark text-light text-center">
+                                        <td colspan="1" class="text-dark border-top-0">-</td>`;
+
+                                    if(retrievedarray[2][i].checksum.check == true) {
+
+                                        tablebuffer += `<td colspan="1" class="bg-success text-dark text-center">INTACT</td>`;
+
+                                    } else {
+
+                                        tablebuffer += `<td colspan="1" class="bg-warning text-dark text-center">CORRUPTED</td>`;
+                                    };
+
+                                    tablebuffer += `
+                                        <td colspan="1" class="bg-dark text-light text-center ">systemTime: ${retrievedarray[2][i].mote.systemTime}</td>
+                                        <td colspan="1">${retrievedarray[2][i].update}</td>`;
+
+                                    if(Math.abs(updateTime[2] - updateTime[1]) > demoInputRecordInterval.value) {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-warning text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                            inconsistency = true
+
+                                    } else {
+
+                                        tablebuffer += `
+                                            <td colspan="1" class="bg-success text-dark text-center">discrepancy: ${Math.abs(updateTime[2] - updateTime[1])}</td>`;
+                                    };
+
+                                    tablebuffer += `</tr>`;
+
+                                    
+                                    // <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><tr></tr><><><><><><><><><><><><><><
+                                    // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
+
+                                    if(inconsistency) {
+
+                                        demoOutputRetrieve.classList.remove('bg-danger', 'bg-warning', 'bg-success', 'bg-primary', 'bg-secondary', 'bg-info'); 
+                                        demoOutputRetrieve.classList.add('bg-danger');
+
+                                        demoOutputRetrieve.innerHTML = `inconstistency in (${demoSelectRecord.value}) records retrieved for node ${demoSelectNode.value}: unacceptable interval`;
+                                        
+                                        demoDiv.classList.remove('border-danger', 'border-warning', 'border-success', 'border-primary', 'border-secondary', 'border-info'); 
+                                        demoDiv.classList.add('border-danger');
+
+                                        demoButtonBrowseExtra.classList.remove('btn-outline-danger', 'btn-outline-warning', 'btn-outline-success', 'btn-outline-primary', 'btn-outline-secondary', 'btn-outline-info');
+                                        demoButtonBrowseExtra.classList.remove('btn-danger', 'btn-warning', 'btn-success', 'btn-primary', 'btn-secondary', 'btn-info');
+                                        demoButtonBrowseExtra.classList.add('btn-outline-danger');
+
+                                        inconsistency = false;
+                                        overrideOutput = true;
+
+                                    } else {
+
+                                        tablebuffer += `
+                                        <tr>
+                                            <td colspan="1" class="text-center text-light bg-secondary">command:</td>
+                                            <td colspan="4" class="text-center">ip_nbr</td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan="5" style="background-color: rgb(41, 4, 30);" class="text-light border-bottom-0">Node IPv6 neighbors:</td>
+                                        </tr>`;
+
+                                        for(let nbr = 0; nbr < retrievedarray[0][i].cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses.length; nbr++) {
+
+                                            if(retrievedarray[0][i].cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[nbr] != null) {
+
+                                                tablebuffer += `
+                                                <tr>
+                                                    <td colspan="5" style="background-color: rgb(0, 0, 0);" class="text-light border-top-0 border-bottom-0">-- ${retrievedarray[0][i].cmd_IpNeighbors_ipAddr.nodeIPv6neighborIpAddresses[nbr].nodeIPv6neighborIpAddress} <-> ${retrievedarray[1][i].cmd_ipNeighbors_llAddr.nodeIPv6neighborLlAddresses[nbr].nodeIPv6neighborLlAddress}, router ${retrievedarray[2][i].cmd_ipNeighbors_info.nodeIPv6neighborInfo[nbr].nodeIPv6neighborRouter}, state: ${retrievedarray[2][i].cmd_ipNeighbors_info.nodeIPv6neighborInfo[nbr].nodeIPv6neighborState}</td>
+                                                </tr>`;
+                                            };
+                                        };
+
+                                        demoTableRetrieved.innerHTML = tablebuffer;
+
+                                        // ~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z~Z
 
                                         if(overrideOutput == false) {
 
