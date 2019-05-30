@@ -1,6 +1,8 @@
 CONTIKI_PROJECT = oar
 all: $(CONTIKI_PROJECT)
 
+MODULES += os/services/shell
+
 PROJECT_SOURCEFILES += oar-debug.c
 
 PROJECT_SOURCEFILES += oar-json.c
