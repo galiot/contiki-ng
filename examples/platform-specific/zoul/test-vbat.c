@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, University of Bristol - http://www.bris.ac.uk/
+ * Copyright (c) 2016, Zolertia - http://www.zolertia.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,63 +27,70 @@
  * SUCH DAMAGE.
  *
  */
-
+/*---------------------------------------------------------------------------*/
 /**
  * \file
- *         Test of Contiki system's stack checker functionality
+ *         An example showing how to get VBAT Voltage functionality on
+ *         RE-Mote Platform
  * \author
- *         Atis Elsts <atis.elsts@bristol.ac.uk>
+ *         Erik Bellido <ebellido@zolertia.com>
+ *         Aitor Mejias <amejias@zolertia.com>
  */
-
+/*---------------------------------------------------------------------------*/
+/* This is the main contiki header, it should be included always */
 #include "contiki.h"
-#include "sys/stack-check.h"
-#include "random.h"
+#include "power-mgmt.h"
+#include "dev/i2c.h"
+#include "sys/etimer.h"
+/*---------------------------------------------------------------------------*/
 
-#include <stdio.h>
-#include <string.h>
-#include <alloca.h>
-#include <inttypes.h>
-/*---------------------------------------------------------------------------*/
-PROCESS(example_process, "Stack check example");
-AUTOSTART_PROCESSES(&example_process);
-/*---------------------------------------------------------------------------*/
-static void
-nested_function(void)
-{
-  printf("stack usage: %" PRId32 " permitted: %" PRId32 "\n",
-         stack_check_get_usage(), stack_check_get_reserved_size());
-}
-/*---------------------------------------------------------------------------*/
-static void
-test_function(void)
-{
-  void *p;
-  uint16_t s;
+/*#define freq I2C_SCL_NORMAL_BUS_SPEED */
+static struct etimer et;
 
-  /* allocate and fill some random bytes */
-  s = random_rand() % 1000;
-  printf("allocating %u bytes on the stack\n", s);
-  p = alloca(s);
-  memset(p, 0, s);
+/* RE-Mote revision B, low-power PIC version */
+#define PM_EXPECTED_VERSION               0x20
 
-  /* call the nested function to print stack usage */
-  nested_function();
-}
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(example_process, ev, data)
+/* We are going to create three different processes, with its own printable
+ * name.  Processes are a great way to run different applications and features
+ * in parallel
+ */
+PROCESS(test_VBAT_process, "Test VBAT process");
+
+/* But we are only going to automatically start the first two */
+AUTOSTART_PROCESSES(&test_VBAT_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(test_VBAT_process, ev, data)
 {
-  static struct etimer et;
+
+  static uint8_t aux = 0x00;
+  static uint16_t voltage = 0x00;
 
   PROCESS_BEGIN();
 
+  if(pm_enable() != PM_SUCCESS) {
+    printf("PM Failed \n");
+  } else if(pm_enable() == PM_SUCCESS) {
+    printf("Process PM started\n");
+  }
+
+  if((pm_get_fw_ver(&aux) == PM_ERROR) || (aux != PM_EXPECTED_VERSION)) {
+    printf("PM: unexpected version 0x%02X\n", aux);
+  }
+  printf("PM: firmware version 0x%02X OK\n", aux);
+
   while(1) {
-    etimer_set(&et, CLOCK_SECOND * 2);
+
+    etimer_set(&et, CLOCK_SECOND);
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-    test_function();
+    /*-------------------voltage VBAT --------------*/
+    if(pm_get_voltage(&voltage) != PM_SUCCESS) {
+      printf("PM: error retrieving voltage\n");
+    } else {
+      printf("%u.%u V\n", voltage / 100, voltage % 100);
+    }
   }
-
   PROCESS_END();
 }
-/*---------------------------------------------------------------------------*/

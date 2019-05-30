@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2017, George Oikonomou - http://www.spd.gr
+ * Copyright (c) 2018, Texas Instruments Incorporated - http://www.ti.com/
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
@@ -28,28 +27,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*---------------------------------------------------------------------------*/
-/**
- * \addtogroup launchpad-peripherals
+ /**
+ * \addtogroup cc13xx-cc26xx-cpu
+ * @{
+ *
+ * \defgroup cc13xx-cc26xx-watchdog CC13xx/CC26xx watchdog timer driver.
+ *
  * @{
  *
  * \file
- * Defines CC13xx/CC26xx Launchpad buttons for use with the button HAL
+ *        Header file of the CC13xx/CC26xx watchdog driver.
  */
 /*---------------------------------------------------------------------------*/
+#ifndef WATCHDOG_ARCH_H_
+#define WATCHDOG_ARCH_H_
+/*---------------------------------------------------------------------------*/
 #include "contiki.h"
-#include "dev/button-hal.h"
-
-#include "ti-lib.h"
 /*---------------------------------------------------------------------------*/
-BUTTON_HAL_BUTTON(key_left, "Key Left", BOARD_IOID_KEY_LEFT, \
-                  GPIO_HAL_PIN_CFG_PULL_UP, BOARD_BUTTON_HAL_INDEX_KEY_LEFT, \
-                  true);
-
-BUTTON_HAL_BUTTON(key_right, "Key Right", BOARD_IOID_KEY_RIGHT, \
-                  GPIO_HAL_PIN_CFG_PULL_UP, BOARD_BUTTON_HAL_INDEX_KEY_RIGHT, \
-                  true);
+#define WATCHDOG_DISABLE     WATCHDOG_CONF_DISABLE
+#define WATCHDOG_TIMEOUT_MS  WATCHDOG_CONF_TIMEOUT_MS
 /*---------------------------------------------------------------------------*/
-BUTTON_HAL_BUTTONS(&key_left, &key_right);
+/**
+ * \brief   Return the next expiration time for the Watchdog.
+ * \return  Non-zero value of the next expiration time in Watchdog ticks. If
+ *          the Watchdog is not running, this returns 0.
+ */
+uint32_t watchdog_arch_next_timeout(void);
 /*---------------------------------------------------------------------------*/
-/** @} */
+#endif /* WATCHDOG_ARCH_H_ */
+/*---------------------------------------------------------------------------*/
+/**
+ * @}
+ * @}
+ */

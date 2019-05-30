@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2017, George Oikonomou - http://www.spd.gr
+ * Copyright (c) 2018, Texas Instruments Incorporated - http://www.ti.com/
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
@@ -28,28 +27,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*---------------------------------------------------------------------------*/
 /**
- * \addtogroup launchpad-peripherals
+ * \addtogroup cc13xx-cc26xx-cpu
+ * @{
+ *
+ * \defgroup cc13xx-cc26xx-clock CC13xx/CC26xx clock implementation
+ *
  * @{
  *
  * \file
- * Defines CC13xx/CC26xx Launchpad buttons for use with the button HAL
+ *        Header file for the  CC13xx/CC26xx clock implementation.
  */
 /*---------------------------------------------------------------------------*/
-#include "contiki.h"
-#include "dev/button-hal.h"
-
-#include "ti-lib.h"
+#ifndef CLOCK_ARCH_H_
+#define CLOCK_ARCH_H_
 /*---------------------------------------------------------------------------*/
-BUTTON_HAL_BUTTON(key_left, "Key Left", BOARD_IOID_KEY_LEFT, \
-                  GPIO_HAL_PIN_CFG_PULL_UP, BOARD_BUTTON_HAL_INDEX_KEY_LEFT, \
-                  true);
-
-BUTTON_HAL_BUTTON(key_right, "Key Right", BOARD_IOID_KEY_RIGHT, \
-                  GPIO_HAL_PIN_CFG_PULL_UP, BOARD_BUTTON_HAL_INDEX_KEY_RIGHT, \
-                  true);
+#include <stdbool.h>
 /*---------------------------------------------------------------------------*/
-BUTTON_HAL_BUTTONS(&key_left, &key_right);
+/**
+ * \brief   Prepare to enter some low-power mode. Return value indicates if we
+ *          are ready or not to enter some low-power mode.
+ * \return  true if ready; else false.
+ */
+bool clock_arch_enter_idle(void);
 /*---------------------------------------------------------------------------*/
-/** @} */
+/**
+ * \brief   Cleanup after returning from low-power mode.
+ */
+void clock_arch_exit_idle(void);
+/*---------------------------------------------------------------------------*/
+#endif /* CLOCK_ARCH_H_ */
+/*---------------------------------------------------------------------------*/
+/**
+ * @}
+ * @}
+ */

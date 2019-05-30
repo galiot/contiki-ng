@@ -402,10 +402,10 @@ init(void)
 static int
 prepare(const void *payload, unsigned short payload_len)
 {
-  const size_t len = MIN((size_t)payload_len,
-                         (size_t)TX_BUF_SIZE);
-
-  memcpy(ieee_radio.tx_buf, payload, len);
+  if(payload_len > TX_BUF_SIZE || payload_len > NETSTACK_RADIO_MAX_PAYLOAD_LEN) {
+    return RADIO_TX_ERR;
+  }
+  memcpy(ieee_radio.tx_buf, payload, payload_len);
   return 0;
 }
 /*---------------------------------------------------------------------------*/
@@ -413,6 +413,11 @@ static int
 transmit(unsigned short transmit_len)
 {
   rf_result_t res;
+
+  if(transmit_len > NETSTACK_RADIO_MAX_PAYLOAD_LEN) {
+    LOG_ERR("Too long\n");
+    return RADIO_TX_ERR;
+  }
 
   if(ieee_radio.send_on_cca && channel_clear() != 1) {
     LOG_WARN("Channel is not clear for transmission\n");
@@ -581,7 +586,7 @@ cca_request(cmd_cca_req_t *cmd_cca_req)
   }
 
   /* Perform the CCA request */
-  stat = RF_runImmediateCmd(ieee_radio.rf_handle, (uint32_t *)&cmd_cca_req);
+  stat = RF_runImmediateCmd(ieee_radio.rf_handle, (uint32_t *)cmd_cca_req);
 
   if(stop_rx) {
     netstack_stop_rx();
