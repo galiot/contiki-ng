@@ -183,9 +183,9 @@ if(process.env.NODE_ENV === 'production') {
 } else {
 
     var PORT = process.env.PORT || 8080;
-    var MONGO_URI = "mongodb://localhost:27017/cargo";
-    var MONGO_USER = "galiot";
-    var MONGO_PASSWORD = "eat_sleep_code_repeat";
+    var MONGO_URI = process.env.MONGO ||"mongodb://localhost:27017/cargo";
+    var MONGO_USER = process.env.MONGO_USER ||"galiot";
+    var MONGO_PASSWORD = process.env.MONGO_PASSWORD ||"eat_sleep_code_repeat";
 
 }
 
@@ -2685,7 +2685,7 @@ mongoose.connect(MONGO_URI, {user: MONGO_USER, pass: MONGO_PASSWORD, useNewUrlPa
     () => {
         console.log("");
         console.log('+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-');
-        console.log('connected to cargo (mongodb://localhost:27017/cargo)');
+        console.log('connected to cargo (' + MONGO_URI + ')');
         console.log('+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-');
     },
     (err) => console.log(err)
@@ -6931,8 +6931,8 @@ function activateScrap(borderRouter, interval) {
 
 const borderRouter = 'http://[fd00::212:4b00:f24:8385]/'; 
 
-if(process.env.auto) {
-    if(process.env.br) {
+if(process.env.AUTO) {
+    if(process.env.BR) {
         
         console.log();
         console.log();
@@ -6942,9 +6942,10 @@ if(process.env.auto) {
         console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
         
         console.log();
-        console.log('INTERVAL: ' + process.env.auto + 'ms');
+        console.log('INTERVAL:      ' + process.env.AUTO + ' ms');
+        console.log('BORDER ROUTER: ' + process.env.BR);
 
-        activateScrap(process.env.br, process.env.auto);
+        activateScrap(process.env.BR, process.env.AUTO);
     
     } else {
 
@@ -6955,9 +6956,10 @@ if(process.env.auto) {
         console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
         
         console.log();
-        console.log('INTERVAL: ' + process.env.auto + 'ms');
+        console.log('        INTERVAL:      ' + process.env.AUTO + ' ms');
+        console.log('DEFAULT BORDER ROUTER: ' + borderRouter);
         
-        activateScrap(borderRouter, process.env.auto);
+        activateScrap(borderRouter, process.env.AUTO);
     };
 
 } else {
@@ -6971,7 +6973,8 @@ if(process.env.auto) {
         console.log('[!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!][!]');
         
         console.log();
-        console.log('INTERVAL: ' + 5000 + 'ms');
+        console.log('DEFAULT INTERVAL:      ' + 5000 + ' ms');
+        console.log('DEFAULT BORDER ROUTER: ' + borderRouter);
 
         activateScrap(borderRouter, 5000);
 

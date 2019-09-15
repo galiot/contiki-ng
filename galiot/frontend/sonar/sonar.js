@@ -9007,7 +9007,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
     demoSelectNode.innerHTML = '';
     nodesarray.addrs.forEach((address, index) => {
         
-        demoSelectNode.innerHTML = `<option value=${address}>${address}</option>`
+        demoSelectNode.innerHTML += `<option value=${address}>${address}</option>`
     });
         
     demoButtonBrowse.addEventListener('click', () => {
@@ -11880,7 +11880,7 @@ function retrieveData(objarray, nodesarray, recordsarray) {
 
                                     tablebuffer += `
                                     <tr class="bg-dark text-light text-center">
-                                    <td colspan="2" class="text-dark border-top-0 border-bottom-0">-</td><`;
+                                    <td colspan="2" class="text-dark border-top-0 border-bottom-0">-</td>`;
 
                                     if(retrievedarray[2][i].checksum.check == true) {
 
